@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="lib/hibernate/antlr-2.7.7.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/hibernate-commons-annotations-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/hibernate-core-4.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/javassist-3.15.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/jboss-logging-3.1.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/jboss-transaction-api_1.1_spec-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/mysql/mysql-connector-java-5.1.19-bin.jar"/>
+	<classpathentry kind="lib" path="lib/quartz/c3p0-0.9.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/quartz/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/quartz/quartz-all-2.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/quartz/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/quartz/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-beanutils-bean-collections-1.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-beanutils-core-1.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-logging-adapters-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-logging-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/json/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/json/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
