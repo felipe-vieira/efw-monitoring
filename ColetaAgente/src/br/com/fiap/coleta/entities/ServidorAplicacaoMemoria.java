@@ -2,6 +2,8 @@ package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 
+import br.com.fiap.coleta.entities.enumerators.TipoMemoriaServidorAplicacao;
+
 public class ServidorAplicacaoMemoria implements Serializable{
 		
 	private static final long serialVersionUID = -4848871582739761986L;
@@ -10,8 +12,17 @@ public class ServidorAplicacaoMemoria implements Serializable{
 	private Long init;
 	private Long max;
 	
-	public ServidorAplicacao servidorAplicacao;
-	private TipoServidorAplicacaoMemoria tipo;
+	private ServidorAplicacao servidorAplicacao;
+	
+	private TipoMemoriaServidorAplicacao tipo;
+	
+	public ServidorAplicacaoMemoria(ServidorAplicacao servidorAplicacao) {
+		this.servidorAplicacao = servidorAplicacao;
+	}
+	
+	public ServidorAplicacaoMemoria(){
+		
+	}
 	
 	public Long getId() {
 		return id;
@@ -38,12 +49,13 @@ public class ServidorAplicacaoMemoria implements Serializable{
 	public void setServidorAplicacao(ServidorAplicacao servidorAplicacao) {
 		this.servidorAplicacao = servidorAplicacao;
 	}
-	public TipoServidorAplicacaoMemoria getTipo() {
+	public TipoMemoriaServidorAplicacao getTipo() {
 		return tipo;
 	}
-	public void setTipo(TipoServidorAplicacaoMemoria tipo) {
+	public void setTipo(TipoMemoriaServidorAplicacao tipo) {
 		this.tipo = tipo;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

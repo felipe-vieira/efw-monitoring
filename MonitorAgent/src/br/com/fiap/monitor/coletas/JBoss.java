@@ -22,7 +22,6 @@ public class JBoss {
 			try{
 				
 				client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
-				System.out.println("Conectado");
 				ModelNode opHeap = new ModelNode();
 				opHeap.get("operation").set("read-attribute");
 				opHeap.get("name").set("heap-memory-usage");
@@ -60,7 +59,6 @@ public class JBoss {
 		
 		try{
 			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
-			System.out.println("Conectado");
 			ModelNode opCount = new ModelNode();
 			opCount.get("operation").set("read-attribute");
 			opCount.get("name").set("thread-count");
@@ -107,7 +105,6 @@ public class JBoss {
 		
 		try{
 			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
-			System.out.println("Conectado");
 			ModelNode opStartTime = new ModelNode();
 			opStartTime.get("operation").set("read-attribute");
 			opStartTime.get("name").set("start-time");
@@ -145,7 +142,6 @@ public class JBoss {
 		
 		try{
 			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
-			System.out.println("Conectado");
 			ModelNode opStatus = new ModelNode();
 			opStatus.get("operation").set("read-attribute");
 			opStatus.get("name").set("server-state");
@@ -170,7 +166,6 @@ public class JBoss {
 		
 		try{
 			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
-			System.out.println("Conectado");
 			ModelNode opDeployment = new ModelNode();
 			opDeployment.get("operation").set("read-children-names");
 			opDeployment.get("child-type").set("deployment");

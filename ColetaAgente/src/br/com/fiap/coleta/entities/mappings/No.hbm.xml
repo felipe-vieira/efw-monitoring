@@ -10,7 +10,7 @@
 		
 		<property name="nome" not-null="true"/>
 		
-		<joined-subclass name="br.com.fiap.coleta.entities.Servidor">
+		<joined-subclass name="br.com.fiap.coleta.entities.Servidor" table="servidor">
 			<key column="no_id"/>
 			<property name = "hostname"/>
 		</joined-subclass>		
@@ -23,12 +23,12 @@
 			<property name = "startTime" column="start_time"/>
 			<property name = "uptime"/>
 			
-			<joined-subclass name="br.com.fiap.coleta.entities.JBoss">
+			<joined-subclass name="br.com.fiap.coleta.entities.JBoss" table="jboss">
 				<key column="no_id"/>
 				<property name = "versao"/>
 			</joined-subclass>
 			
-			<joined-subclass name="br.com.fiap.coleta.entities.Glassfish">
+			<joined-subclass name="br.com.fiap.coleta.entities.Glassfish" table ="glassfish">
 				<key column="no_id"/>
 				<property name = "user"/>
 				<property name = "senha"/>

@@ -8,6 +8,8 @@
         	<generator class="increment"/>
     	</id>
 
+		<many-to-one name="servidorAplicacao" column="servidorAplicacao"/>
+		
 		<property name="nome" not-null="true"/>
 		
 		<property name="ativo" not-null="true"/>

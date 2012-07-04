@@ -3,6 +3,7 @@ package br.com.fiap.coleta.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+
 public class ServidorAplicacaoMemoriaColeta implements Serializable{
 
 	private static final long serialVersionUID = -1532054018006988702L;
@@ -13,12 +14,21 @@ public class ServidorAplicacaoMemoriaColeta implements Serializable{
 	private Long used;
 	private Long commited;
 	
+	
+	public ServidorAplicacaoMemoriaColeta(){
+		
+	}
+	
+	public ServidorAplicacaoMemoriaColeta(ServidorAplicacaoMemoria memoria) {
+		this.memoria = memoria;
+	}
 	public ServidorAplicacaoMemoria getMemoria() {
 		return memoria;
 	}
 	public void setMemoria(ServidorAplicacaoMemoria memoria) {
 		this.memoria = memoria;
 	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -43,6 +53,7 @@ public class ServidorAplicacaoMemoriaColeta implements Serializable{
 	public void setCommited(Long commited) {
 		this.commited = commited;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -3,7 +3,9 @@ package br.com.fiap.coleta.cgt.coletas;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -12,8 +14,10 @@ import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
 import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
+import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoriaColeta;
 import br.com.fiap.coleta.entities.ServidorAplicacaoThreadColeta;
+import br.com.fiap.coleta.entities.enumerators.TipoMemoriaServidorAplicacao;
 import br.com.fiap.coleta.util.socket.SocketUtil;
 
 public class JBossColeta {
@@ -21,7 +25,6 @@ public class JBossColeta {
 	private JBoss jboss;
 	private ServidorAplicacaoBO servidorAplicacaoBO;
 	private SocketUtil socket;
-	private ServidorAplicacaoMemoriaColeta memoriaColeta;
 	private Date dataColeta;
 	
 	public JBossColeta(No no){
@@ -31,8 +34,6 @@ public class JBossColeta {
 	
 	public void initColeta(){
 		
-		
-		System.out.println("coletou");
 		this.dataColeta = new Date();
 		
 		socket = new SocketUtil(this.jboss.getHostname(), 9090);
@@ -40,38 +41,60 @@ public class JBossColeta {
 		try{
 			socket.openSocket();
 			
-			List<ServidorAplicacaoDeployment> deployments = this.getJbossDeployments();
+			//Pega as propriedades do coletor
+			this.getJbossRuntime();
+			List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigJbossMemory();
+			
+			//Pega os valores da coleta
+			Map<String,ServidorAplicacaoDeployment> deployments = this.getJbossDeployments();
+			List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getJbossMemory();
 			ServidorAplicacaoThreadColeta threadColeta = this.getJbossThread();
-			this.getJbossRuntime();			
+					
 			
-			
-			//Salva os objetos coletados.
+			//Salva as propriedades
 			servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
-			//TODO MEMORY + SALVAR TUDO
+			servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
+			
+			//Salva as coletas
+			servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
+			servidorAplicacaoBO.salvaColetasMemoria(coletasMemorias);
+			servidorAplicacaoBO.salvaColetasThread(threadColeta);
+			servidorAplicacaoBO.salvaMapDeployments(deployments);
+			
+			socket.close();
 			
 		}catch(IOException ex){
-			System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
+			System.out.println("Impossï¿½vel abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
 		}
 	}
 	
-	private List<ServidorAplicacaoDeployment> getJbossDeployments(){
+	private Map<String,ServidorAplicacaoDeployment> getJbossDeployments(){
 		
 		try{
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get jboss.deployment"));
 			JSONArray jsonArray = json.getJSONArray("deployments");
 			System.out.println(json.toString());
 			
-			List<ServidorAplicacaoDeployment> deployments = new ArrayList<ServidorAplicacaoDeployment>();
+			Map<String,ServidorAplicacaoDeployment> deployments = this.servidorAplicacaoBO.getMapDeploymentsServidor(this.jboss);
+			
+			if(deployments == null){
+				deployments = new HashMap<String,ServidorAplicacaoDeployment>();
+			}
 			
 			for(Object o:jsonArray){
 				String deploymentName = (String) o;
 				
-				ServidorAplicacaoDeployment deployment = new ServidorAplicacaoDeployment();
-				deployment.setNome(deploymentName);				
-				deployments.add(deployment);
+				ServidorAplicacaoDeployment deployment = deployments.get(deploymentName);
 				
-				System.out.println(deploymentName);
+				if(deployment==null){
+					deployment = new ServidorAplicacaoDeployment();
+					deployment.setNome(deploymentName);
+					deployment.setServidorAplicacao(this.jboss);
+				}
 				
+				deployment.setAtivo(true);
+				
+				deployments.put(deploymentName, deployment);
 			} 
 			
 			return deployments;
@@ -127,16 +150,101 @@ public class JBossColeta {
 	}
 	
 	
-	//TODO ver como faz enum no hibernate
-	private void getJbossMemory(){
-		try{
+	private List<ServidorAplicacaoMemoria> getConfigJbossMemory(){
+		try{		
+			
+			List<ServidorAplicacaoMemoria> retorno = new ArrayList<	ServidorAplicacaoMemoria>();
+			
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get jboss.memory"));
 						
+			JSONObject jsonHeap = json.getJSONObject("heap");
+			JSONObject jsonNonHeap = json.getJSONObject("nonHeap");
+			
+			ServidorAplicacaoMemoria memoriaHeap = this.servidorAplicacaoBO.getMemoriaTipo(this.jboss, TipoMemoriaServidorAplicacao.HEAP);
+			
+			if(memoriaHeap == null){
+				memoriaHeap = new ServidorAplicacaoMemoria(this.jboss);
+			}
+			memoriaHeap.setTipo(TipoMemoriaServidorAplicacao.HEAP);
+			memoriaHeap.setInit(jsonHeap.getLong("init"));
+			memoriaHeap.setMax(jsonHeap.getLong("max"));
+			
+			
+			ServidorAplicacaoMemoria memoriaNonHeap = this.servidorAplicacaoBO.getMemoriaTipo(this.jboss, TipoMemoriaServidorAplicacao.NONHEAP);
+			
+			if(memoriaNonHeap == null){
+				memoriaNonHeap = new ServidorAplicacaoMemoria(this.jboss);
+			}
+			
+			memoriaNonHeap.setTipo(TipoMemoriaServidorAplicacao.NONHEAP);
+			memoriaNonHeap.setInit(jsonNonHeap.getLong("init"));
+			memoriaNonHeap.setMax(jsonNonHeap.getLong("max"));
+			
+			
+			retorno.add(memoriaHeap);
+			retorno.add(memoriaNonHeap);
+			
+			return retorno;
+			
 		}catch (InterruptedException e) {
 			e.printStackTrace();
+			return null;
 		}catch(IOException e){
 			e.printStackTrace();
+			return null;
 		}
+		
+	}
+	
+	private List<ServidorAplicacaoMemoriaColeta> getJbossMemory(){
+		try{		
+			
+			List<ServidorAplicacaoMemoriaColeta> retorno = new ArrayList<	ServidorAplicacaoMemoriaColeta>();
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get jboss.memory"));
+			
+			JSONObject jsonHeap = json.getJSONObject("heap");
+			JSONObject jsonNonHeap = json.getJSONObject("nonHeap");
+			
+			
+			ServidorAplicacaoMemoria memoriaHeap = this.servidorAplicacaoBO.getMemoriaTipo(this.jboss, TipoMemoriaServidorAplicacao.HEAP);
+			ServidorAplicacaoMemoria memoriaNonHeap = this.servidorAplicacaoBO.getMemoriaTipo(this.jboss, TipoMemoriaServidorAplicacao.NONHEAP);
+			
+			
+			if(memoriaHeap != null){
+				ServidorAplicacaoMemoriaColeta coletaMemoriaHeap = new ServidorAplicacaoMemoriaColeta(memoriaHeap);
+				
+				coletaMemoriaHeap.setDataColeta(this.dataColeta);
+				coletaMemoriaHeap.setUsed(jsonHeap.getLong("used"));
+				coletaMemoriaHeap.setCommited(jsonHeap.getLong("committed"));
+				
+				retorno.add(coletaMemoriaHeap);
+				
+			}
+					
+			if(memoriaNonHeap != null){
+				ServidorAplicacaoMemoriaColeta coletaMemoriaNonHeap = new ServidorAplicacaoMemoriaColeta(memoriaNonHeap);
+				
+				coletaMemoriaNonHeap.setDataColeta(this.dataColeta);
+				coletaMemoriaNonHeap.setUsed(jsonNonHeap.getLong("used"));
+				coletaMemoriaNonHeap.setCommited(jsonNonHeap.getLong("committed"));
+				
+				retorno.add(coletaMemoriaNonHeap);
+				
+			}
+			
+			return retorno;
+			
+		}catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		}catch(IOException e){
+			e.printStackTrace();
+			return null;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 	

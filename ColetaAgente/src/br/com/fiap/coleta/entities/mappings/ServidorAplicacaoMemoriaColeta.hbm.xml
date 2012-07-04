@@ -8,6 +8,7 @@
         	<generator class="increment"/>
     	</id>
 
+		<many-to-one name="memoria" column="memoria"/>
 		<property name="dataColeta" column="data_coleta" not-null="true"/>
 		<property name="used" not-null="true"/>
 		<property name="commited" not-null="true"/>

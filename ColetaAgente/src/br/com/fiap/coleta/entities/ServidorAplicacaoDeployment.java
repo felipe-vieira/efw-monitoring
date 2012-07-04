@@ -12,7 +12,7 @@ public class ServidorAplicacaoDeployment implements Serializable {
 	
 	private String nome;
 	
-	private Integer ativo;
+	private Boolean ativo;
 	
 	public Long getId() {
 		return id;
@@ -34,10 +34,10 @@ public class ServidorAplicacaoDeployment implements Serializable {
 	}
 	
 	
-	public Integer getAtivo() {
+	public Boolean getAtivo() {
 		return ativo;
 	}
-	public void setAtivo(Integer ativo) {
+	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
 	}
 	public static long getSerialversionuid() {
