@@ -2,6 +2,8 @@ package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 
+import br.com.fiap.coleta.cgt.coletas.GlassFishColeta;
+
 
 public class Glassfish extends ServidorAplicacao implements Serializable{
 
@@ -32,6 +34,13 @@ public class Glassfish extends ServidorAplicacao implements Serializable{
 	public void setVersao(String versao) {
 		this.versao = versao;
 	}
+	
+	public void coleta(){
+		System.out.println("OPA!");
+		GlassFishColeta coleta = new GlassFishColeta(this);
+		coleta.initColeta();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

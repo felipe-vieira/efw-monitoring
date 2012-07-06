@@ -92,15 +92,17 @@ public class Comando {
 					retorno = new Oracle().getJobRunning();
 				}else if(arg[1].equals("ora.jobHistory")){
 					retorno = new Oracle().getJobHistory();
+				}else if(arg[1].equals("jboss.status")){
+					retorno = app.getStatus();
 				}else if(arg[1].equals("glassfish.memory")){
-					gf.getMemory();				
-				}else if(arg[1].equals("glassfish.compilation")){
-					gf.getCompilation();				
+					retorno = gf.getMemory();				
 				}else if(arg[1].equals("glassfish.runtime")){
-					gf.getRuntime();				
+					retorno = gf.getRuntime();				
 				}else if(arg[1].equals("glassfish.thread")){
-					gf.getThread();
-				}					
+					retorno = gf.getThread();
+				}else if(arg[1].equals("glassfish.deployment")){
+					retorno = gf.getDeployments();
+				}				
 			}else if(arg[0].equals("list")){
 				return "get config.os / config.processor / config.memory / config.partitions / os.memory / os.processor / os.partition";
 			}

@@ -26,5 +26,11 @@
 	<classpathentry exported="true" kind="lib" path="lib/JBoss/jboss-sasl-1.0.0.Beta2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jdbc/jtds-1.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="lib/commons/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/http/fluent-hc-4.2.jar"/>
+	<classpathentry kind="lib" path="lib/http/httpclient-4.2.jar"/>
+	<classpathentry kind="lib" path="lib/http/httpclient-cache-4.2.jar"/>
+	<classpathentry kind="lib" path="lib/http/httpcore-4.2.jar"/>
+	<classpathentry kind="lib" path="lib/http/httpmime-4.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -2,6 +2,7 @@ package br.com.fiap.monitor.coletas;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
@@ -10,12 +11,21 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import br.com.fiap.monitor.coletas.estrutura.ReturnObject;
+import br.com.fiap.monitor.utils.RESTUtils;
+
+
 public class Glassfish {
 	 
 	    private MBeanServerConnection mbsc = null;  
 	 
-	    public void getMemory(){
+	    public ReturnObject getMemory(){
+	    	
 		    try{
+		           	ReturnObject ro = new ReturnObject();
 		           
 		            connect();                  
 
@@ -44,22 +54,26 @@ public class Glassfish {
 					String nonHeapUsed = nonHeap.get("used").toString();
 
 					// Heap Memory
-					System.out.println(heapCommitted);
-					System.out.println(heapInit);
-					System.out.println(heapMax);
-					System.out.println(heapUsed);
+					Map<String,String> heapMemory = new HashMap<String, String>();
+					heapMemory.put("committed",heapCommitted);
+					heapMemory.put("init",heapInit);
+					heapMemory.put("max",heapMax);
+					heapMemory.put("used",heapUsed);
 					
-					// Non Heap Memory
-					System.out.println(nonHeapCommitted);
-					System.out.println(nonHeapInit);
-					System.out.println(nonHeapMax);
-					System.out.println(nonHeapUsed);
+					Map<String,String> nonHeapMemory = new HashMap<String, String>();
+					nonHeapMemory.put("committed",nonHeapCommitted);
+					nonHeapMemory.put("init",nonHeapInit);
+					nonHeapMemory.put("max",nonHeapMax);
+					nonHeapMemory.put("used",nonHeapUsed);	
 					
-
+					ro.putValue("heap", heapMemory);
+					ro.putValue("nonHeap", nonHeapMemory);
+					
+					return ro;					
+					
 		        } catch (Exception e) {
-
 		            e.printStackTrace();
-
+		            return null;
 		        }
 	    }
 	    
@@ -78,54 +92,63 @@ public class Glassfish {
 		        System.out.println(time);
 				
 	    	 } catch (Exception e) {
-
 		            e.printStackTrace();
-
-		        }
+		     }
 	    	
 	    }
 	    
-	    public void getRuntime(){
+	    public ReturnObject getRuntime(){
 	    	
 	    	try{
-		           
+		        
+	    		ReturnObject ro = new ReturnObject();
 	            connect();                  
 
 	            String query = "java.lang:type=Runtime";                        
 
 		        ObjectName queryName = new ObjectName(query);
 		        
-		        String uptime = mbsc.getAttribute(queryName, "Uptime").toString();
-		        String StartTime = mbsc.getAttribute(queryName, "StartTime").toString();
+		        Long uptime = (Long) mbsc.getAttribute(queryName, "Uptime");
+		        Long startTime = (Long) mbsc.getAttribute(queryName, "StartTime");
 		        
-		        System.out.println(uptime);
-		        System.out.println(StartTime);
+		        ro.putValue("uptime",uptime);
+		        ro.putValue("startTime",startTime);
 				
+		        return ro;
+		        
 	    	 } catch (Exception e) {
-
 		            e.printStackTrace();
-
-		        }
+		            return null;
+		     }
 	    	
 	    }
 	    
-	    public void getThread(){
+	    public ReturnObject getThread(){
 	    	
 	    	try{
 		           
+	    		ReturnObject ro = new ReturnObject();
+	    		
 	            connect();                  
 
 	            String query = "java.lang:type=Threading";                        
 
 		        ObjectName queryName = new ObjectName(query);
 		        
+		        String threadCount = mbsc.getAttribute(queryName, "ThreadCount").toString();
+		        String currentThreadUserTime = mbsc.getAttribute(queryName, "CurrentThreadUserTime").toString();
+		        String currentThreadCpuTime = mbsc.getAttribute(queryName, "CurrentThreadCpuTime").toString();
+		        
+				ro.putValue("count", threadCount);
+				ro.putValue("cpuTime", currentThreadUserTime);
+				ro.putValue("userTime", currentThreadCpuTime);
+				
+				return ro;
+				
+		        /*		         
 		        String StartThreadCount = mbsc.getAttribute(queryName, "TotalStartedThreadCount").toString();
-		        String ThreadCount = mbsc.getAttribute(queryName, "ThreadCount").toString();
 		        String PeakThreadCount = mbsc.getAttribute(queryName, "PeakThreadCount").toString();
 		        String DaemonThreadCount = mbsc.getAttribute(queryName, "DaemonThreadCount").toString();
-		        String CurrentThreadUserTime = mbsc.getAttribute(queryName, "CurrentThreadUserTime").toString();
-		        String CurrentThreadCpuTime = mbsc.getAttribute(queryName, "CurrentThreadCpuTime").toString();
-		        
 		        
 		        System.out.println(StartThreadCount);
 		        System.out.println(ThreadCount);
@@ -133,13 +156,38 @@ public class Glassfish {
 		        System.out.println(DaemonThreadCount);
 		        System.out.println(CurrentThreadUserTime);
 		        System.out.println(CurrentThreadCpuTime);
-				
+				*/
+		        
 	    	 } catch (Exception e) {
-		            e.printStackTrace();
+	    		 e.printStackTrace();
+		         return null;   
 		     }
 	    	
 	    }
 
+	    public ReturnObject getDeployments(){
+	    	
+	    	ReturnObject ro = new ReturnObject();
+	    	
+	    	try{
+	    		
+	    		String stringJson = RESTUtils.getInformation("/domain/applications/list-applications");
+	    		JSONObject json = JSONObject.fromObject(stringJson).getJSONObject("properties");
+	    		System.out.println(json.toString());
+	    		
+	    		Set<String> deployments = json.keySet();
+	    		
+	    		ro.putValue("deployments", JSONArray.fromObject(deployments));
+	    		
+	    		return ro;
+	    			    		
+				
+	    	 } catch (Exception e) {
+	    		e.printStackTrace();
+		        return ro;
+		     }
+	    	
+	    }
 	    
 	    
 	    
