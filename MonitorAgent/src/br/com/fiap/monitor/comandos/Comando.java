@@ -18,6 +18,9 @@ public class Comando {
 		Configuracoes config = new Configuracoes();
 		JBoss app = new JBoss();
 		Glassfish gf = new Glassfish();
+
+		Log log = new Log();
+
 		String arg[] = comando.split(" ");
 		ReturnObject retorno = null;
 		
@@ -100,6 +103,18 @@ public class Comando {
 					gf.getRuntime();				
 				}else if(arg[1].equals("glassfish.thread")){
 					gf.getThread();
+				}else if(arg[1].equals("log")){
+					try {
+						if(arg.length == 4){
+						
+							log.getLinhas(arg[2], System.out, Integer.parseInt(arg[3]));		
+						}
+						else if(arg.length == 5){
+							log.getLinhas(arg[2], System.out, Integer.parseInt(arg[3]), arg[4]);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}					
 			}else if(arg[0].equals("list")){
 				return "get config.os / config.processor / config.memory / config.partitions / os.memory / os.processor / os.partition";
