@@ -6,6 +6,10 @@ public class No {
 	
 	private String nome;
 	
+	private Boolean disponivel;
+	
+	private Boolean gerenciavel;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -17,6 +21,19 @@ public class No {
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public Boolean getDisponivel() {
+		return disponivel;
+	}
+	public void setDisponivel(Boolean disponivel) {
+		this.disponivel = disponivel;
+	}
+	public Boolean getGerenciavel() {
+		return gerenciavel;
+	}
+	public void setGerenciavel(Boolean gerenciavel) {
+		this.gerenciavel = gerenciavel;
 	}
 	@Override
 	public int hashCode() {
