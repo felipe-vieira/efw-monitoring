@@ -102,7 +102,7 @@ public class SqlServer {
 		
 	}
 	
-	public ReturnObject getVersion(){
+	public ReturnObject getConfigVersion(){
 		
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
@@ -156,7 +156,7 @@ public class SqlServer {
 		
 	}
 	
-	public ReturnObject getCollation(String database){
+	public ReturnObject getConfigCollation(String database){
 		
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
@@ -183,14 +183,14 @@ public class SqlServer {
 		
 	}
 	
-	public ReturnObject getDrive(){
+	public ReturnObject getConfigDrive(){
 		
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
 		
 		sql.append(" create table ##dbspace(	[DatabaseName] varchar(250) , [FilePath] varchar(250) , [Size] bigint); ");
 		sql.append(" Exec SP_MSForEachDB 'Use ? Insert into ##dbspace select Convert(Varchar(25),DB_Name()), Filename , ");
-		sql.append(" cast(cast(Size * 8 as bigint)/1024 as bigint) Size	from sys.sysfiles';");
+		sql.append(" cast(Size * 8 as bigint) Size	from sys.sysfiles';");
 		sql.append(" CREATE TABLE ##space (drive varchar(10), mbfree int);");
 		sql.append(" INSERT INTO ##space EXEC master.dbo.xp_fixeddrives;");
 		sql.append(" alter table ##space add tamanhosql int;");
@@ -241,7 +241,7 @@ public class SqlServer {
 	}
 	
 	
-	public ReturnObject getFiles(){
+	public ReturnObject getConfigFiles(){
 	
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
@@ -249,8 +249,8 @@ public class SqlServer {
 		sql.append(" create table ##dbfiles(		[DatabaseName] varchar(250) , [FilePath] varchar(250) , [Size] bigint, [MaxSize] bigint, ");
 		sql.append(" Growth varchar(100), Situacao varchar(15), [FileName] Varchar(30));");
 		sql.append(" Exec SP_MSForEachDB 'Use ? Insert into ##dbfiles select Convert(Varchar(25),DB_Name()), Filename ,");
-		sql.append(" cast(cast(Size * 8 as bigint) / 1024.00 as bigint) Size,");
-		sql.append(" cast(case when MaxSize = -1 then -1 else cast(MaxSize as bigint)* 8 / 1024.00/1024 end as bigint) MaxSize,");
+		sql.append(" cast(Size * 8 as bigint) Size,");
+		sql.append(" cast(case when MaxSize = -1 then -1 else cast(MaxSize as bigint)* 8 end as bigint) MaxSize,");
 		sql.append(" case when substring(cast(Status as varchar),1,2) = 10 then cast(Growth as varchar) + '' %''");
 		sql.append(" else cast (cast((Growth * 8 )/1024.00 as numeric(15,2)) as varchar) + '' MB''end Growth,");
 		sql.append(" case when MaxSize = -1 then ''OK'' ");
@@ -348,7 +348,7 @@ public class SqlServer {
 		sql.append(" SELECT database_name, name,Backup_start_date, ");
 		sql.append(" case when Backup_finish_date IS NULL then 'EM EXECUÇÃO' else ");
 		sql.append(" datediff(mi,Backup_start_date,Backup_finish_date) end [Tempo de Execucao],");
-		sql.append(" server_name,recovery_model, cast(backup_size/1024 as numeric(15,2)) [Tamanho (KB)], ");
+		sql.append(" server_name,recovery_model, cast(backup_size as numeric(15)) [Tamanho (B)], ");
 		sql.append(" case when type = 'D' then 'Database' ");
 		sql.append(" when type = 'I' then 'Differential Database' ");
 		sql.append(" when type = 'L' then 'Log' ");
@@ -462,9 +462,7 @@ public class SqlServer {
 		sql.append(" right('00' + substring(Run_time,(len(Run_time)-5),2) ,2)+ ':' + ");
 		sql.append(" right('00' + substring(Run_time,(len(Run_time)-3),2) ,2)+ ':' + ");
 		sql.append(" right('00' + substring(Run_time,(len(Run_time)-1),2) ,2) as varchar) Dt_Execucao, ");
-		sql.append(" right('00' + substring(cast(Run_Duration as varchar),(len(Run_Duration)-5),2) ,2)+ ':' + ");
-		sql.append(" right('00' + substring(cast(Run_Duration as varchar),(len(Run_Duration)-3),2) ,2)+ ':' + ");
-		sql.append(" right('00' + substring(cast(Run_Duration as varchar),(len(Run_Duration)-1),2) ,2) Run_Duration, ");
+		sql.append(" cast(Run_Duration as integer)/60 Run_Duration, ");
 		sql.append(" SQL_Message ");
 		sql.append(" from ##Result_History_Jobs ");
 		sql.append(" where cast(Run_Date + ' ' + right('00' + substring(Run_time,(len(Run_time)-5),2) ,2)+ ':' + ");
@@ -472,7 +470,7 @@ public class SqlServer {
 		sql.append(" right('00' + substring(Run_time,(len(Run_time)-1),2) ,2) as datetime) >= ");
 		sql.append(" convert (varchar(8),(dateadd (day, -1, getdate())),112) + ' 17:00' ");
 		sql.append(" and Step_Id = 0	and Run_Status <> 1 ");
-		sql.append(" order by Dt_Execucao;");
+		sql.append(" order by Dt_Execucao desc ;");
 		sql.append(" ");
 				
 		List<Map<String, Object>> listJobHistory = new ArrayList<Map<String,Object>>();

@@ -180,7 +180,7 @@ public class Oracle {
 			
 		}
 		
-		public ReturnObject getVersion(){
+		public ReturnObject getConfigVersion(){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
@@ -231,7 +231,7 @@ public class Oracle {
 			
 		}
 		
-		public ReturnObject getCollation(){
+		public ReturnObject getConfigCollation(){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
@@ -256,22 +256,22 @@ public class Oracle {
 			
 		}
 		
-		public ReturnObject getDrive(){
+		public ReturnObject getConfigFiles(){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
-			sql.append(" Select t.tablespace_name as Files, SUBSTR(d.file_name,1,80) as Filepath, ");
+			sql.append(" Select t.tablespace_name as File, SUBSTR(d.file_name,1,80) as Filepath, ");
 			sql.append(" ROUND(MAX(d.bytes)/1024,2) as Sizes, ROUND(MAX(t.max_extents)/1024,2) as Maxsizes, ");
 			sql.append(" t.pct_increase as Growth, t.status as Situacao, substr(file_name,instr(file_name,'\',-1)+1,50) as Filename ");
 			sql.append(" FROM DBA_FREE_SPACE f, DBA_DATA_FILES d, DBA_TABLESPACES t ");
 			sql.append(" WHERE t.tablespace_name = d.tablespace_name AND f.tablespace_name(+) = d.tablespace_name ");
 			sql.append(" AND f.file_id(+) = d.file_id GROUP BY t.tablespace_name, d.file_name, t.pct_increase, t.status union ");
-			sql.append(" select substr(f.member,instr(f.member,'\',-1)+1, length(substr(f.member,instr(f.member,'\',-1)+1))-4), ");
+			sql.append(" Select substr(f.member,instr(f.member,'\',-1)+1, length(substr(f.member,instr(f.member,'\',-1)+1))-4) as File, ");
 			sql.append(" f.member, ROUND(MAX(l.bytes)/1024,2), 0, 0, l.status, substr(f.member,instr(f.member,'\',-1)+1,50) ");
 			sql.append(" from v$logfile f, v$log l where l.group# = f.group# group by f.member, l.bytes, l.status ORDER BY 1,3 DESC ");
 
-			List<Map<String, Object>> listDrive = new ArrayList<Map<String,Object>>();
+			List<Map<String, Object>> listFiles = new ArrayList<Map<String,Object>>();
 			
 			try{
 				PreparedStatement stmt = conn.prepareStatement(sql.toString());
@@ -282,7 +282,7 @@ public class Oracle {
 					Map<String,Object> value = new HashMap<String, Object>();
 					
 					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					value.put("File", rs.getString("Files"));
+					value.put("File", rs.getString("File"));
 					value.put("File Path", rs.getString("Filepath"));
 					value.put("Size", rs.getString("Sizes"));
 					value.put("Maxsize", rs.getString("Maxsizes"));
@@ -290,7 +290,7 @@ public class Oracle {
 					value.put("Situacao", rs.getString("Situacao"));
 					value.put("File Name", rs.getString("Filename"));
 					
-					listDrive.add(value);
+					listFiles.add(value);
 				}
 					
 				
@@ -298,20 +298,20 @@ public class Oracle {
 				ex.printStackTrace();
 			}
 			
-			JSONArray json = JSONArray.fromObject(listDrive);
-			retorno.putValue("drive", json);			
+			JSONArray json = JSONArray.fromObject(listFiles);
+			retorno.putValue("files", json);			
 			return retorno;
 			
 		}
 		
 		
-		public ReturnObject getBackup(){
+		public ReturnObject getConfigBackup(){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
 			sql.append(" select i.instance_name as InstanceName, substr(f.fname,instr(f.fname,'\',-1)+1,50) as FileName, ");
-			sql.append(" s.start_time as Backup_start_date , s.elapsed_seconds  as TempodeExecucao, i.host_name as ServerName, ");
+			sql.append(" s.start_time as Backup_start_date , cast(s.elapsed_seconds/60 as integer) as TempodeExecucao, i.host_name as ServerName, ");
 			sql.append(" case(s.backup_type) when 'D' then 'Full Backup' when 'I' then 'Incremental Backup' ");
 			sql.append(" when 'L' then 'Redo Logs' end as RecoveryModel, ROUND(MAX(f.bytes)/1024,2) as TamanhoKB ");
 			sql.append(" from v$instance i, v$backup_files f, v$backup_set s where s.recid = f.bs_key and ");
@@ -335,7 +335,7 @@ public class Oracle {
 					value.put("Instance Name", rs.getString("INSTANCENAME"));
 					value.put("File Name", rs.getString("FILENAME"));
 					value.put("Backup Start Date", rs.getString("BACKUP_START_DATE"));
-					value.put("Tempo de Execucao (s)", rs.getString("TEMPODEEXECUCAO"));
+					value.put("Tempo de Execucao (M)", rs.getString("TEMPODEEXECUCAO"));
 					value.put("Server Name", rs.getString("SERVERNAME"));
 					value.put("Recovery Model", rs.getString("RECOVERYMODEL"));
 					value.put("Tamanho (KB)", rs.getString("TAMANHOKB"));
@@ -355,7 +355,7 @@ public class Oracle {
 		}
 		
 		 
-		public ReturnObject getJobRunning(){
+		public ReturnObject getConfigJobRunning(){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
@@ -396,12 +396,15 @@ public class Oracle {
 				
 				
 				
-		public ReturnObject getJobHistory(){
+		public ReturnObject getConfigJobHistory(){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
-			sql.append(" select JOB_NAME, STATUS, ACTUAL_START_DATE, RUN_DURATION,ADDITIONAL_INFO from dba_scheduler_job_run_details WHERE STATUS <> 'SUCCEEDED' and ");
+			sql.append(" select JOB_NAME, STATUS, ACTUAL_START_DATE, cast((to_number(extract(second from RUN_DURATION)) + ");
+            sql.append(" to_number(extract(minute from RUN_DURATION)) * 60 + ");
+            sql.append(" to_number(extract(hour from RUN_DURATION))   * 60 * 60 + ");
+            sql.append(" to_number(extract(day from RUN_DURATION))  * 60 * 60* 24) / 60 as integer) as RUN_DURATION,ADDITIONAL_INFO from dba_scheduler_job_run_details WHERE STATUS <> 'SUCCEEDED' and ");
 			sql.append(" log_date >= to_timestamp(concat(to_char(sysdate - interval '1' DAY) || ' ',to_char('17:00:00')),'DD:MM:YY HH24:MI:SS') ");
 			sql.append(" order by actual_start_date desc ");
 								

@@ -56,20 +56,20 @@ public class Comando {
 				}else if(arg[1].equals("mssql.memory")){
 					retorno = new SqlServer().getMemory();
 				}else if(arg[1].equals("mssql.config.version")){
-					retorno = new SqlServer().getVersion();
-				}else if(arg[1].equals("mssql.drive")){
-					retorno = new SqlServer().getDrive();
-				}else if(arg[1].equals("mssql.files")){
-					retorno = new SqlServer().getFiles();
+					retorno = new SqlServer().getConfigVersion();
+				}else if(arg[1].equals("mssql.config.drive")){
+					retorno = new SqlServer().getConfigDrive();
+				}else if(arg[1].equals("mssql.config.files")){
+					retorno = new SqlServer().getConfigFiles();
 				}else if(arg[1].equals("mssql.logspace")){
 					retorno = new SqlServer().getLogSpace();
 				}else if(arg[1].equals("mssql.status")){
 					if(arg.length > 2){
 						retorno = new SqlServer().getStatus(arg[2]);
 					}
-				}else if(arg[1].equals("mssql.collation")){
+				}else if(arg[1].equals("mssql.config.collation")){
 					if(arg.length > 2){
-						retorno = new SqlServer().getCollation(arg[2]);
+						retorno = new SqlServer().getConfigCollation(arg[2]);
 					}
 				}else if(arg[1].equals("mssql.backup")){
 					retorno = new SqlServer().getBackup();
@@ -82,20 +82,20 @@ public class Comando {
 					retorno = new Oracle().getConfigMemory();
 				}else if(arg[1].equals("ora.memory")){
 					retorno = new Oracle().getMemory();
-				}else if(arg[1].equals("ora.version")){
-					retorno = new Oracle().getVersion();
+				}else if(arg[1].equals("ora.config.version")){
+					retorno = new Oracle().getConfigVersion();
 				}else if(arg[1].equals("ora.status")){
 					retorno = new Oracle().getStatus();
-				}else if(arg[1].equals("ora.collation")){
-					retorno = new Oracle().getCollation();
-				}else if(arg[1].equals("ora.drive")){
-					retorno = new Oracle().getDrive();
-				}else if(arg[1].equals("ora.backup")){
-					retorno = new Oracle().getBackup();
-				}else if(arg[1].equals("ora.jobRunning")){
-					retorno = new Oracle().getJobRunning();
-				}else if(arg[1].equals("ora.jobHistory")){
-					retorno = new Oracle().getJobHistory();
+				}else if(arg[1].equals("ora.config.collation")){
+					retorno = new Oracle().getConfigCollation();
+				}else if(arg[1].equals("ora.config.files")){
+					retorno = new Oracle().getConfigFiles();
+				}else if(arg[1].equals("ora.config.backup")){
+					retorno = new Oracle().getConfigBackup();
+				}else if(arg[1].equals("ora.config.jobRunning")){
+					retorno = new Oracle().getConfigJobRunning();
+				}else if(arg[1].equals("ora.config.jobHistory")){
+					retorno = new Oracle().getConfigJobHistory();
 				}else if(arg[1].equals("jboss.status")){
 					retorno = app.getStatus();
 				}else if(arg[1].equals("glassfish.memory")){
