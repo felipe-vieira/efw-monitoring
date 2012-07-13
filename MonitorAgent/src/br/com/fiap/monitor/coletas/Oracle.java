@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -261,13 +262,13 @@ public class Oracle {
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
-			sql.append(" Select t.tablespace_name as File, SUBSTR(d.file_name,1,80) as Filepath, ");
+			sql.append(" Select t.tablespace_name as idFile, SUBSTR(d.file_name,1,80) as Filepath, ");
 			sql.append(" ROUND(MAX(d.bytes)/1024,2) as Sizes, ROUND(MAX(t.max_extents)/1024,2) as Maxsizes, ");
 			sql.append(" t.pct_increase as Growth, t.status as Situacao, substr(file_name,instr(file_name,'\',-1)+1,50) as Filename ");
 			sql.append(" FROM DBA_FREE_SPACE f, DBA_DATA_FILES d, DBA_TABLESPACES t ");
 			sql.append(" WHERE t.tablespace_name = d.tablespace_name AND f.tablespace_name(+) = d.tablespace_name ");
 			sql.append(" AND f.file_id(+) = d.file_id GROUP BY t.tablespace_name, d.file_name, t.pct_increase, t.status union ");
-			sql.append(" Select substr(f.member,instr(f.member,'\',-1)+1, length(substr(f.member,instr(f.member,'\',-1)+1))-4) as File, ");
+			sql.append(" Select substr(f.member,instr(f.member,'\',-1)+1, length(substr(f.member,instr(f.member,'\',-1)+1))-4) as idFile, ");
 			sql.append(" f.member, ROUND(MAX(l.bytes)/1024,2), 0, 0, l.status, substr(f.member,instr(f.member,'\',-1)+1,50) ");
 			sql.append(" from v$logfile f, v$log l where l.group# = f.group# group by f.member, l.bytes, l.status ORDER BY 1,3 DESC ");
 
@@ -282,13 +283,13 @@ public class Oracle {
 					Map<String,Object> value = new HashMap<String, Object>();
 					
 					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					value.put("File", rs.getString("File"));
-					value.put("File Path", rs.getString("Filepath"));
+					value.put("File", rs.getString("idFile"));
+					value.put("FilePath", rs.getString("Filepath"));
 					value.put("Size", rs.getString("Sizes"));
 					value.put("Maxsize", rs.getString("Maxsizes"));
 					value.put("Growth", rs.getString("Growth"));
 					value.put("Situacao", rs.getString("Situacao"));
-					value.put("File Name", rs.getString("Filename"));
+					value.put("FileName", rs.getString("Filename"));
 					
 					listFiles.add(value);
 				}
@@ -305,40 +306,40 @@ public class Oracle {
 		}
 		
 		
-		public ReturnObject getConfigBackup(){
+		public ReturnObject getConfigBackup(Long setCount){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
-			sql.append(" select i.instance_name as InstanceName, substr(f.fname,instr(f.fname,'\',-1)+1,50) as FileName, ");
-			sql.append(" s.start_time as Backup_start_date , cast(s.elapsed_seconds/60 as integer) as TempodeExecucao, i.host_name as ServerName, ");
+			sql.append(" select i.instance_name as InstanceName, substr(f.fname,instr(f.fname,'\',-1)+1,50) as FileName, "); 
+			sql.append(" s.start_time as Backup_start_date , s.elapsed_seconds as TempodeExecucao, i.host_name as ServerName, s.set_count, ");
 			sql.append(" case(s.backup_type) when 'D' then 'Full Backup' when 'I' then 'Incremental Backup' ");
-			sql.append(" when 'L' then 'Redo Logs' end as RecoveryModel, ROUND(MAX(f.bytes)/1024,2) as TamanhoKB ");
-			sql.append(" from v$instance i, v$backup_files f, v$backup_set s where s.recid = f.bs_key and ");
-			sql.append(" substr(f.fname,instr(f.fname,'.',-1)+1,50) = 'BKP' ");
-			sql.append(" AND s.start_time >= to_timestamp(concat(to_char(sysdate - interval '1' DAY) || ' ',to_char('18:00:00')),'DD:MM:YY HH24:MI:SS') ");
-			sql.append(" and s.start_time < sysdate + interval '1' DAY ");
-			sql.append(" group by i.instance_name, f.fname, s.start_time, s.elapsed_seconds, i.host_name, s.backup_type ");
-			
-					
+			sql.append(" when 'L' then 'Redo Logs' end as RecoveryModel, ROUND(MAX(f.bytes)/1024,2) as TamanhoKB "); 
+			sql.append(" from v$instance i, v$backup_files f, v$backup_set s where s.recid = f.bs_key and "); 
+			sql.append(" substr(f.fname,instr(f.fname,'.',-1)+1,50) = 'BKP' "); 
+			sql.append(" and s.set_count > ? ");
+			sql.append(" group by i.instance_name, f.fname, s.start_time, s.set_count, s.elapsed_seconds, i.host_name, s.backup_type ");
+								
 			List<Map<String, Object>> listBackup = new ArrayList<Map<String,Object>>();
 			
 			try{
 				PreparedStatement stmt = conn.prepareStatement(sql.toString());
-				ResultSet rs = stmt.executeQuery();
+				stmt.setLong(1, setCount);
 				
+				ResultSet rs = stmt.executeQuery();
+								
 				while(rs.next()){
 					
 					Map<String,Object> value = new HashMap<String, Object>();
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
 					
-					value.put("Instance Name", rs.getString("INSTANCENAME"));
-					value.put("File Name", rs.getString("FILENAME"));
-					value.put("Backup Start Date", rs.getString("BACKUP_START_DATE"));
-					value.put("Tempo de Execucao (M)", rs.getString("TEMPODEEXECUCAO"));
-					value.put("Server Name", rs.getString("SERVERNAME"));
-					value.put("Recovery Model", rs.getString("RECOVERYMODEL"));
-					value.put("Tamanho (KB)", rs.getString("TAMANHOKB"));
+					value.put("InstanceName", rs.getString("InstanceName"));
+					value.put("FileName", rs.getString("FileName"));
+					value.put("BackupStartDate", new Date(rs.getDate("Backup_start_date").getTime()));
+					value.put("TempoExecucao", rs.getLong("TempodeExecucao"));
+					value.put("ServerName", rs.getString("ServerName"));
+					value.put("RecoveryModel", rs.getString("RecoveryModel"));
+					value.put("Tamanho", rs.getLong("TamanhoKB"));
+					value.put("SetCount", rs.getLong("set_count"));
 										
 					listBackup.add(value);
 				}
@@ -353,65 +354,24 @@ public class Oracle {
 			return retorno;
 			
 		}
-		
-		 
-		public ReturnObject getConfigJobRunning(){
-			
-			StringBuilder sql = new StringBuilder();
-			ReturnObject retorno = new ReturnObject();
-			
-			sql.append(" select job, to_timestamp(concat(to_char(last_date) || ' ',to_char(last_sec)),'DD:MM:YY HH24:MI:SS') as RunRequestedDate,");
-			sql.append(" (to_date(this_sec,'hh24:mi:ss') - to_date(last_sec,'hh24:mi:ss')) *60*60*24 as ExecutionTime ");
-			sql.append(" from dba_jobs_running ");
-			sql.append(" where last_date is not null and last_sec is not null");
-					
-			List<Map<String, Object>> listJobRunning = new ArrayList<Map<String,Object>>();
-			
-			try{
-				PreparedStatement stmt = conn.prepareStatement(sql.toString());
-				ResultSet rs = stmt.executeQuery();
-				
-				while(rs.next()){
-					
-					Map<String,Object> value = new HashMap<String, Object>();
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					
-					value.put("Job Name", rs.getString("JOB"));
-					value.put("Run Date", rs.getString("RUNREQUESTEDDATE"));
-					value.put("Execution Time", rs.getString("EXECUTIONTIME"));
-					
-					listJobRunning.add(value);
-				}
-					
-				
-			}catch(SQLException ex){
-				ex.printStackTrace();
-			}
-			
-			JSONArray json = JSONArray.fromObject(listJobRunning);
-			retorno.putValue("jobrunning", json);
-			return retorno;
-			
-		}				
-				
-				
 				
 		public ReturnObject getConfigJobHistory(){
 			
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
-			sql.append(" select JOB_NAME, STATUS, ACTUAL_START_DATE, cast((to_number(extract(second from RUN_DURATION)) + ");
-            sql.append(" to_number(extract(minute from RUN_DURATION)) * 60 + ");
-            sql.append(" to_number(extract(hour from RUN_DURATION))   * 60 * 60 + ");
-            sql.append(" to_number(extract(day from RUN_DURATION))  * 60 * 60* 24) / 60 as integer) as RUN_DURATION,ADDITIONAL_INFO from dba_scheduler_job_run_details WHERE STATUS <> 'SUCCEEDED' and ");
-			sql.append(" log_date >= to_timestamp(concat(to_char(sysdate - interval '1' DAY) || ' ',to_char('17:00:00')),'DD:MM:YY HH24:MI:SS') ");
-			sql.append(" order by actual_start_date desc ");
+			sql.append("SELECT LOG_ID, OWNER, JOB_NAME, STATUS, ACTUAL_START_DATE, cast((to_number(extract(second from RUN_DURATION)) + "); 
+			sql.append("		to_number(extract(minute from RUN_DURATION)) * 60 + ");
+			sql.append("		to_number(extract(hour from RUN_DURATION))   * 60 * 60 + ");
+			sql.append("		to_number(extract(day from RUN_DURATION))  * 60 * 60* 24) as integer) as RUN_DURATION,ADDITIONAL_INFO from dba_scheduler_job_run_details a");
+			sql.append("		WHERE log_id = (SELECT max(log_id) from dba_scheduler_job_run_details b WHERE  b.JOB_NAME = a.JOB_NAME )");
+			sql.append("		order by actual_start_date desc");
 								
 			List<Map<String, Object>> listJobHistory = new ArrayList<Map<String,Object>>();
 			
 			try{
 				PreparedStatement stmt = conn.prepareStatement(sql.toString());
+				stmt.toString();
 				ResultSet rs = stmt.executeQuery();
 				
 				while(rs.next()){
@@ -419,11 +379,13 @@ public class Oracle {
 					Map<String,Object> value = new HashMap<String, Object>();
 					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
 					
-					value.put("Job Name", rs.getString("JOB_NAME"));
+					value.put("LogID", rs.getLong("LOG_ID"));
+					value.put("Owner", rs.getString("OWNER"));
+					value.put("JobName", rs.getString("JOB_NAME"));
 					value.put("Status", rs.getString("STATUS"));
-					value.put("Data de Execucao", rs.getString("ACTUAL_START_DATE"));
+					value.put("DataExecucao", new Date(rs.getDate("ACTUAL_START_DATE").getTime()));
 					value.put("Duracao", rs.getString("RUN_DURATION"));
-					value.put("Mensagem SQL", rs.getString("ADDITIONAL_INFO"));
+					value.put("MensagemSQL", rs.getString("ADDITIONAL_INFO"));
 					
 					listJobHistory.add(value);
 				}
@@ -433,15 +395,6 @@ public class Oracle {
 				ex.printStackTrace();
 			}
 			
-			sql = new StringBuilder();
-			sql.append("drop table ##Result_History_Jobs");
-			
-			try{
-				PreparedStatement stmt = conn.prepareStatement(sql.toString());
-				stmt.execute();
-			}catch(SQLException ex){
-				ex.printStackTrace();
-			}
 			
 			JSONArray json = JSONArray.fromObject(listJobHistory);
 			retorno.putValue("jobhistory", json);

@@ -61,6 +61,8 @@ public class ServidorAplicacaoBO {
 				map.put(deployment.getNome(), deployment);
 			}
 		}
+		
+		
 	
 		return map;
 	}

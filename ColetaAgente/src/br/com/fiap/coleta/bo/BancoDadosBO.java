@@ -1,0 +1,64 @@
+package br.com.fiap.coleta.bo;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import br.com.fiap.coleta.dao.BancoDadosDAO;
+import br.com.fiap.coleta.dao.ColetaDAO;
+import br.com.fiap.coleta.entities.BancoDados;
+import br.com.fiap.coleta.entities.BancoFile;
+import br.com.fiap.coleta.entities.BancoJob;
+import br.com.fiap.coleta.entities.BancoJobColeta;
+
+public class BancoDadosBO {
+
+	private BancoDadosDAO bancoDadosDAO;
+	private ColetaDAO coletaDAO;
+	
+	public BancoDadosBO(){
+		this.bancoDadosDAO = new BancoDadosDAO();
+		this.coletaDAO = new ColetaDAO();
+	}
+	
+	public Map<String,BancoFile> pegaMapFilesBancoDados(BancoDados bd) {
+		
+		List<BancoFile> listaFiles = this.bancoDadosDAO.listaFilesBancoDados(bd);
+		Map<String, BancoFile> map = null;
+		
+		if(listaFiles != null && listaFiles.size() > 0){
+			map = new HashMap<String, BancoFile>();
+			for (BancoFile file : listaFiles) {
+				file.setAtivo(false);
+				map.put(file.getFile(), file);
+			}
+		}
+		
+		return map;
+	}
+	
+	public Map<String,BancoJob> pegaMapJobsBancoDados(BancoDados bd) {
+		
+		List<BancoJob> listaJobs = this.bancoDadosDAO.listaJobsBancoDados(bd);
+		Map<String, BancoJob> map = null;
+		
+		if(listaJobs != null && listaJobs.size() > 0){
+			map = new HashMap<String, BancoJob>();
+			for (BancoJob job : listaJobs) {
+				map.put(job.getJobName(), job);
+			}
+		}
+		
+		return map;
+	}
+
+	public Boolean verificaColetaJobSalva(BancoJob job, Long logId) {
+		BancoJobColeta coleta = this.bancoDadosDAO.pegaColetaJobLogId(job,logId);
+		if(coleta != null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+}

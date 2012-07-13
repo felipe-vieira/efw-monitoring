@@ -73,8 +73,6 @@ public class Comando {
 					}
 				}else if(arg[1].equals("mssql.backup")){
 					retorno = new SqlServer().getBackup();
-				}else if(arg[1].equals("mssql.jobRunning")){
-					retorno = new SqlServer().getJobRunning();
 				}else if(arg[1].equals("mssql.jobHistory")){
 					retorno = new SqlServer().getJobHistory();
 					
@@ -91,9 +89,18 @@ public class Comando {
 				}else if(arg[1].equals("ora.config.files")){
 					retorno = new Oracle().getConfigFiles();
 				}else if(arg[1].equals("ora.config.backup")){
-					retorno = new Oracle().getConfigBackup();
-				}else if(arg[1].equals("ora.config.jobRunning")){
-					retorno = new Oracle().getConfigJobRunning();
+					Long setCount = 0l;
+					
+					if(arg.length >= 3 && arg[2] != null){
+						try{
+							setCount = Long.parseLong(arg[2]);
+						}catch(NumberFormatException ex){
+							setCount = 0l;
+						}
+					}
+					
+					retorno = new Oracle().getConfigBackup(setCount);
+					
 				}else if(arg[1].equals("ora.config.jobHistory")){
 					retorno = new Oracle().getConfigJobHistory();
 				}else if(arg[1].equals("jboss.status")){
@@ -109,7 +116,6 @@ public class Comando {
 				}else if(arg[1].equals("log")){
 					try {
 						if(arg.length == 4){
-						
 							log.getLinhas(arg[2], System.out, Integer.parseInt(arg[3]));		
 						}
 						else if(arg.length == 5){

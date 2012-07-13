@@ -18,9 +18,9 @@ public class OracleConnectionFactory {
 	public static Connection getConnection() throws SQLException{
 			
 			//TODO parametrizar porta, usuario, senha e instancia
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
-			String usuario = "SYSTEM";
-			String senha = "password";
+			String url = "jdbc:oracle:thin:@192.0.0.3:1521:xe";
+			String usuario = "system";
+			String senha = "Gavalsa0512";
 		
 			registraDriver();
 					
