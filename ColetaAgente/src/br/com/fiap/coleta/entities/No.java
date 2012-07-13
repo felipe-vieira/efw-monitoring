@@ -1,5 +1,7 @@
 package br.com.fiap.coleta.entities;
 
+import java.util.Date;
+
 public class No {
 		
 	private Integer id;
@@ -9,6 +11,8 @@ public class No {
 	private Boolean disponivel;
 	
 	private Boolean gerenciavel;
+	
+	private Date ultimaColeta;
 	
 	public Integer getId() {
 		return id;
@@ -35,6 +39,13 @@ public class No {
 	public void setGerenciavel(Boolean gerenciavel) {
 		this.gerenciavel = gerenciavel;
 	}
+	public Date getUltimaColeta() {
+		return ultimaColeta;
+	}
+	public void setUltimaColeta(Date ultimaColeta) {
+		this.ultimaColeta = ultimaColeta;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

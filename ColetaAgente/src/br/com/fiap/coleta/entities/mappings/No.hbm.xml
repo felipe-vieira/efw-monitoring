@@ -11,6 +11,7 @@
 		<property name="nome" not-null="true"/>
 		<property name="disponivel" not-null="false"/>
 		<property name="gerenciavel" not-null="false"/>
+		<property name="ultimaColeta" not-null="false"/>
 		
 		<joined-subclass name="br.com.fiap.coleta.entities.Servidor" table="servidor">
 			<key column="no_id"/>

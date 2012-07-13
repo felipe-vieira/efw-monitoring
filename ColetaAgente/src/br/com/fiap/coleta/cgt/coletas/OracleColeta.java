@@ -13,7 +13,6 @@ import net.sf.json.JSONObject;
 import br.com.fiap.coleta.bo.BancoDadosBO;
 import br.com.fiap.coleta.bo.OracleBO;
 import br.com.fiap.coleta.entities.BancoBackup;
-import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoFileColeta;
 import br.com.fiap.coleta.entities.BancoJob;
