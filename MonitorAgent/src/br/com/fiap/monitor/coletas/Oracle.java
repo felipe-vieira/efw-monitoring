@@ -70,8 +70,7 @@ public class Oracle {
 				ResultSet rs = stmt.executeQuery();
 				
 				if(rs.next()){
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					retorno.putValue("targetMemory", rs.getString("cntr_value"));
+					retorno.putValue("totalMemory", rs.getLong("cntr_value"));
 				}
 					
 				
@@ -145,8 +144,8 @@ public class Oracle {
 				ResultSet rs = stmt.executeQuery();
 				
 				if(rs.next()){
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					retorno.putValue("totalMemory", rs.getString("cntr_value"));
+
+					retorno.putValue("targetMemory", rs.getLong("cntr_value"));
 				}
 					
 				
@@ -186,16 +185,16 @@ public class Oracle {
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
-			sql.append(" select concat('Version: ', version ) as VERSION, concat('Edition: ',edition) as EDITION from v$instance ");
+			sql.append(" select version , edition from v$instance ");
 			
 			try{
 				PreparedStatement stmt = conn.prepareStatement(sql.toString());
 				ResultSet rs = stmt.executeQuery();
 				
 				if(rs.next()){
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					retorno.putValue("Version", rs.getString("VERSION"));
-					retorno.putValue("Edition", rs.getString("EDITION"));
+
+					retorno.putValue("Version", rs.getString("version"));
+					retorno.putValue("Edition", rs.getString("edition"));
 				}
 					
 				
@@ -219,7 +218,7 @@ public class Oracle {
 				ResultSet rs = stmt.executeQuery();
 				
 				if(rs.next()){
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
+
 					retorno.putValue("Status", rs.getString("database_status"));
 				}
 					
@@ -244,7 +243,7 @@ public class Oracle {
 				ResultSet rs = stmt.executeQuery();
 				
 				if(rs.next()){
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
+
 					retorno.putValue("Collation", rs.getString("value"));
 				}
 					
@@ -264,12 +263,12 @@ public class Oracle {
 			
 			sql.append(" Select t.tablespace_name as idFile, SUBSTR(d.file_name,1,80) as Filepath, ");
 			sql.append(" ROUND(MAX(d.bytes)/1024,2) as Sizes, ROUND(MAX(t.max_extents)/1024,2) as Maxsizes, ");
-			sql.append(" t.pct_increase as Growth, t.status as Situacao, substr(file_name,instr(file_name,'\',-1)+1,50) as Filename ");
+			sql.append(" t.pct_increase as Growth, t.status as Situacao, substr(file_name,instr(file_name,'\\',-1)+1,50) as sFileName ");
 			sql.append(" FROM DBA_FREE_SPACE f, DBA_DATA_FILES d, DBA_TABLESPACES t ");
 			sql.append(" WHERE t.tablespace_name = d.tablespace_name AND f.tablespace_name(+) = d.tablespace_name ");
 			sql.append(" AND f.file_id(+) = d.file_id GROUP BY t.tablespace_name, d.file_name, t.pct_increase, t.status union ");
-			sql.append(" Select substr(f.member,instr(f.member,'\',-1)+1, length(substr(f.member,instr(f.member,'\',-1)+1))-4) as idFile, ");
-			sql.append(" f.member, ROUND(MAX(l.bytes)/1024,2), 0, 0, l.status, substr(f.member,instr(f.member,'\',-1)+1,50) ");
+			sql.append(" Select substr(f.member,instr(f.member,'\\',-1)+1, length(substr(f.member,instr(f.member,'\\',-1)+1))-4) as idFile, ");
+			sql.append(" f.member, ROUND(MAX(l.bytes)/1024,2), 0, 0, l.status, substr(f.member,instr(f.member,'\\',-1)+1,50) ");
 			sql.append(" from v$logfile f, v$log l where l.group# = f.group# group by f.member, l.bytes, l.status ORDER BY 1,3 DESC ");
 
 			List<Map<String, Object>> listFiles = new ArrayList<Map<String,Object>>();
@@ -282,14 +281,14 @@ public class Oracle {
 					
 					Map<String,Object> value = new HashMap<String, Object>();
 					
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
+
 					value.put("File", rs.getString("idFile"));
 					value.put("FilePath", rs.getString("Filepath"));
-					value.put("Size", rs.getString("Sizes"));
-					value.put("Maxsize", rs.getString("Maxsizes"));
+					value.put("Size", rs.getLong("Sizes"));
+					value.put("Maxsize", rs.getLong("Maxsizes"));
 					value.put("Growth", rs.getString("Growth"));
 					value.put("Situacao", rs.getString("Situacao"));
-					value.put("FileName", rs.getString("Filename"));
+					value.put("FileName", rs.getString("sFileName"));
 					
 					listFiles.add(value);
 				}
@@ -311,7 +310,7 @@ public class Oracle {
 			StringBuilder sql = new StringBuilder();
 			ReturnObject retorno = new ReturnObject();
 			
-			sql.append(" select i.instance_name as InstanceName, substr(f.fname,instr(f.fname,'\',-1)+1,50) as FileName, "); 
+			sql.append(" select i.instance_name as InstanceName, substr(f.fname,instr(f.fname,'\\',-1)+1,50) as FileName, "); 
 			sql.append(" s.start_time as Backup_start_date , s.elapsed_seconds as TempodeExecucao, i.host_name as ServerName, s.set_count, ");
 			sql.append(" case(s.backup_type) when 'D' then 'Full Backup' when 'I' then 'Incremental Backup' ");
 			sql.append(" when 'L' then 'Redo Logs' end as RecoveryModel, ROUND(MAX(f.bytes)/1024,2) as TamanhoKB "); 
@@ -334,7 +333,7 @@ public class Oracle {
 					
 					value.put("InstanceName", rs.getString("InstanceName"));
 					value.put("FileName", rs.getString("FileName"));
-					value.put("BackupStartDate", new Date(rs.getDate("Backup_start_date").getTime()));
+					value.put("BackupStartDate", rs.getDate("Backup_start_date").getTime());
 					value.put("TempoExecucao", rs.getLong("TempodeExecucao"));
 					value.put("ServerName", rs.getString("ServerName"));
 					value.put("RecoveryModel", rs.getString("RecoveryModel"));
@@ -377,13 +376,12 @@ public class Oracle {
 				while(rs.next()){
 					
 					Map<String,Object> value = new HashMap<String, Object>();
-					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
 					
 					value.put("LogID", rs.getLong("LOG_ID"));
 					value.put("Owner", rs.getString("OWNER"));
 					value.put("JobName", rs.getString("JOB_NAME"));
 					value.put("Status", rs.getString("STATUS"));
-					value.put("DataExecucao", new Date(rs.getDate("ACTUAL_START_DATE").getTime()));
+					value.put("DataExecucao", rs.getDate("ACTUAL_START_DATE").getTime());
 					value.put("Duracao", rs.getString("RUN_DURATION"));
 					value.put("MensagemSQL", rs.getString("ADDITIONAL_INFO"));
 					

@@ -11,7 +11,7 @@ public class BancoDados extends No implements Serializable{
 	
 	private Integer port;
 	
-	private Long totalServerMemory;
+	private Integer portAgent;
 	
 	private Long targetServerMemory;
 	
@@ -38,13 +38,13 @@ public class BancoDados extends No implements Serializable{
 	public void setPort(Integer port) {
 		this.port = port;
 	}
-
-	public Long getTotalServerMemory() {
-		return totalServerMemory;
+	
+	public Integer getPortAgent() {
+		return portAgent;
 	}
 
-	public void setTotalServerMemory(Long totalServerMemory) {
-		this.totalServerMemory = totalServerMemory;
+	public void setPortAgent(Integer portAgent) {
+		this.portAgent = portAgent;
 	}
 
 	public Long getTargetServerMemory() {
@@ -85,6 +85,11 @@ public class BancoDados extends No implements Serializable{
 
 	public void setCollation(String collation) {
 		this.collation = collation;
+	}
+	
+	@Override
+	public void coleta() {
+		System.out.println("Banco de dados invalido");
 	}
 	
 	

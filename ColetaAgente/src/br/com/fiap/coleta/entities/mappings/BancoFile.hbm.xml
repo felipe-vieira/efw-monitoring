@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fiap.coleta.entities.BancoFile" table="banco_file">
+		<id name="id" column="id">
+        	<generator class="increment"/>
+    	</id>		
+		<many-to-one name="bancoDados" not-null="true"/>
+
+		<property name="file" not-null="true"/>
+		<property name="filePath" not-null="true"/>
+		<property name="maxSize" not-null="true"/>
+		<property name="situacao" not-null="true"/>
+		<property name="fileName" not-null="true"/>
+		<property name="ativo" not-null="true"/>
+		<property name="growth"/>
+		
+	</class>
+</hibernate-mapping>

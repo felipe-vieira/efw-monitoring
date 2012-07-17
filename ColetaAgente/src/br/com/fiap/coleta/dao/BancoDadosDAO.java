@@ -21,8 +21,12 @@ public class BancoDadosDAO {
 		
 		try{
 			Query query = session.createQuery("FROM BancoFile file where bancoDados.id = :bdId");
-			query.setLong("id", bd.getId());
-			return (List<BancoFile>) query.list(); 
+			query.setLong("bdId", bd.getId());
+			
+			List<BancoFile> lista =  (List<BancoFile>) query.list();
+			t.commit();
+			
+			return lista;
 			
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -38,9 +42,13 @@ public class BancoDadosDAO {
 		Transaction t = session.beginTransaction();
 		
 		try{
-			Query query = session.createQuery("FROM BancoJob job files where bancoDados.id = :bdId");
-			query.setLong("id", bd.getId());
-			return (List<BancoJob>) query.list(); 
+			Query query = session.createQuery("FROM BancoJob job where bancoDados.id = :bdId");
+			query.setLong("bdId", bd.getId());
+			
+			List<BancoJob> lista = (List<BancoJob>) query.list(); 
+			t.commit();
+			
+			return lista;
 			
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -55,10 +63,15 @@ public class BancoDadosDAO {
 		Transaction t = session.beginTransaction();
 		
 		try{
-			Query query = session.createQuery("FROM BancoJobColeta coleta files where bancoJob.id = :jobId AND logId = :logId");
+			Query query = session.createQuery("FROM BancoJobColeta coleta where bancoJob.id = :jobId AND logId = :logId");
 			query.setLong("jobId", job.getId());
 			query.setLong("logId", logId);
-			return (BancoJobColeta) query.uniqueResult();
+			
+			BancoJobColeta coleta = (BancoJobColeta) query.uniqueResult(); 
+			t.commit();
+			
+			return coleta;
+			
 			
 		}catch(Exception ex){
 			ex.printStackTrace();

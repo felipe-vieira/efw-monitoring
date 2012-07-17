@@ -26,7 +26,7 @@
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 
 		<!-- Echo all executed SQL to stdout -->
-		<property name="show_sql">true</property>
+		<property name="show_sql">false</property>
 
 		<!-- Drop and re-create the database schema on startup -->
 		<property name="hbm2ddl.auto">update</property>
@@ -51,6 +51,15 @@
 		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoThreadColeta.hbm.xml" />
 		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoMemoria.hbm.xml" />
 		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoMemoriaColeta.hbm.xml" />
+		
+		<!-- Banco de dados -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoFile.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoFileColeta.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoMemoriaColeta.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoBackup.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJob.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJobColeta.hbm.xml" />
+		
 					
 	</session-factory>
 

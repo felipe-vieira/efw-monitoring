@@ -52,6 +52,8 @@ public class OracleColeta {
 			
 			try{
 				
+				
+				
 				//Abre o socket
 				socket.openSocket();
 				//Pega a data atual
@@ -68,6 +70,15 @@ public class OracleColeta {
 				jobs = this.getConfigJobHistory(); 
 				
 				
+				//Salva os itens de configuração.
+				this.bancoDadosBO.salvaConfigFiles(files);
+				this.bancoDadosBO.salvaConfigBackups(backups);
+				this.bancoDadosBO.salvaConfigJobs(jobs);
+				
+				//Pega os jobs e files com IDs, necessários para as coletas.
+				jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.oracle);
+				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
+				
 				//Realiza as coletas
 				BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
 				List<BancoFileColeta> filesColeta = this.getFilesColeta();
@@ -77,6 +88,9 @@ public class OracleColeta {
 				socket.close();
 
 				//Persiste tudo
+				this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
+				this.bancoDadosBO.salvaColetasFiles(filesColeta);
+				this.bancoDadosBO.salvaColetasJobs(jobsColeta);
 				
 			}catch (IOException e) {
 				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
@@ -84,6 +98,8 @@ public class OracleColeta {
 			}catch (Exception e){
 				e.printStackTrace();
 				this.oracle.setGerenciavel(false);
+			}finally{
+				this.bancoDadosBO.salvaBanco(this.oracle);
 			}
 		
 	}
@@ -97,14 +113,14 @@ public class OracleColeta {
 				JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.jobHistory"));
 
 				if(json != null){
-					JSONArray jsonArray = json.getJSONArray("files");
+					JSONArray jsonArray = json.getJSONArray("jobhistory");
 				 	
 					for (Object object : jsonArray) {
 						JSONObject i = (JSONObject) object;
 						String jobName = i.getString("JobName");
 						
 						BancoJob job = this.jobs.get(jobName);
-						Long logId = i.getLong("logId");
+						Long logId = i.getLong("LogID");
 
 
 						
@@ -119,7 +135,7 @@ public class OracleColeta {
 								coleta.setDataColeta(this.dataColeta);
 								coleta.setLogId(logId);
 								coleta.setExecutionTime(i.getLong("Duracao"));
-								coleta.setDataExecucao((Date) i.get("DataExecucao"));
+								coleta.setDataExecucao(new Date(i.getLong("DataExecucao")));
 								
 								if(strStatus.equals("SUCCEEDED")){
 									coleta.setStatus(true);
@@ -144,19 +160,7 @@ public class OracleColeta {
 		return jobsColeta;
 	}
 
-	/*
-	private Boolean verificaDisponibilidade(){
-		try{
-			if(InetAddress.getByName(this.servidor.getHostname()).isReachable(30000)){
-				return true;
-			}else{
-				return false;
-			}
-		}catch(Exception ex){
-			return false;
-		}
-	}
-	*/
+	
 
 	private List<BancoFileColeta> getFilesColeta() {
 		
@@ -207,7 +211,7 @@ public class OracleColeta {
 				
 				coleta = new BancoMemoriaColeta(this.oracle);
 				coleta.setDataColeta(this.dataColeta);
-				coleta.setMemory(json.getLong("targetMemory"));
+				coleta.setMemory(json.getLong("totalMemory"));
 			}
 			
 		}catch(IOException ex){
@@ -267,6 +271,10 @@ public class OracleColeta {
 		Map<String,BancoFile> mapFiles = null;
 		mapFiles = bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
 		
+		if(mapFiles == null){
+			mapFiles = new HashMap<String,BancoFile>();
+		}
+		
 		try{
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.files"));
 			JSONArray jsonArray = json.getJSONArray("files");
@@ -282,12 +290,12 @@ public class OracleColeta {
 					file = new BancoFile(this.oracle);
 				}
 				
-				file.setFile(i.getString("File"));
+				file.setFile(idFile);
 				file.setFilePath(i.getString("FilePath"));
-				file.setMaxSize(i.getLong("Maxsizes"));
+				file.setMaxSize(i.getLong("Maxsize"));
 				file.setGrowth(i.getString("Growth"));
 				file.setSituacao(i.getString("Situacao"));
-				file.setFileName(i.getString("Filename"));
+				file.setFileName(i.getString("FileName"));
 				file.setAtivo(true);
 				
 				mapFiles.put(idFile, file);
@@ -338,12 +346,11 @@ public class OracleColeta {
 			for (Object object : jsonArray) {
 				
 				JSONObject i = (JSONObject) object;
-				String instanceName = i.getString("Instance Name");
 				
 				BancoBackup b = new BancoBackup(this.oracle);
 				
 				b.setFileName(i.getString("FileName"));
-				b.setBackupStartDate( (Date) i.get("BackupStartDate") );
+				b.setBackupStartDate(new Date(i.getLong("BackupStartDate")));
 				b.setTempoExecucao(i.getLong("TempoExecucao"));
 				b.setRecoveryModel(i.getString("RecoveryModel"));
 				b.setTamanho(i.getLong("Tamanho"));
@@ -369,13 +376,13 @@ public class OracleColeta {
 	private Map<String,BancoJob> getConfigJobHistory(){
 		Map<String,BancoJob> map = bancoDadosBO.pegaMapJobsBancoDados(this.oracle);
 		
+		if(map == null){
+			map = new HashMap<String, BancoJob>();
+		}
+		
 		try{
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.jobHistory"));
-			JSONArray jsonArray = json.getJSONArray("jobHistory");
-			
-			if(map == null){
-				map = new HashMap<String, BancoJob>();
-			}
+			JSONArray jsonArray = json.getJSONArray("jobhistory");
 			
 			for (Object object : jsonArray) {
 				

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fiap.coleta.entities.BancoBackup" table="banco_backup">
+		<id name="id" column="id">
+        	<generator class="increment"/>
+    	</id>		
+		<many-to-one name="bancoDados" not-null="true"/>
+
+		<property name="fileName" not-null="true"/>
+		<property name="backupStartDate" not-null="true"/>
+		<property name="tempoExecucao" not-null="true"/>
+		<property name="tamanho" not-null="true"/>
+		<property name="recoveryModel" not-null="true"/>
+		<property name="setCount"/>
+		
+	</class>
+</hibernate-mapping>

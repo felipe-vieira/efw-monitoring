@@ -23,7 +23,7 @@ public class BancoFileColeta implements Serializable {
 	public BancoFile getFile() {
 		return file;
 	}
-	public void setFiles(BancoFile file) {
+	public void setFile(BancoFile file) {
 		this.file = file;
 	}
 	public Long getId() {

@@ -16,6 +16,7 @@ public class OracleDAO {
 			Query query = session.createQuery("SELECT max(setCount) as ultimoId FROM BancoBackup where bancoDados.id = :id");
 			query.setLong("id",oracle.getId());
 			Long retorno = (Long) query.uniqueResult();
+			t.commit();
 			
 			if(retorno==null){
 				return 0l;
