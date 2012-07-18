@@ -15,6 +15,8 @@ public class BancoBackup implements Serializable {
 	private Long tamanho;
 	private String recoveryModel;
 	private Long setCount;
+	private String databaseName;
+	private String tipo;
 	
 	public BancoBackup(){
 		
@@ -78,6 +80,23 @@ public class BancoBackup implements Serializable {
 
 	public void setTempoExecucao(Long tempoExecucao) {
 		this.tempoExecucao = tempoExecucao;
+	}
+	
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
+
+	public String getDatabaseName() {
+		return databaseName;
+	}
+
+	public void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
 	}
 
 	@Override

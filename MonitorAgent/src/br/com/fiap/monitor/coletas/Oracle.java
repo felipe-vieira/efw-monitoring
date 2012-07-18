@@ -331,14 +331,15 @@ public class Oracle {
 					
 					Map<String,Object> value = new HashMap<String, Object>();
 					
-					value.put("InstanceName", rs.getString("InstanceName"));
-					value.put("FileName", rs.getString("FileName"));
-					value.put("BackupStartDate", rs.getDate("Backup_start_date").getTime());
-					value.put("TempoExecucao", rs.getLong("TempodeExecucao"));
-					value.put("ServerName", rs.getString("ServerName"));
-					value.put("RecoveryModel", rs.getString("RecoveryModel"));
-					value.put("Tamanho", rs.getLong("TamanhoKB"));
-					value.put("SetCount", rs.getLong("set_count"));
+					value.put("InstanceName", rs.getString("database_name"));
+					value.put("FileName", rs.getString("name"));
+					value.put("BackupStartDate", rs.getString("Backup_start_date"));
+					value.put("TempoExecucao", rs.getString("Tempo de Execucao"));
+					value.put("ServerName", rs.getString("server_name"));
+					value.put("RecoveryModel", rs.getString("recovery_model"));
+					value.put("Tamanho", rs.getString("Tamanho (KB)"));
+					value.put("Tipo", rs.getString("Tipo de Backup"));
+					value.put("SetCount",rs.getLong("backup_set_id"));
 										
 					listBackup.add(value);
 				}

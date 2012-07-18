@@ -10,10 +10,6 @@ public class OracleBO {
 	public OracleBO(){
 		this.oracleDAO = new OracleDAO();
 	}
-
-	public Long pegaUltimoSetBackup(Oracle oracle) {
-		return this.oracleDAO.pegaUltimoSetBackup(oracle);		
-	}
 	
 	
 	

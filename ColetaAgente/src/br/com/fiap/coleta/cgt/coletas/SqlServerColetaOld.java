@@ -29,7 +29,7 @@ import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.SistemaOperacional;
 import br.com.fiap.coleta.util.socket.SocketUtil;
 
-public class SqlServerColeta {
+public class SqlServerColetaOld {
 	
 	private Servidor servidor;
 	
@@ -49,7 +49,7 @@ public class SqlServerColeta {
 	
 	private Date dataColeta;
 	
-	public SqlServerColeta(No no){
+	public SqlServerColetaOld(No no){
 		this.servidor = (Servidor) no;
 		this.sqlServer = (SQLServer) no;
 		//this.sqlServerBO = new SQLServerBO();

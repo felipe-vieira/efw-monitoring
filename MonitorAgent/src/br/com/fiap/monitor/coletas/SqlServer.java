@@ -41,7 +41,7 @@ public class SqlServer {
 		
 		sql.append(" SELECT counter_name ,cntr_value ");
 		sql.append("     FROM master.sys.dm_os_performance_counters");
-		sql.append("     WHERE counter_name = 'Total Server Memory (KB)'");
+		sql.append("     WHERE counter_name = 'Target Server Memory (KB)'");
 		
 		try{
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
@@ -49,7 +49,7 @@ public class SqlServer {
 			
 			if(rs.next()){
 				//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-				retorno.putValue("totalMemory", rs.getString("cntr_value"));
+				retorno.putValue("targetMemory", rs.getString("cntr_value"));
 			}
 				
 			
@@ -69,8 +69,8 @@ public class SqlServer {
 		
 		sql.append(" SELECT counter_name ,cntr_value ");
 		sql.append("     FROM master.sys.dm_os_performance_counters");
-		sql.append("     WHERE counter_name = 'Target Server Memory (KB)'");
-		sql.append("     OR counter_name = 'Stolen Server Memory (KB)'");
+		sql.append("     WHERE counter_name = ''");
+		sql.append("     OR counter_name IN('Stolen Server Memory (KB)','Total Server Memory (KB)')");
 		
 		List<Map<String, Object>> listMemory = new ArrayList<Map<String,Object>>();
 		
@@ -82,9 +82,9 @@ public class SqlServer {
 				
 				Map<String,Object> value = new HashMap<String, Object>();
 				
-				if(rs.getString("counter_name").trim().equals("Target Server Memory (KB)")){
+				if(rs.getString("counter_name").trim().equals("Total Server Memory (KB)")){
 					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					value.put("targetMemory", rs.getString("cntr_value"));
+					value.put("totalMemory", rs.getString("cntr_value"));
 				}else if(rs.getString("counter_name").trim().equals("Stolen Server Memory (KB)"))
 					value.put("stolenMemory", rs.getString("cntr_value"));
 				
@@ -107,8 +107,8 @@ public class SqlServer {
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
 		
-		sql.append(" SELECT 'SQL Server Version ' + CAST(SERVERPROPERTY('productversion') AS VARCHAR(50)) as VERSION, ");
-		sql.append("'SQL Server ' + CAST(SERVERPROPERTY ('edition') AS VARCHAR(50)) as EDITION");
+		sql.append(" SELECT CAST(SERVERPROPERTY('productversion') AS VARCHAR(50)) as VERSION, ");
+		sql.append(" CAST(SERVERPROPERTY ('edition') AS VARCHAR(50)) as EDITION");
 				
 		try{
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
@@ -188,16 +188,16 @@ public class SqlServer {
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
 		
-		sql.append(" create table ##dbspace(	[DatabaseName] varchar(250) , [FilePath] varchar(250) , [Size] bigint); ");
-		sql.append(" Exec SP_MSForEachDB 'Use ? Insert into ##dbspace select Convert(Varchar(25),DB_Name()), Filename , ");
+		sql.append(" create table #dbspace(	[DatabaseName] varchar(250) , [FilePath] varchar(250) , [Size] bigint); ");
+		sql.append(" Exec SP_MSForEachDB 'Use ? Insert into #dbspace select Convert(Varchar(25),DB_Name()), Filename , ");
 		sql.append(" cast(Size * 8 as bigint) Size	from sys.sysfiles';");
-		sql.append(" CREATE TABLE ##space (drive varchar(10), mbfree int);");
-		sql.append(" INSERT INTO ##space EXEC master.dbo.xp_fixeddrives;");
-		sql.append(" alter table ##space add tamanhosql int;");
-		sql.append(" update ##space set tamanhosql = (select SUM(cast((b.size) as int))");
-		sql.append(" from ##dbspace b where ##space.drive  = SUBSTRING(b.filepath,1,1));");
-		sql.append(" update ##space set drive = drive + ':';");
-		sql.append(" select * from ##space;");
+		sql.append(" CREATE TABLE #space (drive varchar(10), mbfree int);");
+		sql.append(" INSERT INTO #space EXEC master.dbo.xp_fixeddrives;");
+		sql.append(" alter table #space add tamanhosql int;");
+		sql.append(" update #space set tamanhosql = (select SUM(cast((b.size) as int))");
+		sql.append(" from #dbspace b where #space.drive  = SUBSTRING(b.filepath,1,1));");
+		sql.append(" update #space set drive = drive + ':';");
+		sql.append(" select * from #space;");
 
 		List<Map<String, Object>> listDrive = new ArrayList<Map<String,Object>>();
 		
@@ -223,8 +223,8 @@ public class SqlServer {
 		}
 		
 		sql = new StringBuilder();
-		sql.append("drop table ##dbspace;");
-		sql.append("drop table ##space;");
+		sql.append("drop table #dbspace;");
+		sql.append("drop table #space;");
 		
 		try{
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
@@ -246,9 +246,9 @@ public class SqlServer {
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
 		
-		sql.append(" create table ##dbfiles(		[DatabaseName] varchar(250) , [FilePath] varchar(250) , [Size] bigint, [MaxSize] bigint, ");
+		sql.append(" create table #dbfiles(		[DatabaseName] varchar(250) , [FilePath] varchar(250) , [Size] bigint, [MaxSize] bigint, ");
 		sql.append(" Growth varchar(100), Situacao varchar(15), [FileName] Varchar(30));");
-		sql.append(" Exec SP_MSForEachDB 'Use ? Insert into ##dbfiles select Convert(Varchar(25),DB_Name()), Filename ,");
+		sql.append(" Exec SP_MSForEachDB 'Use ? Insert into #dbfiles select Convert(Varchar(25),DB_Name()), Filename ,");
 		sql.append(" cast(Size * 8 as bigint) Size,");
 		sql.append(" cast(case when MaxSize = -1 then -1 else cast(MaxSize as bigint)* 8 end as bigint) MaxSize,");
 		sql.append(" case when substring(cast(Status as varchar),1,2) = 10 then cast(Growth as varchar) + '' %''");
@@ -260,7 +260,7 @@ public class SqlServer {
 		sql.append(" end	) < (cast(MaxSize as bigint) * 8/1024.00) then ''OK'' else ''PROBLEMA''");
 		sql.append(" end Situacao,Convert(Varchar(30),Name)");
 		sql.append(" from sys.sysfiles with(nolock) 	order by Situacao, Size desc';");
-		sql.append(" select * from ##dbfiles;");
+		sql.append(" select * from #dbfiles;");
 		
 		List<Map<String, Object>> listFiles = new ArrayList<Map<String,Object>>();
 		
@@ -278,7 +278,7 @@ public class SqlServer {
 				value.put("Maxsize", rs.getString("MaxSize"));
 				value.put("Growth", rs.getString("Growth"));
 				value.put("Situacao", rs.getString("Situacao"));
-				value.put("File Name", rs.getString("FileName"));
+				value.put("FileName", rs.getString("FileName"));
 				
 				listFiles.add(value);
 				
@@ -289,7 +289,7 @@ public class SqlServer {
 		}
 		
 		sql = new StringBuilder();
-		sql.append("drop table ##dbfiles;");
+		sql.append("drop table #dbfiles;");
 			
 		try{
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
@@ -340,15 +340,15 @@ public class SqlServer {
 		
 	}
 	
-	public ReturnObject getBackup(){
+	public ReturnObject getBackup(Long setId){
 		
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
 		
-		sql.append(" SELECT database_name, name,Backup_start_date, ");
+		sql.append(" SELECT backup_set_id,database_name, name,Backup_start_date, ");
 		sql.append(" case when Backup_finish_date IS NULL then 'EM EXECUÇÃO' else ");
 		sql.append(" datediff(mi,Backup_start_date,Backup_finish_date) end [Tempo de Execucao],");
-		sql.append(" server_name,recovery_model, cast(backup_size as numeric(15)) [Tamanho (B)], ");
+		sql.append(" server_name,recovery_model, (cast(backup_size as numeric(15))/1024) [Tamanho], ");
 		sql.append(" case when type = 'D' then 'Database' ");
 		sql.append(" when type = 'I' then 'Differential Database' ");
 		sql.append(" when type = 'L' then 'Log' ");
@@ -359,29 +359,29 @@ public class SqlServer {
 		sql.append(" end [Tipo de Backup]");
 		sql.append(" FROM msdb.dbo.backupset B");
 		sql.append(" INNER JOIN msdb.dbo.backupmediafamily BF ON B.media_set_id = BF.media_set_id");
-		sql.append(" where Backup_start_date >= dateadd(hh, 18 ,cast(floor(cast(GETDATE() as float)) as datetime) - 1 ) ");
-		sql.append(" and Backup_start_date < dateadd (day, 1, cast(floor(cast(GETDATE() as float)) as datetime)) ; ");
+		sql.append(" where backup_set_id > ?");
 		
 				
 		List<Map<String, Object>> listBackup = new ArrayList<Map<String,Object>>();
 		
 		try{
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
+			stmt.setLong(1, setId);
 			ResultSet rs = stmt.executeQuery();
 			
 			while(rs.next()){
 				
 				Map<String,Object> value = new HashMap<String, Object>();
-				//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
 				
-				value.put("Database Name", rs.getString("database_name"));
-				value.put("Backup Name", rs.getString("name"));
-				value.put("Start Date", rs.getString("Backup_start_date"));
-				value.put("Tempo de Execucao", rs.getString("Tempo de Execucao"));
-				value.put("Server Name", rs.getString("server_name"));
-				value.put("Recovery Model", rs.getString("recovery_model"));
-				value.put("Tamanho KB", rs.getString("Tamanho (KB)"));
-				value.put("Tipo de Backup", rs.getString("Tipo de Backup"));
+				value.put("DatabaseName", rs.getString("database_name"));
+				value.put("FileName", rs.getString("name"));
+				value.put("BackupStartDate", rs.getString("Backup_start_date"));
+				value.put("TempoExecucao", rs.getString("Tempo de Execucao"));
+				value.put("ServerName", rs.getString("server_name"));
+				value.put("RecoveryModel", rs.getString("recovery_model"));
+				value.put("Tamanho", rs.getString("Tamanho"));
+				value.put("Tipo", rs.getString("Tipo de Backup"));
+				value.put("SetCount",rs.getLong("backup_set_id"));
 				
 				listBackup.add(value);
 			}
@@ -441,7 +441,7 @@ public class SqlServer {
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
 		
-		sql.append(" create table ##Result_History_Jobs( ");
+		sql.append(" create table #Result_History_Jobs( ");
 		sql.append(" Cod int identity(1,1),Instance_Id int, Job_Id varchar(255), ");
 		sql.append(" Job_Name varchar(255),Step_Id int,Step_Name varchar(255), ");
 		sql.append(" Sql_Message_Id int,Sql_Severity int,SQl_Message varchar(3990), ");
@@ -450,7 +450,7 @@ public class SqlServer {
 		sql.append(" Operator_Paged varchar(100),Retries_Attempted int, Nm_Server varchar(100));");
 		sql.append(" declare @ontem varchar (8);");
 		sql.append(" set @ontem = convert (varchar(8),(dateadd (day, -1, getdate())),112);");
-		sql.append(" insert into ##Result_History_Jobs ");
+		sql.append(" insert into #Result_History_Jobs ");
 		sql.append(" exec Msdb.dbo.SP_HELP_JOBHISTORY @mode = 'FULL' , @start_run_date = @ontem;");
 		sql.append(" select Job_Name, case when Run_Status = 0 then 'Failed' ");
 		sql.append(" when Run_Status = 1 then 'Succeeded' ");
@@ -464,7 +464,7 @@ public class SqlServer {
 		sql.append(" right('00' + substring(Run_time,(len(Run_time)-1),2) ,2) as varchar) Dt_Execucao, ");
 		sql.append(" cast(Run_Duration as integer)/60 Run_Duration, ");
 		sql.append(" SQL_Message ");
-		sql.append(" from ##Result_History_Jobs ");
+		sql.append(" from #Result_History_Jobs ");
 		sql.append(" where cast(Run_Date + ' ' + right('00' + substring(Run_time,(len(Run_time)-5),2) ,2)+ ':' + ");
 		sql.append(" right('00' + substring(Run_time,(len(Run_time)-3),2) ,2)+ ':' + ");
 		sql.append(" right('00' + substring(Run_time,(len(Run_time)-1),2) ,2) as datetime) >= ");
@@ -499,7 +499,7 @@ public class SqlServer {
 		}
 		
 		sql = new StringBuilder();
-		sql.append("drop table ##Result_History_Jobs;");
+		sql.append("drop table #Result_History_Jobs;");
 		
 		try{
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());

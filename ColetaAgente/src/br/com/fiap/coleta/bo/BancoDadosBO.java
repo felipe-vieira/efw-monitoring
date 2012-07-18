@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import br.com.fiap.coleta.dao.BancoDadosDAO;
 import br.com.fiap.coleta.dao.ColetaDAO;
 import br.com.fiap.coleta.entities.BancoBackup;
@@ -13,7 +14,6 @@ import br.com.fiap.coleta.entities.BancoFileColeta;
 import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.coleta.entities.BancoJobColeta;
 import br.com.fiap.coleta.entities.BancoMemoriaColeta;
-import br.com.fiap.coleta.entities.Oracle;
 
 public class BancoDadosBO {
 
@@ -93,6 +93,10 @@ public class BancoDadosBO {
 		this.coletaDAO.salvaColeta(bd);
 	}
 	
+	public Long pegaUltimoSetBackup(BancoDados bd) {
+		return this.bancoDadosDAO.pegaUltimoSetBackup(bd);		
+	}
 	
+
 
 }

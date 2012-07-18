@@ -15,6 +15,7 @@ public class BancoFile implements Serializable {
 	private String situacao;
 	private String fileName;
 	private Boolean ativo;
+	private String databaseName;
 	
 	public BancoFile(){
 		
@@ -94,6 +95,14 @@ public class BancoFile implements Serializable {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	
+	public String getDatabaseName() {
+		return databaseName;
+	}
+
+	public void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
 	}
 
 	@Override

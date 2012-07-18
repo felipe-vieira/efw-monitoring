@@ -81,5 +81,29 @@ public class BancoDadosDAO {
 		
 		
 	}
+	
+	public Long pegaUltimoSetBackup(BancoDados bd) {
+		
+		Session session = DBUtil.getCurrentSession();
+		Transaction t = session.beginTransaction();
+		try{
+			Query query = session.createQuery("SELECT max(setCount) as ultimoId FROM BancoBackup where bancoDados.id = :id");
+			query.setLong("id",bd.getId());
+			Long retorno = (Long) query.uniqueResult();
+			t.commit();
+			
+			if(retorno==null){
+				return 0l;
+			}else{
+				return retorno;
+			}			
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return 0l;
+		}
+		
+	}
 
 }

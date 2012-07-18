@@ -11,7 +11,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.BancoDadosBO;
-import br.com.fiap.coleta.bo.OracleBO;
 import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoFileColeta;
@@ -19,16 +18,15 @@ import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.coleta.entities.BancoJobColeta;
 import br.com.fiap.coleta.entities.BancoMemoriaColeta;
 import br.com.fiap.coleta.entities.No;
-import br.com.fiap.coleta.entities.Oracle;
+import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.coleta.util.socket.SocketUtil;
 
-public class OracleColeta {
+public class SQLServerColeta {
 	
-	private Oracle oracle;
+	private SQLServer sqlserver;
 	
 	private BancoDadosBO bancoDadosBO;
 	
-	private OracleBO oracleBO;
 	
 	private SocketUtil socket;
 	
@@ -40,20 +38,16 @@ public class OracleColeta {
 	
 	private Map<String,BancoJob> jobs;
 	
-	public OracleColeta(No no){
-		this.oracle = (Oracle) no;
+	public SQLServerColeta(No no){
+		this.sqlserver = (SQLServer) no;
 		this.bancoDadosBO = new BancoDadosBO();
-		this.oracleBO = new OracleBO();
 	}
 	
 	public void initColeta(){
 
-			socket = new SocketUtil(this.oracle.getHostname(), 9090);
+			socket = new SocketUtil(this.sqlserver.getHostname(), 9090);
 			
 			try{
-				
-				
-				
 				//Abre o socket
 				socket.openSocket();
 				//Pega a data atual
@@ -73,16 +67,16 @@ public class OracleColeta {
 				//Salva os itens de configuração.
 				this.bancoDadosBO.salvaConfigFiles(files);
 				this.bancoDadosBO.salvaConfigBackups(backups);
-				this.bancoDadosBO.salvaConfigJobs(jobs);
+				//this.bancoDadosBO.salvaConfigJobs(jobs);
 				
 				//Pega os jobs e files com IDs, necessários para as coletas.
-				jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.oracle);
-				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
+				//jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
+				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
 				
 				//Realiza as coletas
 				BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
 				List<BancoFileColeta> filesColeta = this.getFilesColeta();
-				List<BancoJobColeta> jobsColeta = this.getJobsColeta();
+				//List<BancoJobColeta> jobsColeta = this.getJobsColeta();
 				
 				//Fecha o socket
 				socket.close();
@@ -90,16 +84,16 @@ public class OracleColeta {
 				//Persiste tudo
 				this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
 				this.bancoDadosBO.salvaColetasFiles(filesColeta);
-				this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+				//this.bancoDadosBO.salvaColetasJobs(jobsColeta);
 				
 			}catch (IOException e) {
 				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
-				this.oracle.setGerenciavel(false);
+				this.sqlserver.setGerenciavel(false);
 			}catch (Exception e){
 				e.printStackTrace();
-				this.oracle.setGerenciavel(false);
+				this.sqlserver.setGerenciavel(false);
 			}finally{
-				this.bancoDadosBO.salvaBanco(this.oracle);
+				this.bancoDadosBO.salvaBanco(this.sqlserver);
 			}
 		
 	}
@@ -170,14 +164,14 @@ public class OracleColeta {
 			
 			if(this.files != null){
 				filesColeta = new ArrayList<BancoFileColeta>();
-				JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.files"));
+				JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.files"));
 
 				if(json != null){
 					JSONArray jsonArray = json.getJSONArray("files");
 				 	
 					for (Object object : jsonArray) {
 						JSONObject i = (JSONObject) object;
-						String idFile = i.getString("File");
+						String idFile = i.getString("FileName");
 						
 						BancoFile file = this.files.get(idFile);
 						
@@ -205,13 +199,13 @@ public class OracleColeta {
 		BancoMemoriaColeta coleta = null;
 		
 		try{
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.memory"));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.memory"));
 			
 			if(json != null){
-				
-				coleta = new BancoMemoriaColeta(this.oracle);
+				coleta = new BancoMemoriaColeta(this.sqlserver);
 				coleta.setDataColeta(this.dataColeta);
 				coleta.setMemory(json.getLong("totalMemory"));
+				coleta.setStolenMemory(json.getLong("stolenMemory"));
 			}
 			
 		}catch(IOException ex){
@@ -226,12 +220,12 @@ public class OracleColeta {
 	private String getConfigCollation(){
 		try{
 			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.collation"));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.collation "+this.sqlserver.getDBName()));
 			
 			if(json == null){
-				this.oracle.setGerenciavel(false);
+				this.sqlserver.setGerenciavel(false);
 			}else{
-				this.oracle.setCollation(json.getString("Collation"));
+				this.sqlserver.setCollation(json.getString("Collation"));
 			}
 			
 		}catch(IOException ex){
@@ -248,13 +242,13 @@ public class OracleColeta {
 	private void getConfigVersion(){
 		try{
 			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.version"));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.version"));
 			
 			if(json == null){
-				this.oracle.setGerenciavel(false);
+				this.sqlserver.setGerenciavel(false);
 			}else{
-				this.oracle.setVersion(json.getString("Version"));
-				this.oracle.setEdition(json.getString("Edition"));
+				this.sqlserver.setVersion(json.getString("Version"));
+				this.sqlserver.setEdition(json.getString("Edition"));
 			}
 									
 		}catch(IOException ex){
@@ -269,25 +263,25 @@ public class OracleColeta {
 	
 	private Map<String,BancoFile> getConfigFiles(){
 		Map<String,BancoFile> mapFiles = null;
-		mapFiles = bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
+		mapFiles = bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
 		
 		if(mapFiles == null){
 			mapFiles = new HashMap<String,BancoFile>();
 		}
 		
 		try{
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.files"));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.files"));
 			JSONArray jsonArray = json.getJSONArray("files");
 			 	
 			for (Object object : jsonArray) {
 				
 				JSONObject i = (JSONObject) object;
-				String idFile = i.getString("File");
+				String idFile = i.getString("FileName");
 				
 				BancoFile file = mapFiles.get(idFile);
 				
 				if(file==null){
-					file = new BancoFile(this.oracle);
+					file = new BancoFile(this.sqlserver);
 				}
 				
 				file.setFile(idFile);
@@ -296,6 +290,7 @@ public class OracleColeta {
 				file.setGrowth(i.getString("Growth"));
 				file.setSituacao(i.getString("Situacao"));
 				file.setFileName(i.getString("FileName"));
+				file.setDatabaseName(i.getString("DatabaseName"));
 				file.setAtivo(true);
 				
 				mapFiles.put(idFile, file);
@@ -315,12 +310,12 @@ public class OracleColeta {
 	private void getConfigMemory(){
 		try{
 			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.memory"));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.memory"));
 			
 			if(json == null){
-				this.oracle.setGerenciavel(false);
+				this.sqlserver.setGerenciavel(false);
 			}else{
-				this.oracle.setTargetServerMemory(json.getLong("targetMemory"));
+				this.sqlserver.setTargetServerMemory(json.getLong("targetMemory"));
 			}		
 			
 		}catch(IOException ex){
@@ -338,16 +333,16 @@ public class OracleColeta {
 		
 		try{
 			
-			Long ultimoSet = this.bancoDadosBO.pegaUltimoSetBackup(this.oracle);
+			Long ultimoSet = this.bancoDadosBO.pegaUltimoSetBackup(this.sqlserver);
 			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.backup " + ultimoSet));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.backup " + ultimoSet));
 			JSONArray jsonArray = json.getJSONArray("backup");
 			 	
 			for (Object object : jsonArray) {
 				
 				JSONObject i = (JSONObject) object;
 				
-				BancoBackup b = new BancoBackup(this.oracle);
+				BancoBackup b = new BancoBackup(this.sqlserver);
 				
 				b.setFileName(i.getString("FileName"));
 				b.setBackupStartDate(new Date(i.getLong("BackupStartDate")));
@@ -355,6 +350,10 @@ public class OracleColeta {
 				b.setRecoveryModel(i.getString("RecoveryModel"));
 				b.setTamanho(i.getLong("Tamanho"));
 				b.setSetCount(i.getLong("SetCount"));
+				
+				b.setTipo(i.getString("Tipo"));
+				b.setDatabaseName(i.getString("DatabaseName"));
+
 				
 				listaBackup.add(b);
 				
@@ -370,18 +369,18 @@ public class OracleColeta {
 		return listaBackup;
 		
 	}
-	
+
 	
 
 	private Map<String,BancoJob> getConfigJobHistory(){
-		Map<String,BancoJob> map = bancoDadosBO.pegaMapJobsBancoDados(this.oracle);
+		Map<String,BancoJob> map = bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
 		
 		if(map == null){
 			map = new HashMap<String, BancoJob>();
 		}
 		
 		try{
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.jobHistory"));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.jobHistory"));
 			JSONArray jsonArray = json.getJSONArray("jobhistory");
 			
 			for (Object object : jsonArray) {
@@ -393,10 +392,9 @@ public class OracleColeta {
 				BancoJob job = map.get(jobName); 
 				
 				if(job == null){
-					job = new BancoJob(this.oracle);
+					job = new BancoJob(this.sqlserver);
 				}
 							
-				job.setOwner(i.getString("Owner"));
 				job.setJobName(i.getString("JobName"));
 
 				map.put(jobName,job);				
@@ -416,11 +414,11 @@ public class OracleColeta {
 				
 		try{
 			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.status"));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.status" + this.sqlserver.getDBName()));
 			if(json == null){
-				this.oracle.setGerenciavel(false);
+				this.sqlserver.setGerenciavel(false);
 			}else{
-				this.oracle.setStatus(json.getString("Status"));
+				this.sqlserver.setStatus(json.getString("Status"));
 			}
 								
 		}catch(IOException ex){

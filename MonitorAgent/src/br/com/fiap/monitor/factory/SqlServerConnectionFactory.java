@@ -19,7 +19,7 @@ public class SqlServerConnectionFactory {
 	public static Connection getConnection() throws SQLException{
 			
 			//TODO parametrizar porta, usuario, senha e instancia
-			String url = "jdbc:jtds:sqlserver://192.168.1.108:1433/MSSQLSERVER";
+			String url = "jdbc:jtds:sqlserver://192.0.0.2/master;instance=MSSQLSERVER";
 			String usuario = "sa";
 			String senha = "Gavalsa0512";
 		

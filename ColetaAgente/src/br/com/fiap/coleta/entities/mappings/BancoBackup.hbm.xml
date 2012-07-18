@@ -13,7 +13,9 @@
 		<property name="tempoExecucao" not-null="true"/>
 		<property name="tamanho" not-null="true"/>
 		<property name="recoveryModel" not-null="true"/>
-		<property name="setCount"/>
+		<property name="setCount" not-null="true"/>
+		<property name="databaseName"/>
+		<property name="tipo"/>
 		
 	</class>
 </hibernate-mapping>

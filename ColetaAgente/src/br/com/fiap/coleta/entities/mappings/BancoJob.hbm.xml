@@ -8,8 +8,8 @@
     	</id>		
 		<many-to-one name="bancoDados" not-null="true"/>
 
-		<property name="owner" not-null="true"/>
 		<property name="jobName" not-null="true"/>
+		<property name="owner"/>
 		
 	</class>
 </hibernate-mapping>

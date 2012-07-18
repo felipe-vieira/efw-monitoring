@@ -3,7 +3,7 @@ package br.com.fiap.coleta.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import br.com.fiap.coleta.cgt.coletas.SqlServerColeta;
+import br.com.fiap.coleta.cgt.coletas.SqlServerColetaOld;
 
 public class SQLServer extends BancoDados implements Serializable{
 	
@@ -151,7 +151,7 @@ public class SQLServer extends BancoDados implements Serializable{
 
 	@Override
 	public void coleta(){
-		SqlServerColeta coleta = new SqlServerColeta(this);
+		SqlServerColetaOld coleta = new SqlServerColetaOld(this);
 		coleta.initColeta();
 	}	
 	

@@ -55,12 +55,18 @@ public class Comando {
 					retorno = app.getDeployments();
 				}else if(arg[1].equals("mssql.memory")){
 					retorno = new SqlServer().getMemory();
+				}else if(arg[1].equals("mssql.config.memory")){
+					retorno = new SqlServer().getConfigMemory();
 				}else if(arg[1].equals("mssql.config.version")){
 					retorno = new SqlServer().getConfigVersion();
 				}else if(arg[1].equals("mssql.config.drive")){
 					retorno = new SqlServer().getConfigDrive();
 				}else if(arg[1].equals("mssql.config.files")){
 					retorno = new SqlServer().getConfigFiles();
+				}else if(arg[1].equals("mssql.config.collation")){
+					if(arg.length > 2){
+						retorno = new SqlServer().getConfigCollation(arg[2]);
+					}
 				}else if(arg[1].equals("mssql.logspace")){
 					retorno = new SqlServer().getLogSpace();
 				}else if(arg[1].equals("mssql.status")){
@@ -71,11 +77,23 @@ public class Comando {
 					if(arg.length > 2){
 						retorno = new SqlServer().getConfigCollation(arg[2]);
 					}
-				}else if(arg[1].equals("mssql.backup")){
-					retorno = new SqlServer().getBackup();
-				}else if(arg[1].equals("mssql.jobHistory")){
-					retorno = new SqlServer().getJobHistory();
+				}else if(arg[1].equals("mssql.config.backup")){
+					Long setCount = 0l;
 					
+					if(arg.length >= 3 && arg[2] != null){
+						try{
+							setCount = Long.parseLong(arg[2]);
+						}catch(NumberFormatException ex){
+							setCount = 0l;
+						}
+					}
+					retorno = new SqlServer().getBackup(setCount);
+				}else if(arg[1].equals("mssql.config.jobHistory")){
+					retorno = new SqlServer().getJobHistory();
+				}else if(arg[1].equals("mssql.status")){
+					if(arg.length > 2){
+						retorno = new SqlServer().getConfigCollation(arg[2]);
+					}
 				}else if(arg[1].equals("ora.config.memory")){
 					retorno = new Oracle().getConfigMemory();
 				}else if(arg[1].equals("ora.memory")){

@@ -15,6 +15,7 @@
 		<property name="fileName" not-null="true"/>
 		<property name="ativo" not-null="true"/>
 		<property name="growth"/>
+		<property name="databaseName"/>
 		
 	</class>
 </hibernate-mapping>
