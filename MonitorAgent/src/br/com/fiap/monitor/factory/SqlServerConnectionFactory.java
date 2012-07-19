@@ -12,7 +12,6 @@ public class SqlServerConnectionFactory {
 			Class.forName("net.sourceforge.jtds.jdbc.Driver");
 		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
-			System.exit(1);
 		}
 	}
 	

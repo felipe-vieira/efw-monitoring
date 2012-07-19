@@ -1,6 +1,9 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,7 +30,6 @@ public class SQLServerColeta {
 	
 	private BancoDadosBO bancoDadosBO;
 	
-	
 	private SocketUtil socket;
 	
 	private Date dataColeta;
@@ -44,8 +46,10 @@ public class SQLServerColeta {
 	}
 	
 	public void initColeta(){
+			
+			this.verificaDisponibilidade();
 
-			socket = new SocketUtil(this.sqlserver.getHostname(), 9090);
+			socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getPortAgent());
 			
 			try{
 				//Abre o socket
@@ -67,16 +71,16 @@ public class SQLServerColeta {
 				//Salva os itens de configuração.
 				this.bancoDadosBO.salvaConfigFiles(files);
 				this.bancoDadosBO.salvaConfigBackups(backups);
-				//this.bancoDadosBO.salvaConfigJobs(jobs);
+				this.bancoDadosBO.salvaConfigJobs(jobs);
 				
 				//Pega os jobs e files com IDs, necessários para as coletas.
-				//jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
+				jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
 				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
 				
 				//Realiza as coletas
 				BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
 				List<BancoFileColeta> filesColeta = this.getFilesColeta();
-				//List<BancoJobColeta> jobsColeta = this.getJobsColeta();
+				List<BancoJobColeta> jobsColeta = this.getJobsColeta();
 				
 				//Fecha o socket
 				socket.close();
@@ -84,7 +88,9 @@ public class SQLServerColeta {
 				//Persiste tudo
 				this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
 				this.bancoDadosBO.salvaColetasFiles(filesColeta);
-				//this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+				this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+				
+				this.sqlserver.setUltimaColeta(this.dataColeta);
 				
 			}catch (IOException e) {
 				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
@@ -98,13 +104,33 @@ public class SQLServerColeta {
 		
 	}
 	
+	public void verificaDisponibilidade(){
+		
+		String url = "jdbc:jtds:sqlserver://"+this.sqlserver.getHostname()+"/"+this.sqlserver.getDatabase()+";instance="+this.sqlserver.getInstanceName();
+		String usuario = this.sqlserver.getUsuario();
+		String senha = this.sqlserver.getSenha();
+		
+		try{
+			Class.forName("net.sourceforge.jtds.jdbc.Driver");
+			Connection conn =  DriverManager.getConnection(url,usuario,senha);
+			this.sqlserver.setDisponivel(true);
+			conn.close();
+		}catch(ClassNotFoundException ex){
+			ex.printStackTrace();
+		}catch(SQLException ex){
+			ex.printStackTrace();
+			this.sqlserver.setDisponivel(false);
+		}		
+		
+	}
+	
 	private List<BancoJobColeta> getJobsColeta() {
 		List<BancoJobColeta> jobsColeta= null;
 		
 		try{
 			if(this.files != null){
 				jobsColeta = new ArrayList<BancoJobColeta>();
-				JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get ora.config.jobHistory"));
+				JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.jobHistory"));
 
 				if(json != null){
 					JSONArray jsonArray = json.getJSONArray("jobhistory");
@@ -130,11 +156,17 @@ public class SQLServerColeta {
 								coleta.setLogId(logId);
 								coleta.setExecutionTime(i.getLong("Duracao"));
 								coleta.setDataExecucao(new Date(i.getLong("DataExecucao")));
+								coleta.setStatusDescr(strStatus);
+								coleta.setSqlMsg(i.getString("MensagemSQL"));
 								
 								if(strStatus.equals("SUCCEEDED")){
-									coleta.setStatus(true);
+									coleta.setStatus(2);
+									//Não guarda a mensagem se for succeeded
+									coleta.setSqlMsg(null);
+								}else if(strStatus.equals("FAILED")){
+									coleta.setStatus(0);
 								}else{
-									coleta.setStatus(false);
+									coleta.setStatus(1);
 								}
 								
 								jobsColeta.add(coleta);
@@ -220,7 +252,7 @@ public class SQLServerColeta {
 	private String getConfigCollation(){
 		try{
 			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.collation "+this.sqlserver.getDBName()));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.collation "+this.sqlserver.getDatabase()));
 			
 			if(json == null){
 				this.sqlserver.setGerenciavel(false);
@@ -380,8 +412,8 @@ public class SQLServerColeta {
 		}
 		
 		try{
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.jobHistory"));
-			JSONArray jsonArray = json.getJSONArray("jobhistory");
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.config.jobs"));
+			JSONArray jsonArray = json.getJSONArray("jobs");
 			
 			for (Object object : jsonArray) {
 				
@@ -396,6 +428,7 @@ public class SQLServerColeta {
 				}
 							
 				job.setJobName(i.getString("JobName"));
+				job.setOwner(i.getString("Owner"));
 
 				map.put(jobName,job);				
 			}
@@ -414,7 +447,7 @@ public class SQLServerColeta {
 				
 		try{
 			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.status" + this.sqlserver.getDBName()));
+			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.status " + this.sqlserver.getDatabase()));
 			if(json == null){
 				this.sqlserver.setGerenciavel(false);
 			}else{

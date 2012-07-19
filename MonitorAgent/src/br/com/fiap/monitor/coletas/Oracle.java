@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -382,7 +381,7 @@ public class Oracle {
 					value.put("Owner", rs.getString("OWNER"));
 					value.put("JobName", rs.getString("JOB_NAME"));
 					value.put("Status", rs.getString("STATUS"));
-					value.put("DataExecucao", rs.getDate("ACTUAL_START_DATE").getTime());
+					value.put("DataExecucao", rs.getTimestamp("ACTUAL_START_DATE").getTime());
 					value.put("Duracao", rs.getString("RUN_DURATION"));
 					value.put("MensagemSQL", rs.getString("ADDITIONAL_INFO"));
 					

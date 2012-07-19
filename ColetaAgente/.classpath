@@ -26,5 +26,7 @@
 	<classpathentry kind="lib" path="lib/commons/commons-logging-api-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/json/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/json/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/jtds-1.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/ojdbc14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

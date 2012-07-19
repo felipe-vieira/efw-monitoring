@@ -11,7 +11,6 @@ public class OracleConnectionFactory {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
-			System.exit(1);
 		}
 	}
 	

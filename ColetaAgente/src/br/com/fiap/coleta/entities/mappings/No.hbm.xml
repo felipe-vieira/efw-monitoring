@@ -45,16 +45,31 @@
 			<property name = "hostname" not-null="true"/>
 			<property name = "port" not-null="true"/>
 			<property name = "portAgent" column="port_agent" not-null="true"/>
+			<property name = "usuario" not-null="true">
+				<column name="usuario" sql-type="varchar(30)"/>
+			</property>
+			<property name = "senha" not-null="true">
+				<column name="senha" sql-type="varchar(30)"/>
+			</property>
 			<property name = "targetServerMemory" column="target_server_memory"/>
 			<property name = "version" column="version"/>
 			<property name = "edition" column="edition"/>
-			<property name = "status" column="status"/>
+			<property name = "status">
+				<column name="status" sql-type="varchar(30)"/>
+			</property>
 			<property name = "collation" column="collation"/>
+			
+			<joined-subclass name="br.com.fiap.coleta.entities.SQLServer" table="sql_server">
+				<key column="no_id"/>
+				<property name = "instanceName" column="instance_name" not-null= "true"/>
+				<property name = "database" column="database_name" not-null= "true"/>
+			</joined-subclass>
 			
 			<joined-subclass name="br.com.fiap.coleta.entities.Oracle" table="oracle">
 				<key column="no_id"/>
 				<property name = "instanceName" column="instance_name" not-null= "true"/>
 			</joined-subclass>
+
 			
 		</joined-subclass>
 		

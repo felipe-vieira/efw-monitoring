@@ -88,7 +88,9 @@ public class Comando {
 						}
 					}
 					retorno = new SqlServer().getBackup(setCount);
-				}else if(arg[1].equals("mssql.config.jobHistory")){
+				}else if(arg[1].equals("mssql.config.jobs")){
+					retorno = new SqlServer().getConfigJobs();
+				}else if(arg[1].equals("mssql.jobHistory")){
 					retorno = new SqlServer().getJobHistory();
 				}else if(arg[1].equals("mssql.status")){
 					if(arg.length > 2){

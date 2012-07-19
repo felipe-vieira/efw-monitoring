@@ -1,6 +1,9 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,7 +14,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.BancoDadosBO;
-import br.com.fiap.coleta.bo.OracleBO;
 import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoFileColeta;
@@ -27,9 +29,7 @@ public class OracleColeta {
 	private Oracle oracle;
 	
 	private BancoDadosBO bancoDadosBO;
-	
-	private OracleBO oracleBO;
-	
+		
 	private SocketUtil socket;
 	
 	private Date dataColeta;
@@ -43,12 +43,11 @@ public class OracleColeta {
 	public OracleColeta(No no){
 		this.oracle = (Oracle) no;
 		this.bancoDadosBO = new BancoDadosBO();
-		this.oracleBO = new OracleBO();
 	}
 	
 	public void initColeta(){
 
-			socket = new SocketUtil(this.oracle.getHostname(), 9090);
+			socket = new SocketUtil(this.oracle.getHostname(), this.oracle.getPortAgent());
 			
 			try{
 				
@@ -104,6 +103,26 @@ public class OracleColeta {
 		
 	}
 	
+	public void verificaDisponibilidade(){
+		
+		String url = "jdbc:oracle:thin:@"+this.oracle.getHostname()+":"+this.oracle.getPort()+":"+this.oracle.getInstanceName();
+		String usuario = this.oracle.getUsuario();
+		String senha = this.oracle.getSenha();
+		
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection conn =  DriverManager.getConnection(url,usuario,senha);
+			this.oracle.setDisponivel(true);
+			conn.close();
+		}catch(ClassNotFoundException ex){
+			ex.printStackTrace();
+		}catch(SQLException ex){
+			ex.printStackTrace();
+			this.oracle.setDisponivel(false);
+		}		
+		
+	}
+	
 	private List<BancoJobColeta> getJobsColeta() {
 		List<BancoJobColeta> jobsColeta= null;
 		
@@ -136,11 +155,17 @@ public class OracleColeta {
 								coleta.setLogId(logId);
 								coleta.setExecutionTime(i.getLong("Duracao"));
 								coleta.setDataExecucao(new Date(i.getLong("DataExecucao")));
+								coleta.setStatusDescr(strStatus);
+								coleta.setSqlMsg(i.getString("MensagemSQL"));
 								
 								if(strStatus.equals("SUCCEEDED")){
-									coleta.setStatus(true);
+									coleta.setStatus(2);
+									//Não guarda a mensagem se for succeeded
+									coleta.setSqlMsg(null);
+								}else if(strStatus.equals("FAILED")){
+									coleta.setStatus(0);
 								}else{
-									coleta.setStatus(false);
+									coleta.setStatus(1);
 								}
 								
 								jobsColeta.add(coleta);

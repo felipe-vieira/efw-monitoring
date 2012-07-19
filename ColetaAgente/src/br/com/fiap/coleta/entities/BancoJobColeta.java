@@ -13,7 +13,9 @@ public class BancoJobColeta implements Serializable {
 	private Date dataColeta;
 	private Date dataExecucao;
 	private Long executionTime;
-	private Boolean status;
+	private Integer status;
+	private String statusDescr;
+	private String sqlMsg;
 		
 	public BancoJobColeta(){
 		
@@ -73,12 +75,29 @@ public class BancoJobColeta implements Serializable {
 		this.dataExecucao = dataExecucao;
 	}
 
-	public Boolean getStatus() {
+
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(Boolean status) {
+	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getStatusDescr() {
+		return statusDescr;
+	}
+
+	public void setStatusDescr(String statusDescr) {
+		this.statusDescr = statusDescr;
+	}
+
+	public String getSqlMsg() {
+		return sqlMsg;
+	}
+
+	public void setSqlMsg(String sqlMsg) {
+		this.sqlMsg = sqlMsg;
 	}
 
 	@Override

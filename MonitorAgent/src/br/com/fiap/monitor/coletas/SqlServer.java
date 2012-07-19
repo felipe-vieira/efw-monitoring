@@ -84,9 +84,9 @@ public class SqlServer {
 				
 				if(rs.getString("counter_name").trim().equals("Total Server Memory (KB)")){
 					//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-					value.put("totalMemory", rs.getString("cntr_value"));
+					retorno.putValue("totalMemory", rs.getString("cntr_value"));
 				}else if(rs.getString("counter_name").trim().equals("Stolen Server Memory (KB)"))
-					value.put("stolenMemory", rs.getString("cntr_value"));
+					retorno.putValue("stolenMemory", rs.getString("cntr_value"));
 				
 				listMemory.add(value);
 			}
@@ -95,9 +95,7 @@ public class SqlServer {
 		}catch(SQLException ex){
 			ex.printStackTrace();
 		}
-			
-		JSONArray json = JSONArray.fromObject(listMemory);
-		retorno.putValue("memory", json);	
+		
 		return retorno;
 		
 	}
@@ -287,17 +285,7 @@ public class SqlServer {
 		}catch(SQLException ex){
 			ex.printStackTrace();
 		}
-		
-		sql = new StringBuilder();
-		sql.append("drop table #dbfiles;");
-			
-		try{
-			PreparedStatement stmt = conn.prepareStatement(sql.toString());
-			stmt.execute();
-		}catch(SQLException ex){
-			ex.printStackTrace();
-		}
-		
+				
 		JSONArray json = JSONArray.fromObject(listFiles);
 		retorno.putValue("files", json);
 		return retorno;
@@ -375,7 +363,7 @@ public class SqlServer {
 				
 				value.put("DatabaseName", rs.getString("database_name"));
 				value.put("FileName", rs.getString("name"));
-				value.put("BackupStartDate", rs.getString("Backup_start_date"));
+				value.put("BackupStartDate", rs.getTimestamp("Backup_start_date").getTime());
 				value.put("TempoExecucao", rs.getString("Tempo de Execucao"));
 				value.put("ServerName", rs.getString("server_name"));
 				value.put("RecoveryModel", rs.getString("recovery_model"));
@@ -436,42 +424,72 @@ public class SqlServer {
 		
 	}
 	
+	public ReturnObject getConfigJobs(){
+		ReturnObject retorno = new ReturnObject();
+		String sql =  "exec Msdb.dbo.sp_help_job";
+		List<Map<String, Object>> listJob = new ArrayList<Map<String,Object>>();
+
+		try{
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			while(rs.next()){
+				
+				Map<String,Object> value = new HashMap<String, Object>();
+				
+				value.put("JobName", rs.getString("name"));
+				value.put("Owner", rs.getString("owner"));
+			
+				listJob.add(value);
+			}
+				
+			
+		}catch(SQLException ex){
+			ex.printStackTrace();
+		}
+		
+		retorno.putValue("jobs",listJob);
+		
+		return retorno;
+	}
+	
 	public ReturnObject getJobHistory(){
 		
 		StringBuilder sql = new StringBuilder();
 		ReturnObject retorno = new ReturnObject();
 		
-		sql.append(" create table #Result_History_Jobs( ");
-		sql.append(" Cod int identity(1,1),Instance_Id int, Job_Id varchar(255), ");
-		sql.append(" Job_Name varchar(255),Step_Id int,Step_Name varchar(255), ");
-		sql.append(" Sql_Message_Id int,Sql_Severity int,SQl_Message varchar(3990), ");
-		sql.append(" Run_Status int, Run_Date varchar(20),");
-		sql.append(" Run_Time varchar(20),Run_Duration int,Operator_Emailed varchar(100),Operator_NetSent varchar(100), ");
-		sql.append(" Operator_Paged varchar(100),Retries_Attempted int, Nm_Server varchar(100));");
-		sql.append(" declare @ontem varchar (8);");
-		sql.append(" set @ontem = convert (varchar(8),(dateadd (day, -1, getdate())),112);");
-		sql.append(" insert into #Result_History_Jobs ");
-		sql.append(" exec Msdb.dbo.SP_HELP_JOBHISTORY @mode = 'FULL' , @start_run_date = @ontem;");
-		sql.append(" select Job_Name, case when Run_Status = 0 then 'Failed' ");
-		sql.append(" when Run_Status = 1 then 'Succeeded' ");
-		sql.append(" when Run_Status = 2 then 'Retry (step only)' ");
-		sql.append(" when Run_Status = 3 then 'Canceled' ");
-		sql.append(" when Run_Status = 4 then 'In-progress message' ");
-		sql.append(" when Run_Status = 5 then 'Unknown' end Status, ");
-		sql.append(" cast(Run_Date + ' ' + ");
-		sql.append(" right('00' + substring(Run_time,(len(Run_time)-5),2) ,2)+ ':' + ");
-		sql.append(" right('00' + substring(Run_time,(len(Run_time)-3),2) ,2)+ ':' + ");
-		sql.append(" right('00' + substring(Run_time,(len(Run_time)-1),2) ,2) as varchar) Dt_Execucao, ");
-		sql.append(" cast(Run_Duration as integer)/60 Run_Duration, ");
-		sql.append(" SQL_Message ");
-		sql.append(" from #Result_History_Jobs ");
-		sql.append(" where cast(Run_Date + ' ' + right('00' + substring(Run_time,(len(Run_time)-5),2) ,2)+ ':' + ");
-		sql.append(" right('00' + substring(Run_time,(len(Run_time)-3),2) ,2)+ ':' + ");
-		sql.append(" right('00' + substring(Run_time,(len(Run_time)-1),2) ,2) as datetime) >= ");
-		sql.append(" convert (varchar(8),(dateadd (day, -1, getdate())),112) + ' 17:00' ");
-		sql.append(" and Step_Id = 0	and Run_Status <> 1 ");
-		sql.append(" order by Dt_Execucao desc ;");
-		sql.append(" ");
+		sql.append("create table #Result_History_Jobs( ");
+		sql.append("	Cod int identity(1,1),Instance_Id int, Job_Id varchar(255),  ");
+		sql.append("    Job_Name varchar(255),Step_Id int,Step_Name varchar(255),  ");
+		sql.append("    Sql_Message_Id int,Sql_Severity int,SQl_Message varchar(1024),  ");
+		sql.append("	Run_Status int, Run_Date varchar(20), ");
+		sql.append("	Run_Time varchar(20),Run_Duration int,Operator_Emailed varchar(100),Operator_NetSent varchar(100),  ");
+		sql.append("	Operator_Paged varchar(100),Retries_Attempted int, Nm_Server varchar(100)); ");
+
+		sql.append("declare @ontem varchar (8); ");
+		sql.append("set @ontem = convert (varchar(8),(dateadd (day, -1, getdate())),112); ");
+		sql.append("insert into #Result_History_Jobs  ");
+		sql.append("	exec Msdb.dbo.SP_HELP_JOBHISTORY @mode = 'FULL' , @start_run_date = @ontem;");
+						  
+		sql.append("select Instance_Id,Job_Name,");
+		sql.append("	case when Run_Status = 0 then 'FAILED'  ");
+		sql.append("	     when Run_Status = 1 then 'SUCCEEDED'  ");
+		sql.append("	     when Run_Status = 2 then 'RETRY (STEP ONLY)'  ");
+		sql.append("	     when Run_Status = 3 then 'CANCELED'  ");
+		sql.append("	     when Run_Status = 4 then 'IN-PROGRESS MESSAGE'  ");
+		sql.append("	     when Run_Status = 5 then 'UNKNOWN' end Status,  ");
+		sql.append("	 convert(datetime,cast( ");
+		sql.append("	    substring(Run_Date,1,4) + '-' +  ");
+		sql.append("	    substring(Run_Date,5,2) + '-' +  ");
+		sql.append("	    substring(Run_Date,7,2) + ' ' +  ");
+		sql.append("	    right('00' + substring(Run_time,(len(Run_time)-5),2) ,2)+ ':' +  ");
+		sql.append("	    right('00' + substring(Run_time,(len(Run_time)-3),2) ,2)+ ':' +  ");
+		sql.append("	    right('00' + substring(Run_time,(len(Run_time)-1),2) ,2) as varchar),120) Dt_Execucao,  ");
+		sql.append("	Run_Duration, "); 
+		sql.append("	SQL_Message");
+		sql.append("	from #Result_History_Jobs a");
+		sql.append("	where Instance_Id = (select max(Instance_Id) from #Result_History_Jobs b where a.job_id = b.job_id);");
 				
 		List<Map<String, Object>> listJobHistory = new ArrayList<Map<String,Object>>();
 		
@@ -482,13 +500,13 @@ public class SqlServer {
 			while(rs.next()){
 				
 				Map<String,Object> value = new HashMap<String, Object>();
-				//Esse put value é tipo um chave valor que eu fiz pra facilitar o retorno
-				
-				value.put("Job Name", rs.getString("Job_Name"));
+
+				value.put("LogID", rs.getLong("Instance_Id"));
+				value.put("JobName", rs.getString("Job_Name"));
 				value.put("Status", rs.getString("Status"));
-				value.put("Data de Execucao", rs.getString("Dt_Execucao"));
-				value.put("Duracao", rs.getString("Run_Duration"));
-				value.put("Mensagem SQL", rs.getString("SQL_Message"));
+				value.put("DataExecucao", rs.getTimestamp("Dt_Execucao").getTime());
+				value.put("Duracao", rs.getLong("Run_Duration"));
+				value.put("MensagemSQL", rs.getString("SQL_Message"));
 				
 				listJobHistory.add(value);
 			}
