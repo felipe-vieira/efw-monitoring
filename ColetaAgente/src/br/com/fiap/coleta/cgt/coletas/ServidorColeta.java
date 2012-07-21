@@ -58,7 +58,7 @@ public class ServidorColeta {
 				List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
 				
 				
-				//Atualiza os itens de configuração
+				//Atualiza os itens de configuraï¿½ï¿½o
 				this.servidor.setSistemaOperacional(this.getConfigOs());
 				this.servidor.setProcessador(this.getConfigProcessor());
 				this.servidor.setMemoria(this.getConfigMemory());
@@ -83,7 +83,7 @@ public class ServidorColeta {
 				
 				
 			}catch (IOException e) {
-				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
+				System.out.println("Impossï¿½vel abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
 			}catch (Exception e){
 				e.printStackTrace();
 			}
@@ -95,15 +95,22 @@ public class ServidorColeta {
 		
 	}
 	
-	private Boolean verificaDisponibilidade(){
+	private void verificaDisponibilidade(){
 		try{
-			if(InetAddress.getByName(this.servidor.getHostname()).isReachable(30000)){
+			/*if(InetAddress.getByName(this.servidor.getHostname()).isReachable(30000)){
 				return true;
 			}else{
 				return false;
-			}
+			}*/
+			
+			DisponibilidadeColeta disponibilidade = new DisponibilidadeColeta();
+			disponibilidade.verificaDisponibilidade();
+			
+			
+		
 		}catch(Exception ex){
-			return false;
+			ex.printStackTrace();
+			//return false;
 		}
 	}
 	
@@ -277,7 +284,7 @@ public class ServidorColeta {
 				
 				Double i;
 				
-				//Corrige um bug de quando vem 0 de utilização ser Integer.
+				//Corrige um bug de quando vem 0 de utilizaï¿½ï¿½o ser Integer.
 				try{
 					i = (Double) core;
 					i = i * 100;
