@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fiap.coleta.entities.Particao" table="particao">
+
+		<id name="id" column="particao_id">
+        	<generator class="increment"/>
+    	</id>
+		
+		<many-to-one name="servidor" not-null="true"/>
+		
+		<property name="nome" not-null="true"/>
+		
+		<property name="sistemaArquivo" not-null="true">
+			<column name="sistema_arquivo" sql-type="varchar(10)"/>
+		</property>
+		
+		<property name="tamanho" not-null="true"/>
+
+	</class>
+</hibernate-mapping>
