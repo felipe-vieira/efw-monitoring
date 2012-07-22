@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fiap.coleta.entities.No" table="no">
+	
+		<id name="id" column="no_id">
+			<generator class="increment"/>
+		</id>
+		
+		<property name="nome" not-null="true"/>
+		<property name="disponivel" not-null="false"/>
+		<property name="gerenciavel" not-null="false"/>
+		<property name="ultimaColeta" not-null="false"/>
+		
+		<joined-subclass name="br.com.fiap.coleta.entities.Servidor" table="servidor">
+			<key column="no_id"/>
+			<property name = "hostname"/>
+		</joined-subclass>		
+		
+		<joined-subclass name="br.com.fiap.coleta.entities.ServidorAplicacao" table="servidor_aplicacao">
+			<key column="no_id"/>
+			<property name = "hostname"/>
+			<property name = "port"/>
+			<property name = "jmxPort" column="jmx_port"/>
+			<property name = "startTime" column="start_time"/>
+			<property name = "uptime"/>
+			
+			<joined-subclass name="br.com.fiap.coleta.entities.JBoss" table="jboss">
+				<key column="no_id"/>
+				<property name = "versao"/>
+			</joined-subclass>
+			
+			<joined-subclass name="br.com.fiap.coleta.entities.Glassfish" table ="glassfish">
+				<key column="no_id"/>
+				<property name = "user"/>
+				<property name = "senha"/>
+				<property name = "versao"/>
+			</joined-subclass>
+			
+		</joined-subclass>
+		
+	</class> 
+</hibernate-mapping>
