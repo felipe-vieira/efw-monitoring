@@ -6,6 +6,7 @@ import br.com.fiap.coleta.cgt.coletas.JBossColeta;
 
 public class JBoss extends ServidorAplicacao implements Serializable {
 	
+	
 	private static final long serialVersionUID = 5637561467657665987L;
 	
 	public String versao;
