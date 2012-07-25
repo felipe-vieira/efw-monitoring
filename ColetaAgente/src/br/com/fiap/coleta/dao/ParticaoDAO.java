@@ -31,7 +31,11 @@ public class ParticaoDAO {
 		try{
 			
 			for (Particao particao : listParticao) {
-				session.saveOrUpdate(particao);
+				if(particao.getId() == null){
+					session.save(particao);
+				}else{
+					session.merge(particao);
+				}
 			}
 			
 			t.commit();
