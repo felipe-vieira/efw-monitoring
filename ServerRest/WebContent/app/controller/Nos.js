@@ -31,11 +31,10 @@ Ext.define('MONITOR.controller.Nos', {
     		form = win.down('form'),
     		record = form.getRecord(),
     		values = form.getValues();
-
+    		
     	record.set(values);
     	win.close();
     	this.getNosStore().sync();
-    	console.log('wtf omfg');
     }
 
 

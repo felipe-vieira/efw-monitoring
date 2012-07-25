@@ -1,19 +1,16 @@
 Ext.application({
-	requires: ['Ext.container.Viewport', 'Ext.data.proxy.Rest', 'Ext.form.Panel'],
+    requires: ['Ext.container.Viewport'],
     name: 'MONITOR',
     appFolder: 'app',
     controllers:[
-        'LoginController',       
         'Nos'
     ],
     launch: function() {
-    	
-    Ext.create('Ext.container.Viewport', {
+        Ext.create('Ext.container.Viewport', {
             layout: 'fit',
-            renderTo: Ext.getBody(),
             items: [
                 {
-                    xtype: 'loginform'
+                    xtype: 'nolist'
                 }
             ],
 
