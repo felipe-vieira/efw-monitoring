@@ -43,6 +43,9 @@ public class ServidorColeta {
 		Boolean status = true;
 		
 		if(status){
+			
+			//Movido pra ca para conseguir marcar data caso falhe
+			this.dataColeta = new Date();
 			socket = new SocketUtil(this.servidor.getHostname(), 9090);
 			
 			try{
@@ -51,12 +54,17 @@ public class ServidorColeta {
 				socket.openSocket();
 				
 				//Pega a data atual
-				this.dataColeta = new Date();
+				//this.dataColeta = new Date();
 				
 				MemoriaColeta memoriaColeta = null;
 				ProcessadorColeta processadorColeta = null;
 				List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
 				
+				
+				// Disponivel
+				
+				this.servidor.setGerenciavel(true);
+				this.servidor.setDisponivel(true);
 				
 				//Atualiza os itens de configura��o
 				this.servidor.setSistemaOperacional(this.getConfigOs());
@@ -72,6 +80,9 @@ public class ServidorColeta {
 					listaParticaoColeta.add(this.getOsPartition(p));
 				}
 				
+				// Ultima coleta
+				this.servidor.setUltimaColeta(dataColeta);
+				
 				//Fecha o socket
 				socket.close();
 
@@ -83,6 +94,11 @@ public class ServidorColeta {
 				
 				
 			}catch (IOException e) {
+				//TODO: quando o agent ta fora, ele da exception ao rodar o updateServidorColeta, mas atualiza e não mata o server
+				this.servidor.setDisponivel(false);
+				this.servidor.setGerenciavel(false);
+				this.servidor.setUltimaColeta(dataColeta);
+				this.servidorBO.updateServidorColeta(this.servidor);
 				System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
 			}catch (Exception e){
 				e.printStackTrace();
@@ -95,24 +111,19 @@ public class ServidorColeta {
 		
 	}
 	
-	private void verificaDisponibilidade(){
+	/*private void verificaDisponibilidade(){
 		try{
-			/*if(InetAddress.getByName(this.servidor.getHostname()).isReachable(30000)){
+			if(InetAddress.getByName(this.servidor.getHostname()).isReachable(30000)){
 				return true;
 			}else{
 				return false;
-			}*/
-			
-			DisponibilidadeColeta disponibilidade = new DisponibilidadeColeta();
-			disponibilidade.verificaDisponibilidade();
-			
-			
-		
+			}
+					
 		}catch(Exception ex){
 			ex.printStackTrace();
 			//return false;
 		}
-	}
+	}*/
 	
 	private SistemaOperacional getConfigOs(){
 		
