@@ -4,7 +4,7 @@ Ext.application({
     appFolder: 'app',
     controllers:[
         'LoginController',       
-        'Nos'
+        'NoController'
     ],
     launch: function() {
     	

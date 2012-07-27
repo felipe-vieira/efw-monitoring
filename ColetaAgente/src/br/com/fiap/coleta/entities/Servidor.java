@@ -2,8 +2,11 @@ package br.com.fiap.coleta.entities;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import br.com.fiap.coleta.cgt.coletas.ServidorColeta;
 
+@XmlRootElement
 public class Servidor extends No{
 	
 	private String hostname;

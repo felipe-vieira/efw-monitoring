@@ -17,6 +17,8 @@ public class No {
 	
 	private Date ultimaColeta;
 	
+	private String tipo;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -47,6 +49,13 @@ public class No {
 	}
 	public void setUltimaColeta(Date ultimaColeta) {
 		this.ultimaColeta = ultimaColeta;
+	}
+	
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 	@Override
@@ -82,5 +91,6 @@ public class No {
 	public void coleta(){
 		System.out.println("Nó invalido");
 	}
+	
 	
 }

@@ -1,0 +1,21 @@
+.tabelaInfo{
+	width: 100%;
+}
+
+.tabelaInfo td{
+	padding: 2px;
+	border: 1px solid #bad1ef;
+	color: #04408C;
+	font-size: 11px;
+	font-weight: bold;
+	font-family: tahoma,arial,verdana,sans-serif
+}
+
+.tabelaInfo tr{
+	height: 31px;
+}
+
+.tabelaInfo .titulo{
+	background-color: #d3e2f4;
+	width: 100px;
+}
