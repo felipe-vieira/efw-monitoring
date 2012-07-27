@@ -10,7 +10,7 @@
         	</generator>
     	</id>
 		
-		<one-to-one name="servidor" constrained="true"/>
+		<one-to-one name="servidor" constrained="true" lazy = "false"/>
 		
 		<property name="totalMemoria" not-null="true"/>
 

@@ -2,7 +2,8 @@ Ext.define('MONITOR.controller.LoginController', {
     extend: 'Ext.app.Controller',
     views: [
     	'login.Login',
-    	'login.MainScreen'
+    	'login.MainScreen',
+    	'login.MainTab'
     ],
     stores: [
     	'Usuarios'
@@ -37,8 +38,9 @@ Ext.define('MONITOR.controller.LoginController', {
     	    },
     	    callback: function(records, operation, success) {
     	        if(records.length > 0 ){
-    	        	win.close();
-    	        	var view = Ext.widget('mainscreen');
+    	        	win.hide();
+    	        	var viewport = win.up();
+    	        	viewport.add({xtype: 'mainscreen', height: '100%', width: '100%'});
     	        }else{
     	        	win.setLoading(false);
     	        	Ext.MessageBox.alert('Erro','Usu&aacute;rio ou senha inv&aacute;lidos.');

@@ -2,8 +2,6 @@ package br.com.fiap.coleta.entities;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 public class No {
 		
 	private Integer id;
