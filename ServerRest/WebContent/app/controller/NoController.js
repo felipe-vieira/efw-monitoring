@@ -1,8 +1,14 @@
 Ext.define('MONITOR.controller.NoController', {
     extend: 'Ext.app.Controller',
+    requires: [
+        'MONITOR.utils.ConvertUtils'     
+    ],
     views: [
     	'no.List',
-    	'no.Edit'
+    	'no.Edit',
+    	'servidor.ListParticoes',
+    	'servidor.ListGraficos'
+    
     ],
     stores: [
     	'Nos',
@@ -13,7 +19,8 @@ Ext.define('MONITOR.controller.NoController', {
     	'Servidor',
     	'SistemaOperacional',
     	'Memoria',
-    	'Processador'
+    	'Processador',
+    	'Particao'
     ],
     init: function() {
     		
@@ -54,16 +61,26 @@ Ext.define('MONITOR.controller.NoController', {
     	    	
     	        if(servidor != null){
     	        
-    	        	console.log(servidor);
+    	        	console.log(servidor.particoes());
     	        	
     	        	var so = servidor.getSistemaOperacional();
-    	        	//var memoria = servidor.getMemoria();
-    	        	//var processador = servidor.getProcessador();
+    	        	var memoria = servidor.getMemoria();
+    	        	var processador = servidor.getProcessador();
+    	        
     	        	
     	        	var msgPatch = "";
+    	        	var processadorMsg = "";
     	        	
     	        	if(so.get('patch') != null && so.get('patch') != ""){
     	        		msgPatch = " - " + so.get('patch');
+    	        	}
+    	        	
+    	        	if(processador.get('cores') > 1){
+    	        		processadorMsg = processador.get('fabricante') +' '
+    	        			+ processador.get('modelo') + '(' + processador.get('cores') + ' cores - Clock: ' + processador.get('clock') + 'MHz)'; 
+    	        	}else{
+    	        		processadorMsg = processador.get('fabricante') +' '
+	        				+ processador.get('modelo') + '(' + processador.get('cores') + ' core - Clock: ' + processador.get('clock') + 'MHz)';
     	        	}
     	        	
     	        	var infoHtml =
@@ -86,7 +103,15 @@ Ext.define('MONITOR.controller.NoController', {
 		        				'<td class="titulo">Arquitetura: </td>' + 
 		        				'<td>'+ so.get('arquitetura') + '</td>' +	
 		        			'</tr>'+
+		        			'<tr>'+
+		        				'<td class="titulo">Processador:</td>'+
+		        				'<td>' + processadorMsg +  '</td>'+
+		        				'<td class="titulo">Memoria</td>'+
+		        				'<td>'+ MONITOR.utils.ConvertUtils.convertB(memoria.get('totalMemoria')) +'</td>' + 
+		        			'</tr>'+
     	        		'</tbody> </table>';
+    	        	
+    	        	
     	        	
     	        	tabs.add({
     	                closable: true,
@@ -100,16 +125,19 @@ Ext.define('MONITOR.controller.NoController', {
     	    	            	html: infoHtml	            	
     	    	            },
     	    	            {
+    	    	            	xtype: 'particoeslist',
+    	    	            	store: servidor.particoes(),
+    	    	            	padding: 10
+    	    	            },
+    	    	            {
     	    	            	xtype: 'panel',
     	    	            	title: 'Alertas ',
     	    	            	padding: 10,
     	    	            	html: '<< TODO >>'
     	    	            },
     	    	            {
-    	    	            	xtype: 'panel',
-    	    	            	title: 'Coletas ',
+    	    	            	xtype: 'servidorgraficos',
     	    	            	padding: 10,
-    	    	            	html: ''
     	    	            },
     	                ]
     	            }).show();

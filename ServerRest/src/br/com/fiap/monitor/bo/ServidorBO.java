@@ -1,10 +1,14 @@
 package br.com.fiap.monitor.bo;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.Memoria;
 import br.com.fiap.coleta.entities.No;
+import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.SistemaOperacional;
@@ -73,6 +77,25 @@ public class ServidorBO {
 			Processador processador = (Processador) this.genericDAO.getById(Processador.class, id);
 			t.commit();
 			return processador;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}	
+	}
+	
+	public List<Particao> getParticoesId(Integer id){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+				
+		try{
+			Query query = session.createQuery("FROM Particao where servidor.id = :id");
+			
+			query.setInteger("id", id);
+			List<Particao> particoes = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return particoes;
 		}catch(Exception ex){
 			ex.printStackTrace();
 			t.rollback();

@@ -7,7 +7,7 @@ Ext.define('MONITOR.view.no.List' ,{
     initComponent: function() {
 
         this.columns = [
-            {header: 'Name',  dataIndex: 'nome',  flex: 1},
+            {header: 'Nome',  dataIndex: 'nome',  flex: 1},
             {header: 'Disponivel', dataIndex: 'disponivel', 
 	             renderer:function(val){
 	             	if(val){

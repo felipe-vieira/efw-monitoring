@@ -2,7 +2,6 @@ Ext.define('MONITOR.view.login.MainScreen', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.mainscreen',
     layout: 'border',
-    id: 'minharola',
     initComponent: function() {
     
 	    this.items = [
@@ -11,7 +10,7 @@ Ext.define('MONITOR.view.login.MainScreen', {
 	        	region: 'north',
 	            border: false,
 	            layout: 'fit',
-	            title: 'Servidores',
+	            title: 'EFW Monitoring',
 	            floating: false,  // usually you want this set to True (default)
 	            renderTo: Ext.getBody(),  // usually rendered by it's containing component
 	            dockedItems: [{
