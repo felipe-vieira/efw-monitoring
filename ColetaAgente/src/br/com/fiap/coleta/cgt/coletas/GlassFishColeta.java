@@ -1,6 +1,8 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +44,21 @@ public class GlassFishColeta {
 		try{
 			socket.openSocket();
 			
+			// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
+			URL url = new URL("http://" + this.glassfish.getHostname());
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.connect();
+			int code = connection.getResponseCode();
+			connection.disconnect();
+						
+			if (code == 200){
+				this.glassfish.setDisponivel(true);
+			}
+			else{
+				this.glassfish.setDisponivel(false);
+			}
+			
 			//Pega as propriedades do coletor
 			this.getGlassfishRuntime();
 			List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigGlassfishMemory();
@@ -51,6 +68,13 @@ public class GlassFishColeta {
 			List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getGlassfishMemory();
 			ServidorAplicacaoThreadColeta threadColeta = this.getGlassfishThread();
 					
+			// Verifica se as coletas estao vazias, caso estiverem ele nao esta gerenciavel
+			if (deployments.isEmpty() || propriedadesMemorias.isEmpty() || coletasMemorias.isEmpty()){
+				this.glassfish.setGerenciavel(false);
+			}
+			else{
+				this.glassfish.setGerenciavel(true);
+			}
 			
 			//Salva as propriedades
 			servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
@@ -62,9 +86,18 @@ public class GlassFishColeta {
 			servidorAplicacaoBO.salvaColetasThread(threadColeta);
 			servidorAplicacaoBO.salvaMapDeployments(deployments);
 			
+			// Ultima coleta
+			this.glassfish.setUltimaColeta(dataColeta);
+			
 			socket.close();
 			
 		}catch(IOException ex){
+			
+			this.glassfish.setDisponivel(false);
+			this.glassfish.setGerenciavel(false);
+			this.glassfish.setUltimaColeta(dataColeta);
+			this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
+			
 			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
 		}catch(Exception ex){
 			ex.printStackTrace();

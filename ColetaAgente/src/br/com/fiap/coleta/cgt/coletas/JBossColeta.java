@@ -1,6 +1,8 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +43,21 @@ public class JBossColeta {
 		try{
 			socket.openSocket();
 			
+			// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
+			URL url = new URL("http://" + this.jboss.getHostname());
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.connect();
+			int code = connection.getResponseCode();
+			connection.disconnect();
+			
+			if (code == 200){
+				this.jboss.setDisponivel(true);
+			}
+			else{
+				this.jboss.setDisponivel(false);
+			}
+			
 			//Pega as propriedades do coletor
 			this.getJbossRuntime();
 			List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigJbossMemory();
@@ -49,7 +66,16 @@ public class JBossColeta {
 			Map<String,ServidorAplicacaoDeployment> deployments = this.getJbossDeployments();
 			List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getJbossMemory();
 			ServidorAplicacaoThreadColeta threadColeta = this.getJbossThread();
-					
+			
+			// Verifica se as coletas estao vazias, caso estiverem ele nao esta gerenciavel
+			if (deployments.isEmpty() || propriedadesMemorias.isEmpty() || coletasMemorias.isEmpty()){
+				this.jboss.setGerenciavel(false);
+			}
+			else{
+				this.jboss.setGerenciavel(true);
+			}
+			
+			
 			
 			//Salva as propriedades
 			servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
@@ -61,9 +87,18 @@ public class JBossColeta {
 			servidorAplicacaoBO.salvaColetasThread(threadColeta);
 			servidorAplicacaoBO.salvaMapDeployments(deployments);
 			
+			// Ultima coleta
+			this.jboss.setUltimaColeta(dataColeta);
+			
 			socket.close();
 			
 		}catch(IOException ex){
+			
+			this.jboss.setDisponivel(false);
+			this.jboss.setGerenciavel(false);
+			this.jboss.setUltimaColeta(dataColeta);
+			this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
+			
 			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
 		}
 	}
