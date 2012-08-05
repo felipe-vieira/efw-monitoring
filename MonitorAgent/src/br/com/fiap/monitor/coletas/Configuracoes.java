@@ -96,7 +96,8 @@ public class Configuracoes {
 		List<HashMap<String, Object>>  retornoParticoes = new ArrayList<HashMap<String,Object>>();
 		
 		for (FileSystem fileSystem : fileSystems) {
-			if(!fileSystem.getTypeName().equals("cdrom")){
+			//if(!fileSystem.getTypeName().equals("cdrom")){
+			if(fileSystem.getTypeName().equalsIgnoreCase("local_disk") || fileSystem.getTypeName().equalsIgnoreCase("swap")){
 				HashMap<String, Object> particao = new HashMap<String, Object>();
 				particao.put("name", fileSystem.getDirName());
 				particao.put("fileSystem",fileSystem.getSysTypeName());
