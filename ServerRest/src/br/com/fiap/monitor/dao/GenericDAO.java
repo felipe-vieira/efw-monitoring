@@ -12,8 +12,9 @@ public class GenericDAO {
 
 	private Session session;
 
+	
 	/**
-	 * Pega a sessão atual doo hibernate, se for vazia, pega uma nova antes de retornar
+	 * Pega a sessão atual do hibernate, se for vazia, pega uma nova antes de retornar
 	 * @return Session
 	 */
 	public Session getSession() {

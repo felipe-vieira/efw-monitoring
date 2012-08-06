@@ -13,7 +13,7 @@
 		<property name="nome" not-null="true"/>
 		
 		<property name="sistemaArquivo" not-null="true">
-			<column name="sistema_arquivo" sql-type="varchar(10)"/>
+			<column name="sistema_arquivo" sql-type="varchar(30)"/>
 		</property>
 		
 		<property name="tamanho" not-null="true"/>
