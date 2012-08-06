@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="br.com.fiap.coleta.entities.ServidorThreshold" table="servidor_threshold">
+			
+		<id name="id" column="id">
+			<generator class="increment"/>
+		</id>
+		
+		<property name="nome">
+			<column name="nome" sql-type="varchar(30)"  not-null="true"/>
+		</property>
+		
+		<property name="limiteMemoria">
+			<column name="limite_memoria" sql-type="decimal(5,2)"  not-null="true"/>
+		</property>	
+		
+		<property name="limiteCpu">
+			<column name="limite_cpu" sql-type="decimal(5,2)"  not-null="true"/>
+		</property>	
+		
+		<property name="limiteParticao">
+			<column name="limite_particao" sql-type="decimal(5,2)"  not-null="true"/>
+		</property>	
+		
+		
+	</class> 
+</hibernate-mapping>

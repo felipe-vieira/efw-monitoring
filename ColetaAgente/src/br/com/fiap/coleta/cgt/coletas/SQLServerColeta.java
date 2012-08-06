@@ -13,6 +13,7 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.BancoDadosBO;
 import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoFile;
@@ -30,6 +31,8 @@ public class SQLServerColeta {
 	
 	private BancoDadosBO bancoDadosBO;
 	
+	private AlarmeBO alarmeBO;
+	
 	private SocketUtil socket;
 	
 	private Date dataColeta;
@@ -40,58 +43,64 @@ public class SQLServerColeta {
 	
 	private Map<String,BancoJob> jobs;
 	
+	
 	public SQLServerColeta(No no){
 		this.sqlserver = (SQLServer) no;
 		this.bancoDadosBO = new BancoDadosBO();
+		this.alarmeBO = new AlarmeBO();
 	}
 	
 	public void initColeta(){
 			
-			this.verificaDisponibilidade();
-
-			socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getPortAgent());
-			
+		Boolean ultimoStatus = this.sqlserver.getDisponivel();
+		
 			try{
-				//Abre o socket
-				socket.openSocket();
-				//Pega a data atual
-				this.dataColeta = new Date();		
 				
-				//Atualiza os itens de configuração
-				this.getConfigMemory();
-				this.getConfigCollation();
-				this.getConfigVersion();
-				this.getStatus();
+				this.verificaDisponibilidade();
 				
-				files = this.getConfigFiles();
-				backups = this.getConfigBackup();
-				jobs = this.getConfigJobHistory(); 
-				
-				
-				//Salva os itens de configuração.
-				this.bancoDadosBO.salvaConfigFiles(files);
-				this.bancoDadosBO.salvaConfigBackups(backups);
-				this.bancoDadosBO.salvaConfigJobs(jobs);
-				
-				//Pega os jobs e files com IDs, necessários para as coletas.
-				jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
-				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
-				
-				//Realiza as coletas
-				BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
-				List<BancoFileColeta> filesColeta = this.getFilesColeta();
-				List<BancoJobColeta> jobsColeta = this.getJobsColeta();
-				
-				//Fecha o socket
-				socket.close();
-
-				//Persiste tudo
-				this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
-				this.bancoDadosBO.salvaColetasFiles(filesColeta);
-				this.bancoDadosBO.salvaColetasJobs(jobsColeta);
-				
-				this.sqlserver.setUltimaColeta(this.dataColeta);
-				
+				if(this.sqlserver.getDisponivel()){
+					socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getPortAgent());
+					
+					//Abre o socket
+					socket.openSocket();
+					//Pega a data atual
+					this.dataColeta = new Date();		
+					
+					//Atualiza os itens de configuração
+					this.getConfigMemory();
+					this.getConfigCollation();
+					this.getConfigVersion();
+					this.getStatus();
+					
+					files = this.getConfigFiles();
+					backups = this.getConfigBackup();
+					jobs = this.getConfigJobHistory(); 
+					
+					
+					//Salva os itens de configuração.
+					this.bancoDadosBO.salvaConfigFiles(files);
+					this.bancoDadosBO.salvaConfigBackups(backups);
+					this.bancoDadosBO.salvaConfigJobs(jobs);
+					
+					//Pega os jobs e files com IDs, necessários para as coletas.
+					jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
+					files = this.bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
+					
+					//Realiza as coletas
+					BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
+					List<BancoFileColeta> filesColeta = this.getFilesColeta();
+					List<BancoJobColeta> jobsColeta = this.getJobsColeta();
+					
+					//Fecha o socket
+					socket.close();
+	
+					//Persiste tudo
+					this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
+					this.bancoDadosBO.salvaColetasFiles(filesColeta);
+					this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+					
+					this.sqlserver.setUltimaColeta(this.dataColeta);
+				}
 			}catch (IOException e) {
 				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
 				this.sqlserver.setGerenciavel(false);
@@ -99,6 +108,7 @@ public class SQLServerColeta {
 				e.printStackTrace();
 				this.sqlserver.setGerenciavel(false);
 			}finally{
+				this.alarmeBO.geraAlarmeIndsiponibilidade(this.sqlserver, ultimoStatus);
 				this.bancoDadosBO.salvaBanco(this.sqlserver);
 			}
 		
@@ -118,7 +128,6 @@ public class SQLServerColeta {
 		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
 		}catch(SQLException ex){
-			ex.printStackTrace();
 			this.sqlserver.setDisponivel(false);
 		}		
 		

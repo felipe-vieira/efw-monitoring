@@ -10,11 +10,13 @@ import br.com.fiap.coleta.cgt.coletas.ServidorColeta;
 public class Servidor extends No{
 	
 	private String hostname;
-	private SistemaOperacional sistemaOperacional;
+	private ServidorThreshold threshold;
 	
+	private SistemaOperacional sistemaOperacional;
 	private Processador processador;
 	private Memoria memoria;
 	private List<Particao> particoes;
+	
 	
 	public String getHostname() {
 		return hostname;
@@ -55,8 +57,15 @@ public class Servidor extends No{
 	public void setParticoes(List<Particao> particoes) {
 		this.particoes = particoes;
 	}
-	
-	
+		
+	public ServidorThreshold getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(ServidorThreshold threshold) {
+		this.threshold = threshold;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

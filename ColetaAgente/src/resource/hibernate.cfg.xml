@@ -59,7 +59,13 @@
 		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoBackup.hbm.xml" />
 		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJob.hbm.xml" />
 		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJobColeta.hbm.xml" />
-
+		
+		<!--  Alarmes -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/TipoAlarme.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Alarme.hbm.xml"/>
+		
+		<!--  Thresholds  -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorThreshold.hbm.xml"/>
 					
 	</session-factory>
 

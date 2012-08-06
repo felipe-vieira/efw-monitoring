@@ -1,7 +1,7 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
-import java.net.InetAddress;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +9,9 @@ import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.ServidorBO;
+import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.coleta.entities.Memoria;
 import br.com.fiap.coleta.entities.MemoriaColeta;
 import br.com.fiap.coleta.entities.No;
@@ -18,6 +20,7 @@ import br.com.fiap.coleta.entities.ParticaoColeta;
 import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.ProcessadorColeta;
 import br.com.fiap.coleta.entities.Servidor;
+import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.SistemaOperacional;
 import br.com.fiap.coleta.util.socket.SocketUtil;
 
@@ -27,103 +30,91 @@ public class ServidorColeta {
 	
 	private ServidorBO servidorBO;
 	
+	private AlarmeBO alarmeBO;
+		
 	private SocketUtil socket;
 	
 	private Date dataColeta;
 	
+	
 	public ServidorColeta(No no){
 		this.servidor = (Servidor) no;
 		this.servidorBO = new ServidorBO();
-		
+		this.alarmeBO = new AlarmeBO();
 	}
 	
 	public void initColeta(){
 
-		//Boolean status = this.verificaDisponibilidade();
-		Boolean status = true;
+		//Movido pra ca para conseguir marcar data caso falhe
+		this.dataColeta = new Date();
+		socket = new SocketUtil(this.servidor.getHostname(), 9090);
 		
-		if(status){
+		Boolean ultimoStatus = servidor.getDisponivel();
+		
+		
+		try{
 			
-			//Movido pra ca para conseguir marcar data caso falhe
-			this.dataColeta = new Date();
-			socket = new SocketUtil(this.servidor.getHostname(), 9090);
+			//Abre o socket
+			socket.openSocket();
 			
-			try{
-				
-				//Abre o socket
-				socket.openSocket();
-				
-				//Pega a data atual
-				//this.dataColeta = new Date();
-				
-				MemoriaColeta memoriaColeta = null;
-				ProcessadorColeta processadorColeta = null;
-				List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
-				
-				
-				// Disponivel
-				
-				this.servidor.setGerenciavel(true);
-				this.servidor.setDisponivel(true);
-				
-				//Atualiza os itens de configura��o
-				this.servidor.setSistemaOperacional(this.getConfigOs());
-				this.servidor.setProcessador(this.getConfigProcessor());
-				this.servidor.setMemoria(this.getConfigMemory());
-				this.servidor.setParticoes(this.getConfigPartitions());
-				
-				//Faz as coletas
-				memoriaColeta = this.getOsMemory();
-				processadorColeta = this.getOsProcessor();								
-				
-				for(Particao p : this.servidor.getParticoes()){
-					listaParticaoColeta.add(this.getOsPartition(p));
-				}
-				
-				// Ultima coleta
-				this.servidor.setUltimaColeta(dataColeta);
-				
-				//Fecha o socket
-				socket.close();
-
-				//Persiste tudo
-				this.servidorBO.updateServidorColeta(this.servidor);
-				this.servidorBO.saveColetaMemoria(memoriaColeta);
-				this.servidorBO.saveColetaProcessador(processadorColeta);
-				this.servidorBO.saveListaColetaParticao(listaParticaoColeta);
-				
-				
-			}catch (IOException e) {
-				//TODO: quando o agent ta fora, ele da exception ao rodar o updateServidorColeta, mas atualiza e não mata o server
-				this.servidor.setDisponivel(false);
-				this.servidor.setGerenciavel(false);
-				this.servidor.setUltimaColeta(dataColeta);
-				this.servidorBO.updateServidorColeta(this.servidor);
-				System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
-			}catch (Exception e){
-				e.printStackTrace();
+			//Lista os alarmes de coleta
+			List<Alarme> listaAlarmes = new ArrayList<Alarme>();
+			
+			MemoriaColeta memoriaColeta = null;
+			ProcessadorColeta processadorColeta = null;
+			List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
+			
+			ServidorThreshold t = servidor.getThreshold();
+			
+			// Disponivel
+			
+			this.servidor.setGerenciavel(true);
+			this.servidor.setDisponivel(true);
+			
+			//Atualiza os itens de configura��o
+			this.servidor.setSistemaOperacional(this.getConfigOs());
+			this.servidor.setProcessador(this.getConfigProcessor());
+			this.servidor.setMemoria(this.getConfigMemory());
+			this.servidor.setParticoes(this.getConfigPartitions());
+			
+			//Faz as coletas
+			memoriaColeta = this.getOsMemory();
+			processadorColeta = this.getOsProcessor();								
+			
+			for(Particao p : this.servidor.getParticoes()){
+				listaParticaoColeta.add(this.getOsPartition(p));
 			}
 			
+			// Ultima coleta
+			this.servidor.setUltimaColeta(dataColeta);
+			
+			//Fecha o socket
+			socket.close();
+
+			//Persiste tudo
+			this.servidorBO.updateServidorColeta(this.servidor);
+			this.servidorBO.saveColetaMemoria(memoriaColeta);
+			this.servidorBO.saveColetaProcessador(processadorColeta);
+			this.servidorBO.saveListaColetaParticao(listaParticaoColeta);
+			
+			
+		}catch (IOException e) {
+			this.servidor.setDisponivel(false);
+			this.servidor.setGerenciavel(false);
+			this.servidor.setUltimaColeta(dataColeta);
+			this.servidorBO.updateServidorColeta(this.servidor);
+			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
+			
+			this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, ultimoStatus);
+		}catch (Exception e){
+			e.printStackTrace();
 		}
-		else{
-			System.out.println("Down =[ " + this.servidor.getHostname());
-		}
+		
+	
+			
+		
 		
 	}
-	
-	/*private void verificaDisponibilidade(){
-		try{
-			if(InetAddress.getByName(this.servidor.getHostname()).isReachable(30000)){
-				return true;
-			}else{
-				return false;
-			}
-					
-		}catch(Exception ex){
-			ex.printStackTrace();
-			//return false;
-		}
-	}*/
 	
 	private SistemaOperacional getConfigOs(){
 		
@@ -262,7 +253,11 @@ public class ServidorColeta {
 			//pega em bytes
 			coleta.setDataColeta(this.dataColeta);
 			coleta.setUsado(json.getLong("memUsed"));
-					
+			
+			BigDecimal utilizacao = new BigDecimal((coleta.getUsado() / this.servidor.getMemoria().getTotalMemoria())*100);
+			
+			this.alarmeBO.geraAlarmeMemoria(servidor, utilizacao);
+								
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}catch(InterruptedException ex){
@@ -308,7 +303,9 @@ public class ServidorColeta {
 			
 			Double media = soma / cores.size();
 			
-			coleta.setUsado(media);	
+			coleta.setUsado(media);
+			
+			this.alarmeBO.geraAlarmeCpu(servidor,media);
 
 		}catch(IOException ex){
 			ex.printStackTrace();
@@ -326,14 +323,18 @@ public class ServidorColeta {
 		try{
 				
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get os.partition " + particao.getNome()));
-			//System.out.println(json.toString());
 			
 			coleta = new ParticaoColeta(particao);
 									
 			//pega em bytes
 			coleta.setDataColeta(this.dataColeta);
 			coleta.setUsado(json.getLong("partitionUsed"));
-					
+			
+			
+			BigDecimal utilizacao = new BigDecimal( (coleta.getUsado()/particao.getTamanho()) * 100 );
+			this.alarmeBO.geraAlarmeParticao(servidor, particao, utilizacao);
+			
+			
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}catch(InterruptedException ex){

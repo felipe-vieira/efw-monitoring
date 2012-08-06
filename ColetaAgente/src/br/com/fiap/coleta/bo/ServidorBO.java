@@ -38,13 +38,17 @@ public class ServidorBO {
 	
 	
 	public void updateServidorColeta(Servidor servidor){
+		
+		if(servidor.getDisponivel() && servidor.getGerenciavel()){
 			
-		this.sistemaOperacionalDAO.salvarSistemaOperacional(servidor.getSistemaOperacional());
-		this.processadorDAO.salvarProcessador(servidor.getProcessador());
-		this.memoriaDAO.salvarMemoria(servidor.getMemoria());
-		this.particaoDAO.salvaListaParticoes(servidor.getParticoes());
+			this.sistemaOperacionalDAO.salvarSistemaOperacional(servidor.getSistemaOperacional());
+			this.processadorDAO.salvarProcessador(servidor.getProcessador());
+			this.memoriaDAO.salvarMemoria(servidor.getMemoria());
+			this.particaoDAO.salvaListaParticoes(servidor.getParticoes());
+		}	
 		
 		this.servidorDAO.updateServidor(servidor);
+		
 
 	}
 	

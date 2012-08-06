@@ -73,7 +73,23 @@ public class ColetaDAO {
 			t.rollback();
 		}
 
-	} 
+	}
+	
+	public <E> List<E> listAll(Class<E> classe){
+		Session session = DBUtil.getCurrentSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			List<E> lista = session.createQuery("FROM "+classe.getName()).list();
+			t.commit();
+			return lista;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
 
 	
 }
