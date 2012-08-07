@@ -91,7 +91,7 @@ public class AlarmeBO {
 
 	public void geraAlarmeParticao(Servidor servidor, Particao particao, BigDecimal utilizacao){
 		
-		if(utilizacao.compareTo(servidor.getThreshold().getLimiteMemoria()) == 1){
+		if(utilizacao.compareTo(servidor.getThreshold().getLimiteParticao()) == 1){
 			Alarme alarme = new Alarme();
 			alarme.setData(new Date());
 			alarme.setTipo(tipos.get(5));

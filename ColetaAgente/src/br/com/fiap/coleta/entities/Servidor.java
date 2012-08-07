@@ -94,8 +94,12 @@ public class Servidor extends No{
 
 	@Override
 	public void coleta(){
-		ServidorColeta coleta = new ServidorColeta(this);
-		coleta.initColeta();
+		try{
+			ServidorColeta coleta = new ServidorColeta(this);
+			coleta.initColeta();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 
 }

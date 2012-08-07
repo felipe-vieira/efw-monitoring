@@ -16,6 +16,7 @@
 		<joined-subclass name="br.com.fiap.coleta.entities.Servidor" table="servidor">
 			<key column="no_id"/>
 			<property name = "hostname"/>
+			<many-to-one name="threshold" lazy="false"/>
 		</joined-subclass>		
 		
 		<joined-subclass name="br.com.fiap.coleta.entities.ServidorAplicacao" table="servidor_aplicacao">

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fiap.coleta.entities.TipoAlarme" table="tipo_alarme">
+	
+		<id name="id" column = "id">
+			<generator class="increment"/>
+		</id>
+		
+		<property name="descricao" not-null="true">
+			<column name="descricao" sql-type="varchar(30)"/>
+		</property>
+		
+		<property name="mensagem" not-null="true">
+			<column name="mensagem" sql-type="varchar(200)"/>
+		</property>
+
+		<property name="threshold" not-null="true"/>
+		<property name="unidade"/>		
+
+	</class> 
+</hibernate-mapping>

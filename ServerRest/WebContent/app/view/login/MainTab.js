@@ -5,7 +5,7 @@ Ext.define('MONITOR.view.login.MainTab', {
     initComponent: function() {
 	    this.items =  [
 	        {
-	           	title: 'Foo',
+	           	title: 'Inicio',
 	           	closable: 'true'
 	        }
 	    ];
