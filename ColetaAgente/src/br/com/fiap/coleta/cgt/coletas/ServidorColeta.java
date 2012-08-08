@@ -102,7 +102,7 @@ public class ServidorColeta {
 			this.servidor.setGerenciavel(false);
 			this.servidor.setUltimaColeta(dataColeta);
 			this.servidorBO.updateServidorColeta(this.servidor);
-			System.out.println("Impossï¿½vel abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
+			System.out.println("Impossível abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
 			
 			this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, ultimoStatus);
 		}catch (Exception e){
@@ -253,7 +253,9 @@ public class ServidorColeta {
 			coleta.setDataColeta(this.dataColeta);
 			coleta.setUsado(json.getLong("memUsed"));
 			
-			BigDecimal utilizacao = new BigDecimal((coleta.getUsado() / this.servidor.getMemoria().getTotalMemoria())*100);
+			Double percentual = (coleta.getUsado().doubleValue() / this.servidor.getMemoria().getTotalMemoria().doubleValue())*100;
+			
+			BigDecimal utilizacao = new BigDecimal(percentual);
 			
 			this.alarmeBO.geraAlarmeMemoria(servidor, utilizacao);
 								
@@ -329,8 +331,8 @@ public class ServidorColeta {
 			coleta.setDataColeta(this.dataColeta);
 			coleta.setUsado(json.getLong("partitionUsed"));
 			
-			
-			BigDecimal utilizacao = new BigDecimal( (coleta.getUsado()/particao.getTamanho()) * 100 );
+			Double percentual =  (coleta.getUsado().doubleValue()/particao.getTamanho().doubleValue()) * 100; 
+			BigDecimal utilizacao = new BigDecimal(percentual);
 			this.alarmeBO.geraAlarmeParticao(servidor, particao, utilizacao);
 			
 			

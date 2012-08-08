@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<!-- Database connection settings -->
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="connection.url">jdbc:mysql://localhost/monitor</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password"></property>
+
+		<!-- JDBC connection pool (use the built-in) -->
+		<property name="connection.pool_size">1</property>
+
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+		<!-- Enable Hibernate's automatic session context management -->
+		<property name="current_session_context_class">thread</property>
+
+		<!-- Disable the second-level cache  -->
+		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">false</property>
+
+		<!-- Drop and re-create the database schema on startup -->
+		<property name="hbm2ddl.auto">update</property>
+                
+		<!-- Mappings -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/No.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Agendamento.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/AgendamentoRemovido.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Disponibilidade.hbm.xml" />
+		
+		<!-- Servidor -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/SistemaOperacional.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Processador.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Memoria.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Particao.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/MemoriaColeta.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ProcessadorColeta.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ParticaoColeta.hbm.xml" />
+		
+		<!-- Servidores de aplicacao -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoDeployment.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoThreadColeta.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoMemoria.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoMemoriaColeta.hbm.xml" />
+		
+		<!-- Banco de dados -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoFile.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoFileColeta.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoMemoriaColeta.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoBackup.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJob.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJobColeta.hbm.xml" />
+		
+		<!--  Alarmes -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/TipoAlarme.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Alarme.hbm.xml"/>
+		
+		<!--  Thresholds  -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorThreshold.hbm.xml"/>
+					
+	</session-factory>
+
+</hibernate-configuration>
