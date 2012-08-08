@@ -99,7 +99,7 @@ public class Configuracoes {
 		
 		for (FileSystem fileSystem : fileSystems) {
 			//if(!fileSystem.getTypeName().equals("cdrom")){
-			if(fileSystem.getTypeName().equalsIgnoreCase("local_disk") || fileSystem.getTypeName().equalsIgnoreCase("swap")){
+			if(fileSystem.getTypeName().equalsIgnoreCase("local") || fileSystem.getTypeName().equalsIgnoreCase("swap")){
 				HashMap<String, Object> particao = new HashMap<String, Object>();
 				particao.put("name", fileSystem.getDirName());
 				particao.put("fileSystem",fileSystem.getSysTypeName());

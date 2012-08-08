@@ -60,15 +60,16 @@
 		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJob.hbm.xml" />
 		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoJobColeta.hbm.xml" />
 		
-		<!-- Telas -->
-		<mapping resource="br/com/fiap/monitor/entities/mappings/Usuario.hbm.xml" />
-		
 		<!--  Alarmes -->
 		<mapping resource="br/com/fiap/coleta/entities/mappings/TipoAlarme.hbm.xml"/>
 		<mapping resource="br/com/fiap/coleta/entities/mappings/Alarme.hbm.xml"/>
 		
 		<!--  Thresholds  -->
-		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorThreshold.hbm.xml"/>		
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorThreshold.hbm.xml"/>
+		
+		<!-- Telas -->
+		<mapping resource="br/com/fiap/monitor/entities/mappings/Usuario.hbm.xml" />
+				
 					
 	</session-factory>
 

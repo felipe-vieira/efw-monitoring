@@ -14,7 +14,6 @@ import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
 import br.com.fiap.coleta.entities.Glassfish;
-import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;

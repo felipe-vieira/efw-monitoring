@@ -20,7 +20,9 @@ Ext.define('MONITOR.controller.NoController', {
     	'SistemaOperacional',
     	'Memoria',
     	'Processador',
-    	'Particao'
+    	'Particao',
+    	'Alarme',
+    	'TipoAlarme'
     ],
     init: function() {
     		

@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="ServerRest">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="EfwDomain.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/EfwDomain/EfwDomain">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="ServerRest"/>
         <property name="java-output-path" value="/ServerRest/build/classes"/>
     </wb-module>

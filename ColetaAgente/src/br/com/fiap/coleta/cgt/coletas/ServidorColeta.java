@@ -58,7 +58,6 @@ public class ServidorColeta {
 			socket.openSocket();
 			
 			//Lista os alarmes de coleta
-			List<Alarme> listaAlarmes = new ArrayList<Alarme>();
 			
 			MemoriaColeta memoriaColeta = null;
 			ProcessadorColeta processadorColeta = null;

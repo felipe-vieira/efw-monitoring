@@ -10,7 +10,6 @@ import org.hibernate.Transaction;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;
-import br.com.fiap.coleta.entities.ServidorAplicacaoMemoriaColeta;
 import br.com.fiap.coleta.entities.enumerators.TipoMemoriaServidorAplicacao;
 import br.com.fiap.coleta.util.dao.DBUtil;
 

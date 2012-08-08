@@ -57,13 +57,17 @@ public class AgendamentoDAO {
 		Session sessao = DBUtil.getCurrentSession();
 		Transaction t = sessao.beginTransaction();
 		
-		String update = "UPDATE Agendamento a SET a.agendado = :agendado";
-		sessao.createQuery(update)
-			.setBoolean("agendado", false)
-			.executeUpdate();
-		
-		t.commit();
-		
+		try{
+			String update = "UPDATE Agendamento a SET a.agendado = :agendado";
+			sessao.createQuery(update)
+				.setBoolean("agendado", false)
+				.executeUpdate();
+			
+			t.commit();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+		}
 	}
 	
 	/**

@@ -10,10 +10,10 @@ Ext.define('MONITOR.model.Alarme', {
     
     proxy: {
 		type: 'rest',
-		url: 'rest/servidores/',
+		url: 'rest/alarme/',
         reader: {
             type: 'json',
-            root: 'servidor'
+            root: 'alarme'
         },
 		writer: {
 			type: 'json',
@@ -22,12 +22,8 @@ Ext.define('MONITOR.model.Alarme', {
 	},
 	
     hasOne: [
-        {model: 'MONITOR.model.SistemaOperacional', foreignKey: 'id', associationKey: 'sistemaOperacional', getterName: "getSistemaOperacional"  },
-        {model: 'MONITOR.model.Memoria', foreignKey: 'id', associationKey: 'memoria' , getterName: "getMemoria"  },
-        {model: 'MONITOR.model.Processador', foreignKey: 'id', associationKey: 'processador' ,  getterName: "getProcessador"  }
-    ],
-    
-    hasMany:[
-        {model: 'MONITOR.model.Particao', associationKey:'particoes', name:'particoes'}
+        {model: 'MONITOR.model.tipoAlarme', foreignKey: 'id', associationKey: 'tipo', getterName: "getTipoAlarme"  },
+        {model: 'MONITOR.model.No', foreignKey: 'id', associationKey: 'no', getterName: "getNo"  }
+        
     ]
 });

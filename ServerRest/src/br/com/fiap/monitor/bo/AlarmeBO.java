@@ -24,7 +24,7 @@ public class AlarmeBO {
 		Transaction t = session.beginTransaction();
 		
 		try{			
-			Query query = session.createQuery("FROM Alarme where alarme.no.id = :id");
+			Query query = session.createQuery("FROM Alarme where no.id = :id");
 			query.setInteger("id", id);
 			
 			List<Alarme> retorno =  query.list();
