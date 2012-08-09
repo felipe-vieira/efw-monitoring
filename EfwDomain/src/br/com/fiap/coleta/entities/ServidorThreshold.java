@@ -3,7 +3,7 @@ package br.com.fiap.coleta.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ServidorThreshold implements Serializable {
+public class ServidorThreshold extends Threshold implements Serializable {
 
 	private static final long serialVersionUID = -6426566287013692659L;
 	private Long id;

@@ -46,7 +46,7 @@ public class GenericDAO {
 	 * @param query
 	 * @return List
 	 */
-	public List queryList(Query query){
+	public <T> List<T> queryList(Query query){
 		return query.list();			
 	}
 
@@ -66,7 +66,7 @@ public class GenericDAO {
 	 * @param id
 	 * @return Objeto
 	 */
-	public Object getById(Class classe, Serializable id){
+	public <T> Object getById(Class<T> classe, Serializable id){
 		return this.session.get(classe, id);
 	}
 

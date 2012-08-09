@@ -1,8 +1,7 @@
 Ext.define('MONITOR.store.Alarmes', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.Alarme',
-    groupField: 'tipo',
-    autoLoad: true,
+    groupField: 'status',
 
     proxy: {
         type: 'rest',

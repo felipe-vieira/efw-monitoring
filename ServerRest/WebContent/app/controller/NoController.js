@@ -7,12 +7,14 @@ Ext.define('MONITOR.controller.NoController', {
     	'no.List',
     	'no.Edit',
     	'servidor.ListParticoes',
-    	'servidor.ListGraficos'
+    	'servidor.ListGraficos',
+    	'alarme.ListAlarmesNo'
     
     ],
     stores: [
     	'Nos',
-    	'Servidores'
+    	'Servidores',
+    	'Alarmes'
     ],
     models: [
     	'No',
@@ -72,6 +74,13 @@ Ext.define('MONITOR.controller.NoController', {
     	        	
     	        	var msgPatch = "";
     	        	var processadorMsg = "";
+    	        	var storeAlarmes = Ext.create('MONITOR.store.Alarmes');
+    	        	
+    	        	storeAlarmes.load({
+    	        		params: {
+    	        			id: servidor.get('id')
+    	        		}
+    	        	});
     	        	
     	        	if(so.get('patch') != null && so.get('patch') != ""){
     	        		msgPatch = " - " + so.get('patch');
@@ -84,6 +93,8 @@ Ext.define('MONITOR.controller.NoController', {
     	        		processadorMsg = processador.get('fabricante') +' '
 	        				+ processador.get('modelo') + '(' + processador.get('cores') + ' core - Clock: ' + processador.get('clock') + 'MHz)';
     	        	}
+    	        	
+    	        	
     	        	
     	        	var infoHtml =
     	        		'<table class="tabelaInfo"> <tbody>'+
@@ -124,7 +135,7 @@ Ext.define('MONITOR.controller.NoController', {
     	    	            	xtype: 'panel',
     	    	            	title: 'Informações do Servidor',
     	    	            	padding: 10,
-    	    	            	html: infoHtml	            	
+    	    	            	html: infoHtml            	
     	    	            },
     	    	            {
     	    	            	xtype: 'particoeslist',
@@ -132,10 +143,9 @@ Ext.define('MONITOR.controller.NoController', {
     	    	            	padding: 10
     	    	            },
     	    	            {
-    	    	            	xtype: 'panel',
-    	    	            	title: 'Alertas ',
-    	    	            	padding: 10,
-    	    	            	html: '<< TODO >>'
+    	    	            	xtype: 'alarmenolist',
+    	    	            	store: storeAlarmes,
+    	    	            	padding: 10    	    	            	
     	    	            },
     	    	            {
     	    	            	xtype: 'servidorgraficos',

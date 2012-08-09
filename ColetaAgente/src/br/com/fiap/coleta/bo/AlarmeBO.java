@@ -11,6 +11,7 @@ import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Servidor;
+import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.TipoAlarme;
 
 public class AlarmeBO {
@@ -61,29 +62,38 @@ public class AlarmeBO {
 	
 	public void geraAlarmeCpu(Servidor servidor, Double utilizacao) {
 		BigDecimal valor = new BigDecimal(utilizacao);
+		ServidorThreshold threshold = servidor.getThreshold();
 		
-		if(valor.compareTo(servidor.getThreshold().getLimiteCpu()) == 1){
-			Alarme alarme = new Alarme();
-			alarme.setData(new Date());
-			alarme.setTipo(tipos.get(3));
-			alarme.setValor(valor);
-			alarme.setNo(servidor);
-			
-			coletaDAO.salvaColeta(alarme);
+		if(threshold != null && threshold.getLimiteCpu() != null){
+			if(valor.compareTo(threshold.getLimiteCpu()) == 1){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(3));
+				alarme.setValor(valor);
+				alarme.setValorLimite(threshold.getLimiteCpu());
+				alarme.setNo(servidor);
+				
+				coletaDAO.salvaColeta(alarme);
+			}
 		}
 		
 	}
 	
 	public void geraAlarmeMemoria(Servidor servidor, BigDecimal utilizacao){
 		
-		if(utilizacao.compareTo(servidor.getThreshold().getLimiteMemoria()) == 1){
-			Alarme alarme = new Alarme();
-			alarme.setData(new Date());
-			alarme.setTipo(tipos.get(4));
-			alarme.setValor(utilizacao);
-			alarme.setNo(servidor);
-			
-			coletaDAO.salvaColeta(alarme);
+		ServidorThreshold threshold = servidor.getThreshold();
+		
+		if(threshold != null && threshold.getLimiteMemoria() != null){
+			if(utilizacao.compareTo(servidor.getThreshold().getLimiteMemoria()) == 1){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(4));
+				alarme.setValor(utilizacao);
+				alarme.setValorLimite(threshold.getLimiteMemoria());
+				alarme.setNo(servidor);
+				
+				coletaDAO.salvaColeta(alarme);
+			}
 		}
 				
 	}
@@ -91,17 +101,21 @@ public class AlarmeBO {
 
 	public void geraAlarmeParticao(Servidor servidor, Particao particao, BigDecimal utilizacao){
 		
-		if(utilizacao.compareTo(servidor.getThreshold().getLimiteParticao()) == 1){
-			Alarme alarme = new Alarme();
-			alarme.setData(new Date());
-			alarme.setTipo(tipos.get(5));
-			alarme.setValor(utilizacao);
-			alarme.setNo(servidor);
-			alarme.setParametro(particao.getNome());
-			
-			coletaDAO.salvaColeta(alarme);
-		}
+		ServidorThreshold threshold = servidor.getThreshold();
+		
+		if(threshold != null && threshold.getLimiteParticao() != null){
+			if(utilizacao.compareTo(servidor.getThreshold().getLimiteParticao()) == 1){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(5));
+				alarme.setValor(utilizacao);
+				alarme.setValorLimite(threshold.getLimiteParticao());
+				alarme.setNo(servidor);
+				alarme.setParametro(particao.getNome());
 				
+				coletaDAO.salvaColeta(alarme);
+			}			
+		}
 	}
 	
 	

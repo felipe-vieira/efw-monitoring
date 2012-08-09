@@ -15,7 +15,9 @@ public class Alarme implements Serializable{
 	private TipoAlarme tipo;
 	private StatusAlarme status;
 	private BigDecimal valor;
+	private BigDecimal valorLimite;
 	private String parametro;
+	private Integer contagem;
 	
 	public Alarme(){
 		this.status = StatusAlarme.NAO_LIDO;
@@ -57,8 +59,22 @@ public class Alarme implements Serializable{
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
+	public BigDecimal getValorLimite() {
+		return valorLimite;
+	}
 
-	
+	public void setValorLimite(BigDecimal valorLimite) {
+		this.valorLimite = valorLimite;
+	}
+
+	public Integer getContagem() {
+		return contagem;
+	}
+
+	public void setContagem(Integer contagem) {
+		this.contagem = contagem;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -3,9 +3,11 @@ Ext.define('MONITOR.model.Alarme', {
     fields: [
              {name: 'id',	type: 'int'},
              {name: 'data',	type: 'date'},
-             {name: 'status',	type: 'int'},
+             {name: 'status',	type: 'string'},
              {name: 'valor',	type: 'float'},
-             {name: 'parametro', type: 'parametro'}
+             {name: 'valorLimite',	type: 'float'},
+             {name: 'parametro', type: 'parametro'},
+             {name: 'contagem',	type: 'int'},
     ],
     
     proxy: {

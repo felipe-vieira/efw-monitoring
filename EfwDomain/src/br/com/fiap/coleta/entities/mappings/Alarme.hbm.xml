@@ -20,6 +20,7 @@
 
 		<property name="data" not-null="true"/>
 		<property name="valor"/>
+		<property name="valorLimite"/>
 		<property name="parametro"/>
 
 	</class> 

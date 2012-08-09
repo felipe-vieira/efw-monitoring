@@ -11,7 +11,6 @@ import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.ServidorBO;
-import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.coleta.entities.Memoria;
 import br.com.fiap.coleta.entities.MemoriaColeta;
 import br.com.fiap.coleta.entities.No;
@@ -20,7 +19,6 @@ import br.com.fiap.coleta.entities.ParticaoColeta;
 import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.ProcessadorColeta;
 import br.com.fiap.coleta.entities.Servidor;
-import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.SistemaOperacional;
 import br.com.fiap.coleta.util.socket.SocketUtil;
 
@@ -35,6 +33,7 @@ public class ServidorColeta {
 	private SocketUtil socket;
 	
 	private Date dataColeta;
+
 	
 	
 	public ServidorColeta(No no){
@@ -62,9 +61,7 @@ public class ServidorColeta {
 			MemoriaColeta memoriaColeta = null;
 			ProcessadorColeta processadorColeta = null;
 			List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
-			
-			ServidorThreshold t = servidor.getThreshold();
-			
+						
 			// Disponivel
 			
 			this.servidor.setGerenciavel(true);
