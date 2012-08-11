@@ -13,6 +13,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
+import br.com.fiap.coleta.entities.Disponibilidade;
 import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
@@ -28,79 +29,138 @@ public class JBossColeta {
 	private ServidorAplicacaoBO servidorAplicacaoBO;
 	private SocketUtil socket;
 	private Date dataColeta;
+	//SLA
+	private Disponibilidade disponibilidade;
+	
 	
 	public JBossColeta(No no){
 		this.jboss = (JBoss) no;
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
+		// SLA
+		this.disponibilidade = new Disponibilidade();
+		this.disponibilidade.setNo(this.jboss);
 	}
 	
 	public void initColeta(){
 		
 		this.dataColeta = new Date();
 		
+		if (connect()){
+			Boolean ultimoStatus = this.jboss.getDisponivel();
+			socket = new SocketUtil(this.jboss.getHostname(), 9090);
+			try{
+				
+				socket.openSocket();
+
+				// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
+				URL url = new URL("http://" + this.jboss.getHostname() + ":" + this.jboss.getJmxPort());
+				HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.connect();
+				int code = connection.getResponseCode();
+				connection.disconnect();
+
+				if (code == 200){
+					this.jboss.setDisponivel(true);
+					// SLA
+					if (!ultimoStatus){
+						this.disponibilidade.setFim(this.dataColeta);
+					}
+				}
+				else{
+					this.jboss.setDisponivel(false);
+					// SLA
+					if (ultimoStatus){
+						this.disponibilidade.setInicio(this.dataColeta);
+					}
+				}
+
+				//Pega as propriedades do coletor
+				this.getJbossRuntime();
+				List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigJbossMemory();
+
+				//Pega os valores da coleta
+				Map<String,ServidorAplicacaoDeployment> deployments = this.getJbossDeployments();
+				List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getJbossMemory();
+				ServidorAplicacaoThreadColeta threadColeta = this.getJbossThread();
+
+				// Verifica se as coletas estao vazias, caso estiverem ele nao esta gerenciavel
+				if (deployments.isEmpty() || propriedadesMemorias.isEmpty() || coletasMemorias.isEmpty()){
+					this.jboss.setGerenciavel(false);
+				}
+				else{
+					this.jboss.setGerenciavel(true);
+				}
+
+
+
+				//Salva as propriedades
+				servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
+				servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
+
+				//Salva as coletas
+				servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
+				servidorAplicacaoBO.salvaColetasMemoria(coletasMemorias);
+				servidorAplicacaoBO.salvaColetasThread(threadColeta);
+				servidorAplicacaoBO.salvaMapDeployments(deployments);
+
+				// Ultima coleta
+				this.jboss.setUltimaColeta(dataColeta);
+
+				socket.close();
+
+			}catch(IOException ex){
+
+				this.jboss.setDisponivel(false);
+				this.jboss.setGerenciavel(false);
+				this.jboss.setUltimaColeta(dataColeta);
+				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
+				
+				// SLA
+				if (ultimoStatus){
+					this.disponibilidade.setInicio(this.dataColeta);
+				}
+
+				System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
+			}
+		}
+	}
+	
+	private boolean connect(){
+		Boolean ultimoStatus = this.jboss.getDisponivel();
 		socket = new SocketUtil(this.jboss.getHostname(), 9090);
+		
+		boolean result = false;
 		
 		try{
 			socket.openSocket();
 			
-			// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
-			URL url = new URL("http://" + this.jboss.getHostname());
-			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.connect();
-			int code = connection.getResponseCode();
-			connection.disconnect();
-			
-			if (code == 200){
-				this.jboss.setDisponivel(true);
-			}
-			else{
-				this.jboss.setDisponivel(false);
-			}
-			
-			//Pega as propriedades do coletor
-			this.getJbossRuntime();
-			List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigJbossMemory();
-			
-			//Pega os valores da coleta
-			Map<String,ServidorAplicacaoDeployment> deployments = this.getJbossDeployments();
-			List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getJbossMemory();
-			ServidorAplicacaoThreadColeta threadColeta = this.getJbossThread();
-			
-			// Verifica se as coletas estao vazias, caso estiverem ele nao esta gerenciavel
-			if (deployments.isEmpty() || propriedadesMemorias.isEmpty() || coletasMemorias.isEmpty()){
-				this.jboss.setGerenciavel(false);
-			}
-			else{
-				this.jboss.setGerenciavel(true);
-			}
-			
-			
-			
-			//Salva as propriedades
-			servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
-			servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
-			
-			//Salva as coletas
-			servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
-			servidorAplicacaoBO.salvaColetasMemoria(coletasMemorias);
-			servidorAplicacaoBO.salvaColetasThread(threadColeta);
-			servidorAplicacaoBO.salvaMapDeployments(deployments);
-			
-			// Ultima coleta
-			this.jboss.setUltimaColeta(dataColeta);
-			
 			socket.close();
 			
-		}catch(IOException ex){
+			// SLA
+			if (!ultimoStatus){
+				this.disponibilidade.setFim(this.dataColeta);
+			}
+			
+			result = true;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 			
 			this.jboss.setDisponivel(false);
 			this.jboss.setGerenciavel(false);
 			this.jboss.setUltimaColeta(dataColeta);
 			this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
 			
-			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
+			// SLA
+			if (ultimoStatus){
+				this.disponibilidade.setInicio(this.dataColeta);
+			}
+						
+			result = false;
 		}
+		
+		return result;		
 	}
 	
 	private Map<String,ServidorAplicacaoDeployment> getJbossDeployments(){

@@ -13,6 +13,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
+import br.com.fiap.coleta.entities.Disponibilidade;
 import br.com.fiap.coleta.entities.Glassfish;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
@@ -28,79 +29,144 @@ public class GlassFishColeta {
 	private ServidorAplicacaoBO servidorAplicacaoBO;
 	private SocketUtil socket;
 	private Date dataColeta;
+	//SLA
+	private Disponibilidade disponibilidade;
 	
 	public GlassFishColeta(No no){
 		this.glassfish = (Glassfish) no;
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
+		//SLA
+		this.disponibilidade = new Disponibilidade();
+		this.disponibilidade.setNo(this.glassfish);
 	}
 	
 	public void initColeta(){
 		
 		this.dataColeta = new Date();
 		
+		if (connect()){
+			Boolean ultimoStatus = this.glassfish.getDisponivel();
+			socket = new SocketUtil(this.glassfish.getHostname(), 9090);
+
+			try{
+				socket.openSocket();
+
+				// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
+				URL url = new URL("http://" + this.glassfish.getHostname() + ":" + this.glassfish.getJmxPort());
+				HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.connect();
+				int code = connection.getResponseCode();
+				connection.disconnect();
+
+				if (code == 200){
+					this.glassfish.setDisponivel(true);
+					// SLA
+					if (!ultimoStatus){
+						this.disponibilidade.setFim(this.dataColeta);
+					}
+				}
+				else{
+					this.glassfish.setDisponivel(false);
+					// SLA
+					if (ultimoStatus){
+						this.disponibilidade.setInicio(this.dataColeta);
+					}
+				}
+
+				if (code == 200){
+					this.glassfish.setDisponivel(true);
+				}
+				else{
+					this.glassfish.setDisponivel(false);
+				}
+
+				//Pega as propriedades do coletor
+				this.getGlassfishRuntime();
+				List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigGlassfishMemory();
+
+				//Pega os valores da coleta
+				Map<String,ServidorAplicacaoDeployment> deployments = this.getGlassfishDeployments();
+				List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getGlassfishMemory();
+				ServidorAplicacaoThreadColeta threadColeta = this.getGlassfishThread();
+
+				// Verifica se as coletas estao vazias, caso estiverem ele nao esta gerenciavel
+				if (deployments.isEmpty() || propriedadesMemorias.isEmpty() || coletasMemorias.isEmpty()){
+					this.glassfish.setGerenciavel(false);
+				}
+				else{
+					this.glassfish.setGerenciavel(true);
+				}
+
+				//Salva as propriedades
+				servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
+				servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
+
+				//Salva as coletas
+				servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
+				servidorAplicacaoBO.salvaColetasMemoria(coletasMemorias);
+				servidorAplicacaoBO.salvaColetasThread(threadColeta);
+				servidorAplicacaoBO.salvaMapDeployments(deployments);
+
+				// Ultima coleta
+				this.glassfish.setUltimaColeta(dataColeta);
+
+				socket.close();
+
+			}catch(IOException ex){
+
+				this.glassfish.setDisponivel(false);
+				this.glassfish.setGerenciavel(false);
+				this.glassfish.setUltimaColeta(dataColeta);
+				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
+
+				// SLA
+				if (ultimoStatus){
+					this.disponibilidade.setInicio(this.dataColeta);
+				}
+
+				System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	private boolean connect(){
+		Boolean ultimoStatus = this.glassfish.getDisponivel();
 		socket = new SocketUtil(this.glassfish.getHostname(), 9090);
+		
+		boolean result = false;
 		
 		try{
 			socket.openSocket();
 			
-			// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
-			URL url = new URL("http://" + this.glassfish.getHostname());
-			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.connect();
-			int code = connection.getResponseCode();
-			connection.disconnect();
-						
-			if (code == 200){
-				this.glassfish.setDisponivel(true);
-			}
-			else{
-				this.glassfish.setDisponivel(false);
-			}
-			
-			//Pega as propriedades do coletor
-			this.getGlassfishRuntime();
-			List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigGlassfishMemory();
-			
-			//Pega os valores da coleta
-			Map<String,ServidorAplicacaoDeployment> deployments = this.getGlassfishDeployments();
-			List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getGlassfishMemory();
-			ServidorAplicacaoThreadColeta threadColeta = this.getGlassfishThread();
-					
-			// Verifica se as coletas estao vazias, caso estiverem ele nao esta gerenciavel
-			if (deployments.isEmpty() || propriedadesMemorias.isEmpty() || coletasMemorias.isEmpty()){
-				this.glassfish.setGerenciavel(false);
-			}
-			else{
-				this.glassfish.setGerenciavel(true);
-			}
-			
-			//Salva as propriedades
-			servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
-			servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
-			
-			//Salva as coletas
-			servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
-			servidorAplicacaoBO.salvaColetasMemoria(coletasMemorias);
-			servidorAplicacaoBO.salvaColetasThread(threadColeta);
-			servidorAplicacaoBO.salvaMapDeployments(deployments);
-			
-			// Ultima coleta
-			this.glassfish.setUltimaColeta(dataColeta);
-			
 			socket.close();
 			
-		}catch(IOException ex){
+			// SLA
+			if (!ultimoStatus){
+				this.disponibilidade.setFim(this.dataColeta);
+			}
+			
+			result = true;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 			
 			this.glassfish.setDisponivel(false);
 			this.glassfish.setGerenciavel(false);
 			this.glassfish.setUltimaColeta(dataColeta);
 			this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
 			
-			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
-		}catch(Exception ex){
-			ex.printStackTrace();
+			// SLA
+			if (ultimoStatus){
+				this.disponibilidade.setInicio(this.dataColeta);
+			}
+						
+			result = false;
 		}
+		
+		return result;		
 	}
 	
 	private Map<String,ServidorAplicacaoDeployment> getGlassfishDeployments(){
