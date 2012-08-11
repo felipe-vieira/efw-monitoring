@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
+import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
+@XmlRootElement
 public class Alarme implements Serializable{
 
 	private static final long serialVersionUID = -3433864969574318639L;
@@ -18,6 +21,7 @@ public class Alarme implements Serializable{
 	private BigDecimal valorLimite;
 	private String parametro;
 	private Integer contagem;
+	private CriticidadeAlarme criticidade;
 	
 	public Alarme(){
 		this.status = StatusAlarme.NAO_LIDO;
@@ -73,6 +77,14 @@ public class Alarme implements Serializable{
 
 	public void setContagem(Integer contagem) {
 		this.contagem = contagem;
+	}
+
+	public CriticidadeAlarme getCriticidade() {
+		return criticidade;
+	}
+
+	public void setCriticidade(CriticidadeAlarme criticidade) {
+		this.criticidade = criticidade;
 	}
 
 	@Override

@@ -13,11 +13,13 @@ import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.TipoAlarme;
+import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
 
 public class AlarmeBO {
 
 	private ColetaDAO coletaDAO;
 	private Map<Integer,TipoAlarme> tipos;
+
 	
 	public AlarmeBO(){
 		this.coletaDAO = new ColetaDAO();
@@ -43,7 +45,8 @@ public class AlarmeBO {
 			Alarme alarme = new Alarme();
 			alarme.setData(new Date());
 			alarme.setTipo(tipos.get(1));
-			alarme.setNo(no);			
+			alarme.setNo(no);
+			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
 			
 			coletaDAO.salvaColeta(alarme);
 		}
@@ -55,6 +58,7 @@ public class AlarmeBO {
 			alarme.setData(new Date());
 			alarme.setTipo(tipos.get(2));
 			alarme.setNo(no);			
+			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
 			
 			coletaDAO.salvaColeta(alarme);
 		}
@@ -72,6 +76,7 @@ public class AlarmeBO {
 				alarme.setValor(valor);
 				alarme.setValorLimite(threshold.getLimiteCpu());
 				alarme.setNo(servidor);
+				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
 				
 				coletaDAO.salvaColeta(alarme);
 			}
@@ -91,6 +96,7 @@ public class AlarmeBO {
 				alarme.setValor(utilizacao);
 				alarme.setValorLimite(threshold.getLimiteMemoria());
 				alarme.setNo(servidor);
+				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
 				
 				coletaDAO.salvaColeta(alarme);
 			}
@@ -112,6 +118,7 @@ public class AlarmeBO {
 				alarme.setValorLimite(threshold.getLimiteParticao());
 				alarme.setNo(servidor);
 				alarme.setParametro(particao.getNome());
+				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
 				
 				coletaDAO.salvaColeta(alarme);
 			}			

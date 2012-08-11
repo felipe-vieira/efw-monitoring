@@ -130,6 +130,7 @@ Ext.define('MONITOR.controller.NoController', {
     	                closable: true,
     	                title: record.get('nome'),
     	                padding: 10,
+    	                autoScroll: true,
     	                items: [
     	    	            {
     	    	            	xtype: 'panel',

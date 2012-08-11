@@ -4,10 +4,11 @@ Ext.define('MONITOR.model.Alarme', {
              {name: 'id',	type: 'int'},
              {name: 'data',	type: 'date'},
              {name: 'status',	type: 'string'},
+             {name: 'criticidade',	type: 'string'},
              {name: 'valor',	type: 'float'},
              {name: 'valorLimite',	type: 'float'},
              {name: 'parametro', type: 'parametro'},
-             {name: 'contagem',	type: 'int'},
+             {name: 'contagem',	type: 'int'}
     ],
     
     proxy: {

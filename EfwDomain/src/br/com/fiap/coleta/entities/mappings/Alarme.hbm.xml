@@ -18,6 +18,12 @@
 		   </type>
 		</property>
 
+		<property name="criticidade">
+		   <type name="org.hibernate.type.EnumType">
+		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme</param>
+		   </type>
+		</property>
+
 		<property name="data" not-null="true"/>
 		<property name="valor"/>
 		<property name="valorLimite"/>

@@ -21,14 +21,14 @@ public class AlarmesNoRest {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getAlarmesNo(@QueryParam("id") Integer id){
+	public List<Alarme> getAlarmesNo(@QueryParam("id") Integer id){
 		AlarmeBO alarmeBO = new AlarmeBO();
 		JSONObject json = new JSONObject();
 		
 		List<Alarme> alarmes = alarmeBO.listaAlarmesNo(id);
 		json.put("alarmes", alarmes);
 		
-		return json.toString();		
+		return alarmes;		
 							
 	} 
 	

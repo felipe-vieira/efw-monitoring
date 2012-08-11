@@ -2,6 +2,7 @@ Ext.define('MONITOR.view.no.List' ,{
     extend: 'Ext.grid.Panel',
     alias: 'widget.nolist',
     store: 'Nos',
+    autoScroll: true,
     features: [{ftype: 'grouping'}],
 
     initComponent: function() {

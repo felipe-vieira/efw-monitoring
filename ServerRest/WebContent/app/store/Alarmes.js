@@ -8,7 +8,7 @@ Ext.define('MONITOR.store.Alarmes', {
         url: 'rest/alarmesNos/',
         reader: {
             type: 'json',
-            root: 'alarmes'
+            root: 'alarme'
         },
 		writer: {
 			type: 'json', //json ou xml
