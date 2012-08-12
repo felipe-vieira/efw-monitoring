@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.ServidorBO;
+import br.com.fiap.coleta.entities.Disponibilidade;
 import br.com.fiap.coleta.entities.Memoria;
 import br.com.fiap.coleta.entities.MemoriaColeta;
 import br.com.fiap.coleta.entities.No;
@@ -30,6 +31,8 @@ public class ServidorColeta {
 	
 	private AlarmeBO alarmeBO;
 		
+	private Disponibilidade disponibilidade;
+	
 	private SocketUtil socket;
 	
 	private Date dataColeta;
@@ -40,76 +43,129 @@ public class ServidorColeta {
 		this.servidor = (Servidor) no;
 		this.servidorBO = new ServidorBO();
 		this.alarmeBO = new AlarmeBO();
+		this.disponibilidade = new Disponibilidade();
+		this.disponibilidade.setNo(this.servidor);
+		
 	}
 	
 	public void initColeta(){
 
 		//Movido pra ca para conseguir marcar data caso falhe
 		this.dataColeta = new Date();
-		socket = new SocketUtil(this.servidor.getHostname(), 9090);
 		
-		Boolean ultimoStatus = servidor.getDisponivel();
-		
-		
-		try{
+		if (connect()){
+			socket = new SocketUtil(this.servidor.getHostname(), 9090);
+			Boolean ultimoStatus = servidor.getDisponivel();
 			
-			//Abre o socket
-			socket.openSocket();
 			
-			//Lista os alarmes de coleta
-			
-			MemoriaColeta memoriaColeta = null;
-			ProcessadorColeta processadorColeta = null;
-			List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
-						
-			// Disponivel
-			
-			this.servidor.setGerenciavel(true);
-			this.servidor.setDisponivel(true);
-			
-			//Atualiza os itens de configuraï¿½ï¿½o
-			this.servidor.setSistemaOperacional(this.getConfigOs());
-			this.servidor.setProcessador(this.getConfigProcessor());
-			this.servidor.setMemoria(this.getConfigMemory());
-			this.servidor.setParticoes(this.getConfigPartitions());
-			
-			//Faz as coletas
-			memoriaColeta = this.getOsMemory();
-			processadorColeta = this.getOsProcessor();								
-			
-			for(Particao p : this.servidor.getParticoes()){
-				listaParticaoColeta.add(this.getOsPartition(p));
-			}
-			
-			// Ultima coleta
-			this.servidor.setUltimaColeta(dataColeta);
-			
-			//Fecha o socket
-			socket.close();
+			try{
 
-			//Persiste tudo
-			this.servidorBO.updateServidorColeta(this.servidor);
-			this.servidorBO.saveColetaMemoria(memoriaColeta);
-			this.servidorBO.saveColetaProcessador(processadorColeta);
-			this.servidorBO.saveListaColetaParticao(listaParticaoColeta);
-			
-			
-		}catch (IOException e) {
-			this.servidor.setDisponivel(false);
-			this.servidor.setGerenciavel(false);
-			this.servidor.setUltimaColeta(dataColeta);
-			this.servidorBO.updateServidorColeta(this.servidor);
-			System.out.println("Impossível abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
-			
-			this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, ultimoStatus);
-		}catch (Exception e){
-			e.printStackTrace();
+				//Abre o socket
+				socket.openSocket();
+
+				//Lista os alarmes de coleta
+
+				MemoriaColeta memoriaColeta = null;
+				ProcessadorColeta processadorColeta = null;
+				List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
+
+				// Disponivel
+
+				this.servidor.setGerenciavel(true);
+				this.servidor.setDisponivel(true);
+
+				// SLA
+				if (!ultimoStatus){
+					this.disponibilidade.setFim(this.dataColeta);	
+				}
+
+
+				//Atualiza os itens de configuraï¿½ï¿½o
+				this.servidor.setSistemaOperacional(this.getConfigOs());
+				this.servidor.setProcessador(this.getConfigProcessor());
+				this.servidor.setMemoria(this.getConfigMemory());
+				this.servidor.setParticoes(this.getConfigPartitions());
+
+				//Faz as coletas
+				memoriaColeta = this.getOsMemory();
+				processadorColeta = this.getOsProcessor();								
+
+				for(Particao p : this.servidor.getParticoes()){
+					listaParticaoColeta.add(this.getOsPartition(p));
+				}
+
+				// Ultima coleta
+				this.servidor.setUltimaColeta(dataColeta);
+
+				//Fecha o socket
+				socket.close();
+
+				//Persiste tudo
+				this.servidorBO.updateServidorColeta(this.servidor);
+				this.servidorBO.saveColetaMemoria(memoriaColeta);
+				this.servidorBO.saveColetaProcessador(processadorColeta);
+				this.servidorBO.saveListaColetaParticao(listaParticaoColeta);
+
+
+			}catch (IOException e) {
+				this.servidor.setDisponivel(false);
+				this.servidor.setGerenciavel(false);
+
+				// SLA
+				if (ultimoStatus == true){
+					this.disponibilidade.setInicio(this.dataColeta);	
+				}
+
+				
+				
+				this.servidor.setUltimaColeta(dataColeta);
+				this.servidorBO.updateServidorColeta(this.servidor);
+				System.out.println("Impossï¿½vel abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
+
+				this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, ultimoStatus);
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 		}
-		
 	
 			
 		
 		
+	}
+	
+	
+	private boolean connect(){
+		boolean result = false;
+		
+		socket = new SocketUtil(this.servidor.getHostname(), 9090);
+		Boolean ultimoStatus = servidor.getDisponivel();
+		
+		try{
+			socket.openSocket();
+			
+			socket.close();
+			// SLA
+			if (!ultimoStatus){
+				this.disponibilidade.setFim(this.dataColeta);
+			}		
+			
+			result = true;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			
+			this.servidor.setGerenciavel(false);
+			this.servidor.setDisponivel(false);
+			
+			// SLA
+			if (ultimoStatus){
+				this.disponibilidade.setInicio(this.dataColeta);
+			}
+			
+			result = false;
+		}
+		
+		return result;
 	}
 	
 	private SistemaOperacional getConfigOs(){

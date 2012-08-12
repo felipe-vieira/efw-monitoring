@@ -9,12 +9,30 @@ public class Disponibilidade {
 
 	  private Boolean status;
 
-	  private Long tempo;
+	  private Date inicio;
 
-	  private Date data;
+	  private Date fim;
 
 	  private No no;
 
+	  
+	  
+	public Date getInicio() {
+		return inicio;
+	}
+
+	public void setInicio(Date inicio) {
+		this.inicio = inicio;
+	}
+
+	public Date getFim() {
+		return fim;
+	}
+
+	public void setFim(Date fim) {
+		this.fim = fim;
+	}
+	  
 	public Integer getId() {
 		return id;
 	}
@@ -29,23 +47,7 @@ public class Disponibilidade {
 
 	public void setStatus(Boolean status) {
 		this.status = status;
-	}
-
-	public Long getTempo() {
-		return tempo;
-	}
-
-	public void setTempo(Long tempo) {
-		this.tempo = tempo;
-	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
-	}
+	}	
 
 	public No getNo() {
 		return no;
@@ -59,11 +61,11 @@ public class Disponibilidade {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((inicio == null) ? 0 : inicio.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((no == null) ? 0 : no.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((tempo == null) ? 0 : tempo.hashCode());
+		result = prime * result + ((fim == null) ? 0 : fim.hashCode());
 		return result;
 	}
 
@@ -76,10 +78,10 @@ public class Disponibilidade {
 		if (getClass() != obj.getClass())
 			return false;
 		Disponibilidade other = (Disponibilidade) obj;
-		if (data == null) {
-			if (other.data != null)
+		if (fim == null) {
+			if (other.fim != null)
 				return false;
-		} else if (!data.equals(other.data))
+		} else if (!fim.equals(other.fim))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -96,10 +98,10 @@ public class Disponibilidade {
 				return false;
 		} else if (!status.equals(other.status))
 			return false;
-		if (tempo == null) {
-			if (other.tempo != null)
+		if (inicio == null) {
+			if (other.inicio != null)
 				return false;
-		} else if (!tempo.equals(other.tempo))
+		} else if (!inicio.equals(other.inicio))
 			return false;
 		return true;
 	}
