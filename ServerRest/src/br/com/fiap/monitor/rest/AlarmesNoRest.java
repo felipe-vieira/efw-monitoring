@@ -9,11 +9,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 
 import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.monitor.bo.AlarmeBO;
+import br.com.fiap.monitor.to.PagingTO;
 
 @Path("/alarmesNos")
 public class AlarmesNoRest {
@@ -21,14 +23,28 @@ public class AlarmesNoRest {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Alarme> getAlarmesNo(@QueryParam("id") Integer id){
-		AlarmeBO alarmeBO = new AlarmeBO();
-		JSONObject json = new JSONObject();
+	public PagingTO getAlarmesNo(@QueryParam("id") Integer id, @QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
 		
-		List<Alarme> alarmes = alarmeBO.listaAlarmesNo(id);
-		json.put("alarmes", alarmes);
+		PagingTO retorno = new PagingTO();
 		
-		return alarmes;		
+		if(id != null){
+			AlarmeBO alarmeBO = new AlarmeBO();
+		
+			List<Alarme> alarmes = alarmeBO.listaLimitAlarmesNo(id, start, limit);
+			Long total = alarmeBO.contaAlarmesNos(id);
+			
+			
+			
+			retorno.setSuccess(true);
+			retorno.setTotal(total);
+			retorno.setRecords(alarmes);
+			
+			
+		}else{
+			retorno.setSuccess(false);			
+		}
+		
+		return retorno;		
 							
 	} 
 	

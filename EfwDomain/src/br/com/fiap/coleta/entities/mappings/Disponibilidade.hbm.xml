@@ -10,9 +10,9 @@
 		
 		<many-to-one name="no" not-null="true"/>
 		
-		<property name="status" not-null="true"/>
-		<property name="tempo" not-null="true"/>	
-		<property name="data" not-null="true"/>		
+		<property name="inicio" not-null="true"/>	
+		<property name="fim"/>		
+		
 
 	</class> 
 </hibernate-mapping>

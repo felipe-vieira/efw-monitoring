@@ -1,7 +1,8 @@
 Ext.define('MONITOR.controller.NoController', {
     extend: 'Ext.app.Controller',
     requires: [
-        'MONITOR.utils.ConvertUtils'     
+        'MONITOR.utils.ConvertUtils',
+        'MONITOR.utils.DateUtils'    
     ],
     views: [
     	'no.List',
@@ -65,8 +66,6 @@ Ext.define('MONITOR.controller.NoController', {
     	    	
     	        if(servidor != null){
     	        
-    	        	console.log(servidor.particoes());
-    	        	
     	        	var so = servidor.getSistemaOperacional();
     	        	var memoria = servidor.getMemoria();
     	        	var processador = servidor.getProcessador();
@@ -78,9 +77,19 @@ Ext.define('MONITOR.controller.NoController', {
     	        	
     	        	storeAlarmes.load({
     	        		params: {
-    	        			id: servidor.get('id')
+    	        			id: servidor.get('id'),
+    	        			start: 0,
+    	        			limit: 10	
     	        		}
     	        	});
+    	        	
+    	        	storeAlarmes.on('beforeload',function(store, operation,eOpts){
+    	                operation.params={
+    	                		id: servidor.get('id')
+    	                };
+
+    	            });
+    	        	
     	        	
     	        	if(so.get('patch') != null && so.get('patch') != ""){
     	        		msgPatch = " - " + so.get('patch');

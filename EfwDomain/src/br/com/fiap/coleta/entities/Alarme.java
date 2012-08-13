@@ -6,9 +6,11 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
+
 import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
 import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
-@XmlRootElement
+
 public class Alarme implements Serializable{
 
 	private static final long serialVersionUID = -3433864969574318639L;

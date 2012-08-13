@@ -40,4 +40,50 @@ public class AlarmeBO {
 		
 	}
 	
+	public List<Alarme> listaLimitAlarmesNo(Integer id, Integer start, Integer max){
+
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{			
+			Query query = session.createQuery("FROM Alarme where no.id = :id ORDER BY data desc");
+			query.setInteger("id", id);
+			query.setFirstResult(start);
+			query.setMaxResults(max);
+			
+			List<Alarme> retorno =  query.list();
+			t.commit();
+			
+			return retorno;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public Long contaAlarmesNos(Integer id){
+
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{			
+			Query query = session.createQuery("SELECT count(*) FROM Alarme where no.id = :id");
+			query.setInteger("id", id);
+			
+			Long retorno =  (Long) query.uniqueResult();
+			t.commit();
+			
+			return retorno;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
 }

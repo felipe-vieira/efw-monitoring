@@ -4,20 +4,21 @@ Ext.define('MONITOR.view.alarme.ListAlarmesNo' ,{
     extend: 'Ext.grid.Panel',
     alias: 'widget.alarmenolist',
     features: [{ftype: 'grouping'}],
-    height: 300,
-    autoScroll: true,
 
     initComponent: function() {
 
         this.columns = [
+                        
+            {header: 'Tipo',  dataIndex: 'tipo',  flex: 1, tdCls:"celulaAlerta"},
+            {header: 'Mensagem',  dataIndex: 'mensagem',  flex: 1, tdCls:"celulaAlerta"},
             {header: 'Data',  dataIndex: 'data',  flex: 1, tdCls:"celulaAlerta",
             	renderer:function(val){
-            		return val.toLocaleDateString();
+            		return MONITOR.utils.DateUtils.toStringPtBr(val);
             	}
             },
             
             {header: 'Status', dataIndex: 'status', tdCls:"celulaAlerta",
-            	renderer: function(val){
+            	renderer: function(val,metadata,record){
             		if(val=="NAO_LIDO"){
             			return "Não Lido";
             		}else if(val=="LIDO"){
@@ -26,7 +27,29 @@ Ext.define('MONITOR.view.alarme.ListAlarmesNo' ,{
             			return "Resolvido";
             		}
             	}
+            },
+            
+            {header: 'Valor da Coleta', dataIndex: 'valor', tdCls: "celulaAlerta",
+            	renderer: function(val,metadata,record){
+            		if(val == null || val == 0){
+            			return "N/A";
+            		}else{
+            			return val + record.getTipoAlarme().get('unidade');
+            		}
+            	}            	
+            },
+            
+            {header: 'Threshold', dataIndex: 'valorLimite', tdCls: "celulaAlerta",
+            	renderer: function(val,metadata,record){
+            		if(val == null || val == 0){
+            			return "N/A";
+            		}else{
+            			return val + record.getTipoAlarme().get('unidade');
+            		}
+            	}            	
             }
+            
+            
         ];
         
         this.viewConfig = {
@@ -41,8 +64,15 @@ Ext.define('MONITOR.view.alarme.ListAlarmesNo' ,{
             		  return "alerta-critico";
             	  }
               }
-        }
-
+        };
+        
+        this.dockedItems = {
+        	xtype: 'pagingtoolbar',
+            dock: 'bottom',
+            displayInfo: true,
+            store: this.getStore()
+        };
+        
         this.callParent(arguments);
     }
 });

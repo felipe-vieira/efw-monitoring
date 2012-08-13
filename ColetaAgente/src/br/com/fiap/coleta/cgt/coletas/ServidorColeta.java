@@ -75,7 +75,7 @@ public class ServidorColeta {
 				this.servidor.setDisponivel(true);
 
 				// SLA
-				if (!ultimoStatus){
+				if (ultimoStatus ==  false && !ultimoStatus){
 					this.disponibilidade.setFim(this.dataColeta);	
 				}
 
@@ -115,14 +115,6 @@ public class ServidorColeta {
 				if (ultimoStatus == true){
 					this.disponibilidade.setInicio(this.dataColeta);	
 				}
-
-				
-				
-				this.servidor.setUltimaColeta(dataColeta);
-				this.servidorBO.updateServidorColeta(this.servidor);
-				System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
-
-				this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, ultimoStatus);
 			}catch (Exception e){
 				e.printStackTrace();
 			}
@@ -161,6 +153,12 @@ public class ServidorColeta {
 			if (ultimoStatus){
 				this.disponibilidade.setInicio(this.dataColeta);
 			}
+			
+			this.servidor.setUltimaColeta(dataColeta);
+			this.servidorBO.updateServidorColeta(this.servidor);
+			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
+
+			this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, ultimoStatus);
 			
 			result = false;
 		}

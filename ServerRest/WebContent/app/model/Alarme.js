@@ -8,7 +8,10 @@ Ext.define('MONITOR.model.Alarme', {
              {name: 'valor',	type: 'float'},
              {name: 'valorLimite',	type: 'float'},
              {name: 'parametro', type: 'parametro'},
-             {name: 'contagem',	type: 'int'}
+             {name: 'contagem',	type: 'int'},
+             {name: 'tipo', type: 'string', mapping: 'tipo.descricao'},
+             {name: 'mensagem', type: 'string', mapping: 'tipo.mensagem'}
+             
     ],
     
     proxy: {
@@ -25,7 +28,7 @@ Ext.define('MONITOR.model.Alarme', {
 	},
 	
     hasOne: [
-        {model: 'MONITOR.model.tipoAlarme', foreignKey: 'id', associationKey: 'tipo', getterName: "getTipoAlarme"  },
+        {model: 'MONITOR.model.TipoAlarme', foreignKey: 'id', associationKey: 'tipo', getterName: "getTipoAlarme"  },
         {model: 'MONITOR.model.No', foreignKey: 'id', associationKey: 'no', getterName: "getNo"  }
         
     ]
