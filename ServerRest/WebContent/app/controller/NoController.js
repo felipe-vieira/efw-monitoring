@@ -97,12 +97,27 @@ Ext.define('MONITOR.controller.NoController', {
     	        	
     	        	if(processador.get('cores') > 1){
     	        		processadorMsg = processador.get('fabricante') +' '
-    	        			+ processador.get('modelo') + '(' + processador.get('cores') + ' cores - Clock: ' + processador.get('clock') + 'MHz)'; 
+    	        			+ processador.get('modelo') + ' (' + processador.get('cores') + ' cores - Clocks: ' + processador.get('clock') + 'MHz)'; 
     	        	}else{
     	        		processadorMsg = processador.get('fabricante') +' '
-	        				+ processador.get('modelo') + '(' + processador.get('cores') + ' core - Clock: ' + processador.get('clock') + 'MHz)';
+	        				+ processador.get('modelo') + ' (' + processador.get('cores') + ' core - Clock: ' + processador.get('clock') + 'MHz)';
     	        	}
     	        	
+    	        	var strStatus = "";
+    	        	
+    	        	if(servidor.get('disponivel') == true){
+    	        		strStatus += "Disponível";
+    	        	}else{
+    	        		strStatus += "Não Disponível";
+    	        	}
+    	        	
+    	        	strStatus += " / ";
+    	        	
+    	        	if(servidor.get('gerenciavel') == true){
+    	        		strStatus += "Gerenciavel";
+    	        	}else{
+    	        		strStatus += "Não Gerenciavel";
+    	        	}
     	        	
     	        	
     	        	var infoHtml =
@@ -113,6 +128,12 @@ Ext.define('MONITOR.controller.NoController', {
     	        				'<td class="titulo">Hostname:</td>' + 
     	        				'<td>'+ servidor.get('hostname') + '</td>' +
     	        			'</tr>'+
+    	        			'<tr>'+
+	        					'<td class="titulo">Status:</td>' + 
+	        					'<td>'+ strStatus + '</td>' +
+	        					'<td class="titulo">Ultima coleta:</td>' + 
+	        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(servidor.get('ultimaColeta')) + '</td>' +
+	        				'</tr>'+
     	        			'<tr>'+
 		        				'<td class="titulo">Sistema Operacional:</td>' + 
 		        				'<td>'+ so.get('descricao') + '</td>' +

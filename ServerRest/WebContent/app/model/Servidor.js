@@ -8,8 +8,7 @@ Ext.define('MONITOR.model.Servidor', {
 		type: 'rest',
 		url: 'rest/servidores/',
         reader: {
-            type: 'json',
-            root: 'servidor'
+            type: 'json'
         },
 		writer: {
 			type: 'json',

@@ -1,12 +1,17 @@
 package br.com.fiap.coleta.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
-public class Servidor extends No{
+@XmlRootElement(name="servidor")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Servidor extends No implements Serializable{
 	
+	private static final long serialVersionUID = 684732961548387095L;
 	private String hostname;
 	private ServidorThreshold threshold;
 	
@@ -14,7 +19,6 @@ public class Servidor extends No{
 	private Processador processador;
 	private Memoria memoria;
 	private List<Particao> particoes;
-	
 	
 	public String getHostname() {
 		return hostname;

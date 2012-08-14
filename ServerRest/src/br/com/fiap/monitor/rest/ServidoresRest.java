@@ -25,7 +25,7 @@ public class ServidoresRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public String getServerId(@PathParam("id") Integer id){
+	public Servidor getServerId(@PathParam("id") Integer id){
 		ServidorBO bo = new ServidorBO();
 		
 		Servidor servidor = bo.getServidorId(id);
@@ -50,7 +50,7 @@ public class ServidoresRest {
 		JSONObject json = new JSONObject();
 		json.put("servidor", servidor);
 		
-		return json.toString();
+		return servidor;
 		
 	}
 	

@@ -5,6 +5,7 @@ Ext.define('MONITOR.model.No', {
              {name: 'nome',	type: 'string'},
              {name: 'disponivel',	type: 'boolean'},
              {name: 'gerenciavel',	type: 'boolean'},
-             {name: 'tipo', type: 'string'}
+             {name: 'tipo', type: 'string'},
+             {name: 'ultimaColeta', type: 'date'}
     ]
 });

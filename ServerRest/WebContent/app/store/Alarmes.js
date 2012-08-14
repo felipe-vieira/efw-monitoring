@@ -1,7 +1,6 @@
 Ext.define('MONITOR.store.Alarmes', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.Alarme',
-    groupField: 'status',
     pageSize: 10,
 
     proxy: {
