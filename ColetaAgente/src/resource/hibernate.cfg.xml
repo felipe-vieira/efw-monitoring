@@ -35,7 +35,7 @@
 		<mapping resource="br/com/fiap/coleta/entities/mappings/No.hbm.xml" />
 		<mapping resource="br/com/fiap/coleta/entities/mappings/Agendamento.hbm.xml" />
 		<mapping resource="br/com/fiap/coleta/entities/mappings/AgendamentoRemovido.hbm.xml" />
-		<mapping resource="br/com/fiap/coleta/entities/mappings/Disponibilidade.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Indisponibilidade.hbm.xml" />
 		
 		<!-- Servidor -->
 		<mapping resource="br/com/fiap/coleta/entities/mappings/SistemaOperacional.hbm.xml" />

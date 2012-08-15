@@ -3,7 +3,8 @@ Ext.define('MONITOR.controller.LoginController', {
     views: [
     	'login.Login',
     	'login.MainScreen',
-    	'login.MainTab'
+    	'login.MainTab',
+    	'login.MainMenu'
     ],
     stores: [
     	'Usuarios'

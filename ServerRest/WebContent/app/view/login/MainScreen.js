@@ -2,6 +2,8 @@ Ext.define('MONITOR.view.login.MainScreen', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.mainscreen',
     layout: 'border',
+    id: "mainScreen",
+    
     initComponent: function() {
     
 	    this.items = [
@@ -11,33 +13,11 @@ Ext.define('MONITOR.view.login.MainScreen', {
 	            border: false,
 	            layout: 'fit',
 	            title: 'EFW Monitoring',
-	            floating: false,  // usually you want this set to True (default)
-	            renderTo: Ext.getBody(),  // usually rendered by it's containing component
+	            floating: false, 
+	            renderTo: Ext.getBody(),  
 	            dockedItems: [{
-	            xtype: 'toolbar',
-	            dock: 'top',
-	            items: [{
-	              xtype: 'splitbutton',
-	              text: 'Cadastro',
-	              menu: {
-	                items: [{
-	                  text: 'New...'
-	                },{
-	                  text: 'Open...'
-	                }]
-	              }
-	              },'-',{
-	            	  xtype: 'splitbutton',
-	            	  text: 'Base de Conhecimento',
-	            	  menu: {
-	                  items: [{
-	                  text: 'Copy'
-	                },{
-	                  text: 'Paste'
-	                }]
-	              }
-	            }]    
-	          }]
+	            	xtype: 'mainmenu'
+	            }]
 	        },	        
 	        {
 	        	title: 'Todos os nós',
@@ -55,7 +35,9 @@ Ext.define('MONITOR.view.login.MainScreen', {
 	        	border: true,
 	        	collapsible: false
 	        }
-	        ];
+	    ];
+	    
+	    console.log(this.items);
 	    
 	    this.callParent(arguments);
     }

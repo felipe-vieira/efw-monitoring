@@ -9,7 +9,8 @@ Ext.define('MONITOR.controller.NoController', {
     	'no.Edit',
     	'servidor.ListParticoes',
     	'servidor.ListGraficos',
-    	'alarme.ListAlarmesNo'
+    	'alarme.ListAlarmesNo',
+    	'login.MainTab'
     
     ],
     stores: [
@@ -41,9 +42,9 @@ Ext.define('MONITOR.controller.NoController', {
     },
 
     addTabNo: function(grid, record){
+    	
     	var viewport = grid.up('viewport');
     	var tabs = viewport.down('maintab');
-    	
     	var tipo = record.get('tipo'); 
     	
     	if(tipo == "Servidor"){
@@ -58,6 +59,7 @@ Ext.define('MONITOR.controller.NoController', {
     
     
     geraTabServidor: function(tabs, record){
+    	
     	
     	tabs.setLoading(true);
     		

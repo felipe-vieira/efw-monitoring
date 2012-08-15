@@ -10,8 +10,9 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.AlarmeBO;
+import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.bo.ServidorBO;
-import br.com.fiap.coleta.entities.Disponibilidade;
+import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.Memoria;
 import br.com.fiap.coleta.entities.MemoriaColeta;
 import br.com.fiap.coleta.entities.No;
@@ -24,380 +25,376 @@ import br.com.fiap.coleta.entities.SistemaOperacional;
 import br.com.fiap.coleta.util.socket.SocketUtil;
 
 public class ServidorColeta {
-	
+
 	private Servidor servidor;
-	
+
 	private ServidorBO servidorBO;
-	
+
 	private AlarmeBO alarmeBO;
-		
-	private Disponibilidade disponibilidade;
-	
+
+	private Indisponibilidade indisponibilidade;
+
 	private SocketUtil socket;
-	
+
 	private Date dataColeta;
 
-	
-	
-	public ServidorColeta(No no){
+	private IndisponibilidadeBO indisponibilidadeBO;
+
+	public ServidorColeta(No no) {
 		this.servidor = (Servidor) no;
 		this.servidorBO = new ServidorBO();
 		this.alarmeBO = new AlarmeBO();
-		this.disponibilidade = new Disponibilidade();
-		this.disponibilidade.setNo(this.servidor);
-		
+		this.indisponibilidadeBO = new IndisponibilidadeBO();
+		this.indisponibilidade = new Indisponibilidade();
+		this.indisponibilidade.setNo(this.servidor);
+
 	}
-	
-	public void initColeta(){
 
-		//Movido pra ca para conseguir marcar data caso falhe
+	public void initColeta() {
+
+		// Pega utlima indisponibilidade
+		this.indisponibilidade = this.indisponibilidadeBO
+				.pegaUltimaInstanciaIndisponibilidade(this.servidor);
+		// Seta a data da coleta
 		this.dataColeta = new Date();
-		
-		if (connect()){
-			socket = new SocketUtil(this.servidor.getHostname(), 9090);
+
+		if (connect()) {
 			Boolean ultimoStatus = servidor.getDisponivel();
-			
-			
-			try{
 
-				//Abre o socket
-				socket.openSocket();
-
-				//Lista os alarmes de coleta
-
+			try {
+				// Lista os alarmes de coleta
 				MemoriaColeta memoriaColeta = null;
 				ProcessadorColeta processadorColeta = null;
 				List<ParticaoColeta> listaParticaoColeta = new ArrayList<ParticaoColeta>();
 
-				// Disponivel
-
-				this.servidor.setGerenciavel(true);
-				this.servidor.setDisponivel(true);
-
-				// SLA
-				if (ultimoStatus ==  false && !ultimoStatus){
-					this.disponibilidade.setFim(this.dataColeta);	
-				}
-
-
-				//Atualiza os itens de configura��o
+				// Atualiza os itens de configura��o
 				this.servidor.setSistemaOperacional(this.getConfigOs());
 				this.servidor.setProcessador(this.getConfigProcessor());
 				this.servidor.setMemoria(this.getConfigMemory());
 				this.servidor.setParticoes(this.getConfigPartitions());
 
-				//Faz as coletas
+				// Faz as coletas
 				memoriaColeta = this.getOsMemory();
-				processadorColeta = this.getOsProcessor();								
+				processadorColeta = this.getOsProcessor();
 
-				for(Particao p : this.servidor.getParticoes()){
+				for (Particao p : this.servidor.getParticoes()) {
 					listaParticaoColeta.add(this.getOsPartition(p));
 				}
 
 				// Ultima coleta
 				this.servidor.setUltimaColeta(dataColeta);
 
-				//Fecha o socket
+				// Fecha o socket
 				socket.close();
 
-				//Persiste tudo
+				this.servidor.setGerenciavel(true);
+
+				// Persiste tudo
 				this.servidorBO.updateServidorColeta(this.servidor);
 				this.servidorBO.saveColetaMemoria(memoriaColeta);
 				this.servidorBO.saveColetaProcessador(processadorColeta);
 				this.servidorBO.saveListaColetaParticao(listaParticaoColeta);
 
-
-			}catch (IOException e) {
-				this.servidor.setDisponivel(false);
+			} catch (IOException e) {
 				this.servidor.setGerenciavel(false);
-
-				// SLA
-				if (ultimoStatus == true){
-					this.disponibilidade.setInicio(this.dataColeta);	
-				}
-			}catch (Exception e){
+				this.servidorBO.updateServidorColeta(this.servidor);
+			} catch (Exception e) {
+				this.servidor.setGerenciavel(false);
+				this.servidorBO.updateServidorColeta(this.servidor);
 				e.printStackTrace();
 			}
 		}
-	
-			
-		
-		
+
 	}
-	
-	
-	private boolean connect(){
+
+	private boolean connect() {
 		boolean result = false;
-		
+
 		socket = new SocketUtil(this.servidor.getHostname(), 9090);
 		Boolean ultimoStatus = servidor.getDisponivel();
-		
-		try{
-			socket.openSocket();
-			
-			socket.close();
-			// SLA
-			if (!ultimoStatus){
-				this.disponibilidade.setFim(this.dataColeta);
-			}		
-			
+
+		try {
+			this.socket.openSocket();
+
+			this.servidor.setDisponivel(true);
+
+			if (this.indisponibilidade != null && !ultimoStatus) {
+				this.indisponibilidade.setFim(this.dataColeta);
+			}
+
 			result = true;
-			
-		}catch(Exception ex){
-			ex.printStackTrace();
-			
+
+		} catch (Exception ex) {
+
 			this.servidor.setGerenciavel(false);
 			this.servidor.setDisponivel(false);
-			
+
 			// SLA
-			if (ultimoStatus){
-				this.disponibilidade.setInicio(this.dataColeta);
+			if (ultimoStatus) {
+
+				if (this.indisponibilidade == null) {
+					this.indisponibilidade = new Indisponibilidade();
+				}
+
+				this.indisponibilidade.setNo(this.servidor);
+				this.indisponibilidade.setInicio(this.dataColeta);
+
 			}
-			
+
 			this.servidor.setUltimaColeta(dataColeta);
 			this.servidorBO.updateServidorColeta(this.servidor);
-			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
+			System.out.println("Impossivel se conectar ao servidor.");
 
-			this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, ultimoStatus);
-			
+			this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor,
+					ultimoStatus);
+
 			result = false;
+
+		} finally {
+			if (this.indisponibilidade != null) {
+				this.indisponibilidadeBO
+						.salvaIndisponibilidade(this.indisponibilidade);
+			}
 		}
-		
+
 		return result;
 	}
-	
-	private SistemaOperacional getConfigOs(){
-		
-		SistemaOperacional so = servidorBO.pegaSistemaOperacionalServidor(servidor);
-		
-		if(so == null){
+
+	private SistemaOperacional getConfigOs() {
+
+		SistemaOperacional so = servidorBO
+				.pegaSistemaOperacionalServidor(servidor);
+
+		if (so == null) {
 			so = new SistemaOperacional(this.servidor);
 		}
-		
-		try{
-			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get config.os"));
-			//System.out.println(json.toString());
-			
+
+		try {
+
+			JSONObject json = JSONObject.fromObject(this.socket
+					.enviaComando("get config.os"));
+			// System.out.println(json.toString());
+
 			so.setNome(json.getString("name"));
 			so.setDescricao(json.getString("descr"));
 			so.setArquitetura(json.getString("arch"));
 			so.setVersao(json.getString("version"));
 			so.setPatch(json.getString("patch"));
 			so.setFornecedor(json.getString("vendor"));
-			
-			
-		}catch(IOException ex){
+
+		} catch (IOException ex) {
 			ex.printStackTrace();
-		}catch(InterruptedException ex){
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return so;
-		
+
 	}
-	
-	private Processador getConfigProcessor(){
-		Processador processador = servidorBO.pegaProcessadorServidor(this.servidor);
-		
-		if(processador == null){
+
+	private Processador getConfigProcessor() {
+		Processador processador = servidorBO
+				.pegaProcessadorServidor(this.servidor);
+
+		if (processador == null) {
 			processador = new Processador(this.servidor);
 		}
-		
-		try{
-			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get config.processor"));
-			//System.out.println(json.toString());
-			
+
+		try {
+
+			JSONObject json = JSONObject.fromObject(this.socket
+					.enviaComando("get config.processor"));
+			// System.out.println(json.toString());
+
 			processador.setFabricante(json.getString("vendor"));
 			processador.setModelo(json.getString("model"));
 			processador.setCores((Integer) json.get("totalCores"));
 			processador.setClock(json.getLong("freq"));
-			
-			
-		}catch(IOException ex){
+
+		} catch (IOException ex) {
 			ex.printStackTrace();
-		}catch(InterruptedException ex){
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return processador;
-	
+
 	}
-	
-	private Memoria getConfigMemory(){
+
+	private Memoria getConfigMemory() {
 		Memoria memoria = servidorBO.pegaMemoriaServidor(servidor);
-		
-		if(memoria == null){
+
+		if (memoria == null) {
 			memoria = new Memoria(this.servidor);
 		}
-		
-		try{
-			
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get config.memory"));
+
+		try {
+
+			JSONObject json = JSONObject.fromObject(this.socket
+					.enviaComando("get config.memory"));
 			System.out.println(json.toString());
-			
-			//pega em bytes
+
+			// pega em bytes
 			memoria.setTotalMemoria(json.getLong("total"));
-			
-			
-		}catch(IOException ex){
+
+		} catch (IOException ex) {
 			ex.printStackTrace();
-		}catch(InterruptedException ex){
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return memoria;
 	}
-		
-	private List<Particao> getConfigPartitions(){
+
+	private List<Particao> getConfigPartitions() {
 		List<Particao> listaParticoes = new ArrayList<Particao>();
-		
-		try{
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get config.partitions"));
+
+		try {
+			JSONObject json = JSONObject.fromObject(this.socket
+					.enviaComando("get config.partitions"));
 			JSONArray jsonArray = json.getJSONArray("partitions");
-			 	
+
 			for (Object object : jsonArray) {
-				
+
 				JSONObject i = (JSONObject) object;
 				String nome = i.getString("name");
-				
-				Particao p = servidorBO.pegaParticaoServidor(this.servidor, nome);
-				
-				if(p==null){
+
+				Particao p = servidorBO.pegaParticaoServidor(this.servidor,
+						nome);
+
+				if (p == null) {
 					p = new Particao(this.servidor);
 					p.setNome(nome);
 				}
-				
+
 				p.setSistemaArquivo(i.getString("fileSystem"));
-				//Pega em KBytes
+				// Pega em KBytes
 				p.setTamanho(i.getLong("totalSize"));
-				
+
 				listaParticoes.add(p);
-				
+
 			}
-			
-		}catch(IOException ex){
+
+		} catch (IOException ex) {
 			ex.printStackTrace();
-		}catch(InterruptedException ex){
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return listaParticoes;
-		
+
 	}
-	
-	
-	//Metodos de coleta
-	private MemoriaColeta getOsMemory(){
-		
+
+	// Metodos de coleta
+	private MemoriaColeta getOsMemory() {
+
 		MemoriaColeta coleta = null;
-		
-		try{
-				
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get os.memory"));
-			//System.out.println(json.toString());
-			
+
+		try {
+
+			JSONObject json = JSONObject.fromObject(this.socket
+					.enviaComando("get os.memory"));
+			// System.out.println(json.toString());
+
 			coleta = new MemoriaColeta(this.servidor.getMemoria());
-			
-			//pega em bytes
+
+			// pega em bytes
 			coleta.setDataColeta(this.dataColeta);
 			coleta.setUsado(json.getLong("memUsed"));
-			
-			Double percentual = (coleta.getUsado().doubleValue() / this.servidor.getMemoria().getTotalMemoria().doubleValue())*100;
-			
+
+			Double percentual = (coleta.getUsado().doubleValue() / this.servidor
+					.getMemoria().getTotalMemoria().doubleValue()) * 100;
+
 			BigDecimal utilizacao = new BigDecimal(percentual);
-			
+
 			this.alarmeBO.geraAlarmeMemoria(servidor, utilizacao);
-								
-		}catch(IOException ex){
+
+		} catch (IOException ex) {
 			ex.printStackTrace();
-		}catch(InterruptedException ex){
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return coleta;
 	}
-	
-	private ProcessadorColeta getOsProcessor(){
-		
+
+	private ProcessadorColeta getOsProcessor() {
+
 		ProcessadorColeta coleta = null;
-		
-		try{
-				
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get os.processor"));
-			//System.out.println(json.toString());
-			
+
+		try {
+
+			JSONObject json = JSONObject.fromObject(this.socket
+					.enviaComando("get os.processor"));
+			// System.out.println(json.toString());
+
 			coleta = new ProcessadorColeta(this.servidor.getProcessador());
-			
-			//pega em bytes
+
+			// pega em bytes
 			coleta.setDataColeta(this.dataColeta);
-			
+
 			JSONArray cores = json.getJSONArray("cpuUser");
-			
-			
+
 			Double soma = 0d;
-			
+
 			for (Object core : cores) {
-				
+
 				Double i;
-				
-				//Corrige um bug de quando vem 0 de utiliza��o ser Integer.
-				try{
+
+				// Corrige um bug de quando vem 0 de utiliza��o ser Integer.
+				try {
 					i = (Double) core;
 					i = i * 100;
-				}catch(ClassCastException ex){
+				} catch (ClassCastException ex) {
 					i = 0d;
 				}
-				
+
 				soma += i;
 			}
-			
-			Double media = soma / cores.size();
-			
-			coleta.setUsado(media);
-			
-			this.alarmeBO.geraAlarmeCpu(servidor,media);
 
-		}catch(IOException ex){
+			Double media = soma / cores.size();
+
+			coleta.setUsado(media);
+
+			this.alarmeBO.geraAlarmeCpu(servidor, media);
+
+		} catch (IOException ex) {
 			ex.printStackTrace();
-		}catch(InterruptedException ex){
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return coleta;
 	}
-	
-	private ParticaoColeta getOsPartition(Particao particao){
-		
+
+	private ParticaoColeta getOsPartition(Particao particao) {
+
 		ParticaoColeta coleta = null;
-		
-		try{
-				
-			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get os.partition " + particao.getNome()));
-			
+
+		try {
+
+			JSONObject json = JSONObject.fromObject(this.socket
+					.enviaComando("get os.partition " + particao.getNome()));
+
 			coleta = new ParticaoColeta(particao);
-									
-			//pega em bytes
+
+			// pega em bytes
 			coleta.setDataColeta(this.dataColeta);
 			coleta.setUsado(json.getLong("partitionUsed"));
-			
-			Double percentual =  (coleta.getUsado().doubleValue()/particao.getTamanho().doubleValue()) * 100; 
+
+			Double percentual = (coleta.getUsado().doubleValue() / particao
+					.getTamanho().doubleValue()) * 100;
 			BigDecimal utilizacao = new BigDecimal(percentual);
 			this.alarmeBO.geraAlarmeParticao(servidor, particao, utilizacao);
-			
-			
-		}catch(IOException ex){
+
+		} catch (IOException ex) {
 			ex.printStackTrace();
-		}catch(InterruptedException ex){
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return coleta;
-		
+
 	}
-	
-	
-	
-	
+
 }

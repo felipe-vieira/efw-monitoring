@@ -13,7 +13,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
-import br.com.fiap.coleta.entities.Disponibilidade;
+import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
@@ -30,14 +30,14 @@ public class JBossColeta {
 	private SocketUtil socket;
 	private Date dataColeta;
 	//SLA
-	private Disponibilidade disponibilidade;
+	private Indisponibilidade disponibilidade;
 	
 	
 	public JBossColeta(No no){
 		this.jboss = (JBoss) no;
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
 		// SLA
-		this.disponibilidade = new Disponibilidade();
+		this.disponibilidade = new Indisponibilidade();
 		this.disponibilidade.setNo(this.jboss);
 	}
 	

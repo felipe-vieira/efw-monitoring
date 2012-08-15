@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 
-public class Disponibilidade implements Serializable {
+public class Indisponibilidade implements Serializable {
 	
 	private static final long serialVersionUID = -3461539056126528876L;
 
-	private Integer id;
+	  private Integer id;
 
 	  private Date inicio;
 
@@ -66,7 +66,7 @@ public class Disponibilidade implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Disponibilidade other = (Disponibilidade) obj;
+		Indisponibilidade other = (Indisponibilidade) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
