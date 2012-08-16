@@ -13,6 +13,7 @@ public class ServidorAplicacao extends No implements Serializable{
 	private Integer jmxPort;
 	private Date startTime;
 	private Long uptime;
+	private ServidorAplicacaoThreshold threshold;
 	
 	public Servidor getServidor() {
 		return servidor;
@@ -55,6 +56,13 @@ public class ServidorAplicacao extends No implements Serializable{
 	}
 	
 
+	
+	public ServidorAplicacaoThreshold getThreshold() {
+		return threshold;
+	}
+	public void setThreshold(ServidorAplicacaoThreshold threshold) {
+		this.threshold = threshold;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

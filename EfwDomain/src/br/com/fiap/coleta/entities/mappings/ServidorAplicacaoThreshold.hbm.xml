@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="br.com.fiap.coleta.entities.ServidorAplicacaoThreshold" table="servidor_aplicacao_threshold">
+			
+		<id name="id" column="id">
+			<generator class="increment"/>
+		</id>
+		
+		<property name="nome">
+			<column name="nome" sql-type="varchar(30)"  not-null="true"/>
+		</property>
+		
+		<property name="thresholdHeap;">
+			<column name="threshold_heap" sql-type="decimal(5,2)"  not-null="true"/>
+		</property>	
+		
+		<property name="thresholdNonHeap;">
+			<column name="threshold_non_heap" sql-type="decimal(5,2)"  not-null="true"/>
+		</property>	
+		
+		<property name="thresholdCpuUserTime;">
+			<column name="threshold_cpu_user_time" sql-type="decimal(5,2)"  not-null="true"/>
+		</property>	
+		
+		<property name="thresholdCpuCpuTime;">
+			<column name="limite_particao" sql-type="decimal(5,2)"  not-null="true"/>
+		</property>	
+		
+		
+		
+		
+	</class> 
+</hibernate-mapping>

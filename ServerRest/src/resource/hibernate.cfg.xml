@@ -66,10 +66,13 @@
 		
 		<!--  Thresholds  -->
 		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorThreshold.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoThreshold.hbm.xml"/>
 		
 		<!-- Telas -->
 		<mapping resource="br/com/fiap/monitor/entities/mappings/Usuario.hbm.xml" />
-				
+		
+		
+		
 					
 	</session-factory>
 

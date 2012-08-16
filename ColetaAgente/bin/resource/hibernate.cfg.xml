@@ -63,6 +63,7 @@
 		<!--  Alarmes -->
 		<mapping resource="br/com/fiap/coleta/entities/mappings/TipoAlarme.hbm.xml"/>
 		<mapping resource="br/com/fiap/coleta/entities/mappings/Alarme.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoThreshold.hbm.xml"/>
 		
 		<!--  Thresholds  -->
 		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorThreshold.hbm.xml"/>

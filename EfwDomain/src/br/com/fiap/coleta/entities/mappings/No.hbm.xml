@@ -21,11 +21,12 @@
 		
 		<joined-subclass name="br.com.fiap.coleta.entities.ServidorAplicacao" table="servidor_aplicacao">
 			<key column="no_id"/>
-			<property name = "hostname"/>
-			<property name = "port"/>
+			<property name = "hostname" not-null='true'/>
+			<property name = "port" not-null='true'/>
 			<property name = "jmxPort" column="jmx_port"/>
 			<property name = "startTime" column="start_time"/>
 			<property name = "uptime"/>
+			<property name = "threshold"/>
 			
 			<joined-subclass name="br.com.fiap.coleta.entities.JBoss" table="jboss">
 				<key column="no_id"/>

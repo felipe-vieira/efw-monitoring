@@ -123,7 +123,7 @@ public class AlarmeBO {
 				coletaDAO.salvaColeta(alarme);
 			}			
 		}
-	}
+		}
 	
 	
 }
