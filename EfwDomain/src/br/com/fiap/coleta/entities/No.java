@@ -17,6 +17,10 @@ public class No implements Serializable{
 	
 	private String nome;
 	
+	private String hostname;
+	
+	private Integer agentPort;
+	
 	private Boolean disponivel;
 	
 	private Boolean gerenciavel;
@@ -37,7 +41,18 @@ public class No implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+	public String getHostname() {
+		return hostname;
+	}
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	public Integer getAgentPort() {
+		return agentPort;
+	}
+	public void setAgentPort(Integer agentPort) {
+		this.agentPort = agentPort;
+	}
 	public Boolean getDisponivel() {
 		return disponivel;
 	}

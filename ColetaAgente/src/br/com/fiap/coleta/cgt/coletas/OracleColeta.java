@@ -47,7 +47,7 @@ public class OracleColeta {
 	
 	public void initColeta(){
 
-			socket = new SocketUtil(this.oracle.getHostname(), this.oracle.getPortAgent());
+			socket = new SocketUtil(this.oracle.getHostname(), this.oracle.getAgentPort());
 			
 			try{
 				

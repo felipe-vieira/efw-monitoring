@@ -7,11 +7,8 @@ public class BancoDados extends No implements Serializable{
 	
 	private static final long serialVersionUID = -4029595958441788034L;
 	
-	private String hostname;
 	
 	private Integer port;
-	
-	private Integer portAgent;
 	
 	private String usuario;
 	
@@ -45,28 +42,12 @@ public class BancoDados extends No implements Serializable{
 		this.senha = senha;
 	}
 
-	public String getHostname() {
-		return hostname;
-	}
-
-	public void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
-
 	public Integer getPort() {
 		return port;
 	}
 
 	public void setPort(Integer port) {
 		this.port = port;
-	}
-	
-	public Integer getPortAgent() {
-		return portAgent;
-	}
-
-	public void setPortAgent(Integer portAgent) {
-		this.portAgent = portAgent;
 	}
 
 	public Long getTargetServerMemory() {

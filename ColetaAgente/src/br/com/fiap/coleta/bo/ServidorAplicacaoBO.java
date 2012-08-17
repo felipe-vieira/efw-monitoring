@@ -26,24 +26,34 @@ public class ServidorAplicacaoBO {
 	}
 	
 	public void updateServidorAplicacaoColeta(ServidorAplicacao servidorAplicacao){
-		this.coletaDAO.updateColeta(servidorAplicacao);		
+		if(servidorAplicacao != null){
+			this.coletaDAO.updateColeta(servidorAplicacao);
+		}		
 	}
 
 	public void salvaPropriedadesMemoria(List<ServidorAplicacaoMemoria> memorias) {
-		this.coletaDAO.salvaListaColetas(memorias);
+		if(memorias != null){
+			this.coletaDAO.salvaListaColetas(memorias);
+		}
 	}
 	
 
 	public void salvaColetasMemoria(List<ServidorAplicacaoMemoriaColeta> coletasMemorias) {
-		this.coletaDAO.salvaListaColetas(coletasMemorias);		
+		if(coletasMemorias != null){
+			this.coletaDAO.salvaListaColetas(coletasMemorias);
+		}
 	}
 	
 	public void salvaColetasThread(ServidorAplicacaoThreadColeta coleta){
-		this.coletaDAO.salvaColeta(coleta);
+		if(coleta != null){
+			this.coletaDAO.salvaColeta(coleta);
+		}
 	}
 	
 	public void salvaMapDeployments(Map<String, ServidorAplicacaoDeployment> map){
-		this.coletaDAO.salvaMapColeta(map);
+		if(map != null){
+			this.coletaDAO.salvaMapColeta(map);
+		}
 	}
 	
 	public ServidorAplicacaoMemoria getMemoriaTipo(ServidorAplicacao servidor, TipoMemoriaServidorAplicacao tipo){

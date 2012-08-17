@@ -53,7 +53,7 @@ public class AlarmeBO {
 	}
 	
 	public void geraAlarmeNaoGerenciavel(No no, Boolean ultimoStatus){
-		if(!no.getGerenciavel() && no.getDisponivel() != ultimoStatus){
+		if(!no.getGerenciavel() && ultimoStatus){
 			Alarme alarme = new Alarme();
 			alarme.setData(new Date());
 			alarme.setTipo(tipos.get(2));

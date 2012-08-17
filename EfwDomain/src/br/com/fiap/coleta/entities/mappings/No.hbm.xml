@@ -9,19 +9,19 @@
 		</id>
 		
 		<property name="nome" not-null="true"/>
+		<property name="hostname" not-null="true"/>
+		<property name="agentPort" not-null="true"/>
 		<property name="disponivel" not-null="false"/>
 		<property name="gerenciavel" not-null="false"/>
 		<property name="ultimaColeta" not-null="false"/>
 		
 		<joined-subclass name="br.com.fiap.coleta.entities.Servidor" table="servidor">
 			<key column="no_id"/>
-			<property name = "hostname"/>
 			<many-to-one name="threshold" lazy="false"/>
 		</joined-subclass>		
 		
 		<joined-subclass name="br.com.fiap.coleta.entities.ServidorAplicacao" table="servidor_aplicacao">
 			<key column="no_id"/>
-			<property name = "hostname" not-null='true'/>
 			<property name = "port" not-null='true'/>
 			<property name = "jmxPort" column="jmx_port"/>
 			<property name = "startTime" column="start_time"/>
@@ -44,9 +44,7 @@
 		
 		<joined-subclass name="br.com.fiap.coleta.entities.BancoDados" table="banco_dados">
 			<key column="no_id"/>
-			<property name = "hostname" not-null="true"/>
 			<property name = "port" not-null="true"/>
-			<property name = "portAgent" column="port_agent" not-null="true"/>
 			<property name = "usuario" not-null="true">
 				<column name="usuario" sql-type="varchar(30)"/>
 			</property>
@@ -71,10 +69,8 @@
 				<key column="no_id"/>
 				<property name = "instanceName" column="instance_name" not-null= "true"/>
 			</joined-subclass>
-
 			
 		</joined-subclass>
-		
 		
 	</class> 
 </hibernate-mapping>

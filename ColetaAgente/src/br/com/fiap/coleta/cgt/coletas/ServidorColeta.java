@@ -39,15 +39,13 @@ public class ServidorColeta {
 	private Date dataColeta;
 
 	private IndisponibilidadeBO indisponibilidadeBO;
-
+	
+	
 	public ServidorColeta(No no) {
 		this.servidor = (Servidor) no;
 		this.servidorBO = new ServidorBO();
 		this.alarmeBO = new AlarmeBO();
 		this.indisponibilidadeBO = new IndisponibilidadeBO();
-		this.indisponibilidade = new Indisponibilidade();
-		this.indisponibilidade.setNo(this.servidor);
-
 	}
 
 	public void initColeta() {
@@ -59,7 +57,6 @@ public class ServidorColeta {
 		this.dataColeta = new Date();
 
 		if (connect()) {
-			Boolean ultimoStatus = servidor.getDisponivel();
 
 			try {
 				// Lista os alarmes de coleta
@@ -110,12 +107,11 @@ public class ServidorColeta {
 	private boolean connect() {
 		boolean result = false;
 
-		socket = new SocketUtil(this.servidor.getHostname(), 9090);
+		socket = new SocketUtil(this.servidor.getHostname(), this.servidor.getAgentPort());
 		Boolean ultimoStatus = servidor.getDisponivel();
 
 		try {
 			this.socket.openSocket();
-
 			this.servidor.setDisponivel(true);
 
 			if (this.indisponibilidade != null && !ultimoStatus) {
@@ -131,23 +127,20 @@ public class ServidorColeta {
 
 			// SLA
 			if (ultimoStatus) {
-
 				if (this.indisponibilidade == null) {
 					this.indisponibilidade = new Indisponibilidade();
+					this.indisponibilidade.setNo(this.servidor);
+					this.indisponibilidade.setInicio(this.dataColeta);
 				}
-
-				this.indisponibilidade.setNo(this.servidor);
-				this.indisponibilidade.setInicio(this.dataColeta);
-
+				
+				this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor,
+						ultimoStatus);
+				
 			}
 
 			this.servidor.setUltimaColeta(dataColeta);
 			this.servidorBO.updateServidorColeta(this.servidor);
-			System.out.println("Impossivel se conectar ao servidor.");
-
-			this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor,
-					ultimoStatus);
-
+			System.out.println("Servidor indisponivel -  "+this.servidor.getHostname()+" - Impossivel se conectar ao servidor.");
 			result = false;
 
 		} finally {

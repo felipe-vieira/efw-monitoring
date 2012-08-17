@@ -59,7 +59,7 @@ public class SQLServerColeta {
 				this.verificaDisponibilidade();
 				
 				if(this.sqlserver.getDisponivel()){
-					socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getPortAgent());
+					socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getAgentPort());
 					
 					//Abre o socket
 					socket.openSocket();
