@@ -1,6 +1,7 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import br.com.fiap.coleta.bo.AlarmeBO;
+import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
 import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.Glassfish;
@@ -26,78 +29,62 @@ import br.com.fiap.coleta.util.socket.SocketUtil;
 public class GlassFishColeta {
 
 	private Glassfish glassfish;
+	
 	private ServidorAplicacaoBO servidorAplicacaoBO;
+	
+	private IndisponibilidadeBO indisponibilidadeBO;
+	
+	private AlarmeBO alarmeBO;
+	
 	private SocketUtil socket;
+	
 	private Date dataColeta;
-	//SLA
-	private Indisponibilidade disponibilidade;
+	
+	private Indisponibilidade indisp;
+	
+	private Boolean ultimoStatus;
+
+	private Boolean ultimoGerenciavel;
+
+	private List<ServidorAplicacaoMemoria> propriedadesMemorias;
 	
 	public GlassFishColeta(No no){
 		this.glassfish = (Glassfish) no;
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
-		//SLA
-		this.disponibilidade = new Indisponibilidade();
-		this.disponibilidade.setNo(this.glassfish);
+		this.alarmeBO = new AlarmeBO();
+		this.ultimoStatus = this.glassfish.getDisponivel();
+		this.ultimoGerenciavel = this.glassfish.getGerenciavel();
+
 	}
 	
 	public void initColeta(){
-		
+	
 		this.dataColeta = new Date();
+		this.glassfish.setUltimaColeta(dataColeta);
+		
+		// Pega utlima indisponibilidade
+		this.indisp = this.indisponibilidadeBO
+				.pegaUltimaInstanciaIndisponibilidade(this.glassfish);
 		
 		if (connect()){
-			Boolean ultimoStatus = this.glassfish.getDisponivel();
 			socket = new SocketUtil(this.glassfish.getHostname(), 9090);
 
 			try{
 				socket.openSocket();
 
-				// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
-				URL url = new URL("http://" + this.glassfish.getHostname() + ":" + this.glassfish.getJmxPort());
-				HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-				connection.setRequestMethod("GET");
-				connection.connect();
-				int code = connection.getResponseCode();
-				connection.disconnect();
-
-				if (code == 200){
-					this.glassfish.setDisponivel(true);
-					// SLA
-					if (!ultimoStatus){
-						this.disponibilidade.setFim(this.dataColeta);
-					}
-				}
-				else{
-					this.glassfish.setDisponivel(false);
-					// SLA
-					if (ultimoStatus){
-						this.disponibilidade.setInicio(this.dataColeta);
-					}
-				}
-
-				if (code == 200){
-					this.glassfish.setDisponivel(true);
-				}
-				else{
-					this.glassfish.setDisponivel(false);
-				}
-
 				//Pega as propriedades do coletor
 				this.getGlassfishRuntime();
-				List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigGlassfishMemory();
+				this.propriedadesMemorias = this.getConfigGlassfishMemory();
 
 				//Pega os valores da coleta
 				Map<String,ServidorAplicacaoDeployment> deployments = this.getGlassfishDeployments();
 				List<ServidorAplicacaoMemoriaColeta> coletasMemorias = this.getGlassfishMemory();
 				ServidorAplicacaoThreadColeta threadColeta = this.getGlassfishThread();
-
+				
 				// Verifica se as coletas estao vazias, caso estiverem ele nao esta gerenciavel
-				if (deployments.isEmpty() || propriedadesMemorias.isEmpty() || coletasMemorias.isEmpty()){
-					this.glassfish.setGerenciavel(false);
-				}
-				else{
-					this.glassfish.setGerenciavel(true);
-				}
-
+				this.glassfish.setGerenciavel(true);
+				this.glassfish.setUltimaColeta(dataColeta);
+				
 				//Salva as propriedades
 				servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
 				servidorAplicacaoBO.salvaPropriedadesMemoria(propriedadesMemorias);
@@ -114,56 +101,78 @@ public class GlassFishColeta {
 				socket.close();
 
 			}catch(IOException ex){
-
-				this.glassfish.setDisponivel(false);
 				this.glassfish.setGerenciavel(false);
-				this.glassfish.setUltimaColeta(dataColeta);
 				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
-
-				// SLA
-				if (ultimoStatus){
-					this.disponibilidade.setInicio(this.dataColeta);
-				}
-
 				System.out.println("Impossï¿½vel abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
 			}catch(Exception ex){
+				this.glassfish.setGerenciavel(false);
+				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
+				System.out.println("Glassfish não gerenciável - "+ glassfish.getHostname() + "- Erros durante a coleta ");
 				ex.printStackTrace();
+			}finally{
+				if(!this.glassfish.getGerenciavel() && this.ultimoGerenciavel){
+					this.alarmeBO.geraAlarmeNaoGerenciavel(this.glassfish, ultimoGerenciavel);
+				}
 			}
 		}
 	}
 	
 	private boolean connect(){
-		Boolean ultimoStatus = this.glassfish.getDisponivel();
-		socket = new SocketUtil(this.glassfish.getHostname(), 9090);
 		
 		boolean result = false;
 		
 		try{
-			socket.openSocket();
-			
-			socket.close();
-			
-			// SLA
-			if (!ultimoStatus){
-				this.disponibilidade.setFim(this.dataColeta);
+			// Verifica atraves da pagina padrao do Jboss se ele esta disponivel
+			URL url = new URL("http://" + this.glassfish.getHostname() + ":" + this.glassfish.getPort());
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.connect();
+			int code = connection.getResponseCode();
+			connection.disconnect();
+
+			if (code == 200){
+				this.glassfish.setDisponivel(true);
+				result = true;
+			}
+			else{
+				System.out.println("JBOSS Indísponível - "+ this.glassfish.getHostname() +" - HTTP Status: "+code);
+				this.glassfish.setDisponivel(false);
+				this.glassfish.setGerenciavel(false);
+				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
 			}
 			
-			result = true;
 			
 		}catch(Exception ex){
-			ex.printStackTrace();
 			
+			System.out.println("JBOSS Indísponível - "+ this.glassfish.getHostname() +" - Falha no Http GET");
+			ex.printStackTrace();
 			this.glassfish.setDisponivel(false);
 			this.glassfish.setGerenciavel(false);
-			this.glassfish.setUltimaColeta(dataColeta);
 			this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
-			
-			// SLA
-			if (ultimoStatus){
-				this.disponibilidade.setInicio(this.dataColeta);
-			}
-						
 			result = false;
+			
+		}finally{
+			
+			this.glassfish.setUltimaColeta(dataColeta);
+			
+			if (this.glassfish.getDisponivel() && (ultimoStatus || this.indisp == null)){
+
+				if (this.indisp == null) {
+					this.indisp = new Indisponibilidade();
+					this.indisp.setNo(this.glassfish);
+					this.indisp.setInicio(this.dataColeta);
+				}
+				
+				this.alarmeBO.geraAlarmeIndsiponibilidade(this.glassfish, ultimoStatus);
+				
+			} else if (this.glassfish.getDisponivel() && this.indisp !=null && !ultimoStatus){
+				this.indisp.setFim(this.dataColeta);
+			}
+			
+			if(indisp != null){
+				this.indisponibilidadeBO.salvaIndisponibilidade(indisp);
+			}
+			
 		}
 		
 		return result;		
@@ -197,6 +206,8 @@ public class GlassFishColeta {
 				
 				deployments.put(deploymentName, deployment);
 			} 
+			
+			this.alarmeBO.geraAlarmesDeploymemnts(this.glassfish,deployments);
 			
 			return deployments;
 	
@@ -318,6 +329,11 @@ public class GlassFishColeta {
 				coletaMemoriaHeap.setUsed(jsonHeap.getLong("used"));
 				coletaMemoriaHeap.setCommited(jsonHeap.getLong("committed"));
 				
+				if(this.glassfish.getThreshold() != null){
+					BigDecimal utilizacao = new BigDecimal( (coletaMemoriaHeap.getUsed()/this.propriedadesMemorias.get(0).getMax()) *100);
+					this.alarmeBO.geraAlarmeMemoriaHeap(this.glassfish,utilizacao);
+				}
+				
 				retorno.add(coletaMemoriaHeap);
 				
 			}
@@ -330,6 +346,11 @@ public class GlassFishColeta {
 				coletaMemoriaNonHeap.setCommited(jsonNonHeap.getLong("committed"));
 				
 				retorno.add(coletaMemoriaNonHeap);
+				
+				if(this.glassfish.getThreshold() != null){
+					BigDecimal utilizacao = new BigDecimal( (coletaMemoriaNonHeap.getUsed()/this.propriedadesMemorias.get(1).getMax()) *100);
+					this.alarmeBO.geraAlarmeMemoriaNonHeap(this.glassfish,utilizacao);
+				}
 				
 			}
 			

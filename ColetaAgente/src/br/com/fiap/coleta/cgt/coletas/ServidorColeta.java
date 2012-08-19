@@ -126,7 +126,7 @@ public class ServidorColeta {
 			this.servidor.setDisponivel(false);
 
 			// SLA
-			if (ultimoStatus) {
+			if (ultimoStatus || this.indisponibilidade == null) {
 				if (this.indisponibilidade == null) {
 					this.indisponibilidade = new Indisponibilidade();
 					this.indisponibilidade.setNo(this.servidor);

@@ -67,7 +67,6 @@ public class JBossColeta {
 		this.indisp = this.indisponibilidadeBO
 				.pegaUltimaInstanciaIndisponibilidade(this.jboss);
 		
-		
 		if (connect()){
 			socket = new SocketUtil(this.jboss.getHostname(), this.jboss.getAgentPort());
 			try{				
@@ -154,7 +153,7 @@ public class JBossColeta {
 			
 			this.jboss.setUltimaColeta(dataColeta);
 			
-			if (ultimoStatus && !this.jboss.getDisponivel()){
+			if (this.jboss.getDisponivel() && (ultimoStatus || this.indisp == null)){
 
 				if (this.indisp == null) {
 					this.indisp = new Indisponibilidade();
@@ -206,7 +205,7 @@ public class JBossColeta {
 				deployments.put(deploymentName, deployment);
 			}
 			
-			
+			this.alarmeBO.geraAlarmesDeploymemnts(this.jboss,deployments);
 			
 			return deployments;
 	

@@ -26,6 +26,21 @@ public class ColetaDAO {
 	}
 	
 	
+	public void deletaColeta(Object obj){
+		Session session = DBUtil.getCurrentSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			session.delete(obj);
+			t.commit();
+		}catch(Exception e){
+			e.printStackTrace();
+			t.rollback();
+		}
+			
+	}
+	
+	
 	public <E> void salvaListaColetas(List<E> listObj){
 		Session session = DBUtil.getCurrentSession();
 		Transaction t = session.beginTransaction();

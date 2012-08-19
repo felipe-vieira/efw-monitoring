@@ -3,6 +3,7 @@ package br.com.fiap.coleta.bo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import br.com.fiap.coleta.dao.ColetaDAO;
 import br.com.fiap.coleta.dao.ServidorAplicacaoDAO;
@@ -51,9 +52,21 @@ public class ServidorAplicacaoBO {
 	}
 	
 	public void salvaMapDeployments(Map<String, ServidorAplicacaoDeployment> map){
-		if(map != null){
-			this.coletaDAO.salvaMapColeta(map);
+			
+		if(map!= null){
+			Set<String> keys = map.keySet();
+			for (String key : keys) {
+				ServidorAplicacaoDeployment deployment = map.get(key);
+				
+				if(deployment.getAtivo()){
+					this.coletaDAO.salvaColeta(deployment);
+				}else{
+					this.coletaDAO.deletaColeta(deployment);
+				}
+				
+			}
 		}
+		
 	}
 	
 	public ServidorAplicacaoMemoria getMemoriaTipo(ServidorAplicacao servidor, TipoMemoriaServidorAplicacao tipo){

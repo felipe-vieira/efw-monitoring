@@ -5,14 +5,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import br.com.fiap.coleta.dao.ColetaDAO;
 import br.com.fiap.coleta.entities.Alarme;
-import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
+import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
 import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.TipoAlarme;
@@ -126,7 +127,7 @@ public class AlarmeBO {
 				coletaDAO.salvaColeta(alarme);
 			}			
 		}
-		}
+	}
 
 	public void geraAlarmeMemoriaHeap(ServidorAplicacao sa, BigDecimal utilizacao) {
 		ServidorAplicacaoThreshold threshold = sa.getThreshold();
@@ -164,6 +165,40 @@ public class AlarmeBO {
 			}	
 		}
 		
+	}
+
+	public void geraAlarmesDeploymemnts(ServidorAplicacao sa,
+			Map<String, ServidorAplicacaoDeployment> deployments) {
+		
+		Integer deployCount = 0;
+		if(deployments != null){
+			Set<String> keys = deployments.keySet();
+			for (String key : keys) {
+				ServidorAplicacaoDeployment deployment = deployments.get(key);
+				if(deployment.getAtivo()){
+					deployCount++;
+				}else{
+					Alarme alarme = new Alarme();
+					alarme.setData(new Date());
+					alarme.setTipo(tipos.get(7));
+					alarme.setNo(sa);
+					alarme.setParametro(deployment.getNome());
+					alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+					
+					coletaDAO.salvaColeta(alarme);					
+				}
+			}
+		}
+		
+		if(deployCount == 0){
+			Alarme alarme = new Alarme();
+			alarme.setData(new Date());
+			alarme.setTipo(tipos.get(6));
+			alarme.setNo(sa);
+			alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+			
+			coletaDAO.salvaColeta(alarme);			
+		}
 	}
 	
 	

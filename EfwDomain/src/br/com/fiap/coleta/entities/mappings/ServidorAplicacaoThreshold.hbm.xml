@@ -26,7 +26,7 @@
 		</property>	
 		
 		<property name="thresholdCpuCpuTime">
-			<column name="limite_particao" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="threshold_cpu_cpu_time" sql-type="decimal(5,2)"  not-null="true"/>
 		</property>	
 		
 		
