@@ -13,19 +13,19 @@
 			<column name="nome" sql-type="varchar(30)"  not-null="true"/>
 		</property>
 		
-		<property name="thresholdHeap;">
+		<property name="thresholdHeap">
 			<column name="threshold_heap" sql-type="decimal(5,2)"  not-null="true"/>
 		</property>	
 		
-		<property name="thresholdNonHeap;">
+		<property name="thresholdNonHeap">
 			<column name="threshold_non_heap" sql-type="decimal(5,2)"  not-null="true"/>
 		</property>	
 		
-		<property name="thresholdCpuUserTime;">
+		<property name="thresholdCpuUserTime">
 			<column name="threshold_cpu_user_time" sql-type="decimal(5,2)"  not-null="true"/>
 		</property>	
 		
-		<property name="thresholdCpuCpuTime;">
+		<property name="thresholdCpuCpuTime">
 			<column name="limite_particao" sql-type="decimal(5,2)"  not-null="true"/>
 		</property>	
 		

@@ -1,5 +1,7 @@
 package br.com.fiap.coleta.dao;
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -16,9 +18,8 @@ public class IndisponibilidadeDAO {
 		Transaction t = session.beginTransaction();
 			
 		try{
-			Query query = session.createQuery("FROM Disponibilidade WHERE no.id = :noId and dataFim = :dataFim");
+			Query query = session.createQuery("FROM Indisponibilidade WHERE no.id = :noId and fim is null");
 			query.setInteger("noId", no.getId());
-			query.setParameter("dataFim", null);
 			
 			Indisponibilidade d = (Indisponibilidade) query.uniqueResult();
 			t.commit();

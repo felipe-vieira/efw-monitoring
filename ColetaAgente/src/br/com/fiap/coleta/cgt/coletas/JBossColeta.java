@@ -1,6 +1,7 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,14 +29,24 @@ import br.com.fiap.coleta.util.socket.SocketUtil;
 public class JBossColeta {
 
 	private JBoss jboss;
+	
 	private ServidorAplicacaoBO servidorAplicacaoBO;
+	
 	private IndisponibilidadeBO indisponibilidadeBO;
+	
 	private AlarmeBO alarmeBO;
+	
 	private SocketUtil socket;
+	
 	private Date dataColeta;
+	
 	private Indisponibilidade indisp;
+	
 	private Boolean ultimoStatus;
+	
 	private Boolean ultimoGerenciavel;
+	
+	List<ServidorAplicacaoMemoria> propriedadesMemorias;
 	
 	public JBossColeta(No no){
 		this.jboss = (JBoss) no;
@@ -58,13 +69,13 @@ public class JBossColeta {
 		
 		
 		if (connect()){
-			socket = new SocketUtil(this.jboss.getHostname(), 9090);
+			socket = new SocketUtil(this.jboss.getHostname(), this.jboss.getAgentPort());
 			try{				
 				socket.openSocket();
 
 				//Pega as propriedades do coletor
 				this.getJbossRuntime();
-				List<ServidorAplicacaoMemoria> propriedadesMemorias = this.getConfigJbossMemory();
+				this.propriedadesMemorias = this.getConfigJbossMemory();
 
 				//Pega os valores da coleta
 				Map<String,ServidorAplicacaoDeployment> deployments = this.getJbossDeployments();
@@ -193,7 +204,9 @@ public class JBossColeta {
 				deployment.setAtivo(true);
 				
 				deployments.put(deploymentName, deployment);
-			} 
+			}
+			
+			
 			
 			return deployments;
 	
@@ -315,6 +328,11 @@ public class JBossColeta {
 				coletaMemoriaHeap.setUsed(jsonHeap.getLong("used"));
 				coletaMemoriaHeap.setCommited(jsonHeap.getLong("committed"));
 				
+				if(this.jboss.getThreshold() != null){
+					BigDecimal utilizacao = new BigDecimal( (coletaMemoriaHeap.getUsed()/this.propriedadesMemorias.get(0).getMax()) *100);
+					this.alarmeBO.geraAlarmeMemoriaHeap(this.jboss,utilizacao);
+				}
+				
 				retorno.add(coletaMemoriaHeap);
 				
 			}
@@ -325,6 +343,12 @@ public class JBossColeta {
 				coletaMemoriaNonHeap.setDataColeta(this.dataColeta);
 				coletaMemoriaNonHeap.setUsed(jsonNonHeap.getLong("used"));
 				coletaMemoriaNonHeap.setCommited(jsonNonHeap.getLong("committed"));
+				
+				if(this.jboss.getThreshold() != null){
+					BigDecimal utilizacao = new BigDecimal( (coletaMemoriaNonHeap.getUsed()/this.propriedadesMemorias.get(1).getMax()) *100);
+					this.alarmeBO.geraAlarmeMemoriaNonHeap(this.jboss,utilizacao);
+				}
+				
 				
 				retorno.add(coletaMemoriaNonHeap);
 				
