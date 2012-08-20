@@ -26,7 +26,7 @@
 			<property name = "jmxPort" column="jmx_port"/>
 			<property name = "startTime" column="start_time"/>
 			<property name = "uptime"/>
-			<property name = "threshold"/>
+			<many-to-one name="threshold" lazy="false"/>
 			
 			<joined-subclass name="br.com.fiap.coleta.entities.JBoss" table="jboss">
 				<key column="no_id"/>

@@ -9,8 +9,12 @@ import java.util.Set;
 
 import br.com.fiap.coleta.dao.ColetaDAO;
 import br.com.fiap.coleta.entities.Alarme;
+import br.com.fiap.coleta.entities.BancoDados;
+import br.com.fiap.coleta.entities.BancoDadosThreshold;
+import br.com.fiap.coleta.entities.BancoFileColeta;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Particao;
+import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
@@ -198,6 +202,47 @@ public class AlarmeBO {
 			alarme.setCriticidade(CriticidadeAlarme.ALERTA);
 			
 			coletaDAO.salvaColeta(alarme);			
+		}
+	}
+
+	public void geraAlarmeMemoriaBancoDados(BancoDados bd,
+			BigDecimal utilizacao) {
+		
+		BancoDadosThreshold threshold = bd.getThreshold();
+		
+		if(threshold != null && threshold.getLimiteMemoria() != null){
+			if(utilizacao.compareTo(threshold.getLimiteMemoria()) == 1){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(13));
+				alarme.setNo(bd);
+				alarme.setValor(utilizacao);
+				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+				
+				coletaDAO.salvaColeta(alarme);
+			}
+		}
+		
+	}
+
+	public void geraAlarmeFileBancoDados(BancoDados bd,
+			BancoFileColeta coleta) {
+
+		BancoDadosThreshold threshold = bd.getThreshold();
+		
+		if(threshold != null && threshold.getLimiteFile() != null && coleta.getFile().getMaxSize() != -1){
+			BigDecimal utilizacao = new BigDecimal((coleta.getSize().doubleValue()/coleta.getFile().getMaxSize())*100);
+			if(utilizacao.compareTo(threshold.getLimiteFile()) == 1){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(12));
+				alarme.setNo(bd);
+				alarme.setValor(utilizacao);
+				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+				
+				coletaDAO.salvaColeta(alarme);
+			}
+			
 		}
 	}
 	

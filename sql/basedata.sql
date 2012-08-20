@@ -14,3 +14,7 @@ INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(8,'Thres
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(9,'Threshold Memoria Non-heap', 'O uso da memoria non-heap atingiu o limite estabelecido.',1,'%');
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(10,'Threshold CPU TIME', 'O uso de CPU Time atingiu o limite estabelecido.',1,'%');
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(11,'Threshold CPU USER', 'O uso do CPU USER ? atingiu o limite estabelecido.',1,'%');
+
+/* Alarmes de banco de dados */
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(12,'Threshold File Max Size', 'O arquivo ? atingiu o limite estabelecido',1,'%');
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(13,'Threshold Memoria BD', 'O uso de memoria atingiu o limite estabelecido',1,'%');

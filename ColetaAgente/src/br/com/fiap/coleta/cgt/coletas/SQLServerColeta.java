@@ -1,6 +1,7 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -43,11 +44,19 @@ public class SQLServerColeta {
 	
 	private Map<String,BancoJob> jobs;
 	
+	private Boolean ultimoStatus;
+	
+	private Boolean ultimoGerenciavel;
+	
 	
 	public SQLServerColeta(No no){
 		this.sqlserver = (SQLServer) no;
 		this.bancoDadosBO = new BancoDadosBO();
 		this.alarmeBO = new AlarmeBO();
+		
+		this.ultimoStatus = this.sqlserver.getDisponivel();
+		this.ultimoGerenciavel = this.sqlserver.getGerenciavel();
+		
 	}
 	
 	public void initColeta(){
@@ -56,7 +65,7 @@ public class SQLServerColeta {
 		
 			try{
 				
-				this.verificaDisponibilidade();
+				this.connect();
 				
 				if(this.sqlserver.getDisponivel()){
 					socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getAgentPort());
@@ -114,7 +123,7 @@ public class SQLServerColeta {
 		
 	}
 	
-	public void verificaDisponibilidade(){
+	public void connect(){
 		
 		String url = "jdbc:jtds:sqlserver://"+this.sqlserver.getHostname()+"/"+this.sqlserver.getDatabase()+";instance="+this.sqlserver.getInstanceName();
 		String usuario = this.sqlserver.getUsuario();
@@ -129,7 +138,13 @@ public class SQLServerColeta {
 			ex.printStackTrace();
 		}catch(SQLException ex){
 			this.sqlserver.setDisponivel(false);
-		}		
+		}
+		
+		if(!this.sqlserver.getGerenciavel() && this.ultimoStatus){
+			this.alarmeBO.geraAlarmeIndsiponibilidade(this.sqlserver, this.ultimoStatus);
+		}
+
+		
 		
 	}
 	
@@ -221,6 +236,9 @@ public class SQLServerColeta {
 							coleta.setDataColeta(this.dataColeta);
 							coleta.setSize(i.getLong("Size"));
 							filesColeta.add(coleta);
+							
+							alarmeBO.geraAlarmeFileBancoDados(this.sqlserver,coleta);
+							
 						}						
 					}
 				}				
@@ -247,6 +265,12 @@ public class SQLServerColeta {
 				coleta.setDataColeta(this.dataColeta);
 				coleta.setMemory(json.getLong("totalMemory"));
 				coleta.setStolenMemory(json.getLong("stolenMemory"));
+				
+				BigDecimal utilizacao = new BigDecimal((coleta.getMemory().doubleValue()/this.sqlserver.getTargetServerMemory()) * 100);
+				
+				this.alarmeBO.geraAlarmeMemoriaBancoDados(this.sqlserver, utilizacao);
+				
+				
 			}
 			
 		}catch(IOException ex){

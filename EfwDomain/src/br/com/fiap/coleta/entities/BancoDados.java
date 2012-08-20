@@ -24,6 +24,7 @@ public class BancoDados extends No implements Serializable{
 	
 	private String collation;
 	
+	private BancoDadosThreshold threshold;
 	
 
 	public String getUsuario() {
@@ -88,6 +89,14 @@ public class BancoDados extends No implements Serializable{
 
 	public void setCollation(String collation) {
 		this.collation = collation;
+	}
+
+	public BancoDadosThreshold getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(BancoDadosThreshold threshold) {
+		this.threshold = threshold;
 	}
 	
 	
