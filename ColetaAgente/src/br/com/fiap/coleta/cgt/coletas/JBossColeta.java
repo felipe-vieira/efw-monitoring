@@ -136,6 +136,8 @@ public class JBossColeta {
 				System.out.println("JBOSS Indísponível - "+ this.jboss.getHostname() +" - HTTP Status: "+code);
 				this.jboss.setDisponivel(false);
 				this.jboss.setGerenciavel(false);
+				this.jboss.setUptime(null);
+				this.jboss.setStartTime(null);
 				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
 			}
 			
@@ -146,6 +148,8 @@ public class JBossColeta {
 			ex.printStackTrace();
 			this.jboss.setDisponivel(false);
 			this.jboss.setGerenciavel(false);
+			this.jboss.setUptime(null);
+			this.jboss.setStartTime(null);
 			this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
 			result = false;
 			

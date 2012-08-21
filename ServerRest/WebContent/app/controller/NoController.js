@@ -21,12 +21,14 @@ Ext.define('MONITOR.controller.NoController', {
     models: [
     	'No',
     	'Servidor',
+    	'ServidorAplicacao',
     	'SistemaOperacional',
     	'Memoria',
     	'Processador',
     	'Particao',
     	'Alarme',
     	'TipoAlarme'
+    	
     ],
     init: function() {
     		
@@ -49,8 +51,8 @@ Ext.define('MONITOR.controller.NoController', {
     	
     	if(tipo == "Servidor"){
     		this.geraTabServidor(tabs,record);
-    	}else if (tipo == "Servidor de Aplicação"){
-    		//geraTabServidorAplicacao(tabs,record);
+    	}else if (tipo == "Servidor de Aplicacao"){
+    		this.geraTabServidorAplicacao(tabs,record);
     	}else if (tipo == "Banco de Dados"){
     		//geraTabBancoDados(tabs,record);
     	}
@@ -58,9 +60,126 @@ Ext.define('MONITOR.controller.NoController', {
     },
     
     
+    geraTabServidorAplicacao: function(tabs, record){
+    	
+    	tabs.setLoading(true);
+    		
+    	MONITOR.model.ServidorAplicacao.load(record.get('id'),{
+    		success: function (sa){
+    	    	
+    	        if(sa != null){
+    	        
+    	        	var uptime = "--";
+    	        	var startTime = "--";
+    	        	var storeAlarmes = Ext.create('MONITOR.store.Alarmes');
+    	        	
+    	        	storeAlarmes.load({
+    	        		params: {
+    	        			id: sa.get('id'),
+    	        			start: 0,
+    	        			limit: 10	
+    	        		}
+    	        	});
+    	        	
+    	        	storeAlarmes.on('beforeload',function(store, operation,eOpts){
+    	                operation.params={
+    	                		id: sa.get('id')
+    	                };
+
+    	            });
+    	        	
+    	        	var strStatus = "";
+    	        	
+    	        	if(sa.get('disponivel') == true){
+    	        		strStatus += "Disponível";
+    	        	}else{
+    	        		strStatus += "Não Disponível";
+    	        		startTime = MONITOR.utils.DateUtils.toStringPtBr(sa.get('startTime')); 
+    	        		uptime = MONITOR.utils.DateUtils.secsToTime(sa.get('uptime'));
+    	        	}
+    	        	
+    	        	strStatus += " / ";
+    	        	
+    	        	if(sa.get('gerenciavel') == true){
+    	        		strStatus += "Gerenciavel";
+    	        	}else{
+    	        		strStatus += "Não Gerenciavel";
+    	        	}
+    	        	
+    	        	if(sa.get('tipoServidorAplicacao') != null){
+    	        		sa.get('tipoServidorAplicacao')
+    	        	}
+    	        	
+    	        	
+    	        	var infoHtml =
+    	        		'<table class="tabelaInfo"> <tbody>'+
+    	        			'<tr>'+
+    	        				'<td class="titulo">Nome:</td>' + 
+    	        				'<td>'+ sa.get('nome') + '</td>' +
+    	        				'<td class="titulo">Hostname:</td>' + 
+    	        				'<td>'+ sa.get('hostname') + '</td>' +
+    	        			'</tr>'+
+    	        			'<tr>'+
+	        					'<td class="titulo">Tipo:</td>' + 
+	        					'<td>'+ sa.get('tipoServidorAplicacao') +'</td>' +
+	        					'<td class="titulo">Porta:</td>' + 
+	        					'<td>'+ sa.get('port') + '</td>' +
+	        				'</tr>'+
+    	        			'<tr>'+
+        						'<td class="titulo">Iniciado em:</td>' + 
+        						'<td>'+ startTime +'</td>' +
+        						'<td class="titulo">Uptime:</td>' + 
+        						'<td>'+ uptime + '</td>' +
+        					'</tr>'+
+    	        			'<tr>'+
+	        					'<td class="titulo">Status:</td>' + 
+	        					'<td>'+ strStatus +'</td>' +
+	        					'<td class="titulo">Ultima coleta:</td>' + 
+	        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(sa.get('ultimaColeta')) + '</td>' +
+	        				'</tr>'+
+    	        		'</tbody> </table>';
+    	        	
+    	        	
+    	        	
+    	        	tabs.add({
+    	                closable: true,
+    	                title: record.get('nome'),
+    	                padding: 10,
+    	                autoScroll: true,
+    	                items: [
+    	    	            {
+    	    	            	xtype: 'panel',
+    	    	            	title: 'Informações do Servidor de Aplicação',
+    	    	            	padding: 10,
+    	    	            	html: infoHtml            	
+    	    	            },
+    	    	            {
+    	    	            	xtype: 'alarmenolist',
+    	    	            	store: storeAlarmes,
+    	    	            	padding: 10    	    	            	
+    	    	            },
+    	    	            {
+    	    	            	xtype: 'servidorgraficos',
+    	    	            	padding: 10,
+    	    	            },
+    	                ]
+    	            }).show();
+    	        	        	
+    	        }
+    	        
+    	        tabs.setLoading(false);
+    	    }
+    	});
+    	
+
+    	
+    	
+    	
+    },
+    
+    
     geraTabServidor: function(tabs, record){
-    	
-    	
+    
     	tabs.setLoading(true);
     		
     	MONITOR.model.Servidor.load(record.get('id'),{
@@ -198,9 +317,6 @@ Ext.define('MONITOR.controller.NoController', {
     	
     	
     },
-    
-    
-    
     
 
     updateNo: function(button){

@@ -61,8 +61,6 @@ public class SQLServerColeta {
 	
 	public void initColeta(){
 			
-		Boolean ultimoStatus = this.sqlserver.getDisponivel();
-		
 			try{
 				
 				this.connect();
@@ -117,7 +115,11 @@ public class SQLServerColeta {
 				e.printStackTrace();
 				this.sqlserver.setGerenciavel(false);
 			}finally{
-				this.alarmeBO.geraAlarmeIndsiponibilidade(this.sqlserver, ultimoStatus);
+				
+				if(!this.sqlserver.getGerenciavel() && ultimoGerenciavel){
+					this.alarmeBO.geraAlarmeNaoGerenciavel(this.sqlserver, ultimoGerenciavel);
+				}
+				
 				this.bancoDadosBO.salvaBanco(this.sqlserver);
 			}
 		

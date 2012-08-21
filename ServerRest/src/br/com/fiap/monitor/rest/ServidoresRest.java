@@ -46,9 +46,6 @@ public class ServidoresRest {
 		servidor.setMemoria(memoria);
 		servidor.setProcessador(processador);
 		servidor.setParticoes(particoes);
-				
-		JSONObject json = new JSONObject();
-		json.put("servidor", servidor);
 		
 		return servidor;
 		
