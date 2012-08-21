@@ -9,6 +9,7 @@ Ext.define('MONITOR.controller.NoController', {
     	'no.Edit',
     	'servidor.ListParticoes',
     	'servidor.ListGraficos',
+    	'servidorAplicacao.ListDeployments',
     	'alarme.ListAlarmesNo',
     	'login.MainTab'
     
@@ -16,7 +17,8 @@ Ext.define('MONITOR.controller.NoController', {
     stores: [
     	'Nos',
     	'Servidores',
-    	'Alarmes'
+    	'Alarmes',
+    	'ServidorAplicacaoDeployments'
     ],
     models: [
     	'No',
@@ -27,7 +29,8 @@ Ext.define('MONITOR.controller.NoController', {
     	'Processador',
     	'Particao',
     	'Alarme',
-    	'TipoAlarme'
+    	'TipoAlarme',
+    	'ServidorAplicacaoDeployment'
     	
     ],
     init: function() {
@@ -71,8 +74,9 @@ Ext.define('MONITOR.controller.NoController', {
     	        
     	        	var uptime = "--";
     	        	var startTime = "--";
-    	        	var storeAlarmes = Ext.create('MONITOR.store.Alarmes');
     	        	
+    	        	//Store de alarmes
+    	        	var storeAlarmes = Ext.create('MONITOR.store.Alarmes');       	
     	        	storeAlarmes.load({
     	        		params: {
     	        			id: sa.get('id'),
@@ -87,6 +91,14 @@ Ext.define('MONITOR.controller.NoController', {
     	                };
 
     	            });
+    	        	
+    	        	//Store de deployments
+    	        	var storeDeployments = Ext.create('MONITOR.store.ServidorAplicacaoDeployments');
+    	        	storeDeployments.load({
+    	        		params: {
+    	        			id: sa.get('id'),
+    	        		}
+    	        	});
     	        	
     	        	var strStatus = "";
     	        	
@@ -107,7 +119,7 @@ Ext.define('MONITOR.controller.NoController', {
     	        	}
     	        	
     	        	if(sa.get('tipoServidorAplicacao') != null){
-    	        		sa.get('tipoServidorAplicacao')
+    	        		sa.get('tipoServidorAplicacao');
     	        	}
     	        	
     	        	
@@ -152,6 +164,11 @@ Ext.define('MONITOR.controller.NoController', {
     	    	            	title: 'Informações do Servidor de Aplicação',
     	    	            	padding: 10,
     	    	            	html: infoHtml            	
+    	    	            },
+    	    	            {
+    	    	            	xtype: 'listdeployments',
+    	    	            	store: storeDeployments,
+    	    	            	padding: 10    	    	            	
     	    	            },
     	    	            {
     	    	            	xtype: 'alarmenolist',
