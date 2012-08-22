@@ -2,8 +2,14 @@ package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import br.com.fiap.coleta.entities.enumerators.TipoMemoriaServidorAplicacao;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ServidorAplicacaoMemoria implements Serializable{
 		
 	private static final long serialVersionUID = -4848871582739761986L;

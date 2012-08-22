@@ -11,6 +11,9 @@ public class BancoDadosThreshold implements Serializable {
 	private String nome;
 	private BigDecimal limiteMemoria;
 	private BigDecimal limiteFile;
+	private Long limiteTempoBackup;
+	private Long limiteTempoJob;
+	
 	
 	public Integer getId() {
 		return id;
@@ -30,7 +33,18 @@ public class BancoDadosThreshold implements Serializable {
 	public void setLimiteMemoria(BigDecimal limiteMemoria) {
 		this.limiteMemoria = limiteMemoria;
 	}
-	
+	public Long getLimiteTempoBackup() {
+		return limiteTempoBackup;
+	}
+	public void setLimiteTempoBackup(Long limiteTempoBackup) {
+		this.limiteTempoBackup = limiteTempoBackup;
+	}
+	public Long getLimiteTempoJob() {
+		return limiteTempoJob;
+	}
+	public void setLimiteTempoJob(Long limiteTempoJob) {
+		this.limiteTempoJob = limiteTempoJob;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

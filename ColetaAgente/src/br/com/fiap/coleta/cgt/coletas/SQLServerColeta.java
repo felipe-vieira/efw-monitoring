@@ -187,7 +187,6 @@ public class SQLServerColeta {
 								
 								if(strStatus.equals("SUCCEEDED")){
 									coleta.setStatus(2);
-									//Não guarda a mensagem se for succeeded
 									coleta.setSqlMsg(null);
 								}else if(strStatus.equals("FAILED")){
 									coleta.setStatus(0);
@@ -195,6 +194,8 @@ public class SQLServerColeta {
 									coleta.setStatus(1);
 								}
 								
+								this.alarmeBO.geraAlarmesJobs(this.sqlserver,coleta,strStatus);
+		
 								jobsColeta.add(coleta);
 							
 							}
@@ -240,7 +241,7 @@ public class SQLServerColeta {
 							filesColeta.add(coleta);
 							
 							alarmeBO.geraAlarmeFileBancoDados(this.sqlserver,coleta);
-							
+								
 						}						
 					}
 				}				
@@ -484,9 +485,14 @@ public class SQLServerColeta {
 			
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get mssql.status " + this.sqlserver.getDatabase()));
 			if(json == null){
-				this.sqlserver.setGerenciavel(false);
+				this.sqlserver.setGerenciavel(false);				
+				
 			}else{
+				String ultimoStatusBanco = this.sqlserver.getStatus();
+				
 				this.sqlserver.setStatus(json.getString("Status"));
+				
+				this.alarmeBO.geraAlarmeStatus(this.sqlserver,ultimoStatusBanco);
 			}
 								
 		}catch(IOException ex){

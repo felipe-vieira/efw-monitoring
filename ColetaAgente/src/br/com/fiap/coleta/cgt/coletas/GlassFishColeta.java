@@ -163,7 +163,6 @@ public class GlassFishColeta {
 					this.indisp.setInicio(this.dataColeta);
 				}
 				
-				this.alarmeBO.geraAlarmeIndsiponibilidade(this.glassfish, ultimoStatus);
 				
 			} else if (this.glassfish.getDisponivel() && this.indisp !=null && !ultimoStatus){
 				this.indisp.setFim(this.dataColeta);
@@ -174,6 +173,8 @@ public class GlassFishColeta {
 			}
 			
 		}
+		
+		this.alarmeBO.geraAlarmeIndsiponibilidade(this.glassfish, ultimoStatus);
 		
 		return result;		
 	}

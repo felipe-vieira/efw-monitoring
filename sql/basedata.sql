@@ -17,6 +17,8 @@ INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(11,'Thre
 
 /* Alarmes de banco de dados */
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(12,'Threshold File Max Size', 'O arquivo ? atingiu o limite estabelecido',1,'%');
-INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(13,'Threshold Memoria BD', 'O uso de memoria atingiu o limite estabelecido',1,'%');
-INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(14,'Status do Job','O job ? foi concluido com o status ?.',1,'%');
-INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(15,'Tempo Backup','O tempo sem backup atingiu o tempo excedido',1,'%');
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(13,'Threshold Memoria BD', 'O uso de memoria do BD atingiu o limite estabelecido',1,'%');
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold) VALUES(14,'Status do Job','O job ? foi concluido com o status ?.',0);
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(15,'Tempo de Backup','O tempo desde o ultimo backup excedeu o tempo limite estabelecido',1,'s');
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold) VALUES(16,'Status do BD','O status do BD de dados foi alterado para: ?',1,'0');
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(17,'Tempo de Execução do Job','O tempo de execução do job ? excedeu o limite estabelecido',1,'s');

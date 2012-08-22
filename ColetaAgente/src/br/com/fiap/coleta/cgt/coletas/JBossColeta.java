@@ -165,7 +165,6 @@ public class JBossColeta {
 					this.indisp.setInicio(this.dataColeta);
 				}
 				
-				this.alarmeBO.geraAlarmeIndsiponibilidade(this.jboss, ultimoStatus);
 				
 			} else if (this.jboss.getDisponivel() && this.indisp !=null && !ultimoStatus){
 				this.indisp.setFim(this.dataColeta);
@@ -176,6 +175,8 @@ public class JBossColeta {
 			}
 			
 		}
+		
+		this.alarmeBO.geraAlarmeIndsiponibilidade(this.jboss, ultimoStatus);
 		
 		return result;		
 	}

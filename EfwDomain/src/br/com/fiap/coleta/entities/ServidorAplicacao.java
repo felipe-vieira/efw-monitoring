@@ -20,7 +20,6 @@ public class ServidorAplicacao extends No implements Serializable{
 	private ServidorAplicacaoThreshold threshold;
 	private String tipoServidorAplicacao;
 	
-	
 	public Integer getPort() {
 		return port;
 	}
@@ -62,8 +61,5 @@ public class ServidorAplicacao extends No implements Serializable{
 	public void setTipoServidorAplicacao(String tipoServidorAplicacao) {
 		this.tipoServidorAplicacao = tipoServidorAplicacao;
 	}
-		
-	
-	
 	
 }

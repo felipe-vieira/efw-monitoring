@@ -10,6 +10,7 @@ import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
+import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;
 import br.com.fiap.monitor.dao.GenericDAO;
 
 public class ServidorAplicacaoBO {
@@ -45,6 +46,23 @@ public class ServidorAplicacaoBO {
 			List<ServidorAplicacaoDeployment> deployments = (List<ServidorAplicacaoDeployment>) q.list();
 			t.commit();
 			return deployments;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	public List<ServidorAplicacaoMemoria> getConfigMemorias(Integer id) {
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query q =session.createQuery("FROM ServidorAplicacaoMemoria WHERE servidorAplicacao.id = :id");
+			q.setInteger("id", id);
+			List<ServidorAplicacaoMemoria> memorias = (List<ServidorAplicacaoMemoria>) q.list();
+			t.commit();
+			return memorias;
 		}catch(Exception ex){
 			ex.printStackTrace();
 			t.rollback();

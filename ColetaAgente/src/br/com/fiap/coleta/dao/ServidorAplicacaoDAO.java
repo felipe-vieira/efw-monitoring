@@ -38,7 +38,7 @@ public class ServidorAplicacaoDAO {
 		
 	}
 	
-	public List<ServidorAplicacaoDeployment> getDeploymentsServidor(ServidorAplicacao servidor) {
+	public List<ServidorAplicacaoDeployment> getDeploymentsServidor(ServidorAplicacao sa) {
 		
 		List<ServidorAplicacaoDeployment> retorno = null;
 		
@@ -47,8 +47,30 @@ public class ServidorAplicacaoDAO {
 		
 		try{
 			Query query = session.createQuery("FROM ServidorAplicacaoDeployment where servidorAplicacao.id = :id");
-			query.setLong("id", servidor.getId());
+			query.setLong("id", sa.getId());
 			retorno = (List<ServidorAplicacaoDeployment>) query.list();
+			t.commit();
+			
+			return retorno;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public List<ServidorAplicacaoMemoria> getConfigMemorias(ServidorAplicacao sa) {
+		
+		List<ServidorAplicacaoMemoria> retorno = null;
+		
+		Session session = DBUtil.getCurrentSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("FROM ServidorAplicacaoMemoria where servidorAplicacao.id = :id");
+			query.setLong("id", sa.getId());
+			retorno = (List<ServidorAplicacaoMemoria>) query.list();
 			t.commit();
 			
 			return retorno;

@@ -18,7 +18,8 @@ Ext.define('MONITOR.controller.NoController', {
     	'Nos',
     	'Servidores',
     	'Alarmes',
-    	'ServidorAplicacaoDeployments'
+    	'ServidorAplicacaoDeployments',
+    	'ServidorAplicacaoMemorias'
     ],
     models: [
     	'No',
@@ -30,12 +31,11 @@ Ext.define('MONITOR.controller.NoController', {
     	'Particao',
     	'Alarme',
     	'TipoAlarme',
-    	'ServidorAplicacaoDeployment'
-    	
+    	'ServidorAplicacaoDeployment',
+    	'ServidorAplicacaoMemoria'   	
     ],
+    
     init: function() {
-    		
-    	
         this.control({
         	'nolist' : {
         		itemdblclick: this.addTabNo
@@ -104,10 +104,10 @@ Ext.define('MONITOR.controller.NoController', {
     	        	
     	        	if(sa.get('disponivel') == true){
     	        		strStatus += "Disponível";
-    	        	}else{
-    	        		strStatus += "Não Disponível";
     	        		startTime = MONITOR.utils.DateUtils.toStringPtBr(sa.get('startTime')); 
     	        		uptime = MONITOR.utils.DateUtils.secsToTime(sa.get('uptime'));
+    	        	}else{
+    	        		strStatus += "Não Disponível";
     	        	}
     	        	
     	        	strStatus += " / ";

@@ -12,9 +12,9 @@ import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.BancoDadosThreshold;
 import br.com.fiap.coleta.entities.BancoFileColeta;
+import br.com.fiap.coleta.entities.BancoJobColeta;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Particao;
-import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
@@ -244,6 +244,47 @@ public class AlarmeBO {
 			}
 			
 		}
+	}
+
+	public void geraAlarmeStatus(BancoDados bd, String ultimoStatusBanco) {
+		if(!bd.getStatus().equals("ONLINE") && !bd.getStatus().equals("ultimoStatusBanco") ){
+			Alarme alarme = new Alarme();
+			alarme.setData(new Date());
+			alarme.setTipo(tipos.get(16));
+			alarme.setNo(bd);
+			alarme.setParametro(bd.getStatus());
+			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
+		}
+	}
+
+	public void geraAlarmesJobs(BancoDados bd, BancoJobColeta coleta,
+			String strStatus) {
+
+		if(coleta.getStatus() != 2){
+			Alarme alarme = new Alarme();
+			alarme.setData(new Date());
+			alarme.setTipo(tipos.get(14));
+			alarme.setNo(bd);
+			alarme.setParametro(coleta.getBancoJob().getJobName()+";"+strStatus);
+			alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+		}
+		
+		if(bd.getThreshold() != null){
+			if(coleta.getExecutionTime() > bd.getThreshold().getLimiteTempoJob()){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(17));
+				alarme.setNo(bd);
+				alarme.setParametro(coleta.getBancoJob().getJobName());
+				alarme.setValor(new BigDecimal(coleta.getExecutionTime().doubleValue()));
+				alarme.setValorLimite(new BigDecimal(bd.getThreshold().getLimiteTempoJob().doubleValue()));
+				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+			}
+		}
+	}
+	
+	public void geraAlarmeUltimoBackup(BancoDados bd){
+		
 	}
 	
 	
