@@ -9,6 +9,7 @@ import java.util.Set;
 
 import br.com.fiap.coleta.dao.ColetaDAO;
 import br.com.fiap.coleta.entities.Alarme;
+import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.BancoDadosThreshold;
 import br.com.fiap.coleta.entities.BancoFileColeta;
@@ -269,7 +270,7 @@ public class AlarmeBO {
 			alarme.setCriticidade(CriticidadeAlarme.ALERTA);
 		}
 		
-		if(bd.getThreshold() != null){
+		if(bd.getThreshold() != null && bd.getThreshold().getLimiteTempoJob() != null){
 			if(coleta.getExecutionTime() > bd.getThreshold().getLimiteTempoJob()){
 				Alarme alarme = new Alarme();
 				alarme.setData(new Date());
@@ -283,7 +284,25 @@ public class AlarmeBO {
 		}
 	}
 	
-	public void geraAlarmeUltimoBackup(BancoDados bd){
+	public void geraAlarmeUltimoBackup(BancoDados bd, BancoBackup ultimoBackup){
+		BancoDadosThreshold threshold = bd.getThreshold();
+		
+		if(threshold != null && threshold.getLimiteTempoBackup() != null){
+			Long secsUltimo = ultimoBackup.getBackupStartDate().getTime()/1000;
+			Long secsNow = new Date().getTime()/1000;
+			Long diff = secsNow - secsUltimo;
+			
+			if(diff > threshold.getLimiteTempoBackup()){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(15));
+				alarme.setNo(bd);
+				alarme.setValor(new BigDecimal(diff.doubleValue()));
+				alarme.setValorLimite(new BigDecimal(threshold.getLimiteTempoBackup().doubleValue()));
+				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+			}
+			
+		}
 		
 	}
 	

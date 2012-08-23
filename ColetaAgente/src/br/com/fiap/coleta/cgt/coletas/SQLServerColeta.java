@@ -60,68 +60,73 @@ public class SQLServerColeta {
 	}
 	
 	public void initColeta(){
-			
-			try{
-				
-				this.connect();
-				
-				if(this.sqlserver.getDisponivel()){
-					socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getAgentPort());
-					
-					//Abre o socket
-					socket.openSocket();
-					//Pega a data atual
-					this.dataColeta = new Date();		
-					
-					//Atualiza os itens de configuração
-					this.getConfigMemory();
-					this.getConfigCollation();
-					this.getConfigVersion();
-					this.getStatus();
-					
-					files = this.getConfigFiles();
-					backups = this.getConfigBackup();
-					jobs = this.getConfigJobHistory(); 
-					
-					
-					//Salva os itens de configuração.
-					this.bancoDadosBO.salvaConfigFiles(files);
-					this.bancoDadosBO.salvaConfigBackups(backups);
-					this.bancoDadosBO.salvaConfigJobs(jobs);
-					
-					//Pega os jobs e files com IDs, necessários para as coletas.
-					jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
-					files = this.bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
-					
-					//Realiza as coletas
-					BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
-					List<BancoFileColeta> filesColeta = this.getFilesColeta();
-					List<BancoJobColeta> jobsColeta = this.getJobsColeta();
-					
-					//Fecha o socket
-					socket.close();
+		
 	
-					//Persiste tudo
-					this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
-					this.bancoDadosBO.salvaColetasFiles(filesColeta);
-					this.bancoDadosBO.salvaColetasJobs(jobsColeta);
-					
-					this.sqlserver.setUltimaColeta(this.dataColeta);
-				}
-			}catch (IOException e) {
-				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
-				this.sqlserver.setGerenciavel(false);
-			}catch (Exception e){
-				e.printStackTrace();
-				this.sqlserver.setGerenciavel(false);
-			}finally{
+		try{
+			
+			this.connect();
+			
+			if(this.sqlserver.getDisponivel()){
+				socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getAgentPort());
 				
-				if(!this.sqlserver.getGerenciavel() && ultimoGerenciavel){
-					this.alarmeBO.geraAlarmeNaoGerenciavel(this.sqlserver, ultimoGerenciavel);
-				}
+				//Abre o socket
+				socket.openSocket();
+				//Pega a data atual
+				this.dataColeta = new Date();		
 				
-				this.bancoDadosBO.salvaBanco(this.sqlserver);
+				//Atualiza os itens de configuração
+				this.getConfigMemory();
+				this.getConfigCollation();
+				this.getConfigVersion();
+				this.getStatus();
+				
+				files = this.getConfigFiles();
+				backups = this.getConfigBackup();
+				jobs = this.getConfigJobHistory(); 
+				
+				
+				//Salva os itens de configuração.
+				this.bancoDadosBO.salvaConfigFiles(files);
+				this.bancoDadosBO.salvaConfigBackups(backups);
+				this.bancoDadosBO.salvaConfigJobs(jobs);
+				
+				//Pega os jobs e files com IDs, necessários para as coletas.
+				jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
+				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
+				
+				//Realiza as coletas
+				BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
+				List<BancoFileColeta> filesColeta = this.getFilesColeta();
+				List<BancoJobColeta> jobsColeta = this.getJobsColeta();
+				
+				//Fecha o socket
+				socket.close();
+
+				//Persiste tudo
+				this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
+				this.bancoDadosBO.salvaColetasFiles(filesColeta);
+				this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+				
+				this.sqlserver.setUltimaColeta(this.dataColeta);
+				
 			}
+		}catch (IOException e) {
+			System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
+			this.sqlserver.setGerenciavel(false);
+		}catch (Exception e){
+			e.printStackTrace();
+			this.sqlserver.setGerenciavel(false);
+		}finally{
+			
+			BancoBackup ultimoBackup = this.bancoDadosBO.pegaUltimoBackup(this.sqlserver);
+			this.alarmeBO.geraAlarmeUltimoBackup(this.sqlserver,ultimoBackup);
+			
+			if(!this.sqlserver.getGerenciavel() && ultimoGerenciavel){
+				this.alarmeBO.geraAlarmeNaoGerenciavel(this.sqlserver, ultimoGerenciavel);
+			}
+			
+			this.bancoDadosBO.salvaBanco(this.sqlserver);
+		}
 		
 	}
 	
@@ -145,8 +150,6 @@ public class SQLServerColeta {
 		if(!this.sqlserver.getGerenciavel() && this.ultimoStatus){
 			this.alarmeBO.geraAlarmeIndsiponibilidade(this.sqlserver, this.ultimoStatus);
 		}
-
-		
 		
 	}
 	

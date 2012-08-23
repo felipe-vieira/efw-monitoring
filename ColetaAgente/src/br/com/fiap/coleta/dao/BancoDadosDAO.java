@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoJob;
@@ -105,7 +106,27 @@ public class BancoDadosDAO {
 		}
 		
 	}
-	
-	
 
+	public BancoBackup pegaUltimoBackup(BancoDados bd) {
+		Session session = DBUtil.getCurrentSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("FROM BancoBackup where id = (SELECT max(id) FROM BancoBackup where bancoDados.id = :id)");
+			query.setLong("id", bd.getId());
+			
+			BancoBackup coleta = (BancoBackup) query.uniqueResult(); 
+			t.commit();
+			
+			return coleta;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+		
+	}
+	
 }

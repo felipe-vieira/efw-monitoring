@@ -97,6 +97,8 @@ public class BancoDadosBO {
 		return this.bancoDadosDAO.pegaUltimoSetBackup(bd);		
 	}
 	
-
+	public BancoBackup pegaUltimoBackup(BancoDados bd){
+		return this.bancoDadosDAO.pegaUltimoBackup(bd);
+	}
 
 }

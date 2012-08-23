@@ -1,6 +1,7 @@
 package br.com.fiap.coleta.cgt.coletas;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.BancoDadosBO;
 import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoFile;
@@ -39,10 +41,20 @@ public class OracleColeta {
 	private List<BancoBackup> backups;
 	
 	private Map<String,BancoJob> jobs;
+
+	private AlarmeBO alarmeBO;
+
+	private Boolean ultimoStatus;
+
+	private Boolean ultimoGerenciavel;
 	
 	public OracleColeta(No no){
 		this.oracle = (Oracle) no;
 		this.bancoDadosBO = new BancoDadosBO();
+		this.alarmeBO = new AlarmeBO();
+		
+		this.ultimoStatus = this.oracle.getDisponivel();
+		this.ultimoGerenciavel = this.oracle.getGerenciavel();
 	}
 	
 	public void initColeta(){
@@ -50,46 +62,48 @@ public class OracleColeta {
 			socket = new SocketUtil(this.oracle.getHostname(), this.oracle.getAgentPort());
 			
 			try{
-				
-				
-				
-				//Abre o socket
-				socket.openSocket();
-				//Pega a data atual
-				this.dataColeta = new Date();		
-				
-				//Atualiza os itens de configuração
-				this.getConfigMemory();
-				this.getConfigCollation();
-				this.getConfigVersion();
-				this.getStatus();
-				
-				files = this.getConfigFiles();
-				backups = this.getConfigBackup();
-				jobs = this.getConfigJobHistory(); 
-				
-				
-				//Salva os itens de configuração.
-				this.bancoDadosBO.salvaConfigFiles(files);
-				this.bancoDadosBO.salvaConfigBackups(backups);
-				this.bancoDadosBO.salvaConfigJobs(jobs);
-				
-				//Pega os jobs e files com IDs, necessários para as coletas.
-				jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.oracle);
-				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
-				
-				//Realiza as coletas
-				BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
-				List<BancoFileColeta> filesColeta = this.getFilesColeta();
-				List<BancoJobColeta> jobsColeta = this.getJobsColeta();
-				
-				//Fecha o socket
-				socket.close();
 
-				//Persiste tudo
-				this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
-				this.bancoDadosBO.salvaColetasFiles(filesColeta);
-				this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+				this.connect();
+				
+				if(this.oracle.getDisponivel()){
+					//Abre o socket
+					socket.openSocket();
+					//Pega a data atual
+					this.dataColeta = new Date();		
+					
+					//Atualiza os itens de configuração
+					this.getConfigMemory();
+					this.getConfigCollation();
+					this.getConfigVersion();
+					this.getStatus();
+					
+					files = this.getConfigFiles();
+					backups = this.getConfigBackup();
+					jobs = this.getConfigJobHistory(); 
+					
+					
+					//Salva os itens de configuração.
+					this.bancoDadosBO.salvaConfigFiles(files);
+					this.bancoDadosBO.salvaConfigBackups(backups);
+					this.bancoDadosBO.salvaConfigJobs(jobs);
+					
+					//Pega os jobs e files com IDs, necessários para as coletas.
+					jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.oracle);
+					files = this.bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
+					
+					//Realiza as coletas
+					BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
+					List<BancoFileColeta> filesColeta = this.getFilesColeta();
+					List<BancoJobColeta> jobsColeta = this.getJobsColeta();
+					
+					//Fecha o socket
+					socket.close();
+	
+					//Persiste tudo
+					this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
+					this.bancoDadosBO.salvaColetasFiles(filesColeta);
+					this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+				}
 				
 			}catch (IOException e) {
 				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
@@ -98,12 +112,21 @@ public class OracleColeta {
 				e.printStackTrace();
 				this.oracle.setGerenciavel(false);
 			}finally{
+				
+				BancoBackup ultimoBackup = this.bancoDadosBO.pegaUltimoBackup(this.oracle);
+				this.alarmeBO.geraAlarmeUltimoBackup(this.oracle,ultimoBackup);
+				
+				if(!this.oracle.getGerenciavel() && ultimoGerenciavel){
+					this.alarmeBO.geraAlarmeNaoGerenciavel(this.oracle, ultimoGerenciavel);
+				}
+				
 				this.bancoDadosBO.salvaBanco(this.oracle);
 			}
+			
 		
 	}
 	
-	public void verificaDisponibilidade(){
+	public void connect(){
 		
 		String url = "jdbc:oracle:thin:@"+this.oracle.getHostname()+":"+this.oracle.getPort()+":"+this.oracle.getInstanceName();
 		String usuario = this.oracle.getUsuario();
@@ -119,7 +142,14 @@ public class OracleColeta {
 		}catch(SQLException ex){
 			ex.printStackTrace();
 			this.oracle.setDisponivel(false);
-		}		
+		}
+		
+		if(!this.oracle.getGerenciavel() && this.ultimoStatus){
+			this.alarmeBO.geraAlarmeIndsiponibilidade(this.oracle, this.ultimoStatus);
+		}
+		
+		
+		
 		
 	}
 	
@@ -168,6 +198,8 @@ public class OracleColeta {
 									coleta.setStatus(1);
 								}
 								
+								this.alarmeBO.geraAlarmesJobs(this.oracle,coleta,strStatus);
+								
 								jobsColeta.add(coleta);
 							
 							}
@@ -211,6 +243,8 @@ public class OracleColeta {
 							coleta.setDataColeta(this.dataColeta);
 							coleta.setSize(i.getLong("Size"));
 							filesColeta.add(coleta);
+							
+							alarmeBO.geraAlarmeFileBancoDados(this.oracle,coleta);
 						}						
 					}
 				}				
@@ -237,6 +271,11 @@ public class OracleColeta {
 				coleta = new BancoMemoriaColeta(this.oracle);
 				coleta.setDataColeta(this.dataColeta);
 				coleta.setMemory(json.getLong("totalMemory"));
+				
+				BigDecimal utilizacao = new BigDecimal((coleta.getMemory().doubleValue()/this.oracle.getTargetServerMemory()) * 100);
+				
+				this.alarmeBO.geraAlarmeMemoriaBancoDados(this.oracle, utilizacao);
+
 			}
 			
 		}catch(IOException ex){
@@ -445,7 +484,12 @@ public class OracleColeta {
 			if(json == null){
 				this.oracle.setGerenciavel(false);
 			}else{
+				String ultimoStatusBanco = this.oracle.getStatus();
+				
 				this.oracle.setStatus(json.getString("Status"));
+				
+				this.alarmeBO.geraAlarmeStatus(this.oracle,ultimoStatusBanco);
+
 			}
 								
 		}catch(IOException ex){
