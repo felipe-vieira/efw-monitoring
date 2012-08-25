@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.No;
-import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;

@@ -1,16 +1,18 @@
-Ext.define('MONITOR.model.ServidorAplicacaoDeployment', {
+Ext.define('MONITOR.model.ServidorAplicacaoMemoria', {
 	extend: 'Ext.data.Model',
     fields: [
              {name: 'id',	type: 'int'},
-             {name: 'nome',	type: 'string'}         
+             {name: 'init',	type: 'int'},
+             {name: 'max',  type: 'int'},
+             {name: 'tipo', type: 'string'}
     ],
     
     proxy: {
 		type: 'rest',
-		url: 'rest/deployments/',
+		url: 'rest/saConfigMemory/',
         reader: {
             type: 'json',
-            root: 'servidorAplicacaoDeployment'
+            root: 'servidorAplicacaoMemoria'
         },
 		writer: {
 			type: 'json',

@@ -2,7 +2,12 @@ package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BancoDados extends No implements Serializable{
 	
 	private static final long serialVersionUID = -4029595958441788034L;
@@ -26,6 +31,7 @@ public class BancoDados extends No implements Serializable{
 	
 	private BancoDadosThreshold threshold;
 	
+	private String tipoBancoDados;
 
 	public String getUsuario() {
 		return usuario;
@@ -97,6 +103,14 @@ public class BancoDados extends No implements Serializable{
 
 	public void setThreshold(BancoDadosThreshold threshold) {
 		this.threshold = threshold;
+	}
+
+	public String getTipoBancoDados() {
+		return tipoBancoDados;
+	}
+
+	public void setTipoBancoDados(String tipoBancoDados) {
+		this.tipoBancoDados = tipoBancoDados;
 	}
 	
 	

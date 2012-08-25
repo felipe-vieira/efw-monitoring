@@ -26,8 +26,8 @@ public class NoBO {
 
 	public void saveOrUpdateNo(No no) {
 		this.noDao.saveOrUpdateNo(no);
-		
 	}
+	
 
 	
 	

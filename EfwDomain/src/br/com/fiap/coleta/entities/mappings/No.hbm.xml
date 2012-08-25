@@ -58,6 +58,7 @@
 				<column name="status" sql-type="varchar(30)"/>
 			</property>
 			<property name = "collation" column="collation"/>
+			<many-to-one name="threshold" lazy="false"/>
 			
 			<joined-subclass name="br.com.fiap.coleta.entities.SQLServer" table="sql_server">
 				<key column="no_id"/>

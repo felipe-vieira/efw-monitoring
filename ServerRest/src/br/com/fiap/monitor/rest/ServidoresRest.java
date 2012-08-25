@@ -9,8 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import net.sf.json.JSONObject;
-
 import br.com.fiap.coleta.entities.Memoria;
 import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Processador;

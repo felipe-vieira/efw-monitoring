@@ -5,7 +5,7 @@ Ext.define('MONITOR.store.ServidorAplicacaoMemorias', {
 
     proxy: {
         type: 'rest',
-        url: 'rest/saConfigMemoria/',
+		url: 'rest/saConfigMemory/',
         reader: {
             type: 'json',
             root: 'servidorAplicacaoMemoria'

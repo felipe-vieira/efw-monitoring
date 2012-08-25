@@ -10,6 +10,7 @@ Ext.define('MONITOR.controller.NoController', {
     	'servidor.ListParticoes',
     	'servidor.ListGraficos',
     	'servidorAplicacao.ListDeployments',
+    	'servidorAplicacao.ListMemorias',
     	'alarme.ListAlarmesNo',
     	'login.MainTab'
     
@@ -22,17 +23,28 @@ Ext.define('MONITOR.controller.NoController', {
     	'ServidorAplicacaoMemorias'
     ],
     models: [
+    	
     	'No',
+    	
+    	//Servidor
     	'Servidor',
-    	'ServidorAplicacao',
     	'SistemaOperacional',
     	'Memoria',
     	'Processador',
     	'Particao',
-    	'Alarme',
-    	'TipoAlarme',
+    	
+    	//Servidor Aplicacao
+    	'ServidorAplicacao',
     	'ServidorAplicacaoDeployment',
-    	'ServidorAplicacaoMemoria'   	
+    	'ServidorAplicacaoMemoria',
+    	
+    	//Banco de Dados
+    	'BancoDados',
+
+    	//Alarme
+    	'Alarme',
+    	'TipoAlarme'
+   	
     ],
     
     init: function() {
@@ -57,7 +69,7 @@ Ext.define('MONITOR.controller.NoController', {
     	}else if (tipo == "Servidor de Aplicacao"){
     		this.geraTabServidorAplicacao(tabs,record);
     	}else if (tipo == "Banco de Dados"){
-    		//geraTabBancoDados(tabs,record);
+    		this.geraTabBancoDados(tabs,record);
     	}
     	
     },
@@ -96,11 +108,19 @@ Ext.define('MONITOR.controller.NoController', {
     	        	var storeDeployments = Ext.create('MONITOR.store.ServidorAplicacaoDeployments');
     	        	storeDeployments.load({
     	        		params: {
-    	        			id: sa.get('id'),
+    	        			id: sa.get('id')
     	        		}
     	        	});
     	        	
     	        	var strStatus = "";
+    	        	
+    	        	//Store de memorias
+    	        	var storeMemorias = Ext.create('MONITOR.store.ServidorAplicacaoMemorias');
+    	        	storeMemorias.load({
+    	        		params: {
+    	        			id: sa.get('id')
+    	        		}
+    	        	});
     	        	
     	        	if(sa.get('disponivel') == true){
     	        		strStatus += "Disponível";
@@ -171,6 +191,11 @@ Ext.define('MONITOR.controller.NoController', {
     	    	            	padding: 10    	    	            	
     	    	            },
     	    	            {
+    	    	            	xtype: 'listsamemorias',
+    	    	            	store: storeMemorias,
+    	    	            	padding: 10
+    	    	            },
+    	    	            {
     	    	            	xtype: 'alarmenolist',
     	    	            	store: storeAlarmes,
     	    	            	padding: 10    	    	            	
@@ -193,7 +218,6 @@ Ext.define('MONITOR.controller.NoController', {
     	
     	
     },
-    
     
     geraTabServidor: function(tabs, record){
     
@@ -328,11 +352,112 @@ Ext.define('MONITOR.controller.NoController', {
     	        tabs.setLoading(false);
     	    }
     	});
-    	
+    },
 
-    	
-    	
-    	
+    geraTabBancoDados: function(tabs, record){
+        
+    	tabs.setLoading(true);
+    		
+    	MONITOR.model.BancoDados.load(record.get('id'),{
+    		success: function (bd){
+    	    	
+    	        if(bd != null){
+    	        
+    	        	var msgPatch = "";
+    	        	var processadorMsg = "";
+    	        	var storeAlarmes = Ext.create('MONITOR.store.Alarmes');
+    	        	
+    	        	//Store de alarmes
+    	        	storeAlarmes.load({
+    	        		params: {
+    	        			id: bd.get('id'),
+    	        			start: 0,
+    	        			limit: 10	
+    	        		}
+    	        	});
+    	        	
+    	        	storeAlarmes.on('beforeload',function(store, operation,eOpts){
+    	                operation.params={
+    	                		id: bd.get('id')
+    	                };
+
+    	            });
+    	        	
+    	        	var strStatus = "";
+    	        	
+    	        	if(bd.get('disponivel') == true){
+    	        		strStatus += "Disponível";
+    	        	}else{
+    	        		strStatus += "Não Disponível";
+    	        	}
+    	        	
+    	        	strStatus += " / ";
+    	        	
+    	        	if(bd.get('gerenciavel') == true){
+    	        		strStatus += "Gerenciavel";
+    	        	}else{
+    	        		strStatus += "Não Gerenciavel";
+    	        	}
+    	        	
+    	        	var infoHtml =
+    	        		'<table class="tabelaInfo"> <tbody>'+
+    	        			'<tr>'+
+    	        				'<td class="titulo">Nome:</td>' + 
+    	        				'<td>'+ bd.get('nome') + '</td>' +
+    	        				'<td class="titulo">Hostname:</td>' + 
+    	        				'<td>'+ bd.get('hostname') + '</td>' +
+    	        			'</tr>'+
+    	        			'<tr>'+
+	        					'<td class="titulo">Status:</td>' + 
+	        					'<td>'+ strStatus + '</td>' +
+	        					'<td class="titulo">Ultima coleta:</td>' + 
+	        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(bd.get('ultimaColeta')) + '</td>' +
+	        				'</tr>'+
+    	        			'<tr>'+
+        					'<td class="titulo">Tipo:</td>' + 
+        						'<td>'+ bd.get('tipoBancoDados') + '</td>' +
+        						'<td class="titulo">Porta:</td>' + 
+        						'<td>'+ bd.get('port') + '</td>' +
+        					'</tr>'+
+        					'<td class="titulo">Versão:</td>' + 
+        						'<td>'+ bd.get('version') + '</td>' +
+        						'<td class="titulo">Edição:</td>' + 
+        						'<td>'+ bd.get('edition') + '</td>' +
+        					'</tr>'+
+        						'<td class="titulo">Collation:</td>' + 
+        						'<td>'+ bd.get('collation') + '</td>' +
+        						'<td class="titulo">Status:</td>' + 
+        						'<td>'+ bd.get('status') + '</td>' +
+    					'</tr>'+
+    	        		'</tbody> </table>';
+    	        	
+    	        	
+    	        	
+    	        	tabs.add({
+    	                closable: true,
+    	                title: record.get('nome'),
+    	                padding: 10,
+    	                autoScroll: true,
+    	                items: [
+    	    	            {
+    	    	            	xtype: 'panel',
+    	    	            	title: 'Informações do Banco de Dados',
+    	    	            	padding: 10,
+    	    	            	html: infoHtml            	
+    	    	            },
+    	    	            {
+    	    	            	xtype: 'alarmenolist',
+    	    	            	store: storeAlarmes,
+    	    	            	padding: 10    	    	            	
+    	    	            },
+    	                ]
+    	            }).show();
+    	        	        	
+    	        }
+    	        
+    	        tabs.setLoading(false);
+    	    }
+    	});
     },
     
 

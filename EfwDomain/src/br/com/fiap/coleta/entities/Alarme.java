@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
-
 import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
 import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
 

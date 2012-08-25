@@ -1,7 +1,5 @@
 package br.com.fiap.coleta.dao;
 
-import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
