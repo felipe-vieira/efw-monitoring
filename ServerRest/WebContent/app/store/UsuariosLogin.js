@@ -1,12 +1,9 @@
-Ext.define('MONITOR.store.Usuarios', {
+Ext.define('MONITOR.store.UsuariosLogin', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.Usuario',
-    pageSize: 25,
-    autoLoad: true,
-    autoSync: true,
     proxy: {
         type: 'rest',
-        url: 'rest/usuarios/',
+        url: 'rest/usuariosLogin/',
         reader: {
             type: 'json',
             root: 'usuario'

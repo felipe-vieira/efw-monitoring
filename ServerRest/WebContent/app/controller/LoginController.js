@@ -7,7 +7,7 @@ Ext.define('MONITOR.controller.LoginController', {
     	'login.MainMenu'
     ],
     stores: [
-    	'Usuarios'
+    	'UsuariosLogin'
     ],
     models: [
     	'Usuario'
@@ -30,7 +30,7 @@ Ext.define('MONITOR.controller.LoginController', {
     	var form = win.down('form');
     	var values = form.getValues();
     	
-    	var store = this.getUsuariosStore();
+    	var store = this.getUsuariosLoginStore();
     	
     	store.load({
     	    params: {

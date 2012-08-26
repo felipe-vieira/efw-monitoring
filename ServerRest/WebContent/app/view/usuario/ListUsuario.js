@@ -1,0 +1,71 @@
+Ext.define('MONITOR.view.usuario.ListUsuario', {
+    extend: 'Ext.panel.Panel',
+    xtype: 'usuariolist',
+    padding: 10,
+    border: 0,
+    initComponent: function(){
+    	
+    	this.items = [
+    	    {
+    	    	xtype: 'panel',
+    	    	html: "<h1>Cadastro de Usuários</h1><hr/>",
+    	    	border: 0
+    	    },
+    	    
+    	    {
+    	    	xtype: 'grid',
+    	    	store: 'Usuarios',
+    	    	columns: [
+    	    	   {text: 'Login', dataIndex: 'login', columnWidth:'50%'},
+    	    	   {text: 'Administrador', dataIndex: 'administrador', columnWidth:'50%',
+    	    	       renderer: function(val){
+    	    	    	   console.log(val);
+    	    	    	   if(val == "true"){
+    	    	    		   return "Sim";
+    	    	    	   }else{
+    	    	    		   return "Não";
+    	    	    	   }
+    	    	       }
+    	    	   }
+    	    	],
+    	    	dockedItems : [
+    	    	    {
+    	    	    	xtype: 'toolbar',
+    	    	        dock: 'top',
+    	    	        items:
+    	    	        [
+    	    	            {
+    	    	        	    text: 'Novo',
+    	    	        	    action: 'create'
+	                        },
+	                        '-',
+	                        {
+    	    	        	    text: 'Editar',
+    	    	        	    action: 'edit',
+	                        },
+	                        '-',
+	                        {
+    	    	        	    text: 'Excluir',
+	                    	    action: 'delete'
+	                        },
+    	    	        ]
+    	    	    },
+    	    	    
+    	    	    {
+    	    	    	xtype: 'pagingtoolbar',
+    	    	    	dock: 'bottom',
+    	    	    	displayInfo: true,
+    	    	    	store: 'Usuarios'
+    	    		}
+    	    	]
+    	    
+    	    },
+    	    
+    	    
+    	    
+    	];
+    		
+    	
+    	this.callParent(arguments);
+    }
+});
