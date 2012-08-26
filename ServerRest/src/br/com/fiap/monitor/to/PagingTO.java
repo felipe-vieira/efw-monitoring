@@ -3,24 +3,26 @@ package br.com.fiap.monitor.to;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import br.com.fiap.coleta.entities.Alarme;
+import br.com.fiap.coleta.entities.BancoBackup;
 
 @XmlRootElement
-public class PagingTO implements Serializable{
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlSeeAlso({Alarme.class,BancoBackup.class})
+public class PagingTO<T> implements Serializable{
 	
 	private static final long serialVersionUID = -8979816907608844943L;
 	
-	@XmlElement
 	private Boolean success;
 	
-	@XmlElement
 	private Long total;
 	
-	@XmlElement
-	private List<Alarme> records;
+	private List<T> records;
 	
 	public void setSuccess(Boolean success) {
 		this.success = success;
@@ -28,9 +30,19 @@ public class PagingTO implements Serializable{
 	public void setTotal(Long total) {
 		this.total = total;
 	}
-	public void setRecords(List<Alarme> records) {
+	public void setRecords(List<T> records) {
 		this.records = records;
 	}
+	public Boolean getSuccess() {
+		return success;
+	}
+	public Long getTotal() {
+		return total;
+	}
+	public List<T> getRecords() {
+		return records;
+	}
+	
 	
 	
 	

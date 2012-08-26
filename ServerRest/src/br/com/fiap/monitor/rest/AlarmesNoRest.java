@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 
 import br.com.fiap.coleta.entities.Alarme;
@@ -20,9 +21,9 @@ public class AlarmesNoRest {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public PagingTO getAlarmesNo(@QueryParam("id") Integer id, @QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
+	public PagingTO<Alarme> getAlarmesNo(@QueryParam("id") Integer id, @QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
 		
-		PagingTO retorno = new PagingTO();
+		PagingTO<Alarme> retorno = new PagingTO<Alarme>();
 		
 		if(id != null){
 			AlarmeBO alarmeBO = new AlarmeBO();
@@ -30,12 +31,9 @@ public class AlarmesNoRest {
 			List<Alarme> alarmes = alarmeBO.listaLimitAlarmesNo(id, start, limit);
 			Long total = alarmeBO.contaAlarmesNos(id);
 			
-			
-			
 			retorno.setSuccess(true);
 			retorno.setTotal(total);
 			retorno.setRecords(alarmes);
-			
 			
 		}else{
 			retorno.setSuccess(false);			

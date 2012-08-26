@@ -1,14 +1,13 @@
-Ext.define('MONITOR.store.Alarmes', {
+Ext.define('MONITOR.store.BancoJobs', {
     extend: 'Ext.data.Store',
-    model: 'MONITOR.model.Alarme',
-    pageSize: 10,
+    model: 'MONITOR.model.BancoJob',
 
     proxy: {
         type: 'rest',
-        url: 'rest/alarmesNos/',
+        url: 'rest/jobs/',
         reader: {
-            type: 'json',	
-            root: 'records'
+            type: 'json',
+            root: 'bancoJob'
         },
 		writer: {
 			type: 'json', //json ou xml

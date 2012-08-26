@@ -1,14 +1,13 @@
-Ext.define('MONITOR.store.Alarmes', {
+Ext.define('MONITOR.store.BancoFiles', {
     extend: 'Ext.data.Store',
-    model: 'MONITOR.model.Alarme',
-    pageSize: 10,
+    model: 'MONITOR.model.BancoFile',
 
     proxy: {
         type: 'rest',
-        url: 'rest/alarmesNos/',
+        url: 'rest/bdFiles/',
         reader: {
-            type: 'json',	
-            root: 'records'
+            type: 'json',
+            root: 'bancoFile'
         },
 		writer: {
 			type: 'json', //json ou xml

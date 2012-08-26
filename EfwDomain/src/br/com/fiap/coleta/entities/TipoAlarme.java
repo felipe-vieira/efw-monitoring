@@ -2,6 +2,12 @@ package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TipoAlarme implements Serializable{
 	
 	private static final long serialVersionUID = 2692121445455669250L;

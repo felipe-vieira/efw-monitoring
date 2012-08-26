@@ -4,9 +4,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
 import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Alarme implements Serializable{
 
 	private static final long serialVersionUID = -3433864969574318639L;

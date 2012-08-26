@@ -3,6 +3,7 @@ Ext.define('MONITOR.view.alarme.ListAlarmesNo' ,{
 	title: 'Alarmes',
     extend: 'Ext.grid.Panel',
     alias: 'widget.alarmenolist',
+    requires: ['MONITOR.utils.ConvertUtils','MONITOR.utils.DateUtils'],
     features: [{ftype: 'grouping'}],
 
     initComponent: function() {

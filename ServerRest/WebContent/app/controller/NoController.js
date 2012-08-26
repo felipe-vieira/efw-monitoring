@@ -11,6 +11,9 @@ Ext.define('MONITOR.controller.NoController', {
     	'servidor.ListGraficos',
     	'servidorAplicacao.ListDeployments',
     	'servidorAplicacao.ListMemorias',
+    	'bancoDados.ListJobs',
+    	'bancoDados.ListFiles',
+    	'bancoDados.ListBackups',
     	'alarme.ListAlarmesNo',
     	'login.MainTab'
     
@@ -20,7 +23,10 @@ Ext.define('MONITOR.controller.NoController', {
     	'Servidores',
     	'Alarmes',
     	'ServidorAplicacaoDeployments',
-    	'ServidorAplicacaoMemorias'
+    	'ServidorAplicacaoMemorias',
+    	'BancoJobs',
+    	'BancoFiles',
+    	'BancoBackups'
     ],
     models: [
     	
@@ -40,6 +46,9 @@ Ext.define('MONITOR.controller.NoController', {
     	
     	//Banco de Dados
     	'BancoDados',
+    	'BancoJob',
+    	'BancoFile',
+    	'BancoBackup',
 
     	//Alarme
     	'Alarme',
@@ -363,8 +372,6 @@ Ext.define('MONITOR.controller.NoController', {
     	    	
     	        if(bd != null){
     	        
-    	        	var msgPatch = "";
-    	        	var processadorMsg = "";
     	        	var storeAlarmes = Ext.create('MONITOR.store.Alarmes');
     	        	
     	        	//Store de alarmes
@@ -383,6 +390,41 @@ Ext.define('MONITOR.controller.NoController', {
 
     	            });
     	        	
+    	        	//Store de jobs
+    	        	var storeJobs = Ext.create('MONITOR.store.BancoJobs');
+    	        	storeJobs.load({
+    	        		params: {
+    	        			id: bd.get('id')
+    	        		}
+    	        	});
+    	        	
+    	        	var storeFiles = Ext.create('MONITOR.store.BancoFiles');
+    	        	storeFiles.load({
+    	        		params: {
+    	        			id: bd.get('id')
+    	        		}
+    	        	});
+    	        	
+    	        	//Store dos backups
+    	        	//Store de alarmes
+    	        	var storeBackups = Ext.create('MONITOR.store.BancoBackups');
+    	        	
+    	        	storeBackups.load({
+    	        		params: {
+    	        			id: bd.get('id'),
+    	        			start: 0,
+    	        			limit: 10	
+    	        		}
+    	        	});
+    	        	
+    	        	storeBackups.on('beforeload',function(store, operation,eOpts){
+    	                operation.params={
+    	                		id: bd.get('id')
+    	                };
+
+    	            });
+    	        	
+  	        	    	        	
     	        	var strStatus = "";
     	        	
     	        	if(bd.get('disponivel') == true){
@@ -443,13 +485,29 @@ Ext.define('MONITOR.controller.NoController', {
     	    	            	xtype: 'panel',
     	    	            	title: 'Informações do Banco de Dados',
     	    	            	padding: 10,
-    	    	            	html: infoHtml            	
+    	    	            	html: infoHtml,            	
+    	    	            },
+    	    	            {
+    	    	            	xtype: 'listjobs',
+    	    	            	padding: 10,
+    	    	            	store: storeJobs
+    	    	            },
+    	    	            {  	    	            
+    	    	            	xtype: 'listfiles',
+    	    	            	padding: 10,
+    	    	            	store: storeFiles
+    	    	            },
+    	    	            {  	    	            
+    	    	            	xtype: 'listbackups',
+    	    	            	padding: 10,
+    	    	            	store: storeBackups
     	    	            },
     	    	            {
     	    	            	xtype: 'alarmenolist',
     	    	            	store: storeAlarmes,
     	    	            	padding: 10    	    	            	
     	    	            },
+    	    	            
     	                ]
     	            }).show();
     	        	        	

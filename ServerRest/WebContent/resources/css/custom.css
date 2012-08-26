@@ -1,3 +1,10 @@
+h1{
+	color: #d3e2f4;
+	font-size: 24px;
+	font-weight: bold;
+	font-family: tahoma,arial,verdana,sans-serif
+}
+
 .tabelaInfo{
 	width: 100%;
 }
