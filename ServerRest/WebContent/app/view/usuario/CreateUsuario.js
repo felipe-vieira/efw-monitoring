@@ -28,6 +28,8 @@ Ext.define('MONITOR.view.usuario.CreateUsuario', {
                     },
                     {
                     	xtype: 'checkboxfield',
+                    	inputValue: true,
+                    	uncheckedValue: false,
                     	name: 'administrador',
                     	fieldLabel: 'Administador'
                     }

@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.dao.UsuarioDAO;
 import br.com.fiap.monitor.entities.Usuario;
+import br.com.fiap.monitor.to.ReturnTO;
 
 public class UsuarioBO {
 
@@ -46,5 +47,110 @@ public class UsuarioBO {
 		}
 		
 	}
+
+	public ReturnTO saveUsuario(Usuario usuario) {
+		
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		ReturnTO retorno = new ReturnTO();
+		
+		try{
+			if(!this.verificaUsuarioLogin(usuario.getLogin())){
+				
+				usuario.setAtivo(true);
+				dao.saveOrUpdate(usuario);
+				retorno.setSuccess(true);
+			}else{
+				retorno.setSuccess(false);
+				retorno.setMessage("Já existe um usuário com esse login.");
+			}	
+			
+			t.commit();
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			retorno.setSuccess(false);
+			retorno.setMessage(ex.getMessage());
+		}
+		
+		return retorno;
+		
+	}
+	
+	public ReturnTO updateUsuario(Long id, Usuario usuario) {
+		
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		ReturnTO retorno = new ReturnTO();
+		
+		try{
+			Usuario old = (Usuario) dao.getById(Usuario.class, id);
+						
+			if(old.getLogin().equals(usuario.getLogin()) || !this.verificaUsuarioLogin(usuario.getLogin())){
+				
+				dao.update(usuario);
+				retorno.setSuccess(true);
+			}else{
+				retorno.setSuccess(false);
+				retorno.setMessage("Já existe um usuário com esse login.");
+			}	
+			
+			t.commit();
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			retorno.setSuccess(false);
+			retorno.setMessage(ex.getMessage());
+		}
+		
+		return retorno;
+		
+	}
+	
+	public ReturnTO desativaUsuario(Usuario usuario){
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		ReturnTO retorno = new ReturnTO();
+		
+		try{				
+			usuario.setAtivo(false);
+			dao.saveOrUpdate(usuario);
+			retorno.setSuccess(true);
+			t.commit();
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			retorno.setSuccess(false);
+			retorno.setMessage(ex.getMessage());
+		}
+		
+		return retorno;
+	}
+	
+	public Boolean verificaUsuarioLogin(String login){
+		
+		Session session = dao.getSession();
+		
+		try{
+			Query query = session.createQuery("FROM Usuario WHERE login = :login");
+			query.setString("login", login);
+			List<Usuario> list = dao.queryList(query);
+			
+			if(list != null && list.size() > 0){
+				return true;
+			}else{
+				return false;
+			}
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return false;
+		}
+		
+	}
+	
 
 }

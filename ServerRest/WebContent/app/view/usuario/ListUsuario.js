@@ -20,7 +20,7 @@ Ext.define('MONITOR.view.usuario.ListUsuario', {
     	    	   {text: 'Administrador', dataIndex: 'administrador', columnWidth:'50%',
     	    	       renderer: function(val){
     	    	    	   console.log(val);
-    	    	    	   if(val == "true"){
+    	    	    	   if(val == true){
     	    	    		   return "Sim";
     	    	    	   }else{
     	    	    		   return "Não";

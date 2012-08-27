@@ -16,15 +16,17 @@ Ext.define('MONITOR.model.Alarme', {
     
     proxy: {
 		type: 'rest',
-		url: 'rest/alarme/',
+		url: 'rest/usuarios/',
         reader: {
             type: 'json',
-            root: 'alarme'
+            root: 'usuario',
+            successProperty: 'success',
+            messageProperty: 'message'
         },
 		writer: {
 			type: 'json',
-			writeAllFields: true
-		}
+			allowSingle: true
+		},
 	},
 	
     hasOne: [

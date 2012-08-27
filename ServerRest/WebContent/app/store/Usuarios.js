@@ -3,7 +3,10 @@ Ext.define('MONITOR.store.Usuarios', {
     model: 'MONITOR.model.Usuario',
     pageSize: 25,
     autoLoad: true,
-    autoSync: true,
+    sorters:{
+    	property: 'login',
+    	direction: 'ASC'
+    },
     proxy: {
         type: 'rest',
         url: 'rest/usuarios/',
@@ -13,7 +16,6 @@ Ext.define('MONITOR.store.Usuarios', {
         },
 		writer: {
 			type: 'json',
-			writeAllFields: true,
 			allowSingle: true
 		}
     }

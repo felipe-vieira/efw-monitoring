@@ -77,17 +77,26 @@ Ext.define('MONITOR.controller.UsuarioController', {
 		if(this.itemSelected != null){
 			Ext.MessageBox.confirm('Confirmação','Deseja excluir o usuario '+this.itemSelected.get('login')+' ?',
 				function(resp){
-					console.log(resp);
 					if(resp=="yes"){
-						console.log("opa");
-						this.getUsuariosStore().remove(this.itemSelected);
+						
+						this.itemSelected.destroy({
+		        			failure: function(rec,op){
+		                        Ext.MessageBox.show({
+		                            title: 'Erro',
+		                            msg: op.request.scope.reader.jsonData["message"],
+		                            icon: Ext.MessageBox.ERROR,
+		                            buttons: Ext.Msg.OK
+		                        });
+		        			}
+						});
+						
 					}
-				},
-				this
-			);
+				},this);
 		}else{
 			Ext.MessageBox.alert("Alerta","Selecione um registro antes de excluir.");
 		}
+		
+		this.getUsuariosStore().reload();
 	},
 	
 	saveOrUpdate: function(button){
@@ -98,9 +107,28 @@ Ext.define('MONITOR.controller.UsuarioController', {
 	    
         if(form.getForm().isValid()){
         	record.set(values);
-    	    win.close();
-    	    this.getUsuariosStore().add(record);
+        	
+        	record.save(
+        		{
+        			success: function(rec,op){
+        				win.close();
+        			},
+        			failure: function(rec,op){
+                        Ext.MessageBox.show({
+                            title: 'Erro',
+                            msg: op.request.scope.reader.jsonData["message"],
+                            icon: Ext.MessageBox.ERROR,
+                            buttons: Ext.Msg.OK
+                        });
+        			}
+        		}
+        	);
+        	
+        	this.getUsuariosStore().reload();
         }
+        
+        
+        
 	}
 	
 	
