@@ -24,15 +24,15 @@ Ext.define('MONITOR.controller.UsuarioController', {
     			itemclick: this.selectUser
     		},
     		
-    		'toolbar button[action=create]': {
+    		'#toolbarusuario button[action=create]': {
     			click: this.create
     		},
     		
-    		'toolbar button[action=edit]': {
+    		'#toolbarusuario button[action=edit]': {
     			click: this.edit
     		},
     		
-    		'toolbar button[action=delete]': {
+    		'#toolbarusuario button[action=delete]': {
     			click: this.del
     		},
     		

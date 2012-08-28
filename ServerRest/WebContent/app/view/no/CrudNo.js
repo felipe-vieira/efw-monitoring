@@ -25,6 +25,7 @@ Ext.define('MONITOR.view.no.CrudNo', {
     	    	    {
     	    	    	xtype: 'toolbar',
     	    	        dock: 'top',
+    	    	        id: 'toolbarno',
     	    	        items:
     	    	        [
     	    	            {
@@ -63,6 +64,7 @@ Ext.define('MONITOR.view.no.CrudNo', {
     		                        ]
     	    	        	    }
 	                        },
+	                        "-",
 		                    {
     	    	        	    text: 'Editar',
     	    	        	    action: 'edit',

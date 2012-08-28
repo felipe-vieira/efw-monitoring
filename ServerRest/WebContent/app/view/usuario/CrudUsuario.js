@@ -32,6 +32,7 @@ Ext.define('MONITOR.view.usuario.CrudUsuario', {
     	    	    {
     	    	    	xtype: 'toolbar',
     	    	        dock: 'top',
+    	    	        id: 'toolbarusuario',
     	    	        items:
     	    	        [
     	    	            {

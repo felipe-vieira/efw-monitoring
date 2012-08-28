@@ -58,13 +58,27 @@ Ext.define('MONITOR.controller.NoController', {
     ],
     
     init: function() {
+    	
+    	Ext.apply(this,{
+    		itemSelected: null
+    	});
+    	
         this.control({
         	'nolist' : {
         		itemdblclick: this.addTabNo
         	},
+        	
+    		'crudno > grid': {
+    			beforerender: this.resetRegister,
+    			itemclick: this.selectUser
+    		},
 	    	
 			'#submenuno menuitem[id=createServidor]': {
 				click: this.createServidor
+			},
+			
+			'#toolbarno button[action=edit]': {
+				click: this.editNo
 			},
 			
 			'formservidor button[action=save]': {
@@ -532,8 +546,22 @@ Ext.define('MONITOR.controller.NoController', {
 		view.down('form').loadRecord(model);	
     },
     
+    editNo: function(button){
+		if(this.itemSelected != null){
+			
+			if(this.itemSelected instanceof MONITOR.model.No){
+				alert("sim");
+			}else{
+				alert("nao");
+			}
+			//var view = Ext.widget('fromservidor');
+			//view.down('form').loadRecord(this.itemSelected);
+		}else{
+			Ext.MessageBox.alert("Alerta","Selecione um registro antes de alterar.");
+		}
+    },
+    
 	saveOrUpdate: function(button){
-		console.log("oi");
 	    var win    = button.up('window');
         var form   = win.down('form');
         var record = form.getRecord();
@@ -542,7 +570,6 @@ Ext.define('MONITOR.controller.NoController', {
 	    
         if(form.getForm().isValid()){
         	record.set(values);
-        	console.log("tchau");
         	record.save(
         		{
         			success: function(rec,op){
@@ -559,11 +586,18 @@ Ext.define('MONITOR.controller.NoController', {
         			}
         		}
         	);
-        	
-        	
         }
-        
-	}
+	},
+	
+    resetRegister: function(){
+    	this.itemSelected = null;
+    },
+    
+	selectUser: function(grid, record){
+		this.itemSelected = record;
+	},
+	
+	
     
 
 
