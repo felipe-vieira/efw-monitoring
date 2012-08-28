@@ -1,8 +1,8 @@
 Ext.define('MONITOR.controller.UsuarioController', {
     extend: 'Ext.app.Controller',
     views: [
-    	'usuario.ListUsuario',
-    	'usuario.CreateUsuario'
+    	'usuario.CrudUsuario',
+    	'usuario.FormUsuario'
     ],
     stores: [
         'Usuarios'
@@ -19,7 +19,7 @@ Ext.define('MONITOR.controller.UsuarioController', {
     	
     	this.control({
     		
-    		'usuariolist > grid': {
+    		'crudusuario > grid': {
     			beforerender: this.resetRegister,
     			itemclick: this.selectUser
     		},
@@ -36,11 +36,14 @@ Ext.define('MONITOR.controller.UsuarioController', {
     			click: this.del
     		},
     		
-    		'createusuario button[action=save]': {
+    		'formusuario button[action=save]': {
     			click: this.saveOrUpdate
-    		}
+    		},
+    		
     		
     	});
+    	
+    
     },
 
     
@@ -53,7 +56,7 @@ Ext.define('MONITOR.controller.UsuarioController', {
 	},
 	
 	create: function(button){
-		var view = Ext.widget('createusuario');
+		var view = Ext.widget('formusuario');
 		var user = Ext.create('MONITOR.model.Usuario');
 		view.down('form').loadRecord(user);	
 	},
@@ -62,7 +65,7 @@ Ext.define('MONITOR.controller.UsuarioController', {
 		
 		if(this.itemSelected != null){
 			
-			var view = Ext.widget('createusuario');
+			var view = Ext.widget('formusuario');
 			view.down('form').loadRecord(this.itemSelected);
 			
 		}else{
@@ -80,6 +83,10 @@ Ext.define('MONITOR.controller.UsuarioController', {
 					if(resp=="yes"){
 						
 						this.itemSelected.destroy({
+		        			success: function(rec,op){
+		        				var store = Ext.data.StoreManager.lookup('Usuarios');
+		        				store.reload();
+		        			},
 		        			failure: function(rec,op){
 		                        Ext.MessageBox.show({
 		                            title: 'Erro',
@@ -92,14 +99,17 @@ Ext.define('MONITOR.controller.UsuarioController', {
 						
 					}
 				},this);
+			
+			
 		}else{
 			Ext.MessageBox.alert("Alerta","Selecione um registro antes de excluir.");
 		}
 		
-		this.getUsuariosStore().reload();
+		
 	},
 	
 	saveOrUpdate: function(button){
+		console.log("oi");
 	    var win    = button.up('window');
         var form   = win.down('form');
         var record = form.getRecord();
@@ -127,9 +137,8 @@ Ext.define('MONITOR.controller.UsuarioController', {
         	this.getUsuariosStore().reload();
         }
         
-        
-        
-	}
+	},
+	
 	
 	
   

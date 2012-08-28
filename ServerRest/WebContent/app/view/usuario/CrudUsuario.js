@@ -1,6 +1,6 @@
-Ext.define('MONITOR.view.usuario.ListUsuario', {
+Ext.define('MONITOR.view.usuario.CrudUsuario', {
     extend: 'Ext.panel.Panel',
-    xtype: 'usuariolist',
+    xtype: 'crudusuario',
     padding: 10,
     border: 0,
     initComponent: function(){

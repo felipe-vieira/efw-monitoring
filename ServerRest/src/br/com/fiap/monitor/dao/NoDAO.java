@@ -16,7 +16,8 @@ public class NoDAO {
 		Transaction t = session.beginTransaction();
 		
 		try{
-			Query query = session.createQuery("from No");
+			Query query = session.createQuery("from No where ativo = :ativo");
+			query.setBoolean("ativo", true);
 			List<No> retorno = query.list();
 			t.commit();
 			return retorno;

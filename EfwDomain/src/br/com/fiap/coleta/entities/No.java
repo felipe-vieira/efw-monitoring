@@ -25,6 +25,8 @@ public class No implements Serializable{
 	
 	private Boolean gerenciavel;
 	
+	private Boolean ativo;
+	
 	private Date ultimaColeta;
 	
 	private String tipo;
@@ -107,6 +109,12 @@ public class No implements Serializable{
 		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
+	}
+	public Boolean getAtivo() {
+		return ativo;
+	}
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
 	}
 	
 }

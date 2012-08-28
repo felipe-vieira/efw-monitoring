@@ -1,7 +1,7 @@
 Ext.define('MONITOR.model.Servidor', {
     extend: 'MONITOR.model.No',
     fields: [
-
+             
     ],
     
     proxy: {

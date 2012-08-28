@@ -6,9 +6,10 @@ Ext.define('MONITOR.controller.NoController', {
     ],
     views: [
     	'no.List',
-    	'no.Edit',
+    	'no.CrudNo',
     	'servidor.ListParticoes',
     	'servidor.ListGraficos',
+    	'servidor.FormServidor',
     	'servidorAplicacao.ListDeployments',
     	'servidorAplicacao.ListMemorias',
     	'bancoDados.ListJobs',
@@ -61,9 +62,15 @@ Ext.define('MONITOR.controller.NoController', {
         	'nolist' : {
         		itemdblclick: this.addTabNo
         	},
-        	'noedit button[action=save]':{
-        		click : this.updateNo
-        	}
+	    	
+			'#submenuno menuitem[id=createServidor]': {
+				click: this.createServidor
+			},
+			
+			'formservidor button[action=save]': {
+				click: this.saveOrUpdate
+			}
+        
         });
     },
 
@@ -516,19 +523,48 @@ Ext.define('MONITOR.controller.NoController', {
     	        tabs.setLoading(false);
     	    }
     	});
-    },
+    },	
     
 
-    updateNo: function(button){
-    	var win = button.up('window'),
-    		form = win.down('form'),
-    		record = form.getRecord(),
-    		values = form.getValues();
-    		
-    	record.set(values);
-    	win.close();
-    	this.getNosStore().sync();
-    }
+    createServidor: function(button){
+		var view = Ext.widget('formservidor');
+		var model = Ext.create('MONITOR.model.Servidor');
+		view.down('form').loadRecord(model);	
+    },
+    
+	saveOrUpdate: function(button){
+		console.log("oi");
+	    var win    = button.up('window');
+        var form   = win.down('form');
+        var record = form.getRecord();
+        var values = form.getValues();
+	    var store =  this.getNosStore();
+	    
+        if(form.getForm().isValid()){
+        	record.set(values);
+        	console.log("tchau");
+        	record.save(
+        		{
+        			success: function(rec,op){
+        				win.close();
+        				store.reload();
+        			},
+        			failure: function(rec,op){
+                        Ext.MessageBox.show({
+                            title: 'Erro',
+                            msg: op.request.scope.reader.jsonData["message"],
+                            icon: Ext.MessageBox.ERROR,
+                            buttons: Ext.Msg.OK
+                        });
+        			}
+        		}
+        	);
+        	
+        	
+        }
+        
+	}
+    
 
 
 

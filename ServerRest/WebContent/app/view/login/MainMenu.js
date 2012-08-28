@@ -18,7 +18,18 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    		tabs[0].add({
     	                    			closable: true,
     	                    			title: 'Cadastro de usuários',
-    	                    			xtype: 'usuariolist'
+    	                    			xtype: 'crudusuario'
+    	                    		}).show();
+    	                        }
+    	                    },
+    	                    { 
+    	                        text: 'Nós',
+    	                    	handler: function(){
+    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
+    	                    		tabs[0].add({
+    	                    			closable: true,
+    	                    			title: 'Cadastro de nós',
+    	                    			xtype: 'crudno'
     	                    		}).show();
     	                        }
     	                    }

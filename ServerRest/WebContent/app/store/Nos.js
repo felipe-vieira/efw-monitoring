@@ -3,7 +3,14 @@ Ext.define('MONITOR.store.Nos', {
     model: 'MONITOR.model.No',
     groupField: 'tipo',
     autoLoad: true,
-
+    autoSync: true,
+    pageSize: 25,
+    
+    sorters:{
+    	property: 'nome',
+    	direction: 'ASC'
+    },
+    
     proxy: {
         type: 'rest',
         url: 'rest/nos/',

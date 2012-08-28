@@ -11,6 +11,7 @@
 		<property name="nome" not-null="true"/>
 		<property name="hostname" not-null="true"/>
 		<property name="agentPort" not-null="true"/>
+		<property name="ativo" not-null="true"/>
 		<property name="disponivel" not-null="false"/>
 		<property name="gerenciavel" not-null="false"/>
 		<property name="ultimaColeta" not-null="false"/>

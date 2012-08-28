@@ -58,7 +58,7 @@ public class UsuarioBO {
 			if(!this.verificaUsuarioLogin(usuario.getLogin())){
 				
 				usuario.setAtivo(true);
-				dao.saveOrUpdate(usuario);
+				dao.save(usuario);
 				retorno.setSuccess(true);
 			}else{
 				retorno.setSuccess(false);

@@ -9,5 +9,17 @@ Ext.define('MONITOR.model.No', {
              {name: 'ultimaColeta', type: 'date'},
              {name: 'hostname', type: 'string'},
              {name: 'agentPort', type: 'int'}
-    ]
+    ],
+    proxy: {
+		type: 'rest',
+		url: 'rest/nos/',
+        reader: {
+            type: 'json',
+            root: 'no'
+        },
+		writer: {
+			type: 'json',
+			writeAllFields: true
+		}
+	},
 });

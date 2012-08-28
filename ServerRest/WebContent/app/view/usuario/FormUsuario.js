@@ -1,6 +1,6 @@
-Ext.define('MONITOR.view.usuario.CreateUsuario', {
+Ext.define('MONITOR.view.usuario.FormUsuario', {
     extend: 'Ext.window.Window',
-    alias: 'widget.createusuario',
+    alias: 'widget.formusuario',
 
     title: 'Cadastro de Usuário',
     layout: 'fit',

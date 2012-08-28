@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,7 +15,9 @@ import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.SistemaOperacional;
+import br.com.fiap.monitor.bo.NoBO;
 import br.com.fiap.monitor.bo.ServidorBO;
+import br.com.fiap.monitor.to.ReturnTO;
 
 @Path("/servidores")
 public class ServidoresRest {
@@ -47,6 +50,14 @@ public class ServidoresRest {
 		
 		return servidor;
 		
+	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ReturnTO saveServidor(Servidor servidor){
+		NoBO bo = new NoBO();
+		return bo.saveNo(servidor);		
 	}
 	
 }
