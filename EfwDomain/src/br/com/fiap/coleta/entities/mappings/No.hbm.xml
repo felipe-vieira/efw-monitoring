@@ -31,14 +31,12 @@
 			
 			<joined-subclass name="br.com.fiap.coleta.entities.JBoss" table="jboss">
 				<key column="no_id"/>
-				<property name = "versao"/>
 			</joined-subclass>
 			
 			<joined-subclass name="br.com.fiap.coleta.entities.Glassfish" table ="glassfish">
 				<key column="no_id"/>
-				<property name = "user"/>
-				<property name = "senha"/>
-				<property name = "versao"/>
+				<property name = "jmxUser"/>
+				<property name = "jmxSenha"/>
 			</joined-subclass>
 			
 		</joined-subclass>

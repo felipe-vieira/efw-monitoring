@@ -1,8 +1,8 @@
-Ext.define('MONITOR.view.servidor.FormServidor', {
+Ext.define('MONITOR.view.servidorAplicacao.FormJBoss', {
     extend: 'Ext.window.Window',
-    alias: 'widget.formservidor',
+    alias: 'widget.formjboss',
 
-    title: 'Cadastro de Servidor',
+    title: 'Cadastro de Servidor de Aplicacao - JBoss',
     layout: 'fit',
     autoShow: true,
     modal: true,
@@ -29,6 +29,25 @@ Ext.define('MONITOR.view.servidor.FormServidor', {
                     	xtype: 'numberfield',
                     	name: 'agentPort',
                     	fieldLabel: 'Porta do Agente',
+                    	allowBlank: false,
+                        minValue: 1,
+                        maxValue: 65535,
+                        hideTrigger:true
+                    },
+                    {
+                    	xtype: 'numberfield',
+                    	name: 'port',
+                    	fieldLabel: 'Porta do HTTP',
+                    	allowBlank: false,
+                        minValue: 1,
+                        maxValue: 65535,
+                        hideTrigger:true
+                    	
+                    },
+                    {
+                    	xtype: 'numberfield',
+                    	name: 'jmxPort',
+                    	fieldLabel: 'Porta do JMX',
                     	allowBlank: false,
                         minValue: 1,
                         maxValue: 65535,

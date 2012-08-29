@@ -7,15 +7,25 @@ Ext.define('MONITOR.controller.NoController', {
     views: [
     	'no.List',
     	'no.CrudNo',
+    	
     	'servidor.ListParticoes',
     	'servidor.ListGraficos',
     	'servidor.FormServidor',
+    	
     	'servidorAplicacao.ListDeployments',
     	'servidorAplicacao.ListMemorias',
+    	'servidorAplicacao.FormGlassFish',
+    	'servidorAplicacao.FormJBoss',
+    	
     	'bancoDados.ListJobs',
     	'bancoDados.ListFiles',
     	'bancoDados.ListBackups',
+    	'bancoDados.FormOracle',
+    	'bancoDados.FormSQLServer',
+    	
+    	
     	'alarme.ListAlarmesNo',
+    	
     	'login.MainTab'
     
     ],
@@ -44,12 +54,16 @@ Ext.define('MONITOR.controller.NoController', {
     	'ServidorAplicacao',
     	'ServidorAplicacaoDeployment',
     	'ServidorAplicacaoMemoria',
+    	'JBoss',
+    	'Glassfish',
     	
     	//Banco de Dados
     	'BancoDados',
     	'BancoJob',
     	'BancoFile',
     	'BancoBackup',
+    	'SQLServer',
+    	'Oracle',
 
     	//Alarme
     	'Alarme',
@@ -77,13 +91,45 @@ Ext.define('MONITOR.controller.NoController', {
 				click: this.createServidor
 			},
 			
+			'#submenuno menuitem[id=createSQLServer]': {
+				click: this.createSQLServer
+			},
+			
+			'#submenuno menuitem[id=createOracle]': {
+				click: this.createOracle
+			},
+			
+			'#submenuno menuitem[id=createJBoss]': {
+				click: this.createJBoss
+			},
+			
+			'#submenuno menuitem[id=createGlassfish]': {
+				click: this.createGlassfish
+			},
+			
 			'#toolbarno button[action=edit]': {
 				click: this.editNo
 			},
 			
 			'formservidor button[action=save]': {
 				click: this.saveOrUpdate
-			}
+			},
+			
+			'formsqlserver button[action=save]': {
+				click: this.saveOrUpdate
+			},
+			
+			'formoracle button[action=save]': {
+				click: this.saveOrUpdate
+			},
+			
+			'formjboss button[action=save]': {
+				click: this.saveOrUpdate
+			},
+			
+			'formglassfish button[action=save]': {
+				click: this.saveOrUpdate
+			},
         
         });
     },
@@ -546,6 +592,30 @@ Ext.define('MONITOR.controller.NoController', {
 		view.down('form').loadRecord(model);	
     },
     
+    createSQLServer: function(button){
+		var view = Ext.widget('formsqlserver');
+		var model = Ext.create('MONITOR.model.SQLServer');
+		view.down('form').loadRecord(model);	
+    },
+
+    createOracle: function(button){
+		var view = Ext.widget('formoracle');
+		var model = Ext.create('MONITOR.model.Oracle');
+		view.down('form').loadRecord(model);	
+    },
+    
+    createJBoss: function(button){
+		var view = Ext.widget('formjboss');
+		var model = Ext.create('MONITOR.model.JBoss');
+		view.down('form').loadRecord(model);	
+    },
+    
+    createGlassfish: function(button){
+		var view = Ext.widget('formglassfish');
+		var model = Ext.create('MONITOR.model.Glassfish');
+		view.down('form').loadRecord(model);	
+    },
+    
     editNo: function(button){
 		if(this.itemSelected != null){
 			
@@ -596,10 +666,6 @@ Ext.define('MONITOR.controller.NoController', {
 	selectUser: function(grid, record){
 		this.itemSelected = record;
 	},
-	
-	
-    
-
 
 
 });

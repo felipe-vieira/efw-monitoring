@@ -10,7 +10,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import br.com.fiap.coleta.entities.BancoFile;
-import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.monitor.bo.BancoDadosBO;
 
 @Path("/bdFiles")

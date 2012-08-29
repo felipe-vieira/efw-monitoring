@@ -13,40 +13,52 @@ import br.com.fiap.coleta.entities.No;
 
 public class NoBO {
 
-	private NoDAO noDao;
-	private GenericDAO genericDao;
+	private NoDAO noDAO;
+	private GenericDAO genericDAO;
 	
 	public NoBO(){
-		this.noDao = new NoDAO();
-		this.genericDao = new GenericDAO();
+		this.noDAO = new NoDAO();
+		this.genericDAO = new GenericDAO();
 	}
 	
 	public List<No> listAllNos(){
-		return this.noDao.listAllNos();
+		return this.noDAO.listAllNos();
 	}
 
 	public No getNoId(Integer id) {
-		return this.noDao.getNoById(id);
+		return this.noDAO.getNoById(id);
 	}
 
 	public ReturnTO saveNo(No no) {
 		
-		Session session = this.genericDao.getSession();
+		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
 		ReturnTO retorno = new ReturnTO();
+		retorno.setSuccess(false);
 		
 		try{
-			if(this.verificaNoNome(no)){
-				retorno.setSuccess(false);
+			
+			if(no.getNome() == null || no.getNome().equals("")){
+				retorno.setMessage("O campo nome é obrigatório.");
+			}else if(no.getHostname() == null || no.getHostname().equals("")){
+				retorno.setMessage("O campo hostname é obrigatório.");
+			}else if(no.getAgentPort() == null){
+				retorno.setMessage("O campo porta do agente é obrigatório");
+			}else if(this.verificaNoNome(no)){
 				retorno.setMessage("Ja existe um nó com esse nome.");
-				
 			}else if(this.verificaIpPortaTipo(no)){
-				retorno.setSuccess(false);
 				retorno.setMessage("Ja existe um nó com essa combinação de hostname, porta e tipo.");
 			}else{
+				
 				no.setAtivo(true);
-				session.save(no);
+				
+				if(no.getId() == null && no.getId() !=0){
+					this.genericDAO.save(no);
+				}else{
+					this.genericDAO.update(no);
+				}
 				retorno.setSuccess(true);
+				
 			}
 		
 			t.commit();
@@ -69,12 +81,21 @@ public class NoBO {
 	 * @return
 	 */
 	public Boolean verificaNoNome(No no){
-		Session session = this.genericDao.getSession();
+		Session session = this.genericDAO.getSession();
 		
 		try{
 			Query query = session.createQuery("FROM No where nome = :nome");
 			query.setString("nome",no.getNome());
-			List<No> results = this.genericDao.queryList(query);
+			List<No> results = this.genericDAO.queryList(query);
+			
+			if(no.getId() != null && no.getId() != 0){
+				No noOld = (No) this.genericDAO.getById(No.class, no.getId());
+				
+				if(noOld.getNome().equals(no.getNome())){
+					return false;
+				}
+				
+			}
 			
 			if(results != null && results.size() > 0){
 				return true;
@@ -95,24 +116,32 @@ public class NoBO {
 	 * @return
 	 */
 	public Boolean verificaIpPortaTipo(No no){
-		Session session = this.genericDao.getSession();
+		Session session = this.genericDAO.getSession();
 		
 		try{
 			Query query = session.createQuery("FROM No where hostname = :hostname AND agentPort = :agentPort");
 			query.setString("hostname",no.getHostname());
 			query.setInteger("agentPort",no.getAgentPort());
-			List<No> results = this.genericDao.queryList(query);
+			List<No> results = this.genericDAO.queryList(query);
+			
+			if(no.getId() != null && no.getId() != 0){
+				No noOld = (No) this.genericDAO.getById(No.class, no.getId());
+				
+				if(noOld.getHostname().equals(no.getHostname()) && noOld.getAgentPort() == no.getAgentPort()){
+					return false;
+				}
+				
+			}
 			
 			if(results != null && results.size() > 0){
-				Boolean retorno = false;
-				
 				for (No noAtual : results) {
 					if(noAtual.getClass() == no.getClass()){
-						retorno = true;
+						return true;
 					}					
 				}
 				
-				return retorno;
+				return false;
+				
 			}else{
 				return false;
 			}

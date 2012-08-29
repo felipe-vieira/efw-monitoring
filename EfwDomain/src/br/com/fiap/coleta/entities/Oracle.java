@@ -12,14 +12,14 @@ public class Oracle extends BancoDados implements Serializable{
 	
 	private static final long serialVersionUID = -4029595958441788034L;
 	
-	private String InstanceName;
+	private String instanceName;
 
 	public String getInstanceName() {
-		return InstanceName;
+		return instanceName;
 	}
 
 	public void setInstanceName(String instanceName) {
-		InstanceName = instanceName;
+		this.instanceName = instanceName;
 	}
 
 }

@@ -1,8 +1,8 @@
-Ext.define('MONITOR.view.servidor.FormServidor', {
+Ext.define('MONITOR.view.servidorAplicacao.FormGlassFish', {
     extend: 'Ext.window.Window',
-    alias: 'widget.formservidor',
+    alias: 'widget.formglassfish',
 
-    title: 'Cadastro de Servidor',
+    title: 'Cadastro de Servidor de Aplicacao - Glassfish',
     layout: 'fit',
     autoShow: true,
     modal: true,
@@ -33,6 +33,38 @@ Ext.define('MONITOR.view.servidor.FormServidor', {
                         minValue: 1,
                         maxValue: 65535,
                         hideTrigger:true
+                    },
+                    {
+                    	xtype: 'numberfield',
+                    	name: 'port',
+                    	fieldLabel: 'Porta do HTTP',
+                    	allowBlank: false,
+                        minValue: 1,
+                        maxValue: 65535,
+                        hideTrigger:true
+                    	
+                    },
+                    {
+                    	xtype: 'numberfield',
+                    	name: 'jmxPort',
+                    	fieldLabel: 'Porta do JMX',
+                    	allowBlank: false,
+                        minValue: 1,
+                        maxValue: 65535,
+                        hideTrigger:true
+                    },
+                    {
+                    	xtype: 'textfield',
+                    	name: 'jmxUser',
+                    	fieldLabel: 'Usuário JMX',
+                    	allowBlank: false
+                    },
+                    {
+                    	xtype: 'textfield',
+                    	name: 'jmxSenha',
+                    	fieldLabel: 'Senha JMX',
+                    	inputType: 'password',
+                    	allowBlank: false
                     }
                 ]
             }

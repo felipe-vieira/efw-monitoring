@@ -1,7 +1,7 @@
 Ext.define('MONITOR.model.BancoDados', {
     extend: 'MONITOR.model.No',
     fields: [
-        {name: 'port',	type: 'int'},
+        {name: 'port',	type: 'int', defaultValue: 1433},
         {name: 'usuario',	type: 'string'},
         {name: 'senha',	type: 'string'},
         {name: 'targetServerMemory', type:'int'},

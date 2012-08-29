@@ -44,10 +44,12 @@ Ext.define('MONITOR.view.no.CrudNo', {
 	    	    	        	    		disabled: true,
 	    	    	        	    	},
 	    	    	        	    	{
-	    	    	        	    		text: 'SQL Server'
+	    	    	        	    		text: 'SQL Server',
+	    	    	        	    		id: 'createSQLServer'
 	    	    	        	    	},
 	    	    	        	    	{
 	    	    	        	    		text: 'Oracle',
+	    	    	        	    		id: 'createOracle'
 	    	    	        	    	},
 	    	    	        	    	"-",
 	    	    	        	    	{
@@ -56,10 +58,12 @@ Ext.define('MONITOR.view.no.CrudNo', {
 	    	    	        	    	},
 	    	    	        	    	"-",
 	    	    	        	    	{
-	    	    	        	    		text: 'JBoss'
+	    	    	        	    		text: 'JBoss',
+	    	    	        	    		id: 'createJBoss'
 	    	    	        	    	},
 	    	    	        	    	{
-	    	    	        	    		text: 'Glassfish'
+	    	    	        	    		text: 'Glassfish',
+	    	    	        	    		id: 'createGlassfish'
 	    	    	        	    	}
     		                        ]
     	    	        	    }
