@@ -2,6 +2,7 @@ package br.com.fiap.monitor.rest;
 
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -14,7 +15,7 @@ import br.com.fiap.monitor.bo.BancoDadosBO;
 import br.com.fiap.monitor.to.ReturnTO;
 
 @Path("/oracle")
-public class OracleREST {
+public class OracleRest {
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -32,6 +33,11 @@ public class OracleREST {
 		BancoDadosBO bo = new BancoDadosBO();
 		return bo.saveOracle(oracle);	
 	}
+	
+	/* FAZER OS GETS PRA CADA TIPO
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	*/
 	
 }
 

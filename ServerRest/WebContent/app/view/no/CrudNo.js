@@ -19,7 +19,8 @@ Ext.define('MONITOR.view.no.CrudNo', {
     	    	   {text: 'Nome', dataIndex: 'nome', flex:1},
     	    	   {text: 'Hostname', dataIndex: 'hostname', flex:1},
     	    	   {text: 'Porta do Agente', dataIndex: 'agentPort', flex:1},
-    	    	   {text: 'Tipo', dataIndex: 'tipo', flex: 1}
+    	    	   {text: 'Tipo', dataIndex: 'tipo', flex: 1},
+    	    	   {text: 'Sub-tipo', dataIndex: 'subTipo', flex: 1}
     	    	],
     	    	dockedItems : [
     	    	    {

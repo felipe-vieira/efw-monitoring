@@ -11,8 +11,6 @@ import javax.ws.rs.core.MediaType;
 
 
 import br.com.fiap.coleta.entities.BancoDados;
-import br.com.fiap.coleta.entities.Oracle;
-import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.monitor.bo.NoBO;
 
 @Path("/bancoDados")
@@ -26,14 +24,6 @@ public class BancoDadosRest {
 		NoBO bo = new NoBO();
 		
 		BancoDados bd = (BancoDados) bo.getNoId(id);
-				
-		if(bd instanceof SQLServer){
-			bd.setTipoBancoDados("SQL Server");
-		}else if(bd instanceof Oracle){
-			bd.setTipoBancoDados("Oracle");
-		}
-		
-		
 		return bd;
 		
 	}

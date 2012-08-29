@@ -4,8 +4,7 @@ Ext.define('MONITOR.model.ServidorAplicacao', {
         {name: 'port',	type: 'int', defaultValue: 8080},
         {name: 'jmxPort',	type: 'int', defaultValue: 9999},
         {name: 'startTime',	type: 'date'},
-        {name: 'uptime', type:'int'},
-        {name: 'tipoServidorAplicacao', type:'string'}    
+        {name: 'uptime', type:'int'}
     ],
     
     proxy: {

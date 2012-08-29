@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -35,10 +36,6 @@ public class ServidoresRest {
 		Processador processador = bo.getProcessadorId(id);
 		List<Particao> particoes = bo.getParticoesId(id);
 		
-		//Pra não gerar referencia ciclica no json...
-		so.setServidor(null);
-		memoria.setServidor(null);
-		processador.setServidor(null);
 		for(Particao p: particoes){
 			p.setServidor(null);
 		}
@@ -56,6 +53,15 @@ public class ServidoresRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ReturnTO saveServidor(Servidor servidor){
+		NoBO bo = new NoBO();
+		return bo.saveNo(servidor);		
+	}
+	
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public ReturnTO saveServidor(Servidor servidor, @PathParam("id") Long id){
 		NoBO bo = new NoBO();
 		return bo.saveNo(servidor);		
 	}

@@ -7,9 +7,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
-import br.com.fiap.coleta.entities.Glassfish;
-import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.monitor.bo.ServidorAplicacaoBO;
 
@@ -25,15 +22,7 @@ public class ServidoresAplicacaoRest {
 		
 		ServidorAplicacao sa = bo.getServidorAplicacaoId(id);
 		
-		if(sa instanceof JBoss){
-			sa.setTipoServidorAplicacao("JBoss");
-		}else if(sa instanceof Glassfish){
-			sa.setTipoServidorAplicacao("Glassfish");
-		}
-		
-		
 		return sa;
-		
 	}
 	
 }

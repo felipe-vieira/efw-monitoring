@@ -6,6 +6,7 @@ Ext.define('MONITOR.model.No', {
              {name: 'disponivel',	type: 'boolean'},
              {name: 'gerenciavel',	type: 'boolean'},
              {name: 'tipo', type: 'string'},
+             {name: 'subTipo', type: 'string'},
              {name: 'ultimaColeta', type: 'date'},
              {name: 'hostname', type: 'string'},
              {name: 'agentPort', type: 'int', defaultValue: 9090}

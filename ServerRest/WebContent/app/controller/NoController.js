@@ -214,8 +214,8 @@ Ext.define('MONITOR.controller.NoController', {
     	        		strStatus += "Não Gerenciavel";
     	        	}
     	        	
-    	        	if(sa.get('tipoServidorAplicacao') != null){
-    	        		sa.get('tipoServidorAplicacao');
+    	        	if(sa.get('subTipo') != null){
+    	        		sa.get('subTipo');
     	        	}
     	        	
     	        	
@@ -229,7 +229,7 @@ Ext.define('MONITOR.controller.NoController', {
     	        			'</tr>'+
     	        			'<tr>'+
 	        					'<td class="titulo">Tipo:</td>' + 
-	        					'<td>'+ sa.get('tipoServidorAplicacao') +'</td>' +
+	        					'<td>'+ sa.get('subTipo') +'</td>' +
 	        					'<td class="titulo">Porta:</td>' + 
 	        					'<td>'+ sa.get('port') + '</td>' +
 	        				'</tr>'+
@@ -524,7 +524,7 @@ Ext.define('MONITOR.controller.NoController', {
 	        				'</tr>'+
     	        			'<tr>'+
         					'<td class="titulo">Tipo:</td>' + 
-        						'<td>'+ bd.get('tipoBancoDados') + '</td>' +
+        						'<td>'+ bd.get('subTipo') + '</td>' +
         						'<td class="titulo">Porta:</td>' + 
         						'<td>'+ bd.get('port') + '</td>' +
         					'</tr>'+
@@ -619,17 +619,57 @@ Ext.define('MONITOR.controller.NoController', {
     editNo: function(button){
 		if(this.itemSelected != null){
 			
-			if(this.itemSelected instanceof MONITOR.model.No){
-				alert("sim");
-			}else{
-				alert("nao");
-			}
-			//var view = Ext.widget('fromservidor');
-			//view.down('form').loadRecord(this.itemSelected);
+			var tipo = this.itemSelected.get('tipo');
+	    	if(tipo == "Servidor"){
+	    		this.editServidor(this.itemSelected);
+	    	}else if (tipo == "Servidor de Aplicacao"){
+	    		this.editServidorAplicacao(this.itemSelected);
+	    	}else if (tipo == "Banco de Dados"){
+	    		//this.editBancoDados(this.itemSelected);
+	    	}
+			
 		}else{
 			Ext.MessageBox.alert("Alerta","Selecione um registro antes de alterar.");
 		}
     },
+    
+    editServidor : function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.Servidor.load(id,{
+			success: function(servidor){
+				var view = Ext.widget('formservidor');
+				view.down('form').loadRecord(servidor);
+			}
+		});
+		
+    },
+    
+    editServidorAplicacao : function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.ServidorAplicacao.load(id,{
+			success: function(sa){
+				
+				var view = null;
+				var tipo = sa.get('subTipo');
+				
+				console.log(tipo);
+				if(subtipotipo == "Glassfish"){
+					view = Ext.widget('formglassfish');
+				}else{
+					view = Ext.widget('formjboss');
+				}
+				
+				view.down('form').loadRecord(sa);
+			}
+		});
+		
+    },
+
+  
     
 	saveOrUpdate: function(button){
 	    var win    = button.up('window');

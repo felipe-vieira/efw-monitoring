@@ -18,7 +18,6 @@ public class ServidorAplicacao extends No implements Serializable{
 	private Date startTime;
 	private Long uptime;
 	private ServidorAplicacaoThreshold threshold;
-	private String tipoServidorAplicacao;
 	
 	public Integer getPort() {
 		return port;
@@ -53,13 +52,6 @@ public class ServidorAplicacao extends No implements Serializable{
 	}
 	public void setThreshold(ServidorAplicacaoThreshold threshold) {
 		this.threshold = threshold;
-	}
-	
-	public String getTipoServidorAplicacao() {
-		return tipoServidorAplicacao;
-	}
-	public void setTipoServidorAplicacao(String tipoServidorAplicacao) {
-		this.tipoServidorAplicacao = tipoServidorAplicacao;
-	}
+	}	
 	
 }

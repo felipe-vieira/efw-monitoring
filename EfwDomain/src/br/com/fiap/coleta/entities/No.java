@@ -31,6 +31,8 @@ public class No implements Serializable{
 	
 	private String tipo;
 	
+	private String subTipo;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -74,7 +76,6 @@ public class No implements Serializable{
 		this.ultimaColeta = ultimaColeta;
 	}
 	
-	
 	public String getTipo() {
 		return tipo;
 	}
@@ -115,6 +116,12 @@ public class No implements Serializable{
 	}
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	public String getSubTipo() {
+		return subTipo;
+	}
+	public void setSubTipo(String subTipo) {
+		this.subTipo = subTipo;
 	}
 	
 }

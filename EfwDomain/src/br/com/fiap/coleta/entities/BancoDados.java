@@ -31,8 +31,6 @@ public class BancoDados extends No implements Serializable{
 	
 	private BancoDadosThreshold threshold;
 	
-	private String tipoBancoDados;
-
 	public String getUsuario() {
 		return usuario;
 	}
@@ -104,18 +102,4 @@ public class BancoDados extends No implements Serializable{
 	public void setThreshold(BancoDadosThreshold threshold) {
 		this.threshold = threshold;
 	}
-
-	public String getTipoBancoDados() {
-		return tipoBancoDados;
-	}
-
-	public void setTipoBancoDados(String tipoBancoDados) {
-		this.tipoBancoDados = tipoBancoDados;
-	}
-	
-	
-	
-	
-	
-	
 }

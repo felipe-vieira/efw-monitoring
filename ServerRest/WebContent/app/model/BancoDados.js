@@ -8,8 +8,7 @@ Ext.define('MONITOR.model.BancoDados', {
         {name: 'version', type:'string'},
         {name: 'edition', type:'string'},
         {name: 'status', type:'string'},
-        {name: 'collation', type:'string'},
-        {name: 'tipoBancoDados', type:'string'}
+        {name: 'collation', type:'string'}
     ],
     
     proxy: {

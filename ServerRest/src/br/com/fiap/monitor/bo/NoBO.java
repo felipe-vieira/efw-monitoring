@@ -127,7 +127,7 @@ public class NoBO {
 			if(no.getId() != null && no.getId() != 0){
 				No noOld = (No) this.genericDAO.getById(No.class, no.getId());
 				
-				if(noOld.getHostname().equals(no.getHostname()) && noOld.getAgentPort() == no.getAgentPort()){
+				if(noOld.getHostname().equals(no.getHostname()) && noOld.getAgentPort().equals(no.getAgentPort())){
 					return false;
 				}
 				
