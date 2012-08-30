@@ -150,6 +150,32 @@ public class NoBO {
 			ex.printStackTrace();
 			return false;
 		}
+		
+	}
+	
+	public ReturnTO desativaNo(Integer id){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		ReturnTO returnTO = new ReturnTO();
+		
+		try{
+			No no = (No) this.genericDAO.getById(No.class, id);
+			no.setAtivo(false);
+			this.genericDAO.update(no);
+			t.commit();
+			returnTO.setSuccess(true);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			returnTO.setSuccess(false);
+			returnTO.setMessage(ex.getMessage());
+			t.rollback();
+			
+		}
+		
+		return returnTO;
+		
 	}
 	
 	

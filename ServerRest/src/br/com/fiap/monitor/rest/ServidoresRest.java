@@ -3,6 +3,7 @@ package br.com.fiap.monitor.rest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -61,9 +62,22 @@ public class ServidoresRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO saveServidor(Servidor servidor, @PathParam("id") Long id){
+	public ReturnTO saveServidor(Servidor servidor, @PathParam("id") Integer id){
 		NoBO bo = new NoBO();
 		return bo.saveNo(servidor);		
+	}
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ReturnTO desativaServidor(Servidor servidor,@PathParam("id") Integer id){
+		
+		NoBO noBO = new NoBO();
+		if(id!=null){
+			return noBO.desativaNo(id);
+		}else{
+			return null;
+		}
 	}
 	
 }
