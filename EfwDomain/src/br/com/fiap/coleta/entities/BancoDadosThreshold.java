@@ -1,10 +1,14 @@
 package br.com.fiap.coleta.entities;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class BancoDadosThreshold implements Serializable {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class BancoDadosThreshold extends Threshold {
 	
 	private static final long serialVersionUID = 3429935439447652960L;
 	private Integer id;

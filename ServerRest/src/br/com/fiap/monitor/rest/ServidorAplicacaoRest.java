@@ -10,8 +10,8 @@ import javax.ws.rs.core.MediaType;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.monitor.bo.ServidorAplicacaoBO;
 
-@Path("/servidoresAplicacao")
-public class ServidoresAplicacaoRest {
+@Path("/servidorAplicacao")
+public class ServidorAplicacaoRest {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

@@ -3,16 +3,10 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="br.com.fiap.coleta.entities.ServidorThreshold" table="servidor_threshold">
+	<joined-subclass name="br.com.fiap.coleta.entities.ServidorThreshold" table="servidor_threshold" 
+		extends="br.com.fiap.coleta.entities.Threshold">
 			
-		<id name="id" column="id">
-			<generator class="increment"/>
-		</id>
-		
-		<property name="nome">
-			<column name="nome" sql-type="varchar(30)"  not-null="true"/>
-		</property>
-		
+		<key column="id"/>
 		<property name="limiteMemoria">
 			<column name="limite_memoria" sql-type="decimal(5,2)"  not-null="true"/>
 		</property>	
@@ -26,5 +20,5 @@
 		</property>	
 		
 		
-	</class> 
+	</joined-subclass>
 </hibernate-mapping>

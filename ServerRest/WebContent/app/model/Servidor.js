@@ -6,7 +6,7 @@ Ext.define('MONITOR.model.Servidor', {
     
     proxy: {
 		type: 'rest',
-		url: 'rest/servidores/',
+		url: 'rest/servidor/',
         reader: {
             type: 'json'
         },

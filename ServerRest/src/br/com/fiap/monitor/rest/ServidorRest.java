@@ -20,8 +20,8 @@ import br.com.fiap.monitor.bo.NoBO;
 import br.com.fiap.monitor.bo.ServidorBO;
 import br.com.fiap.monitor.to.ReturnTO;
 
-@Path("/servidores")
-public class ServidoresRest {
+@Path("/servidor")
+public class ServidorRest {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
