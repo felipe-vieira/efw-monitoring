@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class Threshold implements Serializable {
+public class Threshold implements Serializable {
 	
 	private static final long serialVersionUID = 1404692808025611732L;
 

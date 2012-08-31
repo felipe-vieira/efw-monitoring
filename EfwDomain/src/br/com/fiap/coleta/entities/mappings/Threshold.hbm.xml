@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="br.com.fiap.coleta.entities.Threshold" abstract="true" table="threshold">
+	<class name="br.com.fiap.coleta.entities.Threshold" table="threshold">
 			
 		<id name="id" column="id">
 			<generator class="increment"/>

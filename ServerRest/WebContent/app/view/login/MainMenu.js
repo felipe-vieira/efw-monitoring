@@ -32,6 +32,17 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    			xtype: 'crudno'
     	                    		}).show();
     	                        }
+    	                    },
+    	                    { 
+    	                        text: 'Thresholds',
+    	                    	handler: function(){
+    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
+    	                    		tabs[0].add({
+    	                    			closable: true,
+    	                    			title: 'Cadastro de Thresholds',
+    	                    			xtype: 'crudthreshold'
+    	                    		}).show();
+    	                        }
     	                    }
     	                ]
     	            }

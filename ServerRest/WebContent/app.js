@@ -5,7 +5,9 @@ Ext.application({
     controllers:[
         'LoginController',       
         'NoController',
-        'UsuarioController'
+        'ThresholdController',
+        'UsuarioController',
+        
     ],
     launch: function() {
     	

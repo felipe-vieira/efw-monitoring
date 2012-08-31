@@ -10,10 +10,13 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.coleta.entities.BancoBackup;
+import br.com.fiap.coleta.entities.No;
+import br.com.fiap.coleta.entities.Threshold;
+import br.com.fiap.monitor.entities.Usuario;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({Alarme.class,BancoBackup.class})
+@XmlSeeAlso({Alarme.class,BancoBackup.class,Threshold.class,Usuario.class,No.class})
 public class PagingTO<T> implements Serializable{
 	
 	private static final long serialVersionUID = -8979816907608844943L;
@@ -42,9 +45,5 @@ public class PagingTO<T> implements Serializable{
 	public List<T> getRecords() {
 		return records;
 	}
-	
-	
-	
-	
 
 }

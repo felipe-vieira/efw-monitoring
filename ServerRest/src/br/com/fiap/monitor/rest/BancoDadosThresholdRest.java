@@ -15,7 +15,7 @@ import br.com.fiap.monitor.bo.ThresholdBO;
 import br.com.fiap.monitor.to.ReturnTO;
 
 @Path("/bancoDadosThreshold")
-public class BancoDadosThreshold {
+public class BancoDadosThresholdRest {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

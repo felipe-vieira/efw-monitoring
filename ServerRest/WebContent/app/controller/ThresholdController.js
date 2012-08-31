@@ -1,14 +1,16 @@
-Ext.define('MONITOR.controller.UsuarioController', {
+Ext.define('MONITOR.controller.ThresholdController', {
     extend: 'Ext.app.Controller',
     views: [
-    	'usuario.CrudUsuario',
-    	'usuario.FormUsuario'
+        'threshold.CrudThreshold'
     ],
     stores: [
-        'Usuarios'
+        'Thresholds'
     ],
     models: [
-        'Usuario'     
+        'Threshold',
+        'ServidorThreshold',
+        'BancoDadosThreshold',
+        'ServidorAplicacaoThreshold'
     ],
     
     init: function() {
@@ -18,28 +20,6 @@ Ext.define('MONITOR.controller.UsuarioController', {
     	});
     	
     	this.control({
-    		
-    		'crudusuario > grid': {
-    			beforerender: this.resetRegister,
-    			itemclick: this.selectUser
-    		},
-    		
-    		'#toolbarusuario button[action=create]': {
-    			click: this.create
-    		},
-    		
-    		'#toolbarusuario button[action=edit]': {
-    			click: this.edit
-    		},
-    		
-    		'#toolbarusuario button[action=delete]': {
-    			click: this.del
-    		},
-    		
-    		'formusuario button[action=save]': {
-    			click: this.saveOrUpdate
-    		},
-    		
     		
     	});
     	
@@ -105,7 +85,6 @@ Ext.define('MONITOR.controller.UsuarioController', {
 			Ext.MessageBox.alert("Alerta","Selecione um registro antes de excluir.");
 		}
 		
-		
 	},
 	
 	saveOrUpdate: function(button){
@@ -138,6 +117,8 @@ Ext.define('MONITOR.controller.UsuarioController', {
         }
         
 	},
+	
+	
 	
   
 });

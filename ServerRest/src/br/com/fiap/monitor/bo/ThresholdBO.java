@@ -22,12 +22,16 @@ public class ThresholdBO {
 	}
 	
 	
-	public List<Threshold> listAllThresholds(){
+	public List<Threshold> listThresholdsLimit(Integer start, Integer limit){
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
 		
 		try{
 			Query query = session.createQuery("FROM Threshold");
+			
+			query.setFirstResult(start);
+			query.setFirstResult(limit);
+			
 			List<Threshold> thresholds = this.genericDAO.queryList(query);
 		
 			for (Threshold threshold : thresholds) {
@@ -48,6 +52,27 @@ public class ThresholdBO {
 			t.rollback();
 			return null;
 		}
+	}
+	
+	public Integer contaThresholds(){
+
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{			
+			Query query = session.createQuery("SELECT count(*) FROM Threshold");
+			
+			Integer retorno =  (Integer) query.uniqueResult();
+			t.commit();
+			
+			return retorno;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
 	}
 	
 	public Threshold getById(Integer id){

@@ -5,19 +5,30 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import br.com.fiap.coleta.entities.Threshold;
 import br.com.fiap.monitor.bo.ThresholdBO;
+import br.com.fiap.monitor.to.PagingTO;
+import br.com.fiap.monitor.to.ReturnTO;
 
 @Path("/thresholds")
 public class ThresholdsRest {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Threshold> listaThresholds(){
+	public PagingTO<Threshold> listaThresholds(@QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
+		
+		PagingTO<Threshold> retorno = new PagingTO<Threshold>();
+
 		ThresholdBO thresholdBO = new ThresholdBO();
-		return thresholdBO.listAllThresholds();
+		List<Threshold> records = thresholdBO.listThresholdsLimit(start,limit);
+		
+		retorno.setSuccess(true);
+		retorno.setRecords(records);
+		retorno.setSuccess(true);
+		return retorno;
 	}
 	
 }
