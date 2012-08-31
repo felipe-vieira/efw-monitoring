@@ -51,9 +51,16 @@ public class GlassFishColeta {
 	public GlassFishColeta(No no){
 		this.glassfish = (Glassfish) no;
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
+		this.indisponibilidadeBO = new IndisponibilidadeBO();
 		this.alarmeBO = new AlarmeBO();
-		this.ultimoStatus = this.glassfish.getDisponivel();
-		this.ultimoGerenciavel = this.glassfish.getGerenciavel();
+		
+		if(this.glassfish.getUltimaColeta() != null){
+			this.ultimoStatus = this.glassfish.getDisponivel();
+			this.ultimoGerenciavel = this.glassfish.getGerenciavel();
+		}else{
+			this.ultimoStatus = false;
+			this.ultimoGerenciavel = false;
+		}
 
 	}
 	
@@ -72,6 +79,8 @@ public class GlassFishColeta {
 			try{
 				socket.openSocket();
 
+				this.setCredentials();
+				
 				//Pega as propriedades do coletor
 				this.getGlassfishRuntime();
 				this.propriedadesMemorias = this.getConfigGlassfishMemory();
@@ -107,7 +116,7 @@ public class GlassFishColeta {
 			}catch(Exception ex){
 				this.glassfish.setGerenciavel(false);
 				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
-				System.out.println("Glassfish não gerenciável - "+ glassfish.getHostname() + "- Erros durante a coleta ");
+				System.out.println("Glassfish nï¿½o gerenciï¿½vel - "+ glassfish.getHostname() + "- Erros durante a coleta ");
 				ex.printStackTrace();
 			}finally{
 				if(!this.glassfish.getGerenciavel() && this.ultimoGerenciavel){
@@ -135,7 +144,7 @@ public class GlassFishColeta {
 				result = true;
 			}
 			else{
-				System.out.println("JBOSS Indísponível - "+ this.glassfish.getHostname() +" - HTTP Status: "+code);
+				System.out.println("Glassfish Indï¿½sponï¿½vel - "+ this.glassfish.getHostname() +" - HTTP Status: "+code);
 				this.glassfish.setDisponivel(false);
 				this.glassfish.setGerenciavel(false);
 				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
@@ -144,7 +153,7 @@ public class GlassFishColeta {
 			
 		}catch(Exception ex){
 			
-			System.out.println("JBOSS Indísponível - "+ this.glassfish.getHostname() +" - Falha no Http GET");
+			System.out.println("Glassfish Indï¿½sponï¿½vel - "+ this.glassfish.getHostname() +" - Falha no Http GET");
 			ex.printStackTrace();
 			this.glassfish.setDisponivel(false);
 			this.glassfish.setGerenciavel(false);
@@ -177,6 +186,16 @@ public class GlassFishColeta {
 		this.alarmeBO.geraAlarmeIndsiponibilidade(this.glassfish, ultimoStatus);
 		
 		return result;		
+	}
+	
+	private void setCredentials(){
+		try{
+			this.socket.enviaComando("get glassfish.credentials " + this.glassfish.getJmxUser() + " " + this.glassfish.getJmxSenha() + " " + this.glassfish.getJmxPort());
+		}catch (InterruptedException e) {
+			e.printStackTrace();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
 	private Map<String,ServidorAplicacaoDeployment> getGlassfishDeployments(){
@@ -221,6 +240,7 @@ public class GlassFishColeta {
 		}
 		
 	}
+	
 	
 	private ServidorAplicacaoThreadColeta getGlassfishThread(){
 		

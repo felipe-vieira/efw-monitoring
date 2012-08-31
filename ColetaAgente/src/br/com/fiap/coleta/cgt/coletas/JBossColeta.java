@@ -72,6 +72,8 @@ public class JBossColeta {
 			try{				
 				socket.openSocket();
 
+				this.setPort();
+				
 				//Pega as propriedades do coletor
 				this.getJbossRuntime();
 				this.propriedadesMemorias = this.getConfigJbossMemory();
@@ -105,7 +107,7 @@ public class JBossColeta {
 			}catch(Exception ex){
 				this.jboss.setGerenciavel(false);
 				this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.jboss);
-				System.out.println("JBoss não gerenciável - "+ jboss.getHostname() + "- Erros durante a coleta ");
+				System.out.println("JBoss nï¿½o gerenciï¿½vel - "+ jboss.getHostname() + "- Erros durante a coleta ");
 				ex.printStackTrace();
 			}finally{
 				if(!this.jboss.getGerenciavel() && this.ultimoGerenciavel){
@@ -133,7 +135,7 @@ public class JBossColeta {
 				result = true;
 			}
 			else{
-				System.out.println("JBOSS Indísponível - "+ this.jboss.getHostname() +" - HTTP Status: "+code);
+				System.out.println("JBOSS Indï¿½sponï¿½vel - "+ this.jboss.getHostname() +" - HTTP Status: "+code);
 				this.jboss.setDisponivel(false);
 				this.jboss.setGerenciavel(false);
 				this.jboss.setUptime(null);
@@ -144,7 +146,7 @@ public class JBossColeta {
 			
 		}catch(Exception ex){
 			
-			System.out.println("JBOSS Indísponível - "+ this.jboss.getHostname() +" - Falha no Http GET");
+			System.out.println("JBOSS Indï¿½sponï¿½vel - "+ this.jboss.getHostname() +" - Falha no Http GET");
 			ex.printStackTrace();
 			this.jboss.setDisponivel(false);
 			this.jboss.setGerenciavel(false);
@@ -179,6 +181,16 @@ public class JBossColeta {
 		this.alarmeBO.geraAlarmeIndsiponibilidade(this.jboss, ultimoStatus);
 		
 		return result;		
+	}
+	
+	private void setPort(){
+		try{
+			this.socket.enviaComando("get jboss.port " + this.jboss.getJmxPort());
+		}catch (InterruptedException e) {
+			e.printStackTrace();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
 	private Map<String,ServidorAplicacaoDeployment> getJbossDeployments(){

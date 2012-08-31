@@ -21,6 +21,18 @@ public class SqlServer {
 
 	private Connection conn;
 	
+	private static SqlServer instance;
+    
+    public static SqlServer getInstance() {
+    	
+		if(SqlServer.instance == null){
+			SqlServer.instance = new SqlServer();
+		}
+		
+		return SqlServer.instance;
+		
+	}
+	
 	public SqlServer(){
 		try{
 			this.conn = SqlServerConnectionFactory.getConnection();

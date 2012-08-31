@@ -23,7 +23,6 @@ Ext.define('MONITOR.controller.NoController', {
     	'bancoDados.FormOracle',
     	'bancoDados.FormSQLServer',
     	
-    	
     	'alarme.ListAlarmesNo',
     	
     	'login.MainTab'
@@ -111,6 +110,10 @@ Ext.define('MONITOR.controller.NoController', {
 				click: this.editNo
 			},
 			
+			'#toolbarno button[action=delete]':{
+				click: this.deleteNo
+			},
+			
 			'formservidor button[action=save]': {
 				click: this.saveOrUpdate
 			},
@@ -140,12 +143,25 @@ Ext.define('MONITOR.controller.NoController', {
     	var tabs = viewport.down('maintab');
     	var tipo = record.get('tipo'); 
     	
-    	if(tipo == "Servidor"){
-    		this.geraTabServidor(tabs,record);
-    	}else if (tipo == "Servidor de Aplicacao"){
-    		this.geraTabServidorAplicacao(tabs,record);
-    	}else if (tipo == "Banco de Dados"){
-    		this.geraTabBancoDados(tabs,record);
+    	if(record.get('ultimaColeta') == null){
+    		
+            Ext.MessageBox.show({
+                title: 'Sem informações para o Nó',
+                msg: "O nó "+record.get('nome')+" ainda não possui informações, verifique o agendamento das coletas.",
+                icon: Ext.MessageBox.WARNING,
+                buttons: Ext.Msg.OK
+            });
+    		
+    	}else{
+    	
+	    	if(tipo == "Servidor"){
+	    		this.geraTabServidor(tabs,record);
+	    	}else if (tipo == "Servidor de Aplicacao"){
+	    		this.geraTabServidorAplicacao(tabs,record);
+	    	}else if (tipo == "Banco de Dados"){
+	    		this.geraTabBancoDados(tabs,record);
+	    	}
+	    	
     	}
     	
     },
@@ -620,17 +636,34 @@ Ext.define('MONITOR.controller.NoController', {
 		if(this.itemSelected != null){
 			
 			var tipo = this.itemSelected.get('tipo');
+			var subTipo = this.itemSelected.get('subTipo');
+			
+			console.log(subTipo);
+			
 	    	if(tipo == "Servidor"){
 	    		this.editServidor(this.itemSelected);
 	    	}else if (tipo == "Servidor de Aplicacao"){
-	    		this.editServidorAplicacao(this.itemSelected);
+	    		console.log("ma");
+	    		if(subTipo == "Glassfish"){
+	    			this.editGlassfish(this.itemSelected);
+	    		}else if(subTipo == "JBoss"){
+	    			this.editJBoss(this.itemSelected);
+	    		}
+	    		
 	    	}else if (tipo == "Banco de Dados"){
-	    		//this.editBancoDados(this.itemSelected);
+	    		
+	    		if(subTipo == "Oracle"){
+	    			this.editOracle(this.itemSelected);
+	    		}else if(subTipo == "SQL Server"){
+	    			this.editSQLServer(this.itemSelected);
+	    		}
+	    		
 	    	}
 			
 		}else{
 			Ext.MessageBox.alert("Alerta","Selecione um registro antes de alterar.");
 		}
+		
     },
     
     editServidor : function(record){
@@ -638,38 +671,67 @@ Ext.define('MONITOR.controller.NoController', {
     	var id = record.get('id');
     	
 		MONITOR.model.Servidor.load(id,{
-			success: function(servidor){
+			success: function(no){
 				var view = Ext.widget('formservidor');
-				view.down('form').loadRecord(servidor);
+				view.down('form').loadRecord(no);
 			}
 		});
 		
     },
     
-    editServidorAplicacao : function(record){
+    editGlassfish : function(record){
     	
     	var id = record.get('id');
     	
-		MONITOR.model.ServidorAplicacao.load(id,{
-			success: function(sa){
-				
-				var view = null;
-				var tipo = sa.get('subTipo');
-				
-				console.log(tipo);
-				if(subtipotipo == "Glassfish"){
-					view = Ext.widget('formglassfish');
-				}else{
-					view = Ext.widget('formjboss');
-				}
-				
-				view.down('form').loadRecord(sa);
+    	console.log("oi");
+		MONITOR.model.Glassfish.load(id,{
+			success: function(no){
+				console.log("bls");
+				var view = Ext.widget('formglassfish');
+				view.down('form').loadRecord(no);
 			}
 		});
 		
     },
-
-  
+    
+    editJBoss : function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.JBoss.load(id,{
+			success: function(no){
+				var view = Ext.widget('formjboss');
+				view.down('form').loadRecord(no);
+			}
+		});
+		
+    },
+    
+    editOracle : function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.Oracle.load(id,{
+			success: function(no){
+				var view = Ext.widget('formoracle');
+				view.down('form').loadRecord(no);
+			}
+		});
+		
+    },
+    
+    editSQLServer : function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.SQLServer.load(id,{
+			success: function(no){
+				var view = Ext.widget('formsqlserver');
+				view.down('form').loadRecord(no);
+			}
+		});
+		
+    }, 
     
 	saveOrUpdate: function(button){
 	    var win    = button.up('window');
@@ -697,6 +759,40 @@ Ext.define('MONITOR.controller.NoController', {
         		}
         	);
         }
+	},
+	
+	deleteNo: function(button){
+		if(this.itemSelected != null){
+			
+			//var store = Ext.data.StoreManager.lookup('Nos');
+			var store = this.getNosStore();
+			
+			Ext.MessageBox.confirm('Confirmação','Deseja excluir o nó '+this.itemSelected.get('nome')+' ?',
+				function(resp){
+					if(resp=="yes"){
+						
+						this.itemSelected.destroy({
+		        			success: function(rec,op){
+		        				store.reload();
+		        			},
+		        			failure: function(rec,op){
+		                        Ext.MessageBox.show({
+		                            title: 'Erro',
+		                            msg: op.request.scope.reader.jsonData["message"],
+		                            icon: Ext.MessageBox.ERROR,
+		                            buttons: Ext.Msg.OK
+		                        });
+		        			}
+						});
+						
+					}
+				},this);
+			
+			
+		}else{
+			Ext.MessageBox.alert("Alerta","Selecione um registro antes de excluir.");
+		}
+		
 	},
 	
     resetRegister: function(){

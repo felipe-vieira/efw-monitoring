@@ -21,6 +21,30 @@ import br.com.fiap.monitor.utils.RESTUtils;
 public class Glassfish {
 	 
 	    private MBeanServerConnection mbsc = null;  
+	    private String user;
+	    private String password;
+	    private int port;
+	    
+	    private static Glassfish instance;
+	    
+	    public static Glassfish getInstance() {
+	    	
+			if(Glassfish.instance == null){
+				Glassfish.instance = new Glassfish();
+			}
+			
+			return Glassfish.instance;
+			
+		}
+	    
+	    
+	    public void setCredentials(String user, String password, int port){
+			this.user = user;
+			this.password = password;
+			this.port = port;
+			
+			System.out.println(this.user + " " + this.password + " " + this.port);
+		}
 	 
 	    public ReturnObject getMemory(){
 	    	
@@ -94,7 +118,6 @@ public class Glassfish {
 	    	 } catch (Exception e) {
 		            e.printStackTrace();
 		     }
-	    	
 	    }
 	    
 	    public ReturnObject getRuntime(){
@@ -161,8 +184,7 @@ public class Glassfish {
 	    	 } catch (Exception e) {
 	    		 e.printStackTrace();
 		         return null;   
-		     }
-	    	
+		     }    	
 	    }
 
 	    public ReturnObject getDeployments(){
@@ -188,9 +210,7 @@ public class Glassfish {
 		     }
 	    	
 	    }
-	    
-	    
-	    
+
 	    private void connect() throws Exception {
 
 	        JMXServiceURL jmxUrl =
@@ -200,7 +220,10 @@ public class Glassfish {
 	        Map<String,Object> env = new HashMap<String, Object>();
 	        
 	        //TODO parametrizar.
-	        String[] credentials = new String[]{"admin", ""};
+	        String[] credentials = new String[]{this.user, this.password};
+	        
+	        System.out.println("usuario " + this.user);
+	        System.out.println("senha " + this.password);
 
 	        env.put(JMXConnector.CREDENTIALS, credentials);              
 
