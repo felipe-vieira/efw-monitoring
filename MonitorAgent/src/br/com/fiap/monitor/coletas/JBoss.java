@@ -13,7 +13,24 @@ public class JBoss {
 
 	private ModelControllerClient client;
 	private String host = "localhost";
-	private int port = 9999;
+	private int port;
+	
+	private static JBoss instance;
+    
+    public static JBoss getInstance() {
+    	
+		if(JBoss.instance == null){
+			JBoss.instance = new JBoss();
+		}
+		
+		return JBoss.instance;
+		
+	}
+	
+	
+	public void setPort(int port){
+		this.port = port;
+	}
 	
 	public ReturnObject getMemory(){
 		
@@ -21,7 +38,7 @@ public class JBoss {
 		
 			try{
 				
-				client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
+				client = ModelControllerClient.Factory.create(InetAddress.getByName(this.host), this.port);
 				ModelNode opHeap = new ModelNode();
 				opHeap.get("operation").set("read-attribute");
 				opHeap.get("name").set("heap-memory-usage");
@@ -58,7 +75,7 @@ public class JBoss {
 		ReturnObject retorno = new ReturnObject();
 		
 		try{
-			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
+			client = ModelControllerClient.Factory.create(InetAddress.getByName(this.host), this.port);
 			ModelNode opCount = new ModelNode();
 			opCount.get("operation").set("read-attribute");
 			opCount.get("name").set("thread-count");
@@ -104,7 +121,7 @@ public class JBoss {
 		ReturnObject retorno = new ReturnObject();
 		
 		try{
-			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
+			client = ModelControllerClient.Factory.create(InetAddress.getByName(this.host), this.port);
 			ModelNode opStartTime = new ModelNode();
 			opStartTime.get("operation").set("read-attribute");
 			opStartTime.get("name").set("start-time");
@@ -141,7 +158,7 @@ public class JBoss {
 		ReturnObject retorno = new ReturnObject();
 		
 		try{
-			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
+			client = ModelControllerClient.Factory.create(InetAddress.getByName(this.host), this.port);
 			ModelNode opStatus = new ModelNode();
 			opStatus.get("operation").set("read-attribute");
 			opStatus.get("name").set("server-state");
@@ -165,7 +182,7 @@ public class JBoss {
 		ReturnObject retorno = new ReturnObject();
 		
 		try{
-			client = ModelControllerClient.Factory.create(InetAddress.getByName(host), port);
+			client = ModelControllerClient.Factory.create(InetAddress.getByName(this.host), this.port);
 			ModelNode opDeployment = new ModelNode();
 			opDeployment.get("operation").set("read-children-names");
 			opDeployment.get("child-type").set("deployment");

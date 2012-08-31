@@ -27,26 +27,30 @@ public class ColetaJob implements Job{
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		System.out.println("começou uma coleta");
+		System.out.println("comeï¿½ou uma coleta");
 		Integer idNo = context.getJobDetail().getJobDataMap().getInt("no");
 		
 		No noAtual = this.noDAO.getNoById(idNo);
 		
-		if(noAtual instanceof Servidor){
-			ServidorColeta coleta = new ServidorColeta(noAtual);
-			coleta.initColeta();
-		}else if(noAtual instanceof SQLServer){
-			SQLServerColeta coleta = new SQLServerColeta(noAtual);
-			coleta.initColeta();
-		}else if(noAtual instanceof Oracle){
-			OracleColeta coleta = new OracleColeta(noAtual);
-			coleta.initColeta();
-		}else if(noAtual instanceof Glassfish){
-			GlassFishColeta coleta = new GlassFishColeta(noAtual);
-			coleta.initColeta();
-		}else if(noAtual instanceof JBoss){
-			JBossColeta coleta =  new JBossColeta(noAtual);
-			coleta.initColeta();
+		try{
+			if(noAtual instanceof Servidor){
+				ServidorColeta coleta = new ServidorColeta(noAtual);
+				coleta.initColeta();
+			}else if(noAtual instanceof SQLServer){
+				SQLServerColeta coleta = new SQLServerColeta(noAtual);
+				coleta.initColeta();
+			}else if(noAtual instanceof Oracle){
+				OracleColeta coleta = new OracleColeta(noAtual);
+				coleta.initColeta();
+			}else if(noAtual instanceof Glassfish){
+				GlassFishColeta coleta = new GlassFishColeta(noAtual);
+				coleta.initColeta();
+			}else if(noAtual instanceof JBoss){
+				JBossColeta coleta =  new JBossColeta(noAtual);
+				coleta.initColeta();
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 		
 	}

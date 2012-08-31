@@ -17,9 +17,11 @@ public class Comando {
 		
 		Metricas metrica = new Metricas();
 		Configuracoes config = new Configuracoes();
-		JBoss app = new JBoss();
-		Glassfish gf = new Glassfish();
-
+		JBoss app = JBoss.getInstance();
+		Glassfish gf = Glassfish.getInstance();
+		SqlServer sql = SqlServer.getInstance();
+		Oracle oracle = Oracle.getInstance();
+		
 		Log log = new Log();
 
 		String arg[] = comando.split(" ");
@@ -43,6 +45,10 @@ public class Comando {
 					if(arg.length > 2){
 						retorno = metrica.getPatitionInfo(arg[2]);
 					}
+				}else if(arg[1].equals("jboss.port")){
+					if(arg.length > 2){
+						app.setPort(Integer.parseInt(arg[2]));
+					}
 				}else if(arg[1].equals("jboss.memory")){
 					retorno = app.getMemory();
 				}else if(arg[1].equals("jboss.thread")){
@@ -54,28 +60,37 @@ public class Comando {
 				}else if(arg[1].equals("jboss.deployment")){
 					retorno = app.getDeployments();
 				}else if(arg[1].equals("mssql.memory")){
-					retorno = new SqlServer().getMemory();
+					//retorno = new SqlServer().getMemory();
+					retorno = sql.getMemory();
 				}else if(arg[1].equals("mssql.config.memory")){
-					retorno = new SqlServer().getConfigMemory();
+					//retorno = new SqlServer().getConfigMemory();
+					retorno = sql.getConfigMemory();
 				}else if(arg[1].equals("mssql.config.version")){
-					retorno = new SqlServer().getConfigVersion();
+					//retorno = new SqlServer().getConfigVersion();
+					retorno = sql.getConfigVersion();
 				}else if(arg[1].equals("mssql.config.drive")){
-					retorno = new SqlServer().getConfigDrive();
+					//retorno = new SqlServer().getConfigDrive();
+					retorno = sql.getConfigDrive();
 				}else if(arg[1].equals("mssql.config.files")){
-					retorno = new SqlServer().getConfigFiles();
+					//retorno = new SqlServer().getConfigFiles();
+					retorno = sql.getConfigFiles();
 				}else if(arg[1].equals("mssql.config.collation")){
 					if(arg.length > 2){
-						retorno = new SqlServer().getConfigCollation(arg[2]);
+						//retorno = new SqlServer().getConfigCollation(arg[2]);
+						retorno = sql.getConfigCollation(arg[2]);
 					}
 				}else if(arg[1].equals("mssql.logspace")){
-					retorno = new SqlServer().getLogSpace();
+					//retorno = new SqlServer().getLogSpace();
+					retorno = sql.getLogSpace();
 				}else if(arg[1].equals("mssql.status")){
 					if(arg.length > 2){
-						retorno = new SqlServer().getStatus(arg[2]);
+						//retorno = new SqlServer().getStatus(arg[2]);
+						retorno = sql.getStatus(arg[2]);
 					}
 				}else if(arg[1].equals("mssql.config.collation")){
 					if(arg.length > 2){
-						retorno = new SqlServer().getConfigCollation(arg[2]);
+						//retorno = new SqlServer().getConfigCollation(arg[2]);
+						retorno = sql.getConfigCollation(arg[2]);
 					}
 				}else if(arg[1].equals("mssql.config.backup")){
 					Long setCount = 0l;
@@ -87,27 +102,37 @@ public class Comando {
 							setCount = 0l;
 						}
 					}
-					retorno = new SqlServer().getBackup(setCount);
+					//retorno = new SqlServer().getBackup(setCount);
+					retorno = sql.getBackup(setCount);
 				}else if(arg[1].equals("mssql.config.jobs")){
-					retorno = new SqlServer().getConfigJobs();
+					//retorno = new SqlServer().getConfigJobs();
+					retorno = sql.getConfigJobs();
 				}else if(arg[1].equals("mssql.jobHistory")){
-					retorno = new SqlServer().getJobHistory();
+					//retorno = new SqlServer().getJobHistory();
+					retorno = sql.getJobHistory();
 				}else if(arg[1].equals("mssql.status")){
 					if(arg.length > 2){
-						retorno = new SqlServer().getConfigCollation(arg[2]);
+						//retorno = new SqlServer().getConfigCollation(arg[2]);
+						retorno = sql.getConfigCollation(arg[2]);
 					}
 				}else if(arg[1].equals("ora.config.memory")){
-					retorno = new Oracle().getConfigMemory();
+					//retorno = new Oracle().getConfigMemory();
+					retorno = oracle.getConfigMemory();
 				}else if(arg[1].equals("ora.memory")){
-					retorno = new Oracle().getMemory();
+					//retorno = new Oracle().getMemory();
+					retorno = oracle.getMemory();
 				}else if(arg[1].equals("ora.config.version")){
-					retorno = new Oracle().getConfigVersion();
+					//retorno = new Oracle().getConfigVersion();
+					retorno = oracle.getConfigVersion();
 				}else if(arg[1].equals("ora.status")){
-					retorno = new Oracle().getStatus();
+					//retorno = new Oracle().getStatus();
+					retorno = oracle.getStatus();
 				}else if(arg[1].equals("ora.config.collation")){
-					retorno = new Oracle().getConfigCollation();
+					//retorno = new Oracle().getConfigCollation();
+					retorno = oracle.getConfigCollation();
 				}else if(arg[1].equals("ora.config.files")){
-					retorno = new Oracle().getConfigFiles();
+					//retorno = new Oracle().getConfigFiles();
+					retorno = oracle.getConfigFiles();
 				}else if(arg[1].equals("ora.config.backup")){
 					Long setCount = 0l;
 					
@@ -119,12 +144,24 @@ public class Comando {
 						}
 					}
 					
-					retorno = new Oracle().getConfigBackup(setCount);
+					//retorno = new Oracle().getConfigBackup(setCount);
+					retorno = oracle.getConfigBackup(setCount);
 					
 				}else if(arg[1].equals("ora.config.jobHistory")){
-					retorno = new Oracle().getConfigJobHistory();
+					//retorno = new Oracle().getConfigJobHistory();
+					retorno = oracle.getConfigJobHistory();
 				}else if(arg[1].equals("jboss.status")){
 					retorno = app.getStatus();
+				}else if(arg[1].equals("glassfish.credentials")){
+					
+					try {
+						if(arg.length == 5){
+							System.out.println("ok");
+							gf.setCredentials(arg[2], arg[3], Integer.parseInt(arg[4]));
+						}
+					} catch (Exception e){
+						e.printStackTrace();
+					}
 				}else if(arg[1].equals("glassfish.memory")){
 					retorno = gf.getMemory();				
 				}else if(arg[1].equals("glassfish.runtime")){

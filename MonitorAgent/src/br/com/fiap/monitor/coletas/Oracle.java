@@ -19,6 +19,18 @@ public class Oracle {
 
 		private Connection conn;
 		
+		private static Oracle instance;
+	    
+	    public static Oracle getInstance() {
+	    	
+			if(Oracle.instance == null){
+				Oracle.instance = new Oracle();
+			}
+			
+			return Oracle.instance;
+			
+		}
+		
 		public Oracle(){
 			try{
 				this.conn = OracleConnectionFactory.getConnection();
