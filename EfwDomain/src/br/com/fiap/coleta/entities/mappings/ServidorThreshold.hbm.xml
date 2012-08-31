@@ -8,15 +8,15 @@
 			
 		<key column="id"/>
 		<property name="limiteMemoria">
-			<column name="limite_memoria" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="limite_memoria" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		<property name="limiteCpu">
-			<column name="limite_cpu" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="limite_cpu" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		<property name="limiteParticao">
-			<column name="limite_particao" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="limite_particao" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		

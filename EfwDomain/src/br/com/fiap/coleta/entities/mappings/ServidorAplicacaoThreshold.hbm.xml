@@ -9,19 +9,19 @@
 		
 		<key column="id"/>
 		<property name="thresholdHeap">
-			<column name="threshold_heap" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="threshold_heap" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		<property name="thresholdNonHeap">
-			<column name="threshold_non_heap" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="threshold_non_heap" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		<property name="thresholdCpuUserTime">
-			<column name="threshold_cpu_user_time" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="threshold_cpu_user_time" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		<property name="thresholdCpuCpuTime">
-			<column name="threshold_cpu_cpu_time" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="threshold_cpu_cpu_time" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		

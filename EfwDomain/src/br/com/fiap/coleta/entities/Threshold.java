@@ -15,6 +15,8 @@ public abstract class Threshold implements Serializable {
 	private Integer id;
 	
 	private String nome;
+	
+	private String tipo;
 
 	public Integer getId() {
 		return id;
@@ -61,6 +63,14 @@ public abstract class Threshold implements Serializable {
 		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 	

@@ -3,21 +3,22 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<joined-subclass name="br.com.fiap.coleta.entities.BancoDadosThreshold" table="banco_dados_threshold">
+	<joined-subclass name="br.com.fiap.coleta.entities.BancoDadosThreshold" table="banco_dados_threshold"
+		extends="br.com.fiap.coleta.entities.Threshold">
 			
 		<key column="id"/>
 		
 		<property name="limiteMemoria">
-			<column name="limite_memoria" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="limite_memoria" sql-type="decimal(5,2)"/>
 		</property>	
 		
 		<property name="limiteFile">
-			<column name="limite_file" sql-type="decimal(5,2)"  not-null="true"/>
+			<column name="limite_file" sql-type="decimal(5,2)"/>
 		</property>	
 		
-		<property name="limiteTempoBackup" not-null="true"/>
+		<property name="limiteTempoBackup"/>
 		
-		<property name="limiteTempoJob" not-null="true"/>		
+		<property name="limiteTempoJob"/>		
 		
 	</joined-subclass>
 </hibernate-mapping>
