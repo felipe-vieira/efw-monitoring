@@ -1,0 +1,79 @@
+#!/bin/bash
+#
+# author: Wagner Spirigoni
+#
+# monitor-agent		Inicia o servico do Monitor-Agent
+#
+
+prog="monitor-server"
+lockfile=/var/lock/$prog
+
+RETVAL=0
+AGENT=/usr/local/bin/monitor-server.jar
+PID_FILE=/var/run/monitor-server.pid
+JAVA=/usr/bin/java
+JAVAOPTS=-jar
+
+start()
+{
+	[ -e $AGENT ] || exit 5
+
+	echo $"Iniciando $prog"
+	$JAVA $JAVAOPTS $AGENT &> /dev/null &
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch $lockfile
+	[ $RETVAL -eq 0 ] && echo $! > $PID_FILE
+	return $RETVAL
+}
+
+stop()
+{
+
+	echo $"Parando $prog"
+	if [ ! -f "$PID_FILE" ]; then
+		return 0
+	fi
+	PID=`cat "$PID_FILE"`
+	if [ -n "$PID" ]; then
+	/bin/kill "$PID" >/dev/null 2>&1
+	fi
+	
+	if [ "x$runlevel" = x0 -o "x$runlevel" = x6 ] ; then
+	    trap '' TERM
+	    killall $prog 2>/dev/null
+	    trap TERM
+	fi
+	[ $RETVAL -eq 0 ] && rm -f $lockfile
+	rm -f "$PID_FILE"
+        return $RETVAL
+}
+
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+	start)
+		if [ -e $lockfile ]; then
+			echo "$prog ja esta rodando"
+			exit 1
+		fi
+		start
+		;;
+	stop)
+		if [ -e $lockfile ]; then
+			rm -f $lockfile
+			stop
+			exit 0
+		fi
+		echo "$prog nao esta rodando"
+		;;
+	restart)
+		restart
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart}"
+		RETVAL=2
+esac
+exit $RETVAL
