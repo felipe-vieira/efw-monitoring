@@ -1,6 +1,11 @@
 package br.com.fiap.coleta.entities;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Agendamento {
 	
 
@@ -10,7 +15,7 @@ public class Agendamento {
 	private String horaFim;
 	private Boolean agendado;
 	private Boolean ativo;
-	private No No;
+	private No no;
 	
 	public Integer getId() {
 		return id;
@@ -50,16 +55,16 @@ public class Agendamento {
 		this.ativo = ativo;
 	}
 	public No getNo() {
-		return No;
+		return no;
 	}
 	public void setNo(No no) {
-		No = no;
+		this.no = no;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((No == null) ? 0 : No.hashCode());
+		result = prime * result + ((no == null) ? 0 : no.hashCode());
 		result = prime * result
 				+ ((agendado == null) ? 0 : agendado.hashCode());
 		result = prime * result + ((horaFim == null) ? 0 : horaFim.hashCode());
@@ -79,10 +84,10 @@ public class Agendamento {
 		if (getClass() != obj.getClass())
 			return false;
 		Agendamento other = (Agendamento) obj;
-		if (No == null) {
-			if (other.No != null)
+		if (no == null) {
+			if (other.no != null)
 				return false;
-		} else if (!No.equals(other.No))
+		} else if (!no.equals(other.no))
 			return false;
 		if (agendado == null) {
 			if (other.agendado != null)

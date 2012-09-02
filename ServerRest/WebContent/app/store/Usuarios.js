@@ -12,7 +12,7 @@ Ext.define('MONITOR.store.Usuarios', {
         url: 'rest/usuarios/',
         reader: {
             type: 'json',
-            root: 'usuario'
+            root: 'records'
         },
 		writer: {
 			type: 'json',
