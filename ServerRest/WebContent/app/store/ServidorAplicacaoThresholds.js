@@ -1,15 +1,15 @@
-Ext.define('MONITOR.store.Thresholds', {
+Ext.define('MONITOR.store.ServidorAplicacaoThresholds', {
     extend: 'Ext.data.Store',
-    model: 'MONITOR.model.Threshold',
+    model: 'MONITOR.model.ServidorAplicacaoThreshold',
     pageSize: 25,
     autoLoad: true,
 
     proxy: {
         type: 'rest',
-        url: 'rest/thresholds/',
+        url: 'rest/servidorAplicacaoThresholds/',
         reader: {
             type: 'json',	
-            root: 'records'
+            root: 'servidorAplicacaoThreshold'
         },
 		writer: {
 			type: 'json', //json ou xml

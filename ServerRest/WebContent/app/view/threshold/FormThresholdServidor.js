@@ -1,8 +1,8 @@
-Ext.define('MONITOR.view.servidorAplicacao.FormJBoss', {
+Ext.define('MONITOR.view.threshold.FormThresholdServidor', {
     extend: 'Ext.window.Window',
-    alias: 'widget.formjboss',
+    alias: 'widget.formthresholdservidor',
 
-    title: 'Cadastro de Servidor de Aplicacao - JBoss',
+    title: 'Cadastro de Threshold - Servidor',
     layout: 'fit',
     autoShow: true,
     modal: true,
@@ -20,40 +20,30 @@ Ext.define('MONITOR.view.servidorAplicacao.FormJBoss', {
                         allowBlank: false
                     },
                     {
-                        xtype: 'textfield',
-                        name : 'hostname',
-                        fieldLabel: 'Hostname',
-                        allowBlank: false
-                    },
-                    {
                     	xtype: 'numberfield',
-                    	name: 'agentPort',
-                    	fieldLabel: 'Porta do Agente',
-                    	allowBlank: false,
-                    	allowDecimal: false,
-                        minValue: 1,
-                        maxValue: 65535,
+                    	name: 'limiteMemoria',
+                    	fieldLabel: 'Limite de Memória (%)',
+                        minValue: 0,
+                        maxValue: 99.99,
+                        decimalSeparator:',',
                         hideTrigger:true
                     },
                     {
                     	xtype: 'numberfield',
-                    	name: 'port',
-                    	fieldLabel: 'Porta do HTTP',
-                    	allowDecimal: false,
-                    	allowBlank: false,
-                        minValue: 1,
-                        maxValue: 65535,
+                    	name: 'limiteCpu',
+                    	fieldLabel: 'Limite de CPU (%)',
+                        minValue: 0,
+                        maxValue: 99.99,
+                        decimalSeparator:',',
                         hideTrigger:true
-                    	
                     },
                     {
                     	xtype: 'numberfield',
-                    	name: 'jmxPort',
-                    	fieldLabel: 'Porta do JMX',
-                    	allowDecimal: false,
-                    	allowBlank: false,
-                        minValue: 1,
-                        maxValue: 65535,
+                    	name: 'limiteParticao',
+                    	fieldLabel: 'Limite de Partição (%)',
+                        minValue: 0,
+                        maxValue: 99.99,
+                        decimalSeparator:',',
                         hideTrigger:true
                     }
                 ]

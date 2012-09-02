@@ -30,6 +30,7 @@ Ext.define('MONITOR.view.servidorAplicacao.FormGlassFish', {
                     	name: 'agentPort',
                     	fieldLabel: 'Porta do Agente',
                     	allowBlank: false,
+                    	allowDecimal: false,
                         minValue: 1,
                         maxValue: 65535,
                         hideTrigger:true
@@ -39,6 +40,7 @@ Ext.define('MONITOR.view.servidorAplicacao.FormGlassFish', {
                     	name: 'port',
                     	fieldLabel: 'Porta do HTTP',
                     	allowBlank: false,
+                    	allowDecimal: false,
                         minValue: 1,
                         maxValue: 65535,
                         hideTrigger:true
@@ -49,6 +51,7 @@ Ext.define('MONITOR.view.servidorAplicacao.FormGlassFish', {
                     	name: 'jmxPort',
                     	fieldLabel: 'Porta do JMX',
                     	allowBlank: false,
+                    	allowDecimal: false,
                         minValue: 1,
                         maxValue: 65535,
                         hideTrigger:true

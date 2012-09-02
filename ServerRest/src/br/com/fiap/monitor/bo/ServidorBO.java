@@ -103,4 +103,22 @@ public class ServidorBO {
 		}	
 	}
 	
+	public List<Servidor> listServidores(){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+				
+		try{
+			Query query = session.createQuery("FROM Servidor");
+			
+			List<Servidor> servidores = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return servidores;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}	
+	}
+	
 }

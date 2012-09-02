@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.BancoBackup;
+import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.coleta.entities.Oracle;
@@ -216,6 +217,24 @@ public class BancoDadosBO {
 		}
 		
 		return retorno;
+	}
+	
+	public List<BancoDados> listBancosDados(){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+				
+		try{
+			Query query = session.createQuery("FROM BancoDados");
+			
+			List<BancoDados> bancos = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return bancos;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}	
 	}
 	
 	

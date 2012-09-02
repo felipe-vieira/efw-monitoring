@@ -30,6 +30,7 @@ Ext.define('MONITOR.view.bancoDados.FormSQLServer', {
                     	name: 'agentPort',
                     	fieldLabel: 'Porta do Agente',
                     	allowBlank: false,
+                    	allowDecimal: false,
                     	minValue: 1,
                         maxValue: 65535,
                         hideTrigger: true
@@ -38,6 +39,7 @@ Ext.define('MONITOR.view.bancoDados.FormSQLServer', {
                     	xtype: 'numberfield',
                     	name: 'port',
                     	fieldLabel: 'Porta do SQL Server',
+                    	allowDecimal: false,
                     	allowBlank: false,
                     	minValue: 1,
                         maxValue: 65535,

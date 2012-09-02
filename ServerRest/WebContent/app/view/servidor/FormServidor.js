@@ -29,10 +29,23 @@ Ext.define('MONITOR.view.servidor.FormServidor', {
                     	xtype: 'numberfield',
                     	name: 'agentPort',
                     	fieldLabel: 'Porta do Agente',
+                    	allowDecimal: false,
                     	allowBlank: false,
                         minValue: 1,
                         maxValue: 65535,
                         hideTrigger:true
+                    },
+                    {
+                    	xtype: 'combobox',
+                    	name: 'thresholdId',
+                    	store: 'ServidorThresholds',
+                    	fieldLabel: 'Threshold',
+                    	valueField: 'id',
+                    	displayField: 'nome',
+                    	value: 'threshold',
+                    	queryMode: 'local',
+                    	emptyText: 'Selecione',
+                    	forceSelection: true
                     }
                 ]
             }

@@ -16,8 +16,8 @@ Ext.define('MONITOR.view.usuario.CrudUsuario', {
     	    	xtype: 'grid',
     	    	store: 'Usuarios',
     	    	columns: [
-    	    	   {text: 'Login', dataIndex: 'login', columnWidth:'50%'},
-    	    	   {text: 'Administrador', dataIndex: 'administrador', columnWidth:'50%',
+    	    	   {text: 'Login', dataIndex: 'login', flex:1,},
+    	    	   {text: 'Administrador', dataIndex: 'administrador', flex:1,
     	    	       renderer: function(val){
     	    	    	   console.log(val);
     	    	    	   if(val == true){

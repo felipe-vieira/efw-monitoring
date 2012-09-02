@@ -1,10 +1,10 @@
 Ext.define('MONITOR.model.BancoDadosThreshold', {
     extend: 'MONITOR.model.Threshold',
     fields: [
-        {name: 'limiteMemoria', type: 'float'},
-        {name: 'limiteFile', type: 'float'},
-        {name: 'limiteTempoBackup', type: 'int'},
-        {name: 'limiteTempoJob', type: 'int'}
+        {name: 'limiteMemoria', type: 'float', convert: null, defaultValue:null},
+        {name: 'limiteFile', type: 'float', convert: null, defaultValue:null},
+        {name: 'limiteTempoBackup', type: 'int', convert: null, defaultValue:null},
+        {name: 'limiteTempoJob', type: 'int', convert: null, defaultValue:null}
     ],
     
     proxy: {
@@ -15,7 +15,6 @@ Ext.define('MONITOR.model.BancoDadosThreshold', {
         },
 		writer: {
 			type: 'json',
-			writeAllFields: true
 		}
     }
 });

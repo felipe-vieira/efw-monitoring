@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import br.com.fiap.coleta.entities.Glassfish;
 import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
+import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;
@@ -174,6 +175,24 @@ public class ServidorAplicacaoBO {
 		}
 		
 		return retorno;
+	}
+	
+	public List<ServidorAplicacao> listServidoresAplicacao(){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+				
+		try{
+			Query query = session.createQuery("FROM ServidorAplicacao");
+			
+			List<ServidorAplicacao> servidores = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return servidores;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}	
 	}
 
 }

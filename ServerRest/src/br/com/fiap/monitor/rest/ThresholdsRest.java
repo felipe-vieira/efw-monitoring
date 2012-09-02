@@ -21,13 +21,21 @@ public class ThresholdsRest {
 	public PagingTO<Threshold> listaThresholds(@QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
 		
 		PagingTO<Threshold> retorno = new PagingTO<Threshold>();
-
-		ThresholdBO thresholdBO = new ThresholdBO();
-		List<Threshold> records = thresholdBO.listThresholdsLimit(start,limit);
 		
-		retorno.setSuccess(true);
-		retorno.setRecords(records);
-		retorno.setSuccess(true);
+		try{
+			ThresholdBO thresholdBO = new ThresholdBO();
+			List<Threshold> records = thresholdBO.listThresholdsLimit(start,limit);
+			Long count = thresholdBO.contaThresholds();
+			
+			retorno.setTotal(count);
+			retorno.setRecords(records);
+			retorno.setSuccess(true);
+			
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			retorno.setSuccess(false);
+		}
+		
 		return retorno;
 	}
 	

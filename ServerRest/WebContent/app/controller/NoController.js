@@ -31,12 +31,19 @@ Ext.define('MONITOR.controller.NoController', {
     stores: [
     	'Nos',
     	'Servidores',
-    	'Alarmes',
+    	
     	'ServidorAplicacaoDeployments',
     	'ServidorAplicacaoMemorias',
+    	
     	'BancoJobs',
     	'BancoFiles',
-    	'BancoBackups'
+    	'BancoBackups',
+    	
+    	'Alarmes',
+    	
+    	'ServidorThresholds',
+    	'ServidorAplicacaoThresholds',
+    	'BancoDadosThresholds'
     ],
     models: [
     	
@@ -83,7 +90,7 @@ Ext.define('MONITOR.controller.NoController', {
         	
     		'crudno > grid': {
     			beforerender: this.resetRegister,
-    			itemclick: this.selectUser
+    			itemclick: this.selectItem
     		},
 	    	
 			'#submenuno menuitem[id=createServidor]': {
@@ -672,7 +679,9 @@ Ext.define('MONITOR.controller.NoController', {
     	
 		MONITOR.model.Servidor.load(id,{
 			success: function(no){
+				//var id = no.getThreshold().id();
 				var view = Ext.widget('formservidor');
+				view.down('form').down('combobox').setValue();
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -683,10 +692,8 @@ Ext.define('MONITOR.controller.NoController', {
     	
     	var id = record.get('id');
     	
-    	console.log("oi");
 		MONITOR.model.Glassfish.load(id,{
 			success: function(no){
-				console.log("bls");
 				var view = Ext.widget('formglassfish');
 				view.down('form').loadRecord(no);
 			}
@@ -739,7 +746,7 @@ Ext.define('MONITOR.controller.NoController', {
         var record = form.getRecord();
         var values = form.getValues();
 	    var store =  this.getNosStore();
-	    
+        console.log(values.thresholdid);
         if(form.getForm().isValid()){
         	record.set(values);
         	record.save(
@@ -799,7 +806,7 @@ Ext.define('MONITOR.controller.NoController', {
     	this.itemSelected = null;
     },
     
-	selectUser: function(grid, record){
+	selectItem: function(grid, record){
 		this.itemSelected = record;
 	},
 

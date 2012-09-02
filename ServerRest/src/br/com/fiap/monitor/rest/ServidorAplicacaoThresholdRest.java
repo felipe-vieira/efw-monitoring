@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
 import br.com.fiap.coleta.entities.Threshold;
 import br.com.fiap.monitor.bo.ThresholdBO;
 import br.com.fiap.monitor.to.ReturnTO;
@@ -20,16 +21,15 @@ public class ServidorAplicacaoThresholdRest {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Threshold getThreshold(@PathParam("id") Integer id){
+	public ServidorAplicacaoThreshold getThreshold(@PathParam("id") Integer id){
 		ThresholdBO thresholdBO = new ThresholdBO();
-		return thresholdBO.getById(id);
+		return (ServidorAplicacaoThreshold) thresholdBO.getById(id);
 	}
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public ReturnTO saveThreshold(Threshold threshold, @PathParam("id") Integer id){
+	public ReturnTO saveThreshold(ServidorAplicacaoThreshold threshold){
 		if(threshold != null){
 			ThresholdBO thresholdBO = new ThresholdBO();
 			return thresholdBO.saveUpdateThreshold(threshold);
@@ -42,7 +42,7 @@ public class ServidorAplicacaoThresholdRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateThreshold(Threshold threshold, @PathParam("id") Integer id){
+	public ReturnTO updateThreshold(ServidorAplicacaoThreshold threshold, @PathParam("id") Integer id){
 		if(threshold != null){
 			ThresholdBO thresholdBO = new ThresholdBO();
 			return thresholdBO.saveUpdateThreshold(threshold);

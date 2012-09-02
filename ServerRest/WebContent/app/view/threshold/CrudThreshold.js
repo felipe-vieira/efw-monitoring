@@ -16,8 +16,8 @@ Ext.define('MONITOR.view.threshold.CrudThreshold', {
     	    	xtype: 'grid',
     	    	store: 'Thresholds',
     	    	columns: [
-    	    	   {text: 'Nome', dataIndex: 'nome', columnWidth:'50%'},
-    	    	   {text: 'Tipo', dataIndex: 'tipo', columnWidth:'50%'}
+    	    	   {text: 'Nome', dataIndex: 'nome', flex:1},
+    	    	   {text: 'Tipo', dataIndex: 'tipo', flex:1}
     	    	],
     	    	dockedItems : [
     	    	    {
@@ -26,10 +26,27 @@ Ext.define('MONITOR.view.threshold.CrudThreshold', {
     	    	        id: 'toolbarthreshold',
     	    	        items:
     	    	        [
-    	    	            {
-    	    	        	    text: 'Novo',
-    	    	        	    action: 'create'
-	                        },
+ 	    	            {
+	    	            	xtype: 'splitbutton',
+	    	        	    text: 'Novo',
+	    	        	    menu:{
+	    	        	    	id: 'submenuthreshold',
+	    	        	    	items:[
+    	    	        	    	{
+    	    	        	    		text: 'Servidor',
+    	    	        	    		id: 'createThresholdServidor'
+    	    	        	    	},
+    	    	        	    	{
+    	    	        	    		text: 'Banco de Dados',
+    	    	        	    		id: 'createThresholdBancoDados'
+    	    	        	    	},
+    	    	        	    	{
+    	    	        	    		text: 'Servidor de Aplicação',
+	    	        	    			id: 'createThresholdServidorAplicacao'
+    	    	        	    	}
+		                        ]
+	    	        	    }
+                        },
 	                        '-',
 	                        {
     	    	        	    text: 'Editar',

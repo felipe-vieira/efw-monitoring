@@ -1,15 +1,15 @@
-Ext.define('MONITOR.store.Thresholds', {
+Ext.define('MONITOR.store.BancoDadosThresholds', {
     extend: 'Ext.data.Store',
-    model: 'MONITOR.model.Threshold',
+    model: 'MONITOR.model.BancoDadosThreshold',
     pageSize: 25,
     autoLoad: true,
 
     proxy: {
         type: 'rest',
-        url: 'rest/thresholds/',
+        url: 'rest/bancoDadosThresholds/',
         reader: {
             type: 'json',	
-            root: 'records'
+            root: 'bancoDadosThresholds'
         },
 		writer: {
 			type: 'json', //json ou xml
