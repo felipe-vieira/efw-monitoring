@@ -11,14 +11,18 @@ import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.Servidor;
+import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.SistemaOperacional;
 import br.com.fiap.monitor.dao.GenericDAO;
+import br.com.fiap.monitor.to.ReturnTO;
 
 public class ServidorBO {
 
 	private GenericDAO genericDAO;
+	private NoBO noBO;
 	
 	public ServidorBO(){
+		this.noBO = new NoBO();
 		this.genericDAO = new GenericDAO();
 	}
 	
@@ -119,6 +123,60 @@ public class ServidorBO {
 			t.rollback();
 			return null;
 		}	
+	}
+	
+
+	public ReturnTO saveServidor(Servidor servidor, Integer thresholdId) {
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		ReturnTO retorno = new ReturnTO();
+		retorno.setSuccess(false);
+		
+		try{
+			
+			if(servidor.getNome() == null || servidor.getNome().equals("")){
+				retorno.setMessage("O campo nome é obrigatório.");
+			}else if(servidor.getHostname() == null || servidor.getHostname().equals("")){
+				retorno.setMessage("O campo hostname é obrigatório.");
+			}else if(servidor.getAgentPort() == null){
+				retorno.setMessage("O campo porta do agente é obrigatório");
+			}else if(this.noBO.verificaNoNome(servidor)){
+				retorno.setMessage("Ja existe um nó com esse nome.");
+			}else if(this.noBO.verificaIpPortaTipo(servidor)){
+				retorno.setMessage("Ja existe um nó com essa combinação de hostname, porta e tipo.");
+			}else{
+				
+				servidor.setAtivo(true);
+				
+				if(thresholdId != null && thresholdId != 0){
+					ServidorThreshold threshold = (ServidorThreshold) this.genericDAO.getById(ServidorThreshold.class, thresholdId);
+					servidor.setThreshold(threshold);
+				}else{
+					servidor.setThreshold(null);
+				}
+				
+				if(servidor.getId() == null && servidor.getId() !=0){
+					this.genericDAO.save(servidor);
+				}else{
+					this.genericDAO.update(servidor);
+				}
+				retorno.setSuccess(true);
+				
+			}
+		
+			t.commit();
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			
+			retorno.setSuccess(false);
+			retorno.setMessage(ex.getMessage());
+		}
+		
+		return retorno;
+		
 	}
 	
 }

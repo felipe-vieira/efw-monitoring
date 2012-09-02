@@ -55,6 +55,18 @@ Ext.define('MONITOR.view.servidorAplicacao.FormJBoss', {
                         minValue: 1,
                         maxValue: 65535,
                         hideTrigger:true
+                    },
+                    {
+                    	xtype: 'combobox',
+                    	name: 'thresholdId',                    	
+                    	store: 'ServidorAplicacaoThresholds',
+                    	id: 'thresholdId',
+                    	fieldLabel: 'Threshold',
+                    	valueField: 'id',
+                    	displayField: 'nome',
+                    	queryMode: 'local',
+                    	emptyText: 'Selecione',
+                    	forceSelection: true
                     }
                 ]
             }

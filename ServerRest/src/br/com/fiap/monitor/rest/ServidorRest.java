@@ -9,6 +9,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import br.com.fiap.coleta.entities.Memoria;
@@ -52,18 +53,18 @@ public class ServidorRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveServidor(Servidor servidor){
-		NoBO bo = new NoBO();
-		return bo.saveNo(servidor);		
+	public ReturnTO saveServidor(Servidor servidor, @QueryParam("thresholdId") Integer thresholdId){
+		ServidorBO bo = new ServidorBO();
+		return bo.saveServidor(servidor,thresholdId);		
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO saveServidor(Servidor servidor, @PathParam("id") Long id){
-		NoBO bo = new NoBO();
-		return bo.saveNo(servidor);		
+	public ReturnTO updateServidor(Servidor servidor, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId){
+		ServidorBO bo = new ServidorBO();
+		return bo.saveServidor(servidor,thresholdId);	
 	}
 	
 }

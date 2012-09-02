@@ -21,6 +21,10 @@ Ext.define('MONITOR.model.BancoDados', {
 			type: 'json',
 			writeAllFields: true
 		}
-    }
+    },
+    
+    hasOne: [
+        {model: 'MONITOR.model.BancoDadosThreshold', foreignKey: 'threshold.id', associationKey: 'threshold' ,  getterName: "getThreshold", setterName: 'setThreshold' }
+    ],
 });
 	

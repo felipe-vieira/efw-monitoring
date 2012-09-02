@@ -1,7 +1,6 @@
 Ext.define('MONITOR.store.BancoDadosThresholds', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.BancoDadosThreshold',
-    pageSize: 25,
     autoLoad: true,
 
     proxy: {
@@ -9,12 +8,18 @@ Ext.define('MONITOR.store.BancoDadosThresholds', {
         url: 'rest/bancoDadosThresholds/',
         reader: {
             type: 'json',	
-            root: 'bancoDadosThresholds'
+            root: 'bancoDadosThreshold'
         },
 		writer: {
 			type: 'json', //json ou xml
 			writeAllFields: true,
 			allowSingle: true
 		}
+    },
+    listeners:{
+	    load: function(store, records, successful, operation, options) {
+	        var falseReader = Ext.create('MONITOR.model.ServidorThreshold', {id:0, nome:'Não Configurado'});
+	        store.insert(0, falseReader);
+	    }
     }
 });

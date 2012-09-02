@@ -64,6 +64,18 @@ Ext.define('MONITOR.view.bancoDados.FormOracle', {
                     	name: 'instanceName',
                     	fieldLabel: 'Nome da Instância',
                     	allowBlank: false
+                    },
+                    {
+                    	xtype: 'combobox',
+                    	name: 'thresholdId',                    	
+                    	store: 'BancoDadosThresholds',
+                    	id: 'thresholdId',
+                    	fieldLabel: 'Threshold',
+                    	valueField: 'id',
+                    	displayField: 'nome',
+                    	queryMode: 'local',
+                    	emptyText: 'Selecione',
+                    	forceSelection: true
                     }
                     
                 ]

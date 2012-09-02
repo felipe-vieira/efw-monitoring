@@ -68,6 +68,18 @@ Ext.define('MONITOR.view.servidorAplicacao.FormGlassFish', {
                     	fieldLabel: 'Senha JMX',
                     	inputType: 'password',
                     	allowBlank: false
+                    },
+                    {
+                    	xtype: 'combobox',
+                    	name: 'thresholdId',                    	
+                    	store: 'ServidorAplicacaoThresholds',
+                    	id: 'thresholdId',
+                    	fieldLabel: 'Threshold',
+                    	valueField: 'id',
+                    	displayField: 'nome',
+                    	queryMode: 'local',
+                    	emptyText: 'Selecione',
+                    	forceSelection: true
                     }
                 ]
             }

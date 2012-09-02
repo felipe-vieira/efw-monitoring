@@ -1,7 +1,6 @@
 Ext.define('MONITOR.store.ServidorAplicacaoThresholds', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.ServidorAplicacaoThreshold',
-    pageSize: 25,
     autoLoad: true,
 
     proxy: {
@@ -16,5 +15,11 @@ Ext.define('MONITOR.store.ServidorAplicacaoThresholds', {
 			writeAllFields: true,
 			allowSingle: true
 		}
+    },
+    listeners:{
+	    load: function(store, records, successful, operation, options) {
+	        var falseReader = Ext.create('MONITOR.model.ServidorThreshold', {id:0, nome:'Não Configurado'});
+	        store.insert(0, falseReader);
+	    }
     }
 });

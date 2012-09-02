@@ -37,12 +37,12 @@ Ext.define('MONITOR.view.servidor.FormServidor', {
                     },
                     {
                     	xtype: 'combobox',
-                    	name: 'thresholdId',
+                    	name: 'thresholdId',                    	
                     	store: 'ServidorThresholds',
+                    	id: 'thresholdId',
                     	fieldLabel: 'Threshold',
                     	valueField: 'id',
                     	displayField: 'nome',
-                    	value: 'threshold',
                     	queryMode: 'local',
                     	emptyText: 'Selecione',
                     	forceSelection: true

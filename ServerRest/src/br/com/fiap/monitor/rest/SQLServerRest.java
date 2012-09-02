@@ -9,6 +9,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import br.com.fiap.coleta.entities.SQLServer;
@@ -22,18 +23,18 @@ public class SQLServerRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveSQLServer(SQLServer sqlserver){
+	public ReturnTO saveSQLServer(SQLServer sqlserver, @QueryParam("thresholdId") Integer thresholdId){
 		BancoDadosBO bo = new BancoDadosBO();
-		return bo.saveSQLServer(sqlserver);	
+		return bo.saveSQLServer(sqlserver, thresholdId);	
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateSQLServer(SQLServer sqlserver){
+	public ReturnTO updateSQLServer(SQLServer sqlserver, @QueryParam("thresholdId") Integer thresholdId){
 		BancoDadosBO bo = new BancoDadosBO();
-		return bo.saveSQLServer(sqlserver);	
+		return bo.saveSQLServer(sqlserver, thresholdId);	
 	}
 	
 	@GET
