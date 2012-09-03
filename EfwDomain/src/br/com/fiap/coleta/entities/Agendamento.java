@@ -60,6 +60,7 @@ public class Agendamento {
 	public void setNo(No no) {
 		this.no = no;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -75,6 +76,7 @@ public class Agendamento {
 				+ ((intervalo == null) ? 0 : intervalo.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
