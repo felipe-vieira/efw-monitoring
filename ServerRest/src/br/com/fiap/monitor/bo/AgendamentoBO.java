@@ -27,9 +27,9 @@ public class AgendamentoBO {
 			
 			Query query = session.createQuery("FROM Agendamento WHERE ativo = :ativo");
 			query.setBoolean("ativo", true);
-			List<Agendamento> retorno = this.genericDAO.queryList(query);
 			query.setFirstResult(start);
 			query.setMaxResults(limit);
+			List<Agendamento> retorno = this.genericDAO.queryList(query);
 			t.commit();
 			
 			return retorno;
@@ -48,7 +48,7 @@ public class AgendamentoBO {
 		
 		try{
 			
-			Query query = session.createQuery("FROM Agendamento WHERE ativo = :ativo");
+			Query query = session.createQuery("SELECT count(*) FROM Agendamento WHERE ativo = :ativo");
 			query.setBoolean("ativo", true);
 			Long retorno = (Long) query.uniqueResult();
 			t.commit();
@@ -105,10 +105,10 @@ public class AgendamentoBO {
 					
 					retorno.setSuccess(true);
 				}
-				
-				t.commit();
-				
 			}
+			
+			t.commit();
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 			retorno.setMessage(ex.getMessage());

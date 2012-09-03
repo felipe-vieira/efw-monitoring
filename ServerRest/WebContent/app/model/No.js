@@ -13,10 +13,9 @@ Ext.define('MONITOR.model.No', {
     ],
     proxy: {
 		type: 'rest',
-		url: 'rest/nos/',
+		url: 'rest/no/',
         reader: {
-            type: 'json',
-            root: 'no'
+            type: 'json'
         },
 		writer: {
 			type: 'json',

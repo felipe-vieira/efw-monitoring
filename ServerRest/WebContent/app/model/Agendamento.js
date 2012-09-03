@@ -1,22 +1,25 @@
-Ext.define('MONITOR.model.BancoDadosThreshold', {
-    extend: 'MONITOR.model.Threshold',
+Ext.define('MONITOR.model.Agendamento', {
+    extend: 'MONITOR.model.No',
     fields: [
         {name: 'id', type: 'id', convert: null, defaultValue:null},
-        {name: 'intervalo', type: 'int', convert: null, defaultValue:null},
+        {name: 'intervalo', type: 'int', convert: null, defaultValue:5},
         {name: 'horaInicio', type: 'string'},
         {name: 'horaFim', type: 'string'},
         {name: 'agendado', type: 'boolean'},
-        {name: 'ativo', type: 'boolean'}
+        {name: 'ativo', type: 'boolean'},
     ],
     
     proxy: {
 		type: 'rest',
-		url: 'rest/agendamentos/',
+		url: 'rest/agendamento/',
         reader: {
-            type: 'json'
+            type: 'json',
+            successProperty: 'success',
+            messageProperty: 'message',
         },
 		writer: {
 			type: 'json',
+			writeAllFields: true
 		}
     },
     

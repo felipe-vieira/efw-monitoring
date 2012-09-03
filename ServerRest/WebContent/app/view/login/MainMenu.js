@@ -22,7 +22,8 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    		}).show();
     	                        }
     	                    },
-    	                    { 
+    	                    '-',
+    	                    {   	                     
     	                        text: 'Nós',
     	                    	handler: function(){
     	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
@@ -30,6 +31,17 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    			closable: true,
     	                    			title: 'Cadastro de nós',
     	                    			xtype: 'crudno'
+    	                    		}).show();
+    	                        }
+    	                    },
+    	                    { 
+    	                        text: 'Agendamentos',
+    	                    	handler: function(){
+    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
+    	                    		tabs[0].add({
+    	                    			closable: true,
+    	                    			title: 'Agendamentos',
+    	                    			xtype: 'crudagendamento'
     	                    		}).show();
     	                        }
     	                    },
