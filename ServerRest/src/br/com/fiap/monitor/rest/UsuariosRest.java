@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import br.com.fiap.monitor.bo.UsuarioBO;
 import br.com.fiap.monitor.entities.Usuario;
+import br.com.fiap.monitor.to.PagingTO;
 import br.com.fiap.monitor.to.ReturnTO;
 
 
@@ -24,12 +25,22 @@ public class UsuariosRest {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<Usuario> listUsuarios(@QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
+	public PagingTO<Usuario> listUsuarios(@QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
 
 		UsuarioBO usuarioBO = new UsuarioBO();
-		return usuarioBO.listaUsuarios(start,limit);
 		
+		PagingTO<Usuario> paging = new PagingTO<Usuario>();
+			
+		List<Usuario> records = usuarioBO.listaUsuarios(start,limit);
+		Long total = usuarioBO.contaUsuarios();
+		
+		paging.setSuccess(true);
+		paging.setRecords(records);
+		paging.setTotal(total);
+		
+		return paging;
 	}
+
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

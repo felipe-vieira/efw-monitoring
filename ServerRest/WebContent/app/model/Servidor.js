@@ -1,7 +1,6 @@
 Ext.define('MONITOR.model.Servidor', {
     extend: 'MONITOR.model.No',
     fields: [
-             
     ],
     
     proxy: {
@@ -19,7 +18,8 @@ Ext.define('MONITOR.model.Servidor', {
     hasOne: [
         {model: 'MONITOR.model.SistemaOperacional', foreignKey: 'id', associationKey: 'sistemaOperacional', getterName: "getSistemaOperacional"  },
         {model: 'MONITOR.model.Memoria', foreignKey: 'id', associationKey: 'memoria' , getterName: "getMemoria"  },
-        {model: 'MONITOR.model.Processador', foreignKey: 'id', associationKey: 'processador' ,  getterName: "getProcessador"  }
+        {model: 'MONITOR.model.Processador', foreignKey: 'id', associationKey: 'processador' ,  getterName: "getProcessador" },
+        {model: 'MONITOR.model.ServidorThreshold', foreignKey: 'threshold.id', associationKey: 'threshold' ,  getterName: "getThreshold", setterName: 'setThreshold' }
     ],
     
     hasMany:[

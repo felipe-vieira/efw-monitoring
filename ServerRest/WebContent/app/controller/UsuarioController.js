@@ -109,11 +109,11 @@ Ext.define('MONITOR.controller.UsuarioController', {
 	},
 	
 	saveOrUpdate: function(button){
-		console.log("oi");
 	    var win    = button.up('window');
         var form   = win.down('form');
         var record = form.getRecord();
         var values = form.getValues();
+	    var store = this.getUsuariosStore();
 	    
         if(form.getForm().isValid()){
         	record.set(values);
@@ -122,6 +122,7 @@ Ext.define('MONITOR.controller.UsuarioController', {
         		{
         			success: function(rec,op){
         				win.close();
+        				store.reload();
         			},
         			failure: function(rec,op){
                         Ext.MessageBox.show({
@@ -134,7 +135,7 @@ Ext.define('MONITOR.controller.UsuarioController', {
         		}
         	);
         	
-        	this.getUsuariosStore().reload();
+        	
         }
         
 	},

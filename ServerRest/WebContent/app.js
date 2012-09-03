@@ -3,6 +3,7 @@ Ext.application({
     name: 'MONITOR',
     appFolder: 'app',
     controllers:[
+        'AgendamentoController',
         'LoginController',       
         'NoController',
         'ThresholdController',

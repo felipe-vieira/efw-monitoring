@@ -17,6 +17,10 @@ Ext.define('MONITOR.model.ServidorAplicacao', {
 			type: 'json',
 			writeAllFields: true
 		}
-    }
+    },
+
+	hasOne: [
+         {model: 'MONITOR.model.ServidorAplicacaoThreshold', foreignKey: 'threshold.id', associationKey: 'threshold' ,  getterName: "getThreshold", setterName: 'setThreshold' }
+    ],
 });
 	

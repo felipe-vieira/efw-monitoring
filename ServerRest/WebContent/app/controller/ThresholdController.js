@@ -1,7 +1,10 @@
 Ext.define('MONITOR.controller.ThresholdController', {
     extend: 'Ext.app.Controller',
     views: [
-        'threshold.CrudThreshold'
+        'threshold.CrudThreshold',
+        'threshold.FormThresholdServidor',
+        'threshold.FormThresholdServidorAplicacao',
+        'threshold.FormThresholdBancoDados'
     ],
     stores: [
         'Thresholds'
@@ -20,51 +23,144 @@ Ext.define('MONITOR.controller.ThresholdController', {
     	});
     	
     	this.control({
-    		
+    		'crudthreshold > grid': {
+    			beforerender: this.resetRegister,
+    			itemclick: this.selectItem
+    		},
+	    	
+			'#submenuthreshold menuitem[id=createThresholdServidor]': {
+				click: this.createThresholdServidor
+			},
+			
+			'#submenuthreshold menuitem[id=createThresholdServidorAplicacao]': {
+				click: this.createThresholdServidorAplicacao
+			},
+			
+			'#submenuthreshold menuitem[id=createThresholdBancoDados]': {
+				click: this.createThresholdBancoDados
+			},
+			
+			'#toolbarthreshold button[action=edit]':{
+				click: this.editThreshold
+			},
+			
+			'#toolbarthreshold button[action=delete]':{
+				click: this.deleteThreshold
+			},
+			
+			'formthresholdservidor button[action=save]': {
+				click: this.saveOrUpdate
+			},
+			
+			'formthresholdservidoraplicacao button[action=save]': {
+				click: this.saveOrUpdate
+			},
+			
+			'formthresholdbancodados button[action=save]': {
+				click: this.saveOrUpdate
+			},
     	});
     	
     
     },
 
+    createThresholdServidor: function(){
+		var view = Ext.widget('formthresholdservidor');
+		var model = Ext.create('MONITOR.model.ServidorThreshold');
+		view.down('form').loadRecord(model);	
+    },
+    
+    createThresholdServidorAplicacao: function(){
+		var view = Ext.widget('formthresholdservidoraplicacao');
+		var model = Ext.create('MONITOR.model.ServidorAplicacaoThreshold');
+		view.down('form').loadRecord(model);	
+    },
+    
+    createThresholdBancoDados: function(){
+		var view = Ext.widget('formthresholdbancodados');
+		var model = Ext.create('MONITOR.model.BancoDadosThreshold');
+		view.down('form').loadRecord(model);		
+    },
+    
+    editThreshold: function(button){
+		if(this.itemSelected != null){
+			
+			var tipo = this.itemSelected.get('tipo');
+
+			if(tipo == "Servidor"){
+	    		this.editServidor(this.itemSelected);
+	    	}else if (tipo == "Servidor de Aplicação"){
+	    		this.editServidorAplicacao(this.itemSelected);
+	    	}else if (tipo == "Banco de Dados"){
+	    		this.editBancoDados(this.itemSelected);
+	    	}
+			
+		}else{
+			Ext.MessageBox.alert("Alerta","Selecione um registro antes de alterar.");
+		}
+		
+    },
+    
+    editServidor: function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.ServidorThreshold.load(id,{
+			success: function(threshold){
+				var view = Ext.widget('formthresholdservidor');
+				view.down('form').loadRecord(threshold);	
+			}
+		});
+    },
+
+
+    editServidorAplicacao: function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.ServidorAplicacaoThreshold.load(id,{
+			success: function(threshold){
+				var view = Ext.widget('formthresholdservidoraplicacao');
+				view.down('form').loadRecord(threshold);	
+			}
+		});
+	
+    },
+    
+    editBancoDados: function(record){
+    	
+    	var id = record.get('id');
+    	
+		MONITOR.model.BancoDadosThreshold.load(id,{
+			success: function(threshold){
+				var view = Ext.widget('formthresholdbancodados');
+				view.down('form').loadRecord(threshold);	
+			}
+		});
+	
+    },
+    
+    
     
     resetRegister: function(){
     	this.itemSelected = null;
     },
     
-	selectUser: function(grid, record){
+	selectItem: function(grid, record){
 		this.itemSelected = record;
 	},
 	
-	create: function(button){
-		var view = Ext.widget('formusuario');
-		var user = Ext.create('MONITOR.model.Usuario');
-		view.down('form').loadRecord(user);	
-	},
-	
-	edit: function(button){
-		
+	deleteThreshold: function(button){
 		if(this.itemSelected != null){
 			
-			var view = Ext.widget('formusuario');
-			view.down('form').loadRecord(this.itemSelected);
+			var store = this.getThresholdsStore();
 			
-		}else{
-			
-			Ext.MessageBox.alert("Alerta","Selecione um registro antes de alterar.");
-		
-		}
-		
-	},
-	
-	del: function(button){
-		if(this.itemSelected != null){
-			Ext.MessageBox.confirm('Confirmação','Deseja excluir o usuario '+this.itemSelected.get('login')+' ?',
+			Ext.MessageBox.confirm('Confirmação','Deseja excluir o threshold '+this.itemSelected.get('nome')+' ?',
 				function(resp){
 					if(resp=="yes"){
 						
 						this.itemSelected.destroy({
 		        			success: function(rec,op){
-		        				var store = Ext.data.StoreManager.lookup('Usuarios');
 		        				store.reload();
 		        			},
 		        			failure: function(rec,op){
@@ -88,11 +184,11 @@ Ext.define('MONITOR.controller.ThresholdController', {
 	},
 	
 	saveOrUpdate: function(button){
-		console.log("oi");
 	    var win    = button.up('window');
         var form   = win.down('form');
         var record = form.getRecord();
         var values = form.getValues();
+        var store  = this.getThresholdsStore();
 	    
         if(form.getForm().isValid()){
         	record.set(values);
@@ -101,6 +197,7 @@ Ext.define('MONITOR.controller.ThresholdController', {
         		{
         			success: function(rec,op){
         				win.close();
+        				store.reload();
         			},
         			failure: function(rec,op){
                         Ext.MessageBox.show({
@@ -112,12 +209,9 @@ Ext.define('MONITOR.controller.ThresholdController', {
         			}
         		}
         	);
-        	
-        	this.getUsuariosStore().reload();
         }
         
 	},
-	
 	
 	
   

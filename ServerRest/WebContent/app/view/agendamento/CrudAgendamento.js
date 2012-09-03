@@ -1,6 +1,6 @@
-Ext.define('MONITOR.view.usuario.CrudUsuario', {
+Ext.define('MONITOR.view.agendamento.CrudAgendamento', {
     extend: 'Ext.panel.Panel',
-    xtype: 'crudusuario',
+    xtype: 'crudagendamento',
     padding: 10,
     border: 0,
     initComponent: function(){
@@ -8,31 +8,32 @@ Ext.define('MONITOR.view.usuario.CrudUsuario', {
     	this.items = [
     	    {
     	    	xtype: 'panel',
-    	    	html: "<h1>Cadastro de Usuários</h1><hr/>",
+    	    	html: "<h1>Agendamentos</h1><hr/>",
     	    	border: 0
     	    },
     	    
     	    {
     	    	xtype: 'grid',
-    	    	store: 'Usuarios',
+    	    	store: 'Agendamentos',
     	    	columns: [
-    	    	   {text: 'Login', dataIndex: 'login', flex:1,},
-    	    	   {text: 'Administrador', dataIndex: 'administrador', flex:1,
+    	    	   {text: 'Nó', flex:1,
+    	    		   renderer: function(val,rec,attr){
+    	    			   return attr.getNo().get('nome');
+    	    		   }
+    	    	   },
+    	    	   {text: 'Hora Inicio', dataIndex: 'horaInicio', flex:1,},
+    	    	   {text: 'Hora Fim', dataIndex: 'horaFim', flex:1,},
+    	    	   {text: 'Intervalo', dataIndex: 'intervalo', flex:1,
     	    	       renderer: function(val){
-    	    	    	   console.log(val);
-    	    	    	   if(val == true){
-    	    	    		   return "Sim";
-    	    	    	   }else{
-    	    	    		   return "Não";
-    	    	    	   }
+    	    	    	   return val + " min.";
     	    	       }
-    	    	   }
+    	    	   },
     	    	],
     	    	dockedItems : [
     	    	    {
     	    	    	xtype: 'toolbar',
     	    	        dock: 'top',
-    	    	        id: 'toolbarusuario',
+    	    	        id: 'toolbaragendamento',
     	    	        items:
     	    	        [
     	    	            {
@@ -56,7 +57,7 @@ Ext.define('MONITOR.view.usuario.CrudUsuario', {
     	    	    	xtype: 'pagingtoolbar',
     	    	    	dock: 'bottom',
     	    	    	displayInfo: true,
-    	    	    	store: 'Usuarios'
+    	    	    	store: 'Agendamentos'
     	    		}
     	    	]
     	    

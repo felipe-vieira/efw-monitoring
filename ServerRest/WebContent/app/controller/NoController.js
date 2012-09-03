@@ -31,12 +31,20 @@ Ext.define('MONITOR.controller.NoController', {
     stores: [
     	'Nos',
     	'Servidores',
-    	'Alarmes',
+    	
     	'ServidorAplicacaoDeployments',
     	'ServidorAplicacaoMemorias',
+    	
     	'BancoJobs',
     	'BancoFiles',
-    	'BancoBackups'
+    	'BancoBackups',
+    	
+    	'Alarmes',
+    	
+    	'Thresholds',
+    	'ServidorThresholds',
+    	'ServidorAplicacaoThresholds',
+    	'BancoDadosThresholds'
     ],
     models: [
     	
@@ -83,7 +91,7 @@ Ext.define('MONITOR.controller.NoController', {
         	
     		'crudno > grid': {
     			beforerender: this.resetRegister,
-    			itemclick: this.selectUser
+    			itemclick: this.selectItem
     		},
 	    	
 			'#submenuno menuitem[id=createServidor]': {
@@ -635,15 +643,14 @@ Ext.define('MONITOR.controller.NoController', {
     editNo: function(button){
 		if(this.itemSelected != null){
 			
+			
 			var tipo = this.itemSelected.get('tipo');
 			var subTipo = this.itemSelected.get('subTipo');
 			
-			console.log(subTipo);
 			
 	    	if(tipo == "Servidor"){
 	    		this.editServidor(this.itemSelected);
 	    	}else if (tipo == "Servidor de Aplicacao"){
-	    		console.log("ma");
 	    		if(subTipo == "Glassfish"){
 	    			this.editGlassfish(this.itemSelected);
 	    		}else if(subTipo == "JBoss"){
@@ -668,12 +675,19 @@ Ext.define('MONITOR.controller.NoController', {
     
     editServidor : function(record){
     	
-    	var id = record.get('id');
+    	this.getServidorThresholdsStore().reload();
     	
+    	var id = record.get('id');
+    	    	
 		MONITOR.model.Servidor.load(id,{
 			success: function(no){
+				
+				var thresholdId = no.getThreshold().get('id');
+		
 				var view = Ext.widget('formservidor');
+				view.down('form').down('combobox').setValue(thresholdId);
 				view.down('form').loadRecord(no);
+				
 			}
 		});
 		
@@ -683,11 +697,13 @@ Ext.define('MONITOR.controller.NoController', {
     	
     	var id = record.get('id');
     	
-    	console.log("oi");
 		MONITOR.model.Glassfish.load(id,{
 			success: function(no){
-				console.log("bls");
+				
+				var thresholdId = no.getThreshold().get('id');
+				
 				var view = Ext.widget('formglassfish');
+				view.down('form').down('combobox').setValue(thresholdId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -700,7 +716,11 @@ Ext.define('MONITOR.controller.NoController', {
     	
 		MONITOR.model.JBoss.load(id,{
 			success: function(no){
+				
+				var thresholdId = no.getThreshold().get('id');
+				
 				var view = Ext.widget('formjboss');
+				view.down('form').down('combobox').setValue(thresholdId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -713,7 +733,11 @@ Ext.define('MONITOR.controller.NoController', {
     	
 		MONITOR.model.Oracle.load(id,{
 			success: function(no){
+				
+				var thresholdId = no.getThreshold().get('id');
+				
 				var view = Ext.widget('formoracle');
+				view.down('form').down('combobox').setValue(thresholdId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -726,7 +750,11 @@ Ext.define('MONITOR.controller.NoController', {
     	
 		MONITOR.model.SQLServer.load(id,{
 			success: function(no){
+				
+				var thresholdId = no.getThreshold().get('id');
+				
 				var view = Ext.widget('formsqlserver');
+				view.down('form').down('combobox').setValue(thresholdId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -739,11 +767,17 @@ Ext.define('MONITOR.controller.NoController', {
         var record = form.getRecord();
         var values = form.getValues();
 	    var store =  this.getNosStore();
-	    
+
+		var thresholdId = values.thresholdId;
+		
+		
         if(form.getForm().isValid()){
         	record.set(values);
         	record.save(
         		{
+        			params:{
+        				'thresholdId': thresholdId
+        			},
         			success: function(rec,op){
         				win.close();
         				store.reload();
@@ -766,7 +800,7 @@ Ext.define('MONITOR.controller.NoController', {
 			
 			//var store = Ext.data.StoreManager.lookup('Nos');
 			var store = this.getNosStore();
-			
+
 			Ext.MessageBox.confirm('Confirmação','Deseja excluir o nó '+this.itemSelected.get('nome')+' ?',
 				function(resp){
 					if(resp=="yes"){
@@ -799,7 +833,7 @@ Ext.define('MONITOR.controller.NoController', {
     	this.itemSelected = null;
     },
     
-	selectUser: function(grid, record){
+	selectItem: function(grid, record){
 		this.itemSelected = record;
 	},
 

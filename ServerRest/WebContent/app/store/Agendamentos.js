@@ -1,18 +1,15 @@
-Ext.define('MONITOR.store.Usuarios', {
+Ext.define('MONITOR.store.Agendamentos', {
     extend: 'Ext.data.Store',
-    model: 'MONITOR.model.Usuario',
+    model: 'MONITOR.model.Agendamento',
     pageSize: 25,
     autoLoad: true,
-    sorters:{
-    	property: 'login',
-    	direction: 'ASC'
-    },
     proxy: {
         type: 'rest',
-        url: 'rest/usuarios/',
+        url: 'rest/agendamentos/',
         reader: {
             type: 'json',
-            root: 'records'
+            root: 'records',
+            successProperty: 'success'
         },
 		writer: {
 			type: 'json',

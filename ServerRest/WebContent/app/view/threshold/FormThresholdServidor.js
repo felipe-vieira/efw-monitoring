@@ -1,8 +1,8 @@
-Ext.define('MONITOR.view.servidor.FormServidor', {
+Ext.define('MONITOR.view.threshold.FormThresholdServidor', {
     extend: 'Ext.window.Window',
-    alias: 'widget.formservidor',
+    alias: 'widget.formthresholdservidor',
 
-    title: 'Cadastro de Servidor',
+    title: 'Cadastro de Threshold - Servidor',
     layout: 'fit',
     autoShow: true,
     modal: true,
@@ -20,32 +20,31 @@ Ext.define('MONITOR.view.servidor.FormServidor', {
                         allowBlank: false
                     },
                     {
-                        xtype: 'textfield',
-                        name : 'hostname',
-                        fieldLabel: 'Hostname',
-                        allowBlank: false
-                    },
-                    {
                     	xtype: 'numberfield',
-                    	name: 'agentPort',
-                    	fieldLabel: 'Porta do Agente',
-                    	allowDecimal: false,
-                    	allowBlank: false,
-                        minValue: 1,
-                        maxValue: 65535,
+                    	name: 'limiteMemoria',
+                    	fieldLabel: 'Limite de Memória (%)',
+                        minValue: 0,
+                        maxValue: 99.99,
+                        decimalSeparator:',',
                         hideTrigger:true
                     },
                     {
-                    	xtype: 'combobox',
-                    	name: 'thresholdId',                    	
-                    	store: 'ServidorThresholds',
-                    	id: 'thresholdId',
-                    	fieldLabel: 'Threshold',
-                    	valueField: 'id',
-                    	displayField: 'nome',
-                    	queryMode: 'local',
-                    	emptyText: 'Selecione',
-                    	forceSelection: true
+                    	xtype: 'numberfield',
+                    	name: 'limiteCpu',
+                    	fieldLabel: 'Limite de CPU (%)',
+                        minValue: 0,
+                        maxValue: 99.99,
+                        decimalSeparator:',',
+                        hideTrigger:true
+                    },
+                    {
+                    	xtype: 'numberfield',
+                    	name: 'limiteParticao',
+                    	fieldLabel: 'Limite de Partição (%)',
+                        minValue: 0,
+                        maxValue: 99.99,
+                        decimalSeparator:',',
+                        hideTrigger:true
                     }
                 ]
             }

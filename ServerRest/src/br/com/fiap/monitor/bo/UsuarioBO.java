@@ -47,6 +47,25 @@ public class UsuarioBO {
 		}
 		
 	}
+	
+	public Long contaUsuarios(){
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{			
+			Query query = session.createQuery("SELECT count(*) FROM Usuario");
+			
+			Long retorno =  (Long) query.uniqueResult();
+			t.commit();
+			
+			return retorno;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
 
 	public ReturnTO saveUsuario(Usuario usuario) {
 		

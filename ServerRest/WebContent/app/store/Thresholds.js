@@ -2,6 +2,7 @@ Ext.define('MONITOR.store.Thresholds', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.Threshold',
     pageSize: 25,
+    autoLoad: true,
 
     proxy: {
         type: 'rest',

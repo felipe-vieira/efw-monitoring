@@ -30,6 +30,7 @@ Ext.define('MONITOR.view.bancoDados.FormOracle', {
                     	name: 'agentPort',
                     	fieldLabel: 'Porta do Agente',
                     	allowBlank: false,
+                    	allowDecimal: false,
                         maxValue: 65535,
                         minValue: 1,
                         hideTrigger:true
@@ -39,6 +40,7 @@ Ext.define('MONITOR.view.bancoDados.FormOracle', {
                     	name: 'port',
                     	fieldLabel: 'Porta do Oracle',
                     	allowBlank: false,
+                    	allowDecimal: false,
                         maxValue: 65535,
                         minValue: 1,
                         hideTrigger:true
@@ -62,6 +64,18 @@ Ext.define('MONITOR.view.bancoDados.FormOracle', {
                     	name: 'instanceName',
                     	fieldLabel: 'Nome da Instância',
                     	allowBlank: false
+                    },
+                    {
+                    	xtype: 'combobox',
+                    	name: 'thresholdId',                    	
+                    	store: 'BancoDadosThresholds',
+                    	id: 'thresholdId',
+                    	fieldLabel: 'Threshold',
+                    	valueField: 'id',
+                    	displayField: 'nome',
+                    	queryMode: 'local',
+                    	emptyText: 'Selecione',
+                    	forceSelection: true
                     }
                     
                 ]

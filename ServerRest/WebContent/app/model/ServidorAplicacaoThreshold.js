@@ -1,10 +1,10 @@
 Ext.define('MONITOR.model.ServidorAplicacaoThreshold', {
     extend: 'MONITOR.model.Threshold',
     fields: [
-        {name: 'thresholdHeap', type: 'float'},
-        {name: 'thresholdNonHeap', type: 'float'},
-        {name: 'thresholdCpuUserTime', type: 'float'},
-        {name: 'thresholdCpuCpuTime', type: 'float'}
+        {name: 'thresholdHeap', type: 'float', convert: null, defaultValue:null},
+        {name: 'thresholdNonHeap', type: 'float', convert: null, defaultValue:null},
+        {name: 'thresholdCpuUserTime', type: 'float', convert: null, defaultValue:null},
+        {name: 'thresholdCpuCpuTime', type: 'float', convert: null, defaultValue:null}
     ],
     
     proxy: {
@@ -14,8 +14,7 @@ Ext.define('MONITOR.model.ServidorAplicacaoThreshold', {
             type: 'json'
         },
 		writer: {
-			type: 'json',
-			writeAllFields: true
+			type: 'json'
 		}
     }
 });

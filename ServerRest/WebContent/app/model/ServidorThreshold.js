@@ -1,9 +1,9 @@
 Ext.define('MONITOR.model.ServidorThreshold', {
     extend: 'MONITOR.model.Threshold',
     fields: [
-        {name: 'limiteMemoria', type: 'float'},
-        {name: 'limiteCpu', type: 'float'},
-        {name: 'limiteParticao', type: 'float'}
+        {name: 'limiteMemoria', type: 'float', convert: null, defaultValue:null},
+        {name: 'limiteCpu', type: 'float', convert: null, defaultValue:null},
+        {name: 'limiteParticao', type: 'float', convert: null, defaultValue:null}
     ],
     
     proxy: {
@@ -13,8 +13,7 @@ Ext.define('MONITOR.model.ServidorThreshold', {
             type: 'json'
         },
 		writer: {
-			type: 'json',
-			writeAllFields: true
+			type: 'json'
 		}
     }
 });

@@ -9,6 +9,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import br.com.fiap.coleta.entities.JBoss;
@@ -22,18 +23,18 @@ public class JBossRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveJboss(JBoss jboss){
+	public ReturnTO saveJboss(JBoss jboss, @QueryParam("thresholdId") Integer thresholdId){
 		ServidorAplicacaoBO bo = new ServidorAplicacaoBO();
-		return bo.saveJBoss(jboss);
+		return bo.saveJBoss(jboss,thresholdId);
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateJboss(JBoss jboss, @PathParam("id") Long id){
+	public ReturnTO updateJboss(JBoss jboss, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId){
 		ServidorAplicacaoBO bo = new ServidorAplicacaoBO();
-		return bo.saveJBoss(jboss);	
+		return bo.saveJBoss(jboss,thresholdId);	
 	}
 	
 	@GET

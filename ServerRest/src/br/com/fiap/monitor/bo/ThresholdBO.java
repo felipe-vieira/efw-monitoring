@@ -30,7 +30,7 @@ public class ThresholdBO {
 			Query query = session.createQuery("FROM Threshold");
 			
 			query.setFirstResult(start);
-			query.setFirstResult(limit);
+			query.setMaxResults(limit);
 			
 			List<Threshold> thresholds = this.genericDAO.queryList(query);
 		
@@ -54,7 +54,7 @@ public class ThresholdBO {
 		}
 	}
 	
-	public Integer contaThresholds(){
+	public Long contaThresholds(){
 
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -62,7 +62,7 @@ public class ThresholdBO {
 		try{			
 			Query query = session.createQuery("SELECT count(*) FROM Threshold");
 			
-			Integer retorno =  (Integer) query.uniqueResult();
+			Long retorno =  (Long) query.uniqueResult();
 			t.commit();
 			
 			return retorno;
@@ -82,7 +82,7 @@ public class ThresholdBO {
 			Threshold threshold = null; 
 			
 			if(id!=null){
-				this.genericDAO.getById(Threshold.class, id);
+				threshold = (Threshold) this.genericDAO.getById(Threshold.class, id);
 			}
 			
 			t.commit();
@@ -134,6 +134,23 @@ public class ThresholdBO {
 		retorno.setSuccess(false);
 		
 		try{
+			
+			threshold = (Threshold) this.genericDAO.getById(Threshold.class, threshold.getId());
+			Query query = null;
+			
+			if(threshold instanceof ServidorThreshold){
+				query = session.createQuery("UPDATE Servidor set threshold = null WHERE threshold.id = :id");
+			}else if(threshold instanceof ServidorAplicacaoThreshold){
+				query = session.createQuery("UPDATE ServidorAplicacao set threshold = null WHERE threshold.id = :id");
+			}else if(threshold instanceof BancoDadosThreshold){
+				query = session.createQuery("UPDATE BancoDados set threshold = null WHERE threshold.id = :id");
+			}
+			
+			if(query != null){
+				query.setInteger("id", threshold.getId());
+				query.executeUpdate();
+			}
+			
 			this.genericDAO.delete(threshold);
 			t.commit();
 			retorno.setSuccess(true);
@@ -145,4 +162,59 @@ public class ThresholdBO {
 		
 		return retorno;
 	}
+	
+	public List<ServidorThreshold> listaThresholdsServidor(){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+	
+		try{
+			Query query = session.createQuery("FROM ServidorThreshold");
+			List<ServidorThreshold> results = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return results;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	public List<ServidorAplicacaoThreshold> listaThresholdsServidorAplicacao(){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+	
+		try{
+			Query query = session.createQuery("FROM ServidorAplicacaoThreshold");
+			List<ServidorAplicacaoThreshold> results = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return results;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	public List<BancoDadosThreshold> listaThresholdsBancoDados(){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+	
+		try{
+			Query query = session.createQuery("FROM BancoDadosThreshold");
+			List<BancoDadosThreshold> results = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return results;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
 }
