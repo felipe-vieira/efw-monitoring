@@ -20,6 +20,9 @@ public class Oracle {
 		private Connection conn;
 		
 		private static Oracle instance;
+		
+		private String user, password, host;
+		private int port;
 	    
 	    public static Oracle getInstance() {
 	    	
@@ -31,9 +34,16 @@ public class Oracle {
 			
 		}
 		
+	    public void setCredentials(String user, String password, String host, int port){
+			this.user = user;
+			this.password = password;
+			this.host = host;
+			this.port = port;
+		}
+	    
 		public Oracle(){
 			try{
-				this.conn = OracleConnectionFactory.getConnection();
+				this.conn = OracleConnectionFactory.getConnection(this.user, this.password, this.host, this.port);
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}

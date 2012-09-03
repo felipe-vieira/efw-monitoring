@@ -68,10 +68,12 @@ public class OracleColeta {
 				if(this.oracle.getDisponivel()){
 					//Abre o socket
 					socket.openSocket();
+					
+					this.setCredentials();
 					//Pega a data atual
 					this.dataColeta = new Date();		
 					
-					//Atualiza os itens de configuração
+					//Atualiza os itens de configuraï¿½ï¿½o
 					this.getConfigMemory();
 					this.getConfigCollation();
 					this.getConfigVersion();
@@ -82,12 +84,12 @@ public class OracleColeta {
 					jobs = this.getConfigJobHistory(); 
 					
 					
-					//Salva os itens de configuração.
+					//Salva os itens de configuraï¿½ï¿½o.
 					this.bancoDadosBO.salvaConfigFiles(files);
 					this.bancoDadosBO.salvaConfigBackups(backups);
 					this.bancoDadosBO.salvaConfigJobs(jobs);
 					
-					//Pega os jobs e files com IDs, necessários para as coletas.
+					//Pega os jobs e files com IDs, necessï¿½rios para as coletas.
 					jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.oracle);
 					files = this.bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
 					
@@ -106,7 +108,7 @@ public class OracleColeta {
 				}
 				
 			}catch (IOException e) {
-				System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
+				System.out.println("Impossï¿½vel abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
 				this.oracle.setGerenciavel(false);
 			}catch (Exception e){
 				e.printStackTrace();
@@ -153,6 +155,16 @@ public class OracleColeta {
 		
 	}
 	
+	private void setCredentials(){
+		try{
+			this.socket.enviaComando("get ora.credentials " + this.oracle.getUsuario() + " " + this.oracle.getSenha() + " " + this.oracle.getHostname() + " " + this.oracle.getPort());
+		}catch (InterruptedException e) {
+			e.printStackTrace();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
 	private List<BancoJobColeta> getJobsColeta() {
 		List<BancoJobColeta> jobsColeta= null;
 		
@@ -190,7 +202,7 @@ public class OracleColeta {
 								
 								if(strStatus.equals("SUCCEEDED")){
 									coleta.setStatus(2);
-									//Não guarda a mensagem se for succeeded
+									//Nï¿½o guarda a mensagem se for succeeded
 									coleta.setSqlMsg(null);
 								}else if(strStatus.equals("FAILED")){
 									coleta.setStatus(0);

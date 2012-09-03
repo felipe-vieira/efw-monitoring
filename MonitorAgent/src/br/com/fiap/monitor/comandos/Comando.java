@@ -59,6 +59,15 @@ public class Comando {
 					retorno = app.getStatus();
 				}else if(arg[1].equals("jboss.deployment")){
 					retorno = app.getDeployments();
+				}else if(arg[1].equals("mssql.credentials")){
+					
+					try {
+						if(arg.length == 6){
+							sql.setCredentials(arg[2], arg[3], arg[4], Integer.parseInt(arg[5]));
+						}
+					} catch (Exception e){
+						e.printStackTrace();
+					}
 				}else if(arg[1].equals("mssql.memory")){
 					//retorno = new SqlServer().getMemory();
 					retorno = sql.getMemory();
@@ -114,6 +123,15 @@ public class Comando {
 					if(arg.length > 2){
 						//retorno = new SqlServer().getConfigCollation(arg[2]);
 						retorno = sql.getConfigCollation(arg[2]);
+					}
+				}else if(arg[1].equals("ora.credentials")){
+					
+					try {
+						if(arg.length == 6){
+							oracle.setCredentials(arg[2], arg[3], arg[4], Integer.parseInt(arg[5]));
+						}
+					} catch (Exception e){
+						e.printStackTrace();
 					}
 				}else if(arg[1].equals("ora.config.memory")){
 					//retorno = new Oracle().getConfigMemory();

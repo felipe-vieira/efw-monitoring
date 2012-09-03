@@ -71,10 +71,12 @@ public class SQLServerColeta {
 				
 				//Abre o socket
 				socket.openSocket();
+				this.setCredentials();
+				
 				//Pega a data atual
 				this.dataColeta = new Date();		
 				
-				//Atualiza os itens de configuração
+				//Atualiza os itens de configuraï¿½ï¿½o
 				this.getConfigMemory();
 				this.getConfigCollation();
 				this.getConfigVersion();
@@ -85,12 +87,12 @@ public class SQLServerColeta {
 				jobs = this.getConfigJobHistory(); 
 				
 				
-				//Salva os itens de configuração.
+				//Salva os itens de configuraï¿½ï¿½o.
 				this.bancoDadosBO.salvaConfigFiles(files);
 				this.bancoDadosBO.salvaConfigBackups(backups);
 				this.bancoDadosBO.salvaConfigJobs(jobs);
 				
-				//Pega os jobs e files com IDs, necessários para as coletas.
+				//Pega os jobs e files com IDs, necessï¿½rios para as coletas.
 				jobs = this.bancoDadosBO.pegaMapJobsBancoDados(this.sqlserver);
 				files = this.bancoDadosBO.pegaMapFilesBancoDados(this.sqlserver);
 				
@@ -111,7 +113,7 @@ public class SQLServerColeta {
 				
 			}
 		}catch (IOException e) {
-			System.out.println("Impossível abrir o socket. Verifique se o agente está instalado no servidor.");
+			System.out.println("Impossï¿½vel abrir o socket. Verifique se o agente estï¿½ instalado no servidor.");
 			this.sqlserver.setGerenciavel(false);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -151,6 +153,16 @@ public class SQLServerColeta {
 			this.alarmeBO.geraAlarmeIndsiponibilidade(this.sqlserver, this.ultimoStatus);
 		}
 		
+	}
+	
+	private void setCredentials(){
+		try{
+			this.socket.enviaComando("get mssql.credentials " + this.sqlserver.getUsuario() + " " + this.sqlserver.getSenha() + " " + this.sqlserver.getHostname() + " " + this.sqlserver.getPort());
+		}catch (InterruptedException e) {
+			e.printStackTrace();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
 	private List<BancoJobColeta> getJobsColeta() {

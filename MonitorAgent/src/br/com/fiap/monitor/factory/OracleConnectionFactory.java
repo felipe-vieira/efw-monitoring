@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class OracleConnectionFactory {
-
+	
 	public static void registraDriver(){
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -14,12 +14,15 @@ public class OracleConnectionFactory {
 		}
 	}
 	
-	public static Connection getConnection() throws SQLException{
+	   
+	
+	//public static Connection getConnection() throws SQLException{
+	 public static Connection getConnection(String usuario, String senha, String host, int porta) throws SQLException{
 			
 			//TODO parametrizar porta, usuario, senha e instancia
-			String url = "jdbc:oracle:thin:@192.0.0.3:1521:xe";
-			String usuario = "system";
-			String senha = "Gavalsa0512";
+			String url = "jdbc:oracle:thin:@" + host + ":" + porta + ":xe";
+			//String usuario = "system";
+			//String senha = "Gavalsa0512";
 		
 			registraDriver();
 					

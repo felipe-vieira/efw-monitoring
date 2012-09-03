@@ -15,12 +15,12 @@ public class SqlServerConnectionFactory {
 		}
 	}
 	
-	public static Connection getConnection() throws SQLException{
+	public static Connection getConnection(String usuario, String senha, String host, int porta) throws SQLException{
 			
 			//TODO parametrizar porta, usuario, senha e instancia
-			String url = "jdbc:jtds:sqlserver://192.0.0.2/master;instance=MSSQLSERVER";
-			String usuario = "sa";
-			String senha = "Gavalsa0512";
+			String url = "jdbc:jtds:sqlserver://" + host + "/master;instance=MSSQLSERVER";
+			//String usuario = "sa";
+			//String senha = "Gavalsa0512";
 		
 			registraDriver();
 					

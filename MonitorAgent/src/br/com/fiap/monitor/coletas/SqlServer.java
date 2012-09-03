@@ -22,6 +22,9 @@ public class SqlServer {
 	private Connection conn;
 	
 	private static SqlServer instance;
+	
+	private String user, password, host;
+	private int port;
     
     public static SqlServer getInstance() {
     	
@@ -33,9 +36,16 @@ public class SqlServer {
 		
 	}
 	
+    public void setCredentials(String user, String password, String host, int port){
+		this.user = user;
+		this.password = password;
+		this.host = host;
+		this.port = port;
+	}
+    
 	public SqlServer(){
 		try{
-			this.conn = SqlServerConnectionFactory.getConnection();
+			this.conn = SqlServerConnectionFactory.getConnection(this.user, this.password, this.host, this.port);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
