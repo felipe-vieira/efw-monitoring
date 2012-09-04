@@ -287,7 +287,7 @@ public class AlarmeBO {
 	public void geraAlarmeUltimoBackup(BancoDados bd, BancoBackup ultimoBackup){
 		BancoDadosThreshold threshold = bd.getThreshold();
 		
-		if(threshold != null && threshold.getLimiteTempoBackup() != null){
+		if(threshold != null && threshold.getLimiteTempoBackup() != null && ultimoBackup != null){
 			Long secsUltimo = ultimoBackup.getBackupStartDate().getTime()/1000;
 			Long secsNow = new Date().getTime()/1000;
 			Long diff = secsNow - secsUltimo;

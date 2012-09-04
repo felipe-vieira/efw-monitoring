@@ -16,12 +16,14 @@ import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.BancoDadosBO;
+import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoFileColeta;
 import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.coleta.entities.BancoJobColeta;
 import br.com.fiap.coleta.entities.BancoMemoriaColeta;
+import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Oracle;
 import br.com.fiap.coleta.util.socket.SocketUtil;
@@ -31,7 +33,11 @@ public class OracleColeta {
 	private Oracle oracle;
 	
 	private BancoDadosBO bancoDadosBO;
-		
+	
+	private IndisponibilidadeBO indisponibilidadeBO;
+	
+	private AlarmeBO alarmeBO;
+	
 	private SocketUtil socket;
 	
 	private Date dataColeta;
@@ -42,10 +48,10 @@ public class OracleColeta {
 	
 	private Map<String,BancoJob> jobs;
 
-	private AlarmeBO alarmeBO;
-
+	private Indisponibilidade indisp;
+	
 	private Boolean ultimoStatus;
-
+	
 	private Boolean ultimoGerenciavel;
 	
 	public OracleColeta(No no){
@@ -53,8 +59,15 @@ public class OracleColeta {
 		this.bancoDadosBO = new BancoDadosBO();
 		this.alarmeBO = new AlarmeBO();
 		
-		this.ultimoStatus = this.oracle.getDisponivel();
-		this.ultimoGerenciavel = this.oracle.getGerenciavel();
+		this.indisponibilidadeBO = new IndisponibilidadeBO();
+		
+		if(this.oracle.getUltimaColeta() != null){
+			this.ultimoStatus = this.oracle.getDisponivel();
+			this.ultimoGerenciavel = this.oracle.getGerenciavel();
+		}else{
+			this.ultimoStatus = false;
+			this.ultimoGerenciavel = false;
+		}
 	}
 	
 	public void initColeta(){
@@ -63,9 +76,13 @@ public class OracleColeta {
 			
 			try{
 
-				this.connect();
+				this.oracle.setUltimaColeta(dataColeta);
 				
-				if(this.oracle.getDisponivel()){
+				// Pega utlima indisponibilidade
+				this.indisp = this.indisponibilidadeBO
+						.pegaUltimaInstanciaIndisponibilidade(this.oracle);
+				
+				if(connect()){
 					//Abre o socket
 					socket.openSocket();
 					
@@ -105,10 +122,12 @@ public class OracleColeta {
 					this.bancoDadosBO.salvaColetaMemoria(memoriaColeta);
 					this.bancoDadosBO.salvaColetasFiles(filesColeta);
 					this.bancoDadosBO.salvaColetasJobs(jobsColeta);
+					
+					this.oracle.setGerenciavel(true);
 				}
 				
 			}catch (IOException e) {
-				System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
+				System.out.println("Impossivel abrir o socket. Verifique se o agente esta instalado no servidor.");
 				this.oracle.setGerenciavel(false);
 			}catch (Exception e){
 				e.printStackTrace();
@@ -118,9 +137,7 @@ public class OracleColeta {
 				BancoBackup ultimoBackup = this.bancoDadosBO.pegaUltimoBackup(this.oracle);
 				this.alarmeBO.geraAlarmeUltimoBackup(this.oracle,ultimoBackup);
 				
-				if(!this.oracle.getGerenciavel() && ultimoGerenciavel){
-					this.alarmeBO.geraAlarmeNaoGerenciavel(this.oracle, ultimoGerenciavel);
-				}
+				this.alarmeBO.geraAlarmeNaoGerenciavel(this.oracle, ultimoGerenciavel);
 				
 				this.bancoDadosBO.salvaBanco(this.oracle);
 			}
@@ -128,7 +145,9 @@ public class OracleColeta {
 		
 	}
 	
-	public void connect(){
+	public Boolean connect(){
+		
+		boolean result = false;
 		
 		String url = "jdbc:oracle:thin:@"+this.oracle.getHostname()+":"+this.oracle.getPort()+":"+this.oracle.getInstanceName();
 		String usuario = this.oracle.getUsuario();
@@ -139,19 +158,40 @@ public class OracleColeta {
 			Connection conn =  DriverManager.getConnection(url,usuario,senha);
 			this.oracle.setDisponivel(true);
 			conn.close();
+			
+			result = true;
 		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
 		}catch(SQLException ex){
 			ex.printStackTrace();
 			this.oracle.setDisponivel(false);
+			result = false;
+		}finally{
+			
+			this.oracle.setUltimaColeta(dataColeta);
+			
+			if (this.oracle.getDisponivel() && (ultimoStatus || this.indisp == null)){
+
+				if (this.indisp == null) {
+					this.indisp = new Indisponibilidade();
+					this.indisp.setNo(this.oracle);
+					this.indisp.setInicio(this.dataColeta);
+				}
+				
+				
+			} else if (this.oracle.getDisponivel() && this.indisp !=null && !ultimoStatus){
+				this.indisp.setFim(this.dataColeta);
+			}
+			
+			if(indisp != null){
+				this.indisponibilidadeBO.salvaIndisponibilidade(indisp);
+			}
+			
 		}
 		
-		if(!this.oracle.getGerenciavel() && this.ultimoStatus){
-			this.alarmeBO.geraAlarmeIndsiponibilidade(this.oracle, this.ultimoStatus);
-		}
+		this.alarmeBO.geraAlarmeIndsiponibilidade(this.oracle, ultimoStatus);
 		
-		
-		
+		return result;	
 		
 	}
 	

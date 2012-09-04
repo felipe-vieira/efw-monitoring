@@ -29,6 +29,8 @@ public class No implements Serializable{
 	
 	private Date ultimaColeta;
 	
+	private Sla sla;
+	
 	private String tipo;
 	
 	private String subTipo;
@@ -116,6 +118,12 @@ public class No implements Serializable{
 	}
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	public Sla getSla() {
+		return sla;
+	}
+	public void setSla(Sla sla) {
+		this.sla = sla;
 	}
 	public String getSubTipo() {
 		return subTipo;

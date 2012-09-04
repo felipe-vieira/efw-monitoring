@@ -54,8 +54,14 @@ public class JBossColeta {
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
 		this.indisponibilidadeBO = new IndisponibilidadeBO();
 		this.alarmeBO = new AlarmeBO();
-		this.ultimoStatus = this.jboss.getDisponivel();
-		this.ultimoGerenciavel = this.jboss.getGerenciavel();
+		
+		if(this.jboss.getUltimaColeta() != null){
+			this.ultimoStatus = this.jboss.getDisponivel();
+			this.ultimoGerenciavel = this.jboss.getGerenciavel();
+		}else{
+			this.ultimoStatus = false;
+			this.ultimoGerenciavel = false;
+		}
 	}
 	
 	public void initColeta(){

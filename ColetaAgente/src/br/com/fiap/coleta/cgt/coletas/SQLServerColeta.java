@@ -16,12 +16,14 @@ import net.sf.json.JSONObject;
 
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.BancoDadosBO;
+import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoFileColeta;
 import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.coleta.entities.BancoJobColeta;
 import br.com.fiap.coleta.entities.BancoMemoriaColeta;
+import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.coleta.util.socket.SocketUtil;
@@ -31,6 +33,8 @@ public class SQLServerColeta {
 	private SQLServer sqlserver;
 	
 	private BancoDadosBO bancoDadosBO;
+	
+	private IndisponibilidadeBO indisponibilidadeBO;
 	
 	private AlarmeBO alarmeBO;
 	
@@ -44,18 +48,28 @@ public class SQLServerColeta {
 	
 	private Map<String,BancoJob> jobs;
 	
+	private Indisponibilidade indisp;
+	
 	private Boolean ultimoStatus;
 	
 	private Boolean ultimoGerenciavel;
 	
 	
 	public SQLServerColeta(No no){
+		
 		this.sqlserver = (SQLServer) no;
+		
 		this.bancoDadosBO = new BancoDadosBO();
 		this.alarmeBO = new AlarmeBO();
+		this.indisponibilidadeBO = new IndisponibilidadeBO();
 		
-		this.ultimoStatus = this.sqlserver.getDisponivel();
-		this.ultimoGerenciavel = this.sqlserver.getGerenciavel();
+		if(this.sqlserver.getUltimaColeta() != null){
+			this.ultimoStatus = this.sqlserver.getDisponivel();
+			this.ultimoGerenciavel = this.sqlserver.getGerenciavel();
+		}else{
+			this.ultimoStatus = false;
+			this.ultimoGerenciavel = false;
+		}
 		
 	}
 	
@@ -64,9 +78,15 @@ public class SQLServerColeta {
 	
 		try{
 			
-			this.connect();
+			this.sqlserver.setUltimaColeta(dataColeta);
 			
-			if(this.sqlserver.getDisponivel()){
+			// Pega utlima indisponibilidade
+			this.indisp = this.indisponibilidadeBO
+					.pegaUltimaInstanciaIndisponibilidade(this.sqlserver);
+			
+			
+			
+			if(connect()){
 				socket = new SocketUtil(this.sqlserver.getHostname(), this.sqlserver.getAgentPort());
 				
 				//Abre o socket
@@ -111,7 +131,9 @@ public class SQLServerColeta {
 				
 				this.sqlserver.setUltimaColeta(this.dataColeta);
 				
+				this.sqlserver.setGerenciavel(true);
 			}
+			
 		}catch (IOException e) {
 			System.out.println("Imposs�vel abrir o socket. Verifique se o agente est� instalado no servidor.");
 			this.sqlserver.setGerenciavel(false);
@@ -123,16 +145,16 @@ public class SQLServerColeta {
 			BancoBackup ultimoBackup = this.bancoDadosBO.pegaUltimoBackup(this.sqlserver);
 			this.alarmeBO.geraAlarmeUltimoBackup(this.sqlserver,ultimoBackup);
 			
-			if(!this.sqlserver.getGerenciavel() && ultimoGerenciavel){
-				this.alarmeBO.geraAlarmeNaoGerenciavel(this.sqlserver, ultimoGerenciavel);
-			}
+			this.alarmeBO.geraAlarmeNaoGerenciavel(this.sqlserver, ultimoGerenciavel);
 			
 			this.bancoDadosBO.salvaBanco(this.sqlserver);
 		}
 		
 	}
 	
-	public void connect(){
+	public Boolean connect(){
+		
+		boolean result = false;
 		
 		String url = "jdbc:jtds:sqlserver://"+this.sqlserver.getHostname()+"/"+this.sqlserver.getDatabase()+";instance="+this.sqlserver.getInstanceName();
 		String usuario = this.sqlserver.getUsuario();
@@ -143,15 +165,41 @@ public class SQLServerColeta {
 			Connection conn =  DriverManager.getConnection(url,usuario,senha);
 			this.sqlserver.setDisponivel(true);
 			conn.close();
+			
+			result = true;
+			
 		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
 		}catch(SQLException ex){
 			this.sqlserver.setDisponivel(false);
+			result = false;
+			
+		}finally{
+			
+			this.sqlserver.setUltimaColeta(dataColeta);
+			
+			if (this.sqlserver.getDisponivel() && (ultimoStatus || this.indisp == null)){
+
+				if (this.indisp == null) {
+					this.indisp = new Indisponibilidade();
+					this.indisp.setNo(this.sqlserver);
+					this.indisp.setInicio(this.dataColeta);
+				}
+				
+				
+			} else if (this.sqlserver.getDisponivel() && this.indisp !=null && !ultimoStatus){
+				this.indisp.setFim(this.dataColeta);
+			}
+			
+			if(indisp != null){
+				this.indisponibilidadeBO.salvaIndisponibilidade(indisp);
+			}
+			
 		}
 		
-		if(!this.sqlserver.getGerenciavel() && this.ultimoStatus){
-			this.alarmeBO.geraAlarmeIndsiponibilidade(this.sqlserver, this.ultimoStatus);
-		}
+		this.alarmeBO.geraAlarmeIndsiponibilidade(this.sqlserver, ultimoStatus);
+		
+		return result;
 		
 	}
 	

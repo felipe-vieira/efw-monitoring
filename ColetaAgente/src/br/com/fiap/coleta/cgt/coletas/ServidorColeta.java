@@ -40,12 +40,21 @@ public class ServidorColeta {
 
 	private IndisponibilidadeBO indisponibilidadeBO;
 	
+	private Boolean ultimoStatus;
+
 	
 	public ServidorColeta(No no) {
 		this.servidor = (Servidor) no;
 		this.servidorBO = new ServidorBO();
 		this.alarmeBO = new AlarmeBO();
 		this.indisponibilidadeBO = new IndisponibilidadeBO();
+		
+		if(this.servidor.getUltimaColeta() != null){
+			this.ultimoStatus = this.servidor.getDisponivel();
+		}else{
+			this.ultimoStatus = false;
+		}
+		
 	}
 
 	public void initColeta() {
@@ -105,18 +114,15 @@ public class ServidorColeta {
 	}
 
 	private boolean connect() {
+		
 		boolean result = false;
 
-		socket = new SocketUtil(this.servidor.getHostname(), this.servidor.getAgentPort());
-		Boolean ultimoStatus = servidor.getDisponivel();
+		this.socket = new SocketUtil(this.servidor.getHostname(), this.servidor.getAgentPort());
+		this.ultimoStatus = servidor.getDisponivel();
 
 		try {
 			this.socket.openSocket();
 			this.servidor.setDisponivel(true);
-
-			if (this.indisponibilidade != null && !ultimoStatus) {
-				this.indisponibilidade.setFim(this.dataColeta);
-			}
 
 			result = true;
 
@@ -124,32 +130,34 @@ public class ServidorColeta {
 
 			this.servidor.setGerenciavel(false);
 			this.servidor.setDisponivel(false);
+			
+			System.out.println("Servidor indisponivel -  "+this.servidor.getHostname()+" - Impossivel se conectar ao servidor.");
 
-			// SLA
-			if (ultimoStatus || this.indisponibilidade == null) {
+			result = false;
+			
+		} finally {
+			this.servidor.setUltimaColeta(dataColeta);
+			
+			if (this.servidor.getDisponivel() && (ultimoStatus || this.indisponibilidade == null)){
+
 				if (this.indisponibilidade == null) {
 					this.indisponibilidade = new Indisponibilidade();
 					this.indisponibilidade.setNo(this.servidor);
 					this.indisponibilidade.setInicio(this.dataColeta);
 				}
 				
-				this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor,
-						ultimoStatus);
 				
+			} else if (this.servidor.getDisponivel() && this.indisponibilidade !=null && !ultimoStatus){
+				this.indisponibilidade.setFim(this.dataColeta);
 			}
-
-			this.servidor.setUltimaColeta(dataColeta);
-			this.servidorBO.updateServidorColeta(this.servidor);
-			System.out.println("Servidor indisponivel -  "+this.servidor.getHostname()+" - Impossivel se conectar ao servidor.");
-			result = false;
-
-		} finally {
-			if (this.indisponibilidade != null) {
-				this.indisponibilidadeBO
-						.salvaIndisponibilidade(this.indisponibilidade);
+			
+			if(indisponibilidade != null){
+				this.indisponibilidadeBO.salvaIndisponibilidade(indisponibilidade);
 			}
 		}
 
+		this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, this.ultimoStatus);
+		
 		return result;
 	}
 
