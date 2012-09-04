@@ -7,6 +7,7 @@ Ext.define('MONITOR.model.Agendamento', {
         {name: 'horaFim', type: 'string'},
         {name: 'agendado', type: 'boolean'},
         {name: 'ativo', type: 'boolean'},
+        {name: 'horaInicio', type: 'string'},
     ],
     
     proxy: {

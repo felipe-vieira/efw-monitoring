@@ -25,7 +25,7 @@ public class AgendamentoBO {
 		
 		try{
 			
-			Query query = session.createQuery("FROM Agendamento WHERE ativo = :ativo");
+			Query query = session.createQuery("FROM Agendamento WHERE ativo = :ativo ORDER BY no.nome");
 			query.setBoolean("ativo", true);
 			query.setFirstResult(start);
 			query.setMaxResults(limit);
@@ -120,7 +120,7 @@ public class AgendamentoBO {
 	}
 	
 	
-	public ReturnTO deletaAgendamento(Agendamento agendamento){
+	public ReturnTO deletaAgendamento(Integer id){
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -130,6 +130,7 @@ public class AgendamentoBO {
 		
 		try{
 			
+			Agendamento agendamento = (Agendamento) this.genericDAO.getById(Agendamento.class, id);
 			agendamento.setAtivo(false);
 			this.genericDAO.update(agendamento);
 			

@@ -273,7 +273,10 @@ public class GlassFishColeta {
 			Date startTime = new Date(json.getLong("startTime"));
 			
 			this.glassfish.setStartTime(startTime);
-			this.glassfish.setUptime(json.getLong("uptime"));
+			
+			Long uptime = json.getLong("uptime")/1000;
+			
+			this.glassfish.setUptime(uptime);
 			
 		}catch (InterruptedException e) {
 			e.printStackTrace();

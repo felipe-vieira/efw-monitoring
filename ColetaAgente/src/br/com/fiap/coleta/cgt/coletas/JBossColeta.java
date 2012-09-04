@@ -267,7 +267,10 @@ public class JBossColeta {
 			Date startTime = new Date(json.getLong("startTime"));
 			
 			this.jboss.setStartTime(startTime);
-			this.jboss.setUptime(json.getLong("uptime"));
+			
+			Long uptime = json.getLong("uptime")/1000;
+			
+			this.jboss.setUptime(uptime);
 			
 		}catch (InterruptedException e) {
 			e.printStackTrace();

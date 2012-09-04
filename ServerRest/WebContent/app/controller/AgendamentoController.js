@@ -43,11 +43,6 @@ Ext.define('MONITOR.controller.AgendamentoController', {
     			click: this.saveOrUpdate
     		},
     		
-    		/*
-    		'formagendamento button[action=delete]': {
-    			click: this.del
-    		},
-    		*/
     		
     	});
     	
@@ -123,6 +118,38 @@ Ext.define('MONITOR.controller.AgendamentoController', {
         }
         
 	},
+	
+	del: function(button){
+		if(this.itemSelected != null){
+			
+			var store = this.getAgendamentosStore();
+			
+			Ext.MessageBox.confirm('Confirmação','Deseja excluir o agendamento?',
+				function(resp){
+					if(resp=="yes"){
+						
+						this.itemSelected.destroy({
+		        			success: function(rec,op){
+		        				store.reload();
+		        			},
+		        			failure: function(rec,op){
+		                        Ext.MessageBox.show({
+		                            title: 'Erro',
+		                            msg: op.request.scope.reader.jsonData["message"],
+		                            icon: Ext.MessageBox.ERROR,
+		                            buttons: Ext.Msg.OK
+		                        });
+		        			}
+						});
+						
+					}
+				},this);
+			
+			
+		}else{
+			Ext.MessageBox.alert("Alerta","Selecione um registro antes de excluir.");
+		}
+	}
 	
   
 });

@@ -39,8 +39,8 @@ public class AgendamentoRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO deleteAgendamento(Agendamento agendamento, @PathParam("id") Integer id){
+	public ReturnTO deleteAgendamento(@PathParam("id") Integer id){
 		AgendamentoBO bo = new AgendamentoBO();
-		return bo.deletaAgendamento(agendamento);
+		return bo.deletaAgendamento(id);
 	}
 }

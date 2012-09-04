@@ -38,30 +38,5 @@ public class AgendamentosRest {
 		
 	}
 	
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveAgendamento(Agendamento agendamento,  @QueryParam("noId") Integer noId){
-		AgendamentoBO bo = new AgendamentoBO();
-		return bo.saveUpdateAgendamento(agendamento, noId);
-	}
-	
-	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public ReturnTO updateAgendamento(Agendamento agendamento, @PathParam("id") Integer id, @QueryParam("noId") Integer noId){
-		AgendamentoBO bo = new AgendamentoBO();
-		return bo.saveUpdateAgendamento(agendamento, noId);
-	}
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public ReturnTO deleteAgendamento(Agendamento agendamento, @PathParam("id") Integer id){
-		AgendamentoBO bo = new AgendamentoBO();
-		return bo.deletaAgendamento(agendamento);
-	}
 	
 }
