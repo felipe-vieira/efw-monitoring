@@ -251,8 +251,8 @@ public class GlassFishColeta {
 			
 			threadColeta.setDataColeta(this.dataColeta);
 			threadColeta.setThreadCount(json.getLong("count"));
-			threadColeta.setCpuTime(json.getLong("cpuTime"));
-			threadColeta.setUserTime(json.getLong("userTime"));
+			threadColeta.setCpuTime(json.getDouble("cpuTime")/600000000);
+			threadColeta.setUserTime(json.getDouble("userTime")/600000000);
 			
 			return threadColeta;
 			

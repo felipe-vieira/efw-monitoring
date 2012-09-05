@@ -15,9 +15,9 @@ public class ServidorAplicacaoThreadColeta implements Serializable{
 	
 	private Long threadCount;
 	
-	private Long cpuTime;
+	private Double cpuTime;
 	
-	private Long userTime;
+	private Double userTime;
 
 	public ServidorAplicacao getServidorAplicacao() {
 		return servidorAplicacao;
@@ -51,19 +51,19 @@ public class ServidorAplicacaoThreadColeta implements Serializable{
 		this.threadCount = threadCount;
 	}
 
-	public Long getCpuTime() {
+	public Double getCpuTime() {
 		return cpuTime;
 	}
 
-	public void setCpuTime(Long cpuTime) {
+	public void setCpuTime(Double cpuTime) {
 		this.cpuTime = cpuTime;
 	}
 
-	public Long getUserTime() {
+	public Double getUserTime() {
 		return userTime;
 	}
 
-	public void setUserTime(Long userTime) {
+	public void setUserTime(double userTime) {
 		this.userTime = userTime;
 	}
 
