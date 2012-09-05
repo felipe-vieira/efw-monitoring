@@ -3,7 +3,6 @@ package br.com.fiap.coleta.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.sql.Time;
 
 public class Sla implements Serializable {
 
@@ -11,11 +10,12 @@ public class Sla implements Serializable {
 	
 	private Long id;
 	private String nome;
-	private Time horaInicio;
-	private Time horaFim;
+	private Date horaInicio;
+	private Date horaFim;
 	private BigDecimal meta;
 	private DiasSemanaSla diasSemana;
 	private Date ultimaColeta;
+	private Boolean ativo;
 	
 	public Long getId() {
 		return id;
@@ -29,23 +29,23 @@ public class Sla implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Time getHoraInicio() {
-		return horaInicio;
-	}
-	public void setHoraInicio(Time horaInicio) {
-		this.horaInicio = horaInicio;
-	}
-	public Time getHoraFim() {
-		return horaFim;
-	}
-	public void setHoraFim(Time horaFim) {
-		this.horaFim = horaFim;
-	}
 	public BigDecimal getMeta() {
 		return meta;
 	}
 	public void setMeta(BigDecimal meta) {
 		this.meta = meta;
+	}
+	public Date getHoraInicio() {
+		return horaInicio;
+	}
+	public void setHoraInicio(Date horaInicio) {
+		this.horaInicio = horaInicio;
+	}
+	public Date getHoraFim() {
+		return horaFim;
+	}
+	public void setHoraFim(Date horaFim) {
+		this.horaFim = horaFim;
 	}
 	public DiasSemanaSla getDiasSemana() {
 		return diasSemana;
@@ -59,6 +59,13 @@ public class Sla implements Serializable {
 	public void setUltimaColeta(Date ultimaColeta) {
 		this.ultimaColeta = ultimaColeta;
 	}
+	public Boolean getAtivo() {
+		return ativo;
+	}
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

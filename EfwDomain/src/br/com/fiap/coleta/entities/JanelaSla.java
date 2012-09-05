@@ -1,7 +1,6 @@
 package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 
 public class JanelaSla implements Serializable {
@@ -11,9 +10,9 @@ public class JanelaSla implements Serializable {
 	private Sla sla;
 	private String descricao;
 	private Date dataInicio;
-	private Date dateFim;
-	private Time horaInicio;
-	private Time horaFim;
+	private Date dataFim;
+	private String horaInicio;
+	private String horaFim;
 	private DiasSemanaJanelaSla diasSemana;
 	
 	public Long getId() {
@@ -40,22 +39,22 @@ public class JanelaSla implements Serializable {
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
 	}
-	public Date getDateFim() {
-		return dateFim;
+	public Date getDataFim() {
+		return dataFim;
 	}
-	public void setDateFim(Date dateFim) {
-		this.dateFim = dateFim;
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
 	}
-	public Time getHoraInicio() {
+	public String getHoraInicio() {
 		return horaInicio;
 	}
-	public void setHoraInicio(Time horaInicio) {
+	public void setHoraInicio(String horaInicio) {
 		this.horaInicio = horaInicio;
 	}
-	public Time getHoraFim() {
+	public String getHoraFim() {
 		return horaFim;
 	}
-	public void setHoraFim(Time horaFim) {
+	public void setHoraFim(String horaFim) {
 		this.horaFim = horaFim;
 	}
 	public DiasSemanaJanelaSla getDiasSemana() {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fiap.coleta.entities.SlaCalculado" table="sla_calculado">
+	
+		<id name="id" column = "id">
+			<generator class="increment"/>
+		</id>
+		
+		<many-to-one name="sla" not-null="true"/>
+		
+		<property name="tipo">
+		   <type name="org.hibernate.type.EnumType">
+		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.TipoSla</param>
+		   </type>
+		</property>
+		
+		<property name="percentual" not-null="true">
+			<column name="percentual" sql-type="decimal(5,2)"/>
+		</property>
+		
+		<property name="controle" not-null="true"/>
+		<property name="tempoTotal" not-null="true"/>
+		<property name="tempoIndisponivel" not-null="true"/>
+		<property name="tempoJanela" not-null="true"/>
+
+	</class> 
+</hibernate-mapping>

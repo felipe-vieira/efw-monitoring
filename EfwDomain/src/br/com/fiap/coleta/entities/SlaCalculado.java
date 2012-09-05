@@ -1,6 +1,7 @@
 package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import br.com.fiap.coleta.entities.enumerators.TipoSla;
@@ -13,6 +14,7 @@ public class SlaCalculado implements Serializable{
 	private Sla sla;
 	private TipoSla tipo;
 	private Date controle;
+	private BigDecimal percentual;
 	private Long tempoTotal;
 	private Long tempoIndisponivel;
 	private Long tempoJanela;
@@ -41,6 +43,12 @@ public class SlaCalculado implements Serializable{
 	}
 	public void setControle(Date controle) {
 		this.controle = controle;
+	}
+	public BigDecimal getPercentual() {
+		return percentual;
+	}
+	public void setPercentual(BigDecimal percentual) {
+		this.percentual = percentual;
 	}
 	public Long getTempoTotal() {
 		return tempoTotal;

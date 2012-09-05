@@ -69,6 +69,13 @@
 		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorThreshold.hbm.xml"/>
 		<mapping resource="br/com/fiap/coleta/entities/mappings/ServidorAplicacaoThreshold.hbm.xml"/>
 		<mapping resource="br/com/fiap/coleta/entities/mappings/BancoDadosThreshold.hbm.xml"/>
+		
+		<!-- Sla -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Sla.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/SlaCalculado.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/JanelaSla.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/DiasSemanaJanelaSla.hbm.xml"/>
+		<mapping resource="br/com/fiap/coleta/entities/mappings/DiasSemanaSla.hbm.xml"/>
 							
 	</session-factory>
 

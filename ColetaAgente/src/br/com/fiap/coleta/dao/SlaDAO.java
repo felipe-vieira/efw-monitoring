@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import br.com.fiap.coleta.entities.Indisponibilidade;
+import br.com.fiap.coleta.entities.JanelaSla;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Sla;
 
@@ -24,31 +25,44 @@ public class SlaDAO extends GenericDAO{
 		
 	}
 	
-	public List<No> listJanelasSla(Sla sla){
+	public List<JanelaSla> listJanelasSla(Sla sla, Calendar dia){
 		
 		Session session = this.getSession();
-		Query query = session.createQuery("FROM No where sla.id = :id");
+		Query query = session.createQuery("FROM JanelaSla where sla.id = :id");
 		query.setLong("id", sla.getId());
 		
-		return (List<No>) query.list();
+		return (List<JanelaSla>) query.list();
 		
 	}
 	
-	public List<Sla> listSlaNaoRodados(){
+	/**
+	 * Lista os SLAS não calculados referentes ao dia base
+	 * @param dia base
+	 * @return Lista com os SLAS
+	 */
+	public List<Sla> listSlaNaoRodados(Calendar dia){
 		
 		Session session = this.getSession();
 		
 		Calendar calendar = Calendar.getInstance();
 		
+		Integer weekday = dia.get(Calendar.DAY_OF_WEEK);
+		
 		calendar.set(Calendar.HOUR_OF_DAY,0);
 		calendar.set(Calendar.MINUTE,0);
 		calendar.set(Calendar.HOUR_OF_DAY,0);
 		
-		Query query = session.createQuery("FROM Sla where ultimaColeta < :date");
+		String strQuery = "FROM Sla where ultimaColeta < :data " +
+				  	      " AND ativo = :ativo" +
+				  	      " AND diasSemana.dia"+weekday+"=:dia";
+		
+		Query query = session.createQuery(strQuery);
+		
 		query.setDate("date",calendar.getTime());
+		query.setBoolean("ativo",true);
+		query.setBoolean("dia",true);
 		
 		return (List<Sla>) query.list();
-		
 	}
 	
 	public List<Indisponibilidade> listaIndisponibilidadesPeriodo(No no, Date dataInicio, Date dataFim){

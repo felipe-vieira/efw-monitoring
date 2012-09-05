@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fiap.coleta.entities.DiasSemanaSla" table="dias_semana_sla">
+	
+		<id name="id" column="id">
+			<generator class="foreign">
+				<param name="property">sla</param>
+			</generator>
+		</id>
+		<one-to-one name="sla" constrained="true"/>
+		<property name="dia1" not-null="true"/>
+		<property name="dia2" not-null="true"/>
+		<property name="dia3" not-null="true"/>
+		<property name="dia4" not-null="true"/>
+		<property name="dia5" not-null="true"/>
+		<property name="dia6" not-null="true"/>
+		<property name="dia7" not-null="true"/>
+		
+
+	</class> 
+</hibernate-mapping>

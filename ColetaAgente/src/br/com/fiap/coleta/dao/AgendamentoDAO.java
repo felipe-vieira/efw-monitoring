@@ -2,10 +2,12 @@ package br.com.fiap.coleta.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.Agendamento;
+import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.util.dao.DBUtil;
 
 public class AgendamentoDAO {
@@ -67,6 +69,35 @@ public class AgendamentoDAO {
 		}catch(Exception ex){
 			ex.printStackTrace();
 			t.rollback();
+		}
+	}
+	
+	/**
+	 *	Pega intervalo do agendamento de um nó 
+	 */
+	public Agendamento pegaAgendamentoNo(No no){
+		Session sessao = DBUtil.getCurrentSession();
+		Transaction t = sessao.beginTransaction();
+		
+		try{
+			Query query = sessao.createQuery("FROM Agendamento where no.id = :id");
+			query.setParameter("id", no.getId());
+			
+			List<Agendamento> agendamentos = (List<Agendamento>) query.list();
+			Agendamento agendamento = null;
+			
+			if(agendamentos != null && agendamentos.size() > 0){
+				agendamento =  agendamentos.get(0);
+			}
+			
+			t.commit();
+			
+			return agendamento;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
 		}
 	}
 	
