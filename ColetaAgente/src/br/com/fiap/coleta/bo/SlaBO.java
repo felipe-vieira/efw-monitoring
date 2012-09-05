@@ -31,14 +31,17 @@ public class SlaBO {
 		Calendar dtInicio = Calendar.getInstance();
 		Calendar dtFim = Calendar.getInstance();
 		
-		dtInicio.roll(Calendar.DAY_OF_YEAR, -1);
 		dtInicio.set(Calendar.HOUR_OF_DAY, 0);
 		dtInicio.set(Calendar.MINUTE, 0);
 		dtInicio.set(Calendar.SECOND, 0);
+		dtInicio.set(Calendar.DATE, (dtInicio.get(Calendar.DATE) -1) );
 		
 		dtFim.set(Calendar.HOUR_OF_DAY, 0);
 		dtFim.set(Calendar.MINUTE, 0);
 		dtFim.set(Calendar.SECOND, 0);
+		
+		System.out.println(dtInicio.getTime());
+		System.out.println(dtFim.getTime());
 		
 		try{
 			List<Sla> slas = this.slaDAO.listSlaNaoRodados(dtInicio);
@@ -46,13 +49,14 @@ public class SlaBO {
 			for (Sla sla : slas) {
 				List<No> nos = this.slaDAO.listNosSla(sla);
 				List<JanelaSla> janelas = this.slaDAO.listJanelasSla(sla,dtInicio);
-				
-				
 			}
+			
+			t.commit();
 			
 			
 		}catch(Exception ex){
-			
+			ex.printStackTrace();
+			t.rollback();
 		}
 		
 	}

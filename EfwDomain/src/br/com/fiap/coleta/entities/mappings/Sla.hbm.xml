@@ -17,8 +17,8 @@
 		<property name="horaInicio" not-null="true" type="time"/>
 		<property name="horaFim" not-null="true" type="time"/>
 		<property name="ativo" not-null="true"/>
-		<one-to-one name="diasSemana" lazy="false"/>
 		<property name="ultimaColeta"/>
+		<one-to-one name="diasSemana" lazy="false"/>
 
 	</class> 
 </hibernate-mapping>

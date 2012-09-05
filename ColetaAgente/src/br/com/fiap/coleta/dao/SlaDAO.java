@@ -27,9 +27,17 @@ public class SlaDAO extends GenericDAO{
 	
 	public List<JanelaSla> listJanelasSla(Sla sla, Calendar dia){
 		
+		
+		String strQuery = "FROM JanelaSla where sla.id = :id "+
+						  " where dataInicio <= :date "+
+						  " AND (dataFim >= :date OR dataFim is null)";
+				
+				
 		Session session = this.getSession();
-		Query query = session.createQuery("FROM JanelaSla where sla.id = :id");
+		Query query = session.createQuery(strQuery);
+		
 		query.setLong("id", sla.getId());
+		query.setDate("date", dia.getTime());
 		
 		return (List<JanelaSla>) query.list();
 		
@@ -52,13 +60,13 @@ public class SlaDAO extends GenericDAO{
 		calendar.set(Calendar.MINUTE,0);
 		calendar.set(Calendar.HOUR_OF_DAY,0);
 		
-		String strQuery = "FROM Sla where ultimaColeta < :data " +
+		String strQuery = "FROM Sla where (ultimaColeta is null OR ultimaColeta < :data) " +
 				  	      " AND ativo = :ativo" +
 				  	      " AND diasSemana.dia"+weekday+"=:dia";
 		
 		Query query = session.createQuery(strQuery);
 		
-		query.setDate("date",calendar.getTime());
+		query.setDate("data",calendar.getTime());
 		query.setBoolean("ativo",true);
 		query.setBoolean("dia",true);
 		
