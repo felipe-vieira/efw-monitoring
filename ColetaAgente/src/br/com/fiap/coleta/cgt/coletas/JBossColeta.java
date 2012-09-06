@@ -13,9 +13,11 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import br.com.fiap.coleta.bo.AgendamentoBO;
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
+import br.com.fiap.coleta.entities.Agendamento;
 import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
@@ -39,6 +41,10 @@ public class JBossColeta {
 	private SocketUtil socket;
 	
 	private Date dataColeta;
+	
+	private AgendamentoBO agendamentoBO;
+	
+	private Agendamento agendamento;
 	
 	private Indisponibilidade indisp;
 	
@@ -66,6 +72,7 @@ public class JBossColeta {
 	
 	public void initColeta(){
 		
+		this.agendamento = this.agendamentoBO.pegaAgendamentoNo(this.jboss);
 		this.dataColeta = new Date();
 		this.jboss.setUltimaColeta(dataColeta);
 		
@@ -251,9 +258,8 @@ public class JBossColeta {
 			
 			threadColeta.setDataColeta(this.dataColeta);
 			threadColeta.setThreadCount(json.getLong("count"));
-			threadColeta.setCpuTime(json.getDouble("cpuTime")/600000000);
-			//threadColeta.setCpuTime(json.getDouble("cpuTime")/(intervalo*10000000);
-			threadColeta.setUserTime(json.getDouble("userTime")/600000000);
+			threadColeta.setCpuTime(json.getDouble("cpuTime")/( this.agendamento.getIntervalo() *10000000));
+			threadColeta.setUserTime(json.getDouble("userTime")/( this.agendamento.getIntervalo() *10000000));
 			
 			return threadColeta;
 			
