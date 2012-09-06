@@ -13,9 +13,11 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import br.com.fiap.coleta.bo.AgendamentoBO;
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
+import br.com.fiap.coleta.entities.Agendamento;
 import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.Glassfish;
 import br.com.fiap.coleta.entities.No;
@@ -34,6 +36,8 @@ public class GlassFishColeta {
 	
 	private IndisponibilidadeBO indisponibilidadeBO;
 	
+	private AgendamentoBO agendamentoBO;
+	
 	private AlarmeBO alarmeBO;
 	
 	private SocketUtil socket;
@@ -45,6 +49,8 @@ public class GlassFishColeta {
 	private Boolean ultimoStatus;
 
 	private Boolean ultimoGerenciavel;
+	
+	private Agendamento agendamento;
 
 	private List<ServidorAplicacaoMemoria> propriedadesMemorias;
 	
@@ -66,6 +72,8 @@ public class GlassFishColeta {
 	
 	public void initColeta(){
 	
+		this.agendamento = this.agendamentoBO.pegaAgendamentoNo(this.glassfish);
+		
 		this.dataColeta = new Date();
 		this.glassfish.setUltimaColeta(dataColeta);
 		
@@ -251,8 +259,8 @@ public class GlassFishColeta {
 			
 			threadColeta.setDataColeta(this.dataColeta);
 			threadColeta.setThreadCount(json.getLong("count"));
-			threadColeta.setCpuTime(json.getDouble("cpuTime")/600000000);
-			threadColeta.setUserTime(json.getDouble("userTime")/600000000);
+			threadColeta.setCpuTime(json.getDouble("cpuTime")/( this.agendamento.getIntervalo() *10000000));
+			threadColeta.setUserTime(json.getDouble("userTime")/( this.agendamento.getIntervalo() *10000000));
 			
 			return threadColeta;
 			
