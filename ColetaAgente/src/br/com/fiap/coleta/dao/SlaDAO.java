@@ -29,7 +29,7 @@ public class SlaDAO extends GenericDAO{
 		
 		
 		String strQuery = "FROM JanelaSla where sla.id = :id "+
-						  " where dataInicio <= :date "+
+						  " AND dataInicio <= :date "+
 						  " AND (dataFim >= :date OR dataFim is null)";
 				
 				
@@ -75,22 +75,28 @@ public class SlaDAO extends GenericDAO{
 	
 	public List<Indisponibilidade> listaIndisponibilidadesPeriodo(No no, Date dataInicio, Date dataFim){
 		
+		System.out.println("-- Debug DAO --");
+		System.out.println(dataInicio);
+		System.out.println(dataFim);
+		
 		StringBuilder queryStr  = new StringBuilder();
 		
-		queryStr.append(" FROM Indisponibilidade WHERE No.id = :noId ");
+		queryStr.append(" FROM Indisponibilidade WHERE no.id = :id ");
 		queryStr.append(" AND ");
 		queryStr.append("     (");
-		queryStr.append("      (inicio >= :dataInicio AND fim <= :dataFim) OR");
-		queryStr.append("      (inicio <= :dataFim AND fim is null) OR");
-		queryStr.append("      (inicio <= :dataInicio AND fim >= :dataInicio) OR");
-		queryStr.append("      (inicio <= :dataInicio AND fim >= :dataFim) OR");
+		queryStr.append("      (inicio >= :dataInicio AND fim <= :dataFim)");
+		queryStr.append("      OR  (inicio <= :dataFim AND fim is null)");
+		queryStr.append("      OR  (inicio <= :dataInicio AND fim >= :dataInicio)");
+		queryStr.append("      OR  (inicio <= :dataInicio AND fim >= :dataFim)");
 		queryStr.append("     )");
+		
+		System.out.println(queryStr.toString());
 		
 		Session session = this.getSession();
 		Query query = session.createQuery(queryStr.toString());
-		query.setInteger("noId", no.getId());
-		query.setDate("dataInicio", dataInicio);
-		query.setDate("dataFim", dataFim);
+		query.setInteger("id", no.getId());
+		query.setTimestamp("dataInicio", dataInicio);
+		query.setTimestamp("dataFim", dataFim);
 		
 		return (List<Indisponibilidade>) query.list();
 		

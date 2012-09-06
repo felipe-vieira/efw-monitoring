@@ -11,8 +11,8 @@ public class JanelaSla implements Serializable {
 	private String descricao;
 	private Date dataInicio;
 	private Date dataFim;
-	private String horaInicio;
-	private String horaFim;
+	private Date horaInicio;
+	private Date horaFim;
 	private DiasSemanaJanelaSla diasSemana;
 	
 	public Long getId() {
@@ -45,16 +45,16 @@ public class JanelaSla implements Serializable {
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 	}
-	public String getHoraInicio() {
+	public Date getHoraInicio() {
 		return horaInicio;
 	}
-	public void setHoraInicio(String horaInicio) {
+	public void setHoraInicio(Date horaInicio) {
 		this.horaInicio = horaInicio;
 	}
-	public String getHoraFim() {
+	public Date getHoraFim() {
 		return horaFim;
 	}
-	public void setHoraFim(String horaFim) {
+	public void setHoraFim(Date horaFim) {
 		this.horaFim = horaFim;
 	}
 	public DiasSemanaJanelaSla getDiasSemana() {
