@@ -22,3 +22,7 @@ INSERT INTO tipo_alarme(id,descricao,mensagem,threshold) VALUES(14,'Status do Jo
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(15,'Tempo de Backup','O tempo desde o ultimo backup excedeu o tempo limite estabelecido',1,'s');
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold) VALUES(16,'Status do BD','O status do BD de dados foi alterado para: ?',0);
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(17,'Tempo de Execução do Job','O tempo de execução do job ? excedeu o limite estabelecido',1,'s');
+
+/* Alarmes de SLA */
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(18,'SLA Diário', 'O SLA diário não antingiu a meta.',1,'%');
+INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(19,'SLA Mensal', 'O SLA mensal está abaixo da meta',1,'%');

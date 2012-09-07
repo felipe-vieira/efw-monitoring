@@ -7,21 +7,29 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.JanelaSla;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Sla;
+import br.com.fiap.coleta.entities.SlaCalculado;
+import br.com.fiap.coleta.entities.enumerators.TipoSla;
 
 public class SlaDAO extends GenericDAO{
 
 	public List<No> listNosSla(Sla sla){
 		
 		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
+		
 		Query query = session.createQuery("FROM No where sla.id = :id");
 		query.setLong("id", sla.getId());
 		
-		return (List<No>) query.list();
+		List<No> lista =  (List<No>) query.list();
+		t.commit();
+		
+		return lista;
 		
 	}
 	
@@ -34,12 +42,18 @@ public class SlaDAO extends GenericDAO{
 				
 				
 		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
+		
 		Query query = session.createQuery(strQuery);
+		
 		
 		query.setLong("id", sla.getId());
 		query.setDate("date", dia.getTime());
 		
-		return (List<JanelaSla>) query.list();
+		List<JanelaSla> janelas = (List<JanelaSla>) query.list();
+		t.commit();
+		
+		return janelas;
 		
 	}
 	
@@ -51,6 +65,7 @@ public class SlaDAO extends GenericDAO{
 	public List<Sla> listSlaNaoRodados(Calendar dia){
 		
 		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
 		
 		Calendar calendar = Calendar.getInstance();
 		
@@ -70,14 +85,42 @@ public class SlaDAO extends GenericDAO{
 		query.setBoolean("ativo",true);
 		query.setBoolean("dia",true);
 		
-		return (List<Sla>) query.list();
+		List<Sla> lista = (List<Sla>) query.list();
+		
+		t.commit();
+		
+		return lista;
+	}
+	
+	public List<Sla> listSlaNaoRodadosMes(Calendar dia) {
+		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
+		
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.set(Calendar.HOUR_OF_DAY,0);
+		calendar.set(Calendar.MINUTE,0);
+		calendar.set(Calendar.HOUR_OF_DAY,0);
+		
+		String strQuery = "FROM Sla where (ultimaColetaMes is null OR ultimaColetaMes < :data) " +
+				  	      " AND ativo = :ativo";
+		
+		Query query = session.createQuery(strQuery);
+		
+		query.setDate("data",calendar.getTime());
+		query.setBoolean("ativo",true);
+		
+		List<Sla> lista = (List<Sla>) query.list();
+		
+		t.commit();
+		
+		return lista;
 	}
 	
 	public List<Indisponibilidade> listaIndisponibilidadesPeriodo(No no, Date dataInicio, Date dataFim){
 		
-		System.out.println("-- Debug DAO --");
-		System.out.println(dataInicio);
-		System.out.println(dataFim);
+		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
 		
 		StringBuilder queryStr  = new StringBuilder();
 		
@@ -90,17 +133,64 @@ public class SlaDAO extends GenericDAO{
 		queryStr.append("      OR  (inicio <= :dataInicio AND fim >= :dataFim)");
 		queryStr.append("     )");
 		
-		System.out.println(queryStr.toString());
 		
-		Session session = this.getSession();
+
 		Query query = session.createQuery(queryStr.toString());
 		query.setInteger("id", no.getId());
 		query.setTimestamp("dataInicio", dataInicio);
 		query.setTimestamp("dataFim", dataFim);
+		 
+		List<Indisponibilidade> lista = (List<Indisponibilidade>) query.list();
 		
-		return (List<Indisponibilidade>) query.list();
+		t.commit();
+		
+		return lista;
 		
 	}
+
+	public List<SlaCalculado> listSlasNoMes(No no, Calendar dataInicio, Calendar dataFim) {
+		
+		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
+		
+		String queryStr = " FROM SlaCalculado WHERE no.id = :id AND controle BETWEEN :dataInicio AND :dataFim AND tipo = :tipo";
+		
+		Query query = session.createQuery(queryStr.toString());
+		query.setInteger("id", no.getId());
+		query.setTimestamp("dataInicio", dataInicio.getTime());
+		query.setTimestamp("dataFim", dataFim.getTime());
+		query.setParameter("tipo", TipoSla.DIARIO);
+		
+		List<SlaCalculado> lista = (List<SlaCalculado>) query.list();
+		
+		t.commit();
+		
+		return lista;
+
+	}
+	
+	public SlaCalculado getSlaNoMes(No no, Calendar dataInicio, Calendar dataFim) {
+		
+		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
+		
+		String queryStr = " FROM SlaCalculado WHERE no.id = :id AND controle BETWEEN :dataInicio AND :dataFim AND tipo = :tipo";
+		
+		Query query = session.createQuery(queryStr.toString());
+		query.setInteger("id", no.getId());
+		query.setTimestamp("dataInicio", dataInicio.getTime());
+		query.setTimestamp("dataFim", dataFim.getTime());
+		query.setParameter("tipo", TipoSla.MENSAL);
+		
+		SlaCalculado sla = (SlaCalculado) query.uniqueResult();
+		
+		t.commit();
+		
+		return sla;
+
+	}
+
+
 	
 	
 	

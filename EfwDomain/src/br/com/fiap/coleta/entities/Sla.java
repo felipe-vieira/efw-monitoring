@@ -15,6 +15,7 @@ public class Sla implements Serializable {
 	private BigDecimal meta;
 	private DiasSemanaSla diasSemana;
 	private Date ultimaColeta;
+	private Date ultimaColetaMes;
 	private Boolean ativo;
 	
 	public Long getId() {
@@ -58,6 +59,12 @@ public class Sla implements Serializable {
 	}
 	public void setUltimaColeta(Date ultimaColeta) {
 		this.ultimaColeta = ultimaColeta;
+	}
+	public Date getUltimaColetaMes() {
+		return ultimaColetaMes;
+	}
+	public void setUltimaColetaMes(Date ultimaColetaMes) {
+		this.ultimaColetaMes = ultimaColetaMes;
 	}
 	public Boolean getAtivo() {
 		return ativo;

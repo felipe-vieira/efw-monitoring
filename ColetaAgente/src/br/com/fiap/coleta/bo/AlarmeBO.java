@@ -21,6 +21,7 @@ import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
 import br.com.fiap.coleta.entities.ServidorThreshold;
+import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.coleta.entities.TipoAlarme;
 import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
 
@@ -306,5 +307,36 @@ public class AlarmeBO {
 		
 	}
 	
+	public void geraAlarmeSlaDiario(Sla sla, No no, BigDecimal percentual) {
+
+		
+			if(percentual.compareTo(sla.getMeta()) == -1){
+				Alarme alarme = new Alarme();
+				alarme.setData(new Date());
+				alarme.setTipo(tipos.get(18));
+				alarme.setNo(no);
+				alarme.setValor(percentual);
+				alarme.setValorLimite(sla.getMeta());
+				alarme.setCriticidade(CriticidadeAlarme.CRITICO);
+				
+				coletaDAO.salvaColeta(alarme);
+			}
+	}
+
+	public void geraAlarmeSlaMensal(Sla sla, No no, BigDecimal percentual) {
+	
+		if(percentual.compareTo(sla.getMeta()) == -1){
+			Alarme alarme = new Alarme();
+			alarme.setData(new Date());
+			alarme.setTipo(tipos.get(19));
+			alarme.setNo(no);
+			alarme.setValor(percentual);
+			alarme.setValorLimite(sla.getMeta());
+			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
+		
+			coletaDAO.salvaColeta(alarme);
+		}
+	
+	}
 	
 }

@@ -45,6 +45,9 @@ public class GerenciadorFila {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			List<Agendamento> agendamentos = this.agendamentoDAO.listaAgendamentosAtivos();
 			
+			//Cria o agendamento de sla
+			SchedulerUtil.criaAgendamentoSla(scheduler);
+			
 			for(Agendamento agendamento:agendamentos){	
 				SchedulerUtil.adicionarAgendamento(scheduler, agendamento);
 				agendamento.setAgendado(true);

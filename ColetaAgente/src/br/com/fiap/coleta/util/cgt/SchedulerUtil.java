@@ -11,6 +11,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 
 import br.com.fiap.coleta.cgt.jobs.ColetaJob;
+import br.com.fiap.coleta.cgt.jobs.SlaJob;
 import br.com.fiap.coleta.entities.Agendamento;
 
 public class SchedulerUtil  {
@@ -35,6 +36,28 @@ public class SchedulerUtil  {
 				.endAt(DateBuilder.dateOf(Integer.parseInt(horaFim[0]), Integer.parseInt(horaFim[1]), 0))
 				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
 					.withIntervalInMinutes(agendamento.getIntervalo())
+					.repeatForever()
+				 )
+				.build();					
+			
+
+		scheduler.scheduleJob(job, trigger);
+	}
+	
+	public static void criaAgendamentoSla(Scheduler scheduler) throws SchedulerException{
+		
+		//Cria o job
+		JobDetail job = JobBuilder.newJob(SlaJob.class)
+				.withIdentity("sla", "sla")
+				.build();
+		
+		
+		//Cria a trigger pra chamar o job
+		Trigger trigger = TriggerBuilder.newTrigger()
+				.withIdentity("sla", "sla")
+				.startAt(DateBuilder.dateOf(0, 0, 0))
+				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
+					.withIntervalInMinutes(30)
 					.repeatForever()
 				 )
 				.build();					

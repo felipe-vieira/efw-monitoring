@@ -7,14 +7,12 @@ public class Run {
 	
 	public static void main(String[] args) {
 		System.out.println("Iniciando o coletor...");
+
 		GerenciadorFila gerenciador = new GerenciadorFila();
 		gerenciador.iniciaGerenciador();
 		
-		/* Teste de sla
-		SlaBO bo = new SlaBO();
 		
-		bo.calculaSlaDiario();
-		*/
+		
 	}
 	
 }

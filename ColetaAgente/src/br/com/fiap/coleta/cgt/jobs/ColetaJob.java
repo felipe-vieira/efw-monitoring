@@ -27,7 +27,6 @@ public class ColetaJob implements Job{
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		System.out.println("come�ou uma coleta");
 		Integer idNo = context.getJobDetail().getJobDataMap().getInt("no");
 		
 		No noAtual = this.noDAO.getNoById(idNo);

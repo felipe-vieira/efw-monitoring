@@ -11,7 +11,7 @@
 		<many-to-one name="no" not-null="true"/>
 		
 		<property name="inicio" not-null="true"/>	
-		<property name="fim"/>		
+		<property name="fim" not-null="false"/>		
 		
 
 	</class> 

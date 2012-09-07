@@ -18,6 +18,7 @@
 		<property name="horaFim" not-null="true" type="time"/>
 		<property name="ativo" not-null="true"/>
 		<property name="ultimaColeta"/>
+		<property name="ultimaColetaMes"/>
 		<one-to-one name="diasSemana" lazy="false"/>
 
 	</class> 

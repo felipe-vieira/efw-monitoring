@@ -13,6 +13,7 @@ public class SlaCalculado implements Serializable{
 	private Long id;
 	private Sla sla;
 	private TipoSla tipo;
+	private No no;
 	private Date controle;
 	private BigDecimal percentual;
 	private Long tempoTotal;
@@ -37,6 +38,12 @@ public class SlaCalculado implements Serializable{
 	}
 	public void setTipo(TipoSla tipo) {
 		this.tipo = tipo;
+	}
+	public No getNo() {
+		return no;
+	}
+	public void setNo(No no) {
+		this.no = no;
 	}
 	public Date getControle() {
 		return controle;
