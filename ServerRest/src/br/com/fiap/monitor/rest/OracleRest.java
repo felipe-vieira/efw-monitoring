@@ -23,18 +23,20 @@ public class OracleRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveOracle(Oracle oracle, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO saveOracle(Oracle oracle, @QueryParam("thresholdId") Integer thresholdId, 
+			@QueryParam("slaId") Long slaId){
 		BancoDadosBO bo = new BancoDadosBO();
-		return bo.saveOracle(oracle,thresholdId);	
+		return bo.saveOracle(oracle,thresholdId,slaId);	
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateOracle(Oracle oracle, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO updateOracle(Oracle oracle, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId,
+			@QueryParam("slaId") Long slaId){
 		BancoDadosBO bo = new BancoDadosBO();
-		return bo.saveOracle(oracle,thresholdId);	
+		return bo.saveOracle(oracle,thresholdId,slaId);	
 	}
 	
 	@GET

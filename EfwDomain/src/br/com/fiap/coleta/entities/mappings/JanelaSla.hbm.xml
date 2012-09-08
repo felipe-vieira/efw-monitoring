@@ -15,6 +15,7 @@
 		<property name="dataFim"/>
 		<property name="horaInicio"  type="time" not-null="true"/>
 		<property name="horaFim" type="time" not-null="true"/>
+		<property name="ativo" not-null="true"/>
 		
 
 		<one-to-one name="diasSemana" lazy="false"/>

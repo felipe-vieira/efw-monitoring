@@ -53,18 +53,19 @@ public class ServidorRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveServidor(Servidor servidor, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO saveServidor(Servidor servidor, @QueryParam("thresholdId") Integer thresholdId, @QueryParam("slaId") Long slaId){
 		ServidorBO bo = new ServidorBO();
-		return bo.saveServidor(servidor,thresholdId);		
+		return bo.saveServidor(servidor,thresholdId,slaId);		
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateServidor(Servidor servidor, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO updateServidor(Servidor servidor, @PathParam("id") Long id, 
+			@QueryParam("thresholdId") Integer thresholdId, @QueryParam("slaId") Long slaId){
 		ServidorBO bo = new ServidorBO();
-		return bo.saveServidor(servidor,thresholdId);	
+		return bo.saveServidor(servidor,thresholdId,slaId);	
 	}
 	
 }

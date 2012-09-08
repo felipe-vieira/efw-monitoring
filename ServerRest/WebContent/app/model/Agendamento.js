@@ -1,7 +1,7 @@
 Ext.define('MONITOR.model.Agendamento', {
     extend: 'MONITOR.model.No',
     fields: [
-        {name: 'id', type: 'id', convert: null, defaultValue:null},
+        {name: 'id', type: 'int', convert: null, defaultValue:null},
         {name: 'intervalo', type: 'int', convert: null, defaultValue:5},
         {name: 'horaInicio', type: 'string'},
         {name: 'horaFim', type: 'string'},

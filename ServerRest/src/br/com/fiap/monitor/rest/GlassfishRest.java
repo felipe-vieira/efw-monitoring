@@ -23,18 +23,20 @@ public class GlassfishRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveGlassfish(Glassfish glassfish, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO saveGlassfish(Glassfish glassfish, @QueryParam("thresholdId") Integer thresholdId, 
+			@QueryParam("slaId") Long slaId){
 		ServidorAplicacaoBO bo = new ServidorAplicacaoBO();
-		return bo.saveGlassfish(glassfish,thresholdId);
+		return bo.saveGlassfish(glassfish,thresholdId,slaId);
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateGlassfish(Glassfish glassfish, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO updateGlassfish(Glassfish glassfish, @PathParam("id") Long id, 
+			@QueryParam("thresholdId") Integer thresholdId, @QueryParam("slaId") Long slaId){
 		ServidorAplicacaoBO bo = new ServidorAplicacaoBO();
-		return bo.saveGlassfish(glassfish,thresholdId);	
+		return bo.saveGlassfish(glassfish,thresholdId,slaId);	
 	}
 	
 	@GET

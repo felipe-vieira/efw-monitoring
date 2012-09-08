@@ -44,7 +44,8 @@ Ext.define('MONITOR.controller.NoController', {
     	'Thresholds',
     	'ServidorThresholds',
     	'ServidorAplicacaoThresholds',
-    	'BancoDadosThresholds'
+    	'BancoDadosThresholds',
+    	'SlasCombo'
     ],
     models: [
     	
@@ -74,7 +75,10 @@ Ext.define('MONITOR.controller.NoController', {
 
     	//Alarme
     	'Alarme',
-    	'TipoAlarme'
+    	'TipoAlarme',
+    	
+    	//SLA
+    	'Sla'
    	
     ],
     
@@ -683,9 +687,13 @@ Ext.define('MONITOR.controller.NoController', {
 			success: function(no){
 				
 				var thresholdId = no.getThreshold().get('id');
+				var slaId = no.getSla().get('id');
+				console.log(no);
+				console.log(slaId);
 		
 				var view = Ext.widget('formservidor');
-				view.down('form').down('combobox').setValue(thresholdId);
+				view.down('form').down('#thresholdId').setValue(thresholdId);
+				view.down('form').down('#slaId').setValue(slaId);
 				view.down('form').loadRecord(no);
 				
 			}
@@ -701,9 +709,11 @@ Ext.define('MONITOR.controller.NoController', {
 			success: function(no){
 				
 				var thresholdId = no.getThreshold().get('id');
+				var slaId = no.getSla().get('id');
 				
 				var view = Ext.widget('formglassfish');
-				view.down('form').down('combobox').setValue(thresholdId);
+				view.down('form').down('#thresholdId').setValue(thresholdId);
+				view.down('form').down('#slaId').setValue(slaId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -718,9 +728,11 @@ Ext.define('MONITOR.controller.NoController', {
 			success: function(no){
 				
 				var thresholdId = no.getThreshold().get('id');
+				var slaId = no.getSla().get('id');
 				
 				var view = Ext.widget('formjboss');
-				view.down('form').down('combobox').setValue(thresholdId);
+				view.down('form').down('#thresholdId').setValue(thresholdId);
+				view.down('form').down('#slaId').setValue(slaId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -735,9 +747,11 @@ Ext.define('MONITOR.controller.NoController', {
 			success: function(no){
 				
 				var thresholdId = no.getThreshold().get('id');
+				var slaId = no.getSla().get('id');
 				
 				var view = Ext.widget('formoracle');
-				view.down('form').down('combobox').setValue(thresholdId);
+				view.down('form').down('#thresholdId').setValue(thresholdId);
+				view.down('form').down('#slaId').setValue(slaId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -752,9 +766,11 @@ Ext.define('MONITOR.controller.NoController', {
 			success: function(no){
 				
 				var thresholdId = no.getThreshold().get('id');
+				var slaId = no.getSla().get('id');
 				
 				var view = Ext.widget('formsqlserver');
-				view.down('form').down('combobox').setValue(thresholdId);
+				view.down('form').down('#thresholdId').setValue(thresholdId);
+				view.down('form').down('#slaId').setValue(slaId);
 				view.down('form').loadRecord(no);
 			}
 		});
@@ -769,20 +785,25 @@ Ext.define('MONITOR.controller.NoController', {
 	    var store =  this.getNosStore();
 
 		var thresholdId = values.thresholdId;
+		var slaId = values.slaId;
 		
 		
         if(form.getForm().isValid()){
         	record.set(values);
+        	win.setLoading(true);
         	record.save(
         		{
         			params:{
-        				'thresholdId': thresholdId
+        				'thresholdId': thresholdId,
+        				'slaId':slaId
         			},
         			success: function(rec,op){
+        				win.setLoading(false);
         				win.close();
         				store.reload();
         			},
         			failure: function(rec,op){
+        				win.setLoading(false);
                         Ext.MessageBox.show({
                             title: 'Erro',
                             msg: op.request.scope.reader.jsonData["message"],
@@ -830,6 +851,7 @@ Ext.define('MONITOR.controller.NoController', {
 	},
 	
     resetRegister: function(){
+    	this.getSlasComboStore().reload();
     	this.itemSelected = null;
     },
     

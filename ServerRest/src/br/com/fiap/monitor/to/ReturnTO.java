@@ -11,6 +11,7 @@ public class ReturnTO {
 
 	public Boolean success;
 	public String message;
+	public Long id;
 	
 	public Boolean getSuccess() {
 		return success;
@@ -24,5 +25,12 @@ public class ReturnTO {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 		
 }

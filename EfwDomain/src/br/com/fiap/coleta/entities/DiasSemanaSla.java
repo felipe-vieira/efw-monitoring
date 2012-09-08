@@ -2,12 +2,17 @@ package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DiasSemanaSla implements Serializable{
 
 	private static final long serialVersionUID = -5545992949642391865L;
 	
 	private Long id;
-	private Sla sla;
 	private Boolean dia1;
 	private Boolean dia2;
 	private Boolean dia3;
@@ -21,12 +26,6 @@ public class DiasSemanaSla implements Serializable{
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public Sla getSla() {
-		return sla;
-	}
-	public void setSla(Sla sla) {
-		this.sla = sla;
 	}
 	public Boolean getDia1() {
 		return dia1;

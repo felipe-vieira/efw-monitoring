@@ -76,6 +76,18 @@ Ext.define('MONITOR.view.bancoDados.FormOracle', {
                     	queryMode: 'local',
                     	emptyText: 'Selecione',
                     	forceSelection: true
+                    },
+                    {
+                    	xtype: 'combobox',
+                    	name: 'slaId',                    	
+                    	store: 'SlasCombo',
+                    	id: 'slaId',
+                    	fieldLabel: 'SLA',
+                    	valueField: 'id',
+                    	displayField: 'nome',
+                    	queryMode: 'local',
+                    	emptyText: 'Selecione',
+                    	forceSelection: true
                     }
                     
                 ]

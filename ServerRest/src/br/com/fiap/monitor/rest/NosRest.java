@@ -59,6 +59,8 @@ public class NosRest {
 			}else{
 				no.setTipo("Desconhecido");
 			}
+			
+			
 		}
 		
 		return nos;

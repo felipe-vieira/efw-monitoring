@@ -6,12 +6,17 @@ Ext.application({
         'AgendamentoController',
         'LoginController',       
         'NoController',
+        'SlaController',
+        'JanelaSlaController',
         'ThresholdController',
         'UsuarioController',
         
     ],
     launch: function() {
+   
     	
+    Ext.USE_NATIVE_JSON = true;
+    
     Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             renderTo: Ext.getBody(),

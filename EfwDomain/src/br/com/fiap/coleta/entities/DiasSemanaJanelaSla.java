@@ -7,7 +7,6 @@ public class DiasSemanaJanelaSla implements Serializable{
 	private static final long serialVersionUID = -4784458913690583916L;
 	
 	private Long id;
-	private JanelaSla janela;
 	private Boolean dia1;
 	private Boolean dia2;
 	private Boolean dia3;
@@ -23,14 +22,6 @@ public class DiasSemanaJanelaSla implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public JanelaSla getJanela() {
-		return janela;
-	}
-
-	public void setJanela(JanelaSla janela) {
-		this.janela = janela;
 	}
 	public Boolean getDia1() {
 		return dia1;

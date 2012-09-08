@@ -2,9 +2,52 @@ Ext.define("MONITOR.utils.DateUtils", {
 	singleton : true,
 	
 	toStringPtBr : function (date){
-		console.log(date);
 		return date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " "  + 
 			date.toLocaleTimeString();
+		
+	},
+	
+	toDatePtBr : function (date){
+		return date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear();		
+	},
+	
+	toHours : function (date){
+		return date.toLocaleTimeString().substring(0,5);
+	},
+	
+	stringToTime : function (str){
+		
+		var d = new Date();
+		var arr= str.split(":");
+		var error = false;
+		
+		if(arr.length !=2){
+			error = true;
+		}else{
+			
+			if(isNaN(arr[0]) || arr[0] <0 || arr[0] >23 || isNaN(arr[1]) ||  arr[1]<0 || arr[1]>59){
+				error = true;
+			}else{
+				var parse = 'Thu, 01 Jan 1970 '+arr[0]+':'+arr[1]+':'+00;
+				d.setTime(Date.parse(parse));
+			}
+		}
+		
+		if(error == true){
+			
+            Ext.MessageBox.show({
+                title: 'Erro',
+                msg: "Formato de hora inválido",
+                icon: Ext.MessageBox.ERROR,
+                buttons: Ext.Msg.OK
+            });
+            
+			return null;
+			
+		}else{
+			return d;
+		}
+		
 		
 	},
 	

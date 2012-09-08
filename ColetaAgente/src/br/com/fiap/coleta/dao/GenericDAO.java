@@ -86,6 +86,15 @@ public class GenericDAO {
 	public void delete(Object obj) {
 		this.session.delete(obj);
 	}
+	
+	/**
+	 * Junta um objeto
+	 * @param cli
+	 */
+	public void merge(Object obj) {
+		this.session.merge(obj);
+	}
+	
 
 
 

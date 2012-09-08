@@ -9,7 +9,6 @@
 				<param name="property">janela</param>
 			</generator>
 		</id>
-		<one-to-one name="janela" constrained="true"/>
 		<property name="dia1" not-null="true"/>
 		<property name="dia2" not-null="true"/>
 		<property name="dia3" not-null="true"/>

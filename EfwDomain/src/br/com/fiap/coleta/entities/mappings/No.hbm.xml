@@ -16,7 +16,7 @@
 		<property name="disponivel" not-null="false"/>
 		<property name="gerenciavel" not-null="false"/>
 		<property name="ultimaColeta" not-null="false"/>
-		<many-to-one name = "sla" not-null="false"/>
+		<many-to-one name = "sla" not-null="false" lazy="false"/>
 		
 		<joined-subclass name="br.com.fiap.coleta.entities.Servidor" table="servidor">
 			<key column="no_id"/>

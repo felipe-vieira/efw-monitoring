@@ -13,6 +13,7 @@ import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.SistemaOperacional;
+import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.ReturnTO;
 
@@ -126,7 +127,7 @@ public class ServidorBO {
 	}
 	
 
-	public ReturnTO saveServidor(Servidor servidor, Integer thresholdId) {
+	public ReturnTO saveServidor(Servidor servidor, Integer thresholdId, Long slaId) {
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -155,6 +156,14 @@ public class ServidorBO {
 				}else{
 					servidor.setThreshold(null);
 				}
+				
+				if(slaId != null && slaId != 0){
+					Sla sla = (Sla) this.genericDAO.getById(Sla.class, slaId);
+					servidor.setSla(sla);
+				}else{
+					servidor.setSla(null);
+				}
+				
 				
 				if(servidor.getId() == null && servidor.getId() !=0){
 					this.genericDAO.save(servidor);

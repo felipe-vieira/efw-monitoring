@@ -26,7 +26,10 @@ public class NoBO {
 	}
 
 	public No getNoId(Integer id) {
-		return this.noDAO.getNoById(id);
+		
+		No no = this.noDAO.getNoById(id);
+		
+		return no; 
 	}
 
 	public ReturnTO saveNo(No no) {

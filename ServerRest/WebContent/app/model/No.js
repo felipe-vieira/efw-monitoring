@@ -22,4 +22,7 @@ Ext.define('MONITOR.model.No', {
 			writeAllFields: true
 		}
 	},
+	hasOne:[
+	        {model: 'MONITOR.model.Sla', foreignKey: 'sla.id', associationKey: 'sla' ,  getterName: "getSla", setterName: 'setSla' }
+    ]
 });

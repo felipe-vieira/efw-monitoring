@@ -9,7 +9,7 @@
 				<param name="property">sla</param>
 			</generator>
 		</id>
-		<one-to-one name="sla" constrained="true"/>
+		
 		<property name="dia1" not-null="true"/>
 		<property name="dia2" not-null="true"/>
 		<property name="dia3" not-null="true"/>

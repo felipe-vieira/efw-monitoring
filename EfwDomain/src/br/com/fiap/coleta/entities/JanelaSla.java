@@ -14,6 +14,7 @@ public class JanelaSla implements Serializable {
 	private Date horaInicio;
 	private Date horaFim;
 	private DiasSemanaJanelaSla diasSemana;
+	private Boolean ativo;
 	
 	public Long getId() {
 		return id;
@@ -64,6 +65,12 @@ public class JanelaSla implements Serializable {
 		this.diasSemana = diasSemana;
 	}
 	
+	public Boolean getAtivo() {
+		return ativo;
+	}
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

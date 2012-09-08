@@ -38,7 +38,8 @@ public class SlaDAO extends GenericDAO{
 		
 		String strQuery = "FROM JanelaSla where sla.id = :id "+
 						  " AND dataInicio <= :date "+
-						  " AND (dataFim >= :date OR dataFim is null)";
+						  " AND (dataFim >= :date OR dataFim is null)"+
+						  " AND ativo = :ativo";
 				
 				
 		Session session = this.getSession();
@@ -49,6 +50,7 @@ public class SlaDAO extends GenericDAO{
 		
 		query.setLong("id", sla.getId());
 		query.setDate("date", dia.getTime());
+		query.setBoolean("ativo", true);
 		
 		List<JanelaSla> janelas = (List<JanelaSla>) query.list();
 		t.commit();

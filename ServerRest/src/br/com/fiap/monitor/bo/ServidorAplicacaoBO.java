@@ -15,6 +15,7 @@ import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;
 import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
 import br.com.fiap.coleta.entities.ServidorThreshold;
+import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.ReturnTO;
 
@@ -77,7 +78,7 @@ public class ServidorAplicacaoBO {
 		}
 	}
 
-	public ReturnTO saveGlassfish(Glassfish glassfish, Integer thresholdId) {
+	public ReturnTO saveGlassfish(Glassfish glassfish, Integer thresholdId, Long slaId) {
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -115,6 +116,13 @@ public class ServidorAplicacaoBO {
 					glassfish.setThreshold(null);
 				}
 				
+				if(slaId != null && slaId != 0){
+					Sla sla = (Sla) this.genericDAO.getById(Sla.class, slaId);
+					glassfish.setSla(sla);
+				}else{
+					glassfish.setSla(null);
+				}
+				
 				if(glassfish.getId() == null && glassfish.getId() != 0){
 					this.genericDAO.save(glassfish);
 				}else{
@@ -137,7 +145,7 @@ public class ServidorAplicacaoBO {
 		return retorno;
 	}
 	
-	public ReturnTO saveJBoss(JBoss jboss,  Integer thresholdId) {
+	public ReturnTO saveJBoss(JBoss jboss,  Integer thresholdId, Long slaId) {
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -169,6 +177,13 @@ public class ServidorAplicacaoBO {
 					jboss.setThreshold(threshold);
 				}else{
 					jboss.setThreshold(null);
+				}
+				
+				if(slaId != null && slaId != 0){
+					Sla sla = (Sla) this.genericDAO.getById(Sla.class, slaId);
+					jboss.setSla(sla);
+				}else{
+					jboss.setSla(null);
 				}
 				
 				if(jboss.getId() == null && jboss.getId() != 0){

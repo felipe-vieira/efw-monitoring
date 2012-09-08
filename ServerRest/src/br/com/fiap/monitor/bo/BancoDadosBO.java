@@ -14,6 +14,8 @@ import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.coleta.entities.Oracle;
 import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
+import br.com.fiap.coleta.entities.ServidorThreshold;
+import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.ReturnTO;
 
@@ -115,7 +117,7 @@ public class BancoDadosBO {
 		
 	}
 
-	public ReturnTO saveSQLServer(SQLServer sqlserver, Integer thresholdId) {
+	public ReturnTO saveSQLServer(SQLServer sqlserver, Integer thresholdId, Long slaId) {
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
 		ReturnTO retorno = new ReturnTO();
@@ -154,6 +156,13 @@ public class BancoDadosBO {
 					sqlserver.setThreshold(null);
 				}
 				
+				if(slaId != null && slaId != 0){
+					Sla sla = (Sla) this.genericDAO.getById(Sla.class, slaId);
+					sqlserver.setSla(sla);
+				}else{
+					sqlserver.setSla(null);
+				}
+				
 				if(sqlserver.getId() == null){
 					this.genericDAO.save(sqlserver);
 				}else{
@@ -176,7 +185,7 @@ public class BancoDadosBO {
 		return retorno;
 	}
 	
-	public ReturnTO saveOracle(Oracle oracle, Integer thresholdId) {
+	public ReturnTO saveOracle(Oracle oracle, Integer thresholdId, Long slaId) {
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
 		ReturnTO retorno = new ReturnTO();
@@ -211,6 +220,13 @@ public class BancoDadosBO {
 					oracle.setThreshold(threshold);
 				}else{
 					oracle.setThreshold(null);
+				}
+				
+				if(slaId != null && slaId != 0){
+					Sla sla = (Sla) this.genericDAO.getById(Sla.class, slaId);
+					oracle.setSla(sla);
+				}else{
+					oracle.setSla(null);
 				}
 				
 				if(oracle.getId() == null){

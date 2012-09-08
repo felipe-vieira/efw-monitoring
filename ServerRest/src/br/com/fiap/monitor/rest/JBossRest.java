@@ -23,18 +23,20 @@ public class JBossRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveJboss(JBoss jboss, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO saveJboss(JBoss jboss, @QueryParam("thresholdId") Integer thresholdId,
+			@QueryParam("slaId") Long slaId){
 		ServidorAplicacaoBO bo = new ServidorAplicacaoBO();
-		return bo.saveJBoss(jboss,thresholdId);
+		return bo.saveJBoss(jboss,thresholdId,slaId);
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateJboss(JBoss jboss, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO updateJboss(JBoss jboss, @PathParam("id") Long id, @QueryParam("thresholdId") Integer thresholdId,
+			@QueryParam("slaId") Long slaId){
 		ServidorAplicacaoBO bo = new ServidorAplicacaoBO();
-		return bo.saveJBoss(jboss,thresholdId);	
+		return bo.saveJBoss(jboss,thresholdId,slaId);	
 	}
 	
 	@GET

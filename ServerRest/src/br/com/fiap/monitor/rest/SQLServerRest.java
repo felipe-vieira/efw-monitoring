@@ -23,18 +23,20 @@ public class SQLServerRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveSQLServer(SQLServer sqlserver, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO saveSQLServer(SQLServer sqlserver, @QueryParam("thresholdId") Integer thresholdId, 
+			@QueryParam("slaId") Long slaId){
 		BancoDadosBO bo = new BancoDadosBO();
-		return bo.saveSQLServer(sqlserver, thresholdId);	
+		return bo.saveSQLServer(sqlserver, thresholdId,slaId);	
 	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateSQLServer(SQLServer sqlserver, @QueryParam("thresholdId") Integer thresholdId){
+	public ReturnTO updateSQLServer(SQLServer sqlserver, @QueryParam("thresholdId") Integer thresholdId,
+			@QueryParam("slaId") Long slaId){
 		BancoDadosBO bo = new BancoDadosBO();
-		return bo.saveSQLServer(sqlserver, thresholdId);	
+		return bo.saveSQLServer(sqlserver, thresholdId,slaId);	
 	}
 	
 	@GET

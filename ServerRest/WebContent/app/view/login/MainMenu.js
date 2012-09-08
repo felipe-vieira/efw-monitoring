@@ -55,7 +55,31 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    			xtype: 'crudthreshold'
     	                    		}).show();
     	                        }
-    	                    }
+    	                    },
+    	                    '-',
+    	                    { 
+    	                        text: 'SLA',
+    	                    	handler: function(){
+    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
+    	                    		tabs[0].add({
+    	                    			closable: true,
+    	                    			title: 'Cadastro de SLA',
+    	                    			xtype: 'crudsla'
+    	                    		}).show();
+    	                        }
+    	                    },
+    	                    { 
+    	                        text: 'SLA - Janelas',
+    	                    	handler: function(){
+    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
+    	                    		tabs[0].add({
+    	                    			closable: true,
+    	                    			title: 'Cadastre Janelas SLA',
+    	                    			xtype: 'crudjanelasla'
+    	                    		}).show();
+    	                        }
+    	                    },
+    	                    
     	                ]
     	            }
     	        }
