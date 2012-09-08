@@ -74,7 +74,7 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
     	                    		tabs[0].add({
     	                    			closable: true,
-    	                    			title: 'Cadastre Janelas SLA',
+    	                    			title: 'Cadastro de Janelas SLA',
     	                    			xtype: 'crudjanelasla'
     	                    		}).show();
     	                        }

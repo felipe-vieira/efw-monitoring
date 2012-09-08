@@ -17,9 +17,9 @@ Ext.define("MONITOR.utils.DateUtils", {
 	
 	stringToTime : function (str){
 		
-		var d = new Date();
 		var arr= str.split(":");
 		var error = false;
+		var d = null;
 		
 		if(arr.length !=2){
 			error = true;
@@ -28,8 +28,11 @@ Ext.define("MONITOR.utils.DateUtils", {
 			if(isNaN(arr[0]) || arr[0] <0 || arr[0] >23 || isNaN(arr[1]) ||  arr[1]<0 || arr[1]>59){
 				error = true;
 			}else{
-				var parse = 'Thu, 01 Jan 1970 '+arr[0]+':'+arr[1]+':'+00;
-				d.setTime(Date.parse(parse));
+				var parse = arr[0]+':'+arr[1]+':'+'00';
+
+				console.log(parse);
+				d = Ext.Date.parse(parse, "H:i:s");
+				console.log(d);
 			}
 		}
 		

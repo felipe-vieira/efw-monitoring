@@ -50,7 +50,7 @@ Ext.define('MONITOR.view.janelasla.CrudJanelaSla', {
     	    	    {
     	    	    	xtype: 'toolbar',
     	    	        dock: 'top',
-    	    	        id: 'toolbarsla',
+    	    	        id: 'toolbarjanelasla',
     	    	        items:
     	    	        [
     	    	            {

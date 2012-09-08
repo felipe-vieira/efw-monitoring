@@ -4,10 +4,10 @@ Ext.define('MONITOR.model.JanelaSla', {
     fields: [
         {name:'id', type:'int'},
         {name:'descricao', type:'string'},
-        {name:'dataInicio', type:'date'},
-        {name:'dataFim', type:'date'},
-        {name:'horaInicio', type:'date'},
-        {name:'horaFim', type:'date'}
+        {name:'dataInicio', type:'date', dateFormat:'c'},
+        {name:'dataFim', type:'date', dateFormat:'c'},
+        {name:'horaInicio', type:'date', dateFormat:'c'},
+        {name:'horaFim', type:'date', dateFormat:'c'}
     ],
     
     proxy: {

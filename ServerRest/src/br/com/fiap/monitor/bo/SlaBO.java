@@ -1,5 +1,7 @@
 package br.com.fiap.monitor.bo;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -272,6 +274,11 @@ public class SlaBO {
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();	
 		
+		SimpleDateFormat timeFormat = new SimpleDateFormat("k:m:s");
+		
+		Long inicio = Time.valueOf(timeFormat.format(janela.getHoraInicio())).getTime();
+		Long fim = Time.valueOf(timeFormat.format(janela.getHoraFim())).getTime();
+		
 		ReturnTO retorno = new ReturnTO();
 		retorno.setSuccess(false);
 		
@@ -293,13 +300,13 @@ public class SlaBO {
 			}else if (janela.getHoraInicio() == null){
 				retorno.setMessage("O campo Hora Inicio é obrigatório");
 				t.rollback();
-			}else if(janela.getHoraInicio().before(sla.getHoraInicio())){
+			}else if(inicio < sla.getHoraInicio().getTime()){
 				retorno.setMessage("O campo Hora inicio é anterior ao inicio do periodo do SLA selecionado.");
 				t.rollback();
 			}else if (janela.getHoraFim() == null){
 				retorno.setMessage("O campo Hora Fim é obrigatório");
 				t.rollback();
-			}else if(janela.getHoraFim().after(sla.getHoraFim())){
+			}else if(fim > sla.getHoraFim().getTime()){
 				retorno.setMessage("O campo Hora fim é superior ao termino do periodo do SLA selecionado.");
 				t.rollback();
 			}else{
