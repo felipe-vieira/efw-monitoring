@@ -74,24 +74,20 @@ Ext.define('MONITOR.controller.SlaController', {
 		
 		if(this.itemSelected != null){
 
-			var strHoraInicio = MONITOR.utils.DateUtils.toHours(this.itemSelected.get('horaInicio'));
-			var strHoraFim = MONITOR.utils.DateUtils.toHours(this.itemSelected.get('horaFim'));
-			
 			var view = Ext.widget('formsla');
 			var diasSemana = this.itemSelected.getDiasSemana();
 			
 			view.down('form').loadRecord(this.itemSelected);
 			view.down('form').form.setValues({
-				'horaInicio': strHoraInicio,
-				'horaFim': strHoraFim,
 				'dia1': diasSemana.get('dia1'),
 				'dia2': diasSemana.get('dia2'),
 				'dia3': diasSemana.get('dia3'),
 				'dia4': diasSemana.get('dia4'),
 				'dia5': diasSemana.get('dia5'),
 				'dia6': diasSemana.get('dia6'),
-				'dia7': diasSemana.get('dia7')
+				'dia7': diasSemana.get('dia7'),
 			});
+			
 						
 			
 		}else{			
@@ -153,43 +149,55 @@ Ext.define('MONITOR.controller.SlaController', {
         	dias.set("dia5",values.dia5);
         	dias.set("dia6",values.dia6);
         	dias.set("dia7",values.dia7);
+        	
         	//Converte as horas
-        	var horaInicio = MONITOR.utils.DateUtils.stringToTime(values.horaInicio);
-        	var horaFim = MONITOR.utils.DateUtils.stringToTime(values.horaFim);
+        	var horaInicio = Ext.Date.parse(values.horaInicio, "H:i");
+        	var horaFim = Ext.Date.parse(values.horaFim, "H:i");
         	
-        	console.log(horaInicio.getTimezoneOffset());
+       		record.set('horaInicio',horaInicio);
+    		record.set('horaFim',horaFim);
         	
-        	if(horaInicio!= null && horaFim != null){
-        		win.setLoading(true);
-        		record.set('horaInicio',horaInicio);
-        		record.set('horaFim',horaFim);
-        		
-	        	record.save(
-	        		{
-	        			success: function(rec,op){
-	        				
-	        				var id = op.request.scope.reader.jsonData["id"];
-	        				
-	        				dias.set("id",id);
-	        				dias.save();
-	        				
-	        				win.setLoading(false);
-	        				win.close();
-	        				store.reload();
-	        				
-	        			},
-	        			failure: function(rec,op){
-	        				win.setLoading(false);
-	                        Ext.MessageBox.show({
-	                            title: 'Erro',
-	                            msg: op.request.scope.reader.jsonData["message"],
-	                            icon: Ext.MessageBox.ERROR,
-	                            buttons: Ext.Msg.OK
-	                        });
-	        			}
-	        		}
-	        	);
-        	}
+        	
+    		win.setLoading(true);
+    		
+        	record.save(
+        		{
+        			success: function(rec,op){
+        				
+        				var id = op.request.scope.reader.jsonData["id"];
+        				
+        				dias.set("id",id);
+        				
+        				dias.save({
+        					success: function(rec,op){
+        						win.setLoading(false);
+                				win.close();
+                				store.reload();
+        					},
+        					failure: function(rec,op){
+                				win.setLoading(false);
+                                Ext.MessageBox.show({
+                                    title: 'Erro',
+                                    msg: op.request.scope.reader.jsonData["message"],
+                                    icon: Ext.MessageBox.ERROR,
+                                    buttons: Ext.Msg.OK
+                                });
+                			}
+        					
+        				});
+        				
+        			},
+        			failure: function(rec,op){
+        				win.setLoading(false);
+                        Ext.MessageBox.show({
+                            title: 'Erro',
+                            msg: op.request.scope.reader.jsonData["message"],
+                            icon: Ext.MessageBox.ERROR,
+                            buttons: Ext.Msg.OK
+                        });
+        			}
+        		}
+        	);
         }
 	}	
   

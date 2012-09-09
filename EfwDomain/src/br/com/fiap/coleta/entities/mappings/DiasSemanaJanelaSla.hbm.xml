@@ -4,11 +4,7 @@
 <hibernate-mapping>
 	<class name="br.com.fiap.coleta.entities.DiasSemanaJanelaSla" table="dias_semana_janela_sla">
 	
-		<id name="id" column="id">
-			<generator class="foreign">
-				<param name="property">janela</param>
-			</generator>
-		</id>
+		<id name="id" column="id"/>
 		<property name="dia1" not-null="true"/>
 		<property name="dia2" not-null="true"/>
 		<property name="dia3" not-null="true"/>

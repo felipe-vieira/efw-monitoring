@@ -34,25 +34,17 @@ Ext.define('MONITOR.controller.JanelaSlaController', {
     			click: this.create
     		},
     		
-    		'formjanelasla button[action=save]':{
-    			click: this.saveOrUpdate
-    		},
-    		
-    		/*
-    		'#toolbarsla button[action=edit]':{
+    		'#toolbarjanelasla button[action=edit]':{
     			click: this.edit
-    		},
+    		}, 
     		
-    		'#toolbarsla button[action=delete]':{
+    		'#toolbarjanelasla button[action=delete]':{
     			click: this.del
     		},
     		
-    		
-    		
-    		 */
-    		
-
-    		
+    		'formjanelasla button[action=save]':{
+    			click: this.saveOrUpdate
+    		}
     	});
     	
 
@@ -81,16 +73,13 @@ Ext.define('MONITOR.controller.JanelaSlaController', {
 		
 		if(this.itemSelected != null){
 
-			var strHoraInicio = MONITOR.utils.DateUtils.toHours(this.itemSelected.get('horaInicio'));
-			var strHoraFim = MONITOR.utils.DateUtils.toHours(this.itemSelected.get('horaFim'));
-			
-			var view = Ext.widget('formsla');
+			var view = Ext.widget('formjanelasla');
 			var diasSemana = this.itemSelected.getDiasSemana();
+			var slaId = this.itemSelected.getSla().get('id');
 			
 			view.down('form').loadRecord(this.itemSelected);
 			view.down('form').form.setValues({
-				'horaInicio': strHoraInicio,
-				'horaFim': strHoraFim,
+				'slaId': slaId,
 				'dia1': diasSemana.get('dia1'),
 				'dia2': diasSemana.get('dia2'),
 				'dia3': diasSemana.get('dia3'),
@@ -110,7 +99,7 @@ Ext.define('MONITOR.controller.JanelaSlaController', {
 	del: function(button){
 		if(this.itemSelected != null){
 			var store = this.getJanelasSlaStore();
-			Ext.MessageBox.confirm('Confirmação','Deseja excluir o SLA '+this.itemSelected.get('nome')+' ?',
+			Ext.MessageBox.confirm('Confirmação','Deseja excluir o registro '+this.itemSelected.get('descricao')+' ?',
 				function(resp){
 					if(resp=="yes"){
 						
@@ -164,55 +153,66 @@ Ext.define('MONITOR.controller.JanelaSlaController', {
         	var slaId = values.slaId;
         	
         	//Converte as horas
-        	var horaInicio = MONITOR.utils.DateUtils.stringToTime(values.horaInicio);
-        	var horaFim = MONITOR.utils.DateUtils.stringToTime(values.horaFim);
-        
-        	console.log(values.dataInicio);
-        	console.log(values.dataFim);
+        	var horaInicio = Ext.Date.parse(values.horaInicio, "H:i");
+        	var horaFim = Ext.Date.parse(values.horaFim, "H:i");
         	
         	var dataInicio = Ext.Date.parse(values.dataInicio, "d/m/Y");
     		var dataFim = Ext.Date.parse(values.dataFim, "d/m/Y");
+
+    		win.setLoading(true);
+    		
+    		record.set('horaInicio',horaInicio);
+    		record.set('horaFim',horaFim);
+    		record.set('dataInicio',dataInicio);
+    		record.set('dataFim',dataFim);
     		
     		
-        	if(horaInicio!= null && horaFim != null){
-        		win.setLoading(true);
-        		
-        		record.set('horaInicio',horaInicio);
-        		record.set('horaFim',horaFim);
-        		record.set('dataInicio',dataInicio);
-        		record.set('dataFim',dataFim);
-        		
-        		
-	        	record.save(
-	        		{
-	        			
-	        			params:{
-	        				'slaId': slaId
-	        			},
-	        			success: function(rec,op){
-	        				
-	        				var id = op.request.scope.reader.jsonData["id"];
-	        				
-	        				dias.set("id",id);
-	        				dias.save();
-	        				
-	        				win.setLoading(false);
-	        				win.close();
-	        				store.reload();
-	        				
-	        			},
-	        			failure: function(rec,op){
-	        				win.setLoading(false);
-	                        Ext.MessageBox.show({
-	                            title: 'Erro',
-	                            msg: op.request.scope.reader.jsonData["message"],
-	                            icon: Ext.MessageBox.ERROR,
-	                            buttons: Ext.Msg.OK
-	                        });
-	        			}
-	        		}
-	        	);
-        	}
+        	record.save(
+        		{
+        			
+        			params:{
+        				'slaId': slaId
+        			},
+        			success: function(rec,op){
+        				
+        				var id = op.request.scope.reader.jsonData["id"];
+
+        				dias.set("id",id);
+        				
+        				dias.save({
+        					success: function(rec,op){
+        						win.setLoading(false);
+                				win.close();
+                				store.reload();
+        					},
+        					failure: function(rec,op){
+                				win.setLoading(false);
+                                Ext.MessageBox.show({
+                                    title: 'Erro',
+                                    msg: op.request.scope.reader.jsonData["message"],
+                                    icon: Ext.MessageBox.ERROR,
+                                    buttons: Ext.Msg.OK
+                                });
+                			}
+        					
+        				});
+        				
+        				win.setLoading(false);
+        				win.close();
+        				store.reload();
+        				
+        			},
+        			failure: function(rec,op){
+        				win.setLoading(false);
+                        Ext.MessageBox.show({
+                            title: 'Erro',
+                            msg: op.request.scope.reader.jsonData["message"],
+                            icon: Ext.MessageBox.ERROR,
+                            buttons: Ext.Msg.OK
+                        });
+        			}
+        		}
+        	);
         }
 	}	
   

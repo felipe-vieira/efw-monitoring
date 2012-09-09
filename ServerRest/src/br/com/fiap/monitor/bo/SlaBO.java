@@ -213,12 +213,10 @@ public class SlaBO {
 		
 		try{
 			
-			Sla sla = (Sla) this.genericDAO.getById(Sla.class, dias.getId());
 			DiasSemanaSla diaOld = (DiasSemanaSla) this.genericDAO.getById(DiasSemanaSla.class, dias.getId());
 						
-			if(diaOld == null){
-				dias.setId(null);
-				this.genericDAO.saveOrUpdate(dias);
+			if(diaOld == null){	
+				this.genericDAO.save(dias);
 			}else{
 				this.genericDAO.merge(dias);
 			}
@@ -391,13 +389,10 @@ public class SlaBO {
 		
 		try{
 			
-			JanelaSla sla = (JanelaSla) this.genericDAO.getById(JanelaSla.class, dias.getId());
 			DiasSemanaJanelaSla diaOld = (DiasSemanaJanelaSla) this.genericDAO.getById(DiasSemanaJanelaSla.class, dias.getId());
 			
-			
 			if(diaOld == null){
-				dias.setId(null);
-				this.genericDAO.saveOrUpdate(dias);
+				this.genericDAO.save(dias);
 			}else{
 				this.genericDAO.merge(dias);
 			}

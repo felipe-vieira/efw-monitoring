@@ -12,7 +12,8 @@ Ext.define("MONITOR.utils.DateUtils", {
 	},
 	
 	toHours : function (date){
-		return date.toLocaleTimeString().substring(0,5);
+		date = MONITOR.utils.DateUtils.offsetWorkaround(date);
+		return Ext.Date.format(date,'H:i');
 	},
 	
 	stringToTime : function (str){
@@ -31,7 +32,7 @@ Ext.define("MONITOR.utils.DateUtils", {
 				var parse = arr[0]+':'+arr[1]+':'+'00';
 
 				console.log(parse);
-				d = Ext.Date.parse(parse, "H:i:s");
+				d = Ext.Date.parse(parse, "H:i:s", true);
 				console.log(d);
 			}
 		}
@@ -90,6 +91,23 @@ Ext.define("MONITOR.utils.DateUtils", {
 		
 		return retorno;
 			
+	},
+	
+	offsetWorkaround: function(date){
+		var local = new Date();
+		
+		if(date.getTimezoneOffset() != local.getTimezoneOffset()){
+			var offsetDate = date.getTimezoneOffset(); 
+			var offsetLocal = local.getTimezoneOffset();
+		
+			var diff = offsetDate - offsetLocal;
+			var msDiff = (diff*60000);
+
+			date.setTime(date.getTime() + msDiff);
+			
+		}
+		
+		return date;
 	}
 	
 });

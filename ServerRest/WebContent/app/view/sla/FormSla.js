@@ -23,20 +23,28 @@ Ext.define('MONITOR.view.sla.FormSla', {
                         allowBlank: false
                     },
                     {
-                        xtype: 'textfield',
-                        name : 'horaInicio',
-                        fieldLabel: 'Hora Inicio (hh:ms)',
+                    	xtype: 'timefield',
+                        name: 'horaInicio',
+                        fieldLabel: 'Hora Inicio',
+                        minValue: '0:00  ',
+                        maxValue: '23:59 ',
+                        increment: 30,
+                        anchor: '100%',
                         labelWidth: 120,
                         labelAlign: 'right',
-                        allowBlank: false
-                    },
+                        format : 'H:i'
+                    }, 
                     {
-                        xtype: 'textfield',
-                        name : 'horaFim',
-                        fieldLabel: 'Hora Fim (hh:ms)',
+                        xtype: 'timefield',
+                        name: 'horaFim',
+                        fieldLabel: 'Hora Fim',
+                        minValue: '0:00  ',
+                        maxValue: '23:59 ',
+                        increment: 30,
+                        anchor: '100%',
                         labelWidth: 120,
                         labelAlign: 'right',
-                        allowBlank: false
+                        format : 'H:i'
                     },
                     {
                     	xtype: 'numberfield',
