@@ -14,7 +14,7 @@ public class SendEmail
    private String host = "";
    private String user = "";
    private String password = "";
-   private String port = "25";
+   private int port = 25;
 	
    public void send()
    {
@@ -23,7 +23,7 @@ public class SendEmail
       properties.setProperty("mail.smtp.host", this.host);
       properties.setProperty("mail.user", this.user);
       properties.setProperty("mail.password", this.password);
-      properties.setProperty("mail.port", this.port);
+      properties.setProperty("mail.port", "" + this.port);
 
       Session session = Session.getDefaultInstance(properties);
 
@@ -104,11 +104,11 @@ public void setPassword(String password) {
 	this.password = password;
 }
 
-public String getPort() {
+public Integer getPort() {
 	return port;
 }
 
-public void setPort(String port) {
+public void setPort(int port) {
 	this.port = port;
 }
 }

@@ -59,6 +59,7 @@ public class GlassFishColeta {
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
 		this.indisponibilidadeBO = new IndisponibilidadeBO();
 		this.alarmeBO = new AlarmeBO();
+		this.agendamentoBO = new AgendamentoBO();
 		
 		if(this.glassfish.getUltimaColeta() != null){
 			this.ultimoStatus = this.glassfish.getDisponivel();

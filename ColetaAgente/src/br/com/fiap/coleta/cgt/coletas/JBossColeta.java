@@ -60,6 +60,7 @@ public class JBossColeta {
 		this.servidorAplicacaoBO = new ServidorAplicacaoBO();
 		this.indisponibilidadeBO = new IndisponibilidadeBO();
 		this.alarmeBO = new AlarmeBO();
+		this.agendamentoBO = new AgendamentoBO();
 		
 		if(this.jboss.getUltimaColeta() != null){
 			this.ultimoStatus = this.jboss.getDisponivel();
