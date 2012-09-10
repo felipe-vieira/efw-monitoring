@@ -73,9 +73,8 @@ public class GlassFishColeta {
 	
 	public void initColeta(){
 	
-		this.agendamento = this.agendamentoBO.pegaAgendamentoNo(this.glassfish);
-		
 		this.dataColeta = new Date();
+		this.agendamento = this.agendamentoBO.pegaAgendamentoNo(this.glassfish);
 		this.glassfish.setUltimaColeta(dataColeta);
 		
 		// Pega utlima indisponibilidade
@@ -163,7 +162,6 @@ public class GlassFishColeta {
 		}catch(Exception ex){
 			
 			System.out.println("Glassfish Ind�spon�vel - "+ this.glassfish.getHostname() +" - Falha no Http GET");
-			ex.printStackTrace();
 			this.glassfish.setDisponivel(false);
 			this.glassfish.setGerenciavel(false);
 			this.servidorAplicacaoBO.updateServidorAplicacaoColeta(this.glassfish);
@@ -173,7 +171,7 @@ public class GlassFishColeta {
 			
 			this.glassfish.setUltimaColeta(dataColeta);
 			
-			if (this.glassfish.getDisponivel() && (ultimoStatus || this.indisp == null)){
+			if (!this.glassfish.getDisponivel() && (ultimoStatus || this.indisp == null)){
 
 				if (this.indisp == null) {
 					this.indisp = new Indisponibilidade();
@@ -182,7 +180,7 @@ public class GlassFishColeta {
 				}
 				
 				
-			} else if (this.glassfish.getDisponivel() && this.indisp !=null && !ultimoStatus){
+			} else if (this.glassfish.getDisponivel() && this.indisp !=null){
 				this.indisp.setFim(this.dataColeta);
 			}
 			

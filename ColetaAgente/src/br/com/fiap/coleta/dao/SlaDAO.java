@@ -23,8 +23,9 @@ public class SlaDAO extends GenericDAO{
 		Session session = this.getSession();
 		Transaction t = session.beginTransaction();
 		
-		Query query = session.createQuery("FROM No where sla.id = :id");
+		Query query = session.createQuery("FROM No where sla.id = :id and ativo = :ativo");
 		query.setLong("id", sla.getId());
+		query.setBoolean("ativo", true);
 		
 		List<No> lista =  (List<No>) query.list();
 		t.commit();

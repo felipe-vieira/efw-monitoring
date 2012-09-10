@@ -78,6 +78,7 @@ public class SQLServerColeta {
 	
 		try{
 			
+			this.dataColeta = new Date();
 			this.sqlserver.setUltimaColeta(dataColeta);
 			
 			// Pega utlima indisponibilidade
@@ -178,7 +179,7 @@ public class SQLServerColeta {
 			
 			this.sqlserver.setUltimaColeta(dataColeta);
 			
-			if (this.sqlserver.getDisponivel() && (ultimoStatus || this.indisp == null)){
+			if (!this.sqlserver.getDisponivel() && (ultimoStatus || this.indisp == null)){
 
 				if (this.indisp == null) {
 					this.indisp = new Indisponibilidade();
@@ -187,7 +188,7 @@ public class SQLServerColeta {
 				}
 				
 				
-			} else if (this.sqlserver.getDisponivel() && this.indisp !=null && !ultimoStatus){
+			} else if (this.sqlserver.getDisponivel() && this.indisp !=null){
 				this.indisp.setFim(this.dataColeta);
 			}
 			

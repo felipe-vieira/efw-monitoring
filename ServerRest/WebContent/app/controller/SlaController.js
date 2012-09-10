@@ -5,10 +5,14 @@ Ext.define('MONITOR.controller.SlaController', {
     ],
     views: [
     	'sla.CrudSla',
-    	'sla.FormSla'
+    	'sla.FormSla',
+    	'sla.ConsultaSla',
+    	'sla.ListSlasCalculados'
     ],
     stores: [
-        'Slas'
+        'Slas',
+        'SlasCalculados'
+        
     ],
     models: [
         'Sla',
@@ -42,6 +46,10 @@ Ext.define('MONITOR.controller.SlaController', {
     		
     		'formsla button[action=save]':{
     			click: this.saveOrUpdate
+    		},
+    		
+    		'consultasla button[action=search]':{
+    			click: this.listSlasCalculados
     		},
     		
 
@@ -199,6 +207,40 @@ Ext.define('MONITOR.controller.SlaController', {
         		}
         	);
         }
-	}	
+	},
+	
+	listSlasCalculados: function(button){
+		
+	    var form    = button.up('form');
+        var values = form.getValues();
+        
+        var id = values.noId;
+    	var dataInicio = values.dataInicio;
+		var dataFim = values.dataFim;
+
+		var tipo = values.tipo;
+		
+		
+    	var storeAlarmes = Ext.create('MONITOR.store.SlasCalculados');       	
+    	storeAlarmes.load({
+    		params: {
+    			id: id,
+    			dataInicio: dataInicio,
+    			dataFim: dataFim,
+    			tipo: tipo,
+    			start: 0,
+    			limit: 30	
+    		}
+    	});
+    	
+    	storeAlarmes.on('beforeload',function(store, operation,eOpts){
+            operation.params={
+        		id: id,
+        		dataInicio: dataInicio,
+        		dataFim: dataFim,
+        		tipo: tipo,
+            };
+        });
+	}
   
 });

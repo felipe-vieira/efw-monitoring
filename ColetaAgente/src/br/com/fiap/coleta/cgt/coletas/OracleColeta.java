@@ -71,7 +71,8 @@ public class OracleColeta {
 	}
 	
 	public void initColeta(){
-
+		
+			this.dataColeta = new Date();
 			socket = new SocketUtil(this.oracle.getHostname(), this.oracle.getAgentPort());
 			
 			try{
@@ -163,14 +164,13 @@ public class OracleColeta {
 		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
 		}catch(SQLException ex){
-			ex.printStackTrace();
 			this.oracle.setDisponivel(false);
 			result = false;
 		}finally{
 			
 			this.oracle.setUltimaColeta(dataColeta);
 			
-			if (this.oracle.getDisponivel() && (ultimoStatus || this.indisp == null)){
+			if (!this.oracle.getDisponivel() && (ultimoStatus || this.indisp == null)){
 
 				if (this.indisp == null) {
 					this.indisp = new Indisponibilidade();
@@ -179,7 +179,7 @@ public class OracleColeta {
 				}
 				
 				
-			} else if (this.oracle.getDisponivel() && this.indisp !=null && !ultimoStatus){
+			} else if (this.oracle.getDisponivel() && this.indisp !=null){
 				this.indisp.setFim(this.dataColeta);
 			}
 			

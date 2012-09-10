@@ -92,8 +92,8 @@ Ext.define('MONITOR.view.sla.CrudSla', {
     	    
     	    
     	];
-    		
-    	
+ 
+        
     	this.callParent(arguments);
     }
 });

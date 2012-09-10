@@ -4,8 +4,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import br.com.fiap.coleta.entities.enumerators.TipoSla;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SlaCalculado implements Serializable{
 
 	private static final long serialVersionUID = -1136506875375872258L;
@@ -75,6 +81,7 @@ public class SlaCalculado implements Serializable{
 	public void setTempoJanela(Long tempoJanela) {
 		this.tempoJanela = tempoJanela;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,6 +89,7 @@ public class SlaCalculado implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

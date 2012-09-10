@@ -2,6 +2,7 @@ package br.com.fiap.monitor.bo;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -14,6 +15,8 @@ import br.com.fiap.coleta.entities.DiasSemanaSla;
 import br.com.fiap.coleta.entities.JanelaSla;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Sla;
+import br.com.fiap.coleta.entities.SlaCalculado;
+import br.com.fiap.coleta.entities.enumerators.TipoSla;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.PagingTO;
 import br.com.fiap.monitor.to.ReturnTO;
@@ -412,8 +415,120 @@ public class SlaBO {
 		
 	}
 	
+	public SlaCalculado ultimoSlaMensalNo(Integer noId){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM SlaCalculado WHERE no.id = :noId AND tipo = :tipo ORDER BY controle DESC");
+			query.setInteger("noId", noId);
+			query.setParameter("tipo", TipoSla.MENSAL);
+			
+			query.setMaxResults(1);
+			
+			SlaCalculado sla = (SlaCalculado) query.uniqueResult();
+			
+			t.commit();
+			
+			return sla;		
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
 	
+	public SlaCalculado ultimoSlaDiarioNo(Integer noId){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM SlaCalculado WHERE no.id = :noId AND tipo = :tipo ORDER BY controle DESC");
+			query.setInteger("noId", noId);
+			query.setParameter("tipo", TipoSla.DIARIO);
+			
+			query.setMaxResults(1);
+			
+			SlaCalculado sla = (SlaCalculado) query.uniqueResult();
+			
+			t.commit();
+			
+			return sla;		
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
 	
+	public List<SlaCalculado> listaSlasCalculados(Long id, Date dataInicio, Date dataFim, Integer start, Integer limit, TipoSla tipo){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM SlaCalculado WHERE no.id = :noId AND tipo = :tipo" +
+											  " AND controle BETWEEN :dataInicio AND :dataFim"+
+											  " ORDER BY controle ASC");
+			
+			query.setLong("noId", id);
+			query.setParameter("tipo", tipo);
+			query.setDate("dataInicio", dataInicio);
+			query.setDate("dataFim", dataFim);
+			
+			query.setFirstResult(0);
+			query.setMaxResults(limit);
+			
+			List<SlaCalculado> lista = this.genericDAO.queryList(query);
+			
+			t.commit();
+			
+			return lista;		
+		
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	public Long countSlaCalculados(Long id, Date dataInicio, Date dataFim, TipoSla tipo){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("SELECT count(*) FROM SlaCalculado WHERE no.id = :noId AND tipo = :tipo" +
+											  " AND controle BETWEEN :dataInicio AND :dataFim"+
+											  " ORDER BY controle ASC");
+			
+			query.setLong("noId", id);
+			query.setParameter("tipo", tipo);
+			query.setDate("dataInicio", dataInicio);
+			query.setDate("dataFim", dataFim);
+			
+			Long total = (Long) query.uniqueResult();
+			
+			t.commit();
+			
+			return total;		
+		
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
 	
 	
 }

@@ -78,7 +78,8 @@ Ext.define('MONITOR.controller.NoController', {
     	'TipoAlarme',
     	
     	//SLA
-    	'Sla'
+    	'Sla',
+    	'SlaCalculado'
    	
     ],
     
@@ -246,74 +247,111 @@ Ext.define('MONITOR.controller.NoController', {
     	        		sa.get('subTipo');
     	        	}
     	        	
+    	        	var slaMensal = null;
+    	        	var slaDiario = null;
     	        	
-    	        	var infoHtml =
-    	        		'<table class="tabelaInfo"> <tbody>'+
-    	        			'<tr>'+
-    	        				'<td class="titulo">Nome:</td>' + 
-    	        				'<td>'+ sa.get('nome') + '</td>' +
-    	        				'<td class="titulo">Hostname:</td>' + 
-    	        				'<td>'+ sa.get('hostname') + '</td>' +
-    	        			'</tr>'+
-    	        			'<tr>'+
-	        					'<td class="titulo">Tipo:</td>' + 
-	        					'<td>'+ sa.get('subTipo') +'</td>' +
-	        					'<td class="titulo">Porta:</td>' + 
-	        					'<td>'+ sa.get('port') + '</td>' +
-	        				'</tr>'+
-    	        			'<tr>'+
-        						'<td class="titulo">Iniciado em:</td>' + 
-        						'<td>'+ startTime +'</td>' +
-        						'<td class="titulo">Uptime:</td>' + 
-        						'<td>'+ uptime + '</td>' +
-        					'</tr>'+
-    	        			'<tr>'+
-	        					'<td class="titulo">Status:</td>' + 
-	        					'<td>'+ strStatus +'</td>' +
-	        					'<td class="titulo">Ultima coleta:</td>' + 
-	        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(sa.get('ultimaColeta')) + '</td>' +
-	        				'</tr>'+
-    	        		'</tbody> </table>';
-    	        	
-    	        	
-    	        	
-    	        	tabs.add({
-    	                closable: true,
-    	                title: record.get('nome'),
-    	                padding: 10,
-    	                autoScroll: true,
-    	                items: [
-    	    	            {
-    	    	            	xtype: 'panel',
-    	    	            	title: 'Informações do Servidor de Aplicação',
-    	    	            	padding: 10,
-    	    	            	html: infoHtml            	
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'listdeployments',
-    	    	            	store: storeDeployments,
-    	    	            	padding: 10    	    	            	
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'listsamemorias',
-    	    	            	store: storeMemorias,
-    	    	            	padding: 10
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'alarmenolist',
-    	    	            	store: storeAlarmes,
-    	    	            	padding: 10    	    	            	
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'servidorgraficos',
-    	    	            	padding: 10,
-    	    	            },
-    	                ]
-    	            }).show();
-    	        	        	
+    	        	MONITOR.model.SlaCalculado.load(sa.get('id'),{
+    	        		params:{
+    	        			'tipo': 'mensal'
+    	        		},
+    	        		success: function(sla){
+    	        			slaMensal = sla;
+    	        			
+    	    	        	MONITOR.model.SlaCalculado.load(sa.get('id'),{
+    	    	        		params:{
+    	    	        			'tipo': 'diario'
+    	    	        		},
+    	    	        		success: function(sla){
+    	    	        			
+    	    	        			slaDiario = sla;    	    	        			
+    	    	    	        	
+    	    	    	        	var strSlaDiario = "Não Disponível";
+    	    	    	        	var strSlaMensal = "Não Disponível";
+    	    	    	        	
+    	    	    	        	if(slaMensal.get('controle') != null){
+    	    	    	        		console.log(slaDiario);
+    	    	    	        		strSlaDiario = slaDiario.get('percentual') + "%";
+    	    	    	        	}
+    	    	    	        	
+    	    	    	        	if(slaMensal.get('controle') != null){
+    	    	    	        		console.log(slaMensal);
+    	    	    	        		strSlaMensal = slaMensal.get('percentual') + "%";
+    	    	    	        	}
+    	    	    	        	
+    	    	    	        	var infoHtml =
+    	    	    	        		'<table class="tabelaInfo"> <tbody>'+
+    	    	    	        			'<tr>'+
+    	    	    	        				'<td class="titulo">Nome:</td>' + 
+    	    	    	        				'<td>'+ sa.get('nome') + '</td>' +
+    	    	    	        				'<td class="titulo">Hostname:</td>' + 
+    	    	    	        				'<td>'+ sa.get('hostname') + '</td>' +
+    	    	    	        			'</tr>'+
+    	    	    	        			'<tr>'+
+    	    		        					'<td class="titulo">Tipo:</td>' + 
+    	    		        					'<td>'+ sa.get('subTipo') +'</td>' +
+    	    		        					'<td class="titulo">Porta:</td>' + 
+    	    		        					'<td>'+ sa.get('port') + '</td>' +
+    	    		        				'</tr>'+
+    	    	    	        			'<tr>'+
+    	    	        						'<td class="titulo">Iniciado em:</td>' + 
+    	    	        						'<td>'+ startTime +'</td>' +
+    	    	        						'<td class="titulo">Uptime:</td>' + 
+    	    	        						'<td>'+ uptime + '</td>' +
+    	    	        					'</tr>'+
+    	    	    	        			'<tr>'+
+    	    	    							'<td class="titulo">Sla Mensal:</td>' + 
+    	    	    							'<td>'+ strSlaMensal +'</td>' +
+    	    	    							'<td class="titulo">Sla Diário:</td>' + 
+    	    	    							'<td>'+ strSlaDiario + '</td>' +
+    	    	    						'</tr>'+
+    	    	    	        			'<tr>'+
+    	    		        					'<td class="titulo">Status:</td>' + 
+    	    		        					'<td>'+ strStatus +'</td>' +
+    	    		        					'<td class="titulo">Ultima coleta:</td>' + 
+    	    		        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(sa.get('ultimaColeta')) + '</td>' +
+    	    		        				'</tr>'+
+    	    	    	        		'</tbody> </table>';
+    	    	    	        	
+    	    	    	        	tabs.add({
+    	    	    	                closable: true,
+    	    	    	                title: record.get('nome'),
+    	    	    	                padding: 10,
+    	    	    	                autoScroll: true,
+    	    	    	                items: [
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'panel',
+    	    	    	    	            	title: 'Informações do Servidor de Aplicação',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            	html: infoHtml            	
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'listdeployments',
+    	    	    	    	            	store: storeDeployments,
+    	    	    	    	            	padding: 10    	    	            	
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'listsamemorias',
+    	    	    	    	            	store: storeMemorias,
+    	    	    	    	            	padding: 10
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'alarmenolist',
+    	    	    	    	            	store: storeAlarmes,
+    	    	    	    	            	padding: 10    	    	            	
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'servidorgraficos',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            },
+    	    	    	                ]
+    	    	    	            }).show();
+    	    	    	        	tabs.setLoading(false);
+    	    	        		}
+    	    	        	});
+    	        			
+    	        		}
+    	        	});
     	        }
-    	        
-    	        tabs.setLoading(false);
     	    }
     	});
     	
@@ -385,71 +423,117 @@ Ext.define('MONITOR.controller.NoController', {
     	        		strStatus += "Não Gerenciavel";
     	        	}
     	        	
+    	        	var slaMensal = "opa";
+    	        	var slaDiario = "opa"; 
+    	        		
+    	        	MONITOR.model.SlaCalculado.load(servidor.get('id'),{
+    	        		scope: this,
+    	        		synchronous: true,
+    	        		params:{
+    	        			'tipo': 'mensal'
+    	        		},
+    	        		success: function(sla){
+    	        			slaMensal = sla;
+    	        			
+    	    	        	MONITOR.model.SlaCalculado.load(servidor.get('id'),{
+    	    	        		scope: this,
+    	    	        		synchronous: true,
+    	    	        		params:{
+    	    	        			'tipo': 'diario'
+    	    	        		},
+    	    	        		success: function(sla){
+    	    	        			slaDiario = sla;
+    	    	    	        	var strSlaDiario = "Não disponível";
+    	    	    	        	var strSlaMensal = "Não disponível";
+    	    	    	        	
+    	    	    	        	if(slaDiario.get('controle') != null){
+    	    	    	        		strSlaDiario = slaDiario.get('percentual') + "%";
+    	    	    	        	}
+    	    	    	        	
+    	    	    	        	if(slaMensal.get('controle') != null){
+    	    	    	        		strSlaMensal = slaMensal.get('percentual') + "%";
+    	    	    	        	}
+    	    	    	        	
+    	    	    	        	var infoHtml =
+    	    	    	        		'<table class="tabelaInfo"> <tbody>'+
+    	    	    	        			'<tr>'+
+    	    	    	        				'<td class="titulo">Nome:</td>' + 
+    	    	    	        				'<td>'+ servidor.get('nome') + '</td>' +
+    	    	    	        				'<td class="titulo">Hostname:</td>' + 
+    	    	    	        				'<td>'+ servidor.get('hostname') + '</td>' +
+    	    	    	        			'</tr>'+
+    	    	    	        			'<tr>'+
+    	    		        					'<td class="titulo">Status:</td>' + 
+    	    		        					'<td>'+ strStatus + '</td>' +
+    	    		        					'<td class="titulo">Ultima coleta:</td>' + 
+    	    		        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(servidor.get('ultimaColeta')) + '</td>' +
+    	    		        				'</tr>'+
+    	    	    	        			'<tr>'+
+    	    			        				'<td class="titulo">Sistema Operacional:</td>' + 
+    	    			        				'<td>'+ so.get('descricao') + '</td>' +
+    	    			        				'<td class="titulo">Fornecedor: </td>' + 
+    	    			        				'<td>'+ so.get('fornecedor') + '</td>' +
+    	    			        			'</tr>'+
+    	    	    	        			'<tr>'+
+    	    		        					'<td class="titulo">Versão:</td>' + 
+    	    			        				'<td>'+ so.get('versao') + msgPatch + '</td>' +
+    	    			        				'<td class="titulo">Arquitetura: </td>' + 
+    	    			        				'<td>'+ so.get('arquitetura') + '</td>' +	
+    	    			        			'</tr>'+
+    	    			        			'<tr>'+
+    	    									'<td class="titulo">SLA Mensal:</td>' + 
+    	    									'<td>'+ strSlaMensal +'</td>' +
+    	    									'<td class="titulo">SLA Diário:</td>' + 
+    	    									'<td>'+ strSlaDiario + '</td>' +
+    	    								'</tr>'+
+    	    			        			'<tr>'+
+    	    			        				'<td class="titulo">Processador:</td>'+
+    	    			        				'<td>' + processadorMsg +  '</td>'+
+    	    			        				'<td class="titulo">Memoria</td>'+
+    	    			        				'<td>'+ MONITOR.utils.ConvertUtils.convertB(memoria.get('totalMemoria')) +'</td>' + 
+    	    			        			'</tr>'+
+    	    	    	        		'</tbody> </table>';
+    	    	    	        	
+    	    	    	        	tabs.add({
+    	    	    	                closable: true,
+    	    	    	                title: record.get('nome'),
+    	    	    	                padding: 10,
+    	    	    	                autoScroll: true,
+    	    	    	                items: [
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'panel',
+    	    	    	    	            	title: 'Informações do Servidor',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            	html: infoHtml            	
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'particoeslist',
+    	    	    	    	            	store: servidor.particoes(),
+    	    	    	    	            	padding: 10
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'alarmenolist',
+    	    	    	    	            	store: storeAlarmes,
+    	    	    	    	            	padding: 10    	    	            	
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'servidorgraficos',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            },
+    	    	    	                ]
+    	    	    	            }).show();
+    	    	        		}
+    	    	        		
+    	    	        	});
+    	    	        	
+    	        		}
+    	        	});
     	        	
-    	        	var infoHtml =
-    	        		'<table class="tabelaInfo"> <tbody>'+
-    	        			'<tr>'+
-    	        				'<td class="titulo">Nome:</td>' + 
-    	        				'<td>'+ servidor.get('nome') + '</td>' +
-    	        				'<td class="titulo">Hostname:</td>' + 
-    	        				'<td>'+ servidor.get('hostname') + '</td>' +
-    	        			'</tr>'+
-    	        			'<tr>'+
-	        					'<td class="titulo">Status:</td>' + 
-	        					'<td>'+ strStatus + '</td>' +
-	        					'<td class="titulo">Ultima coleta:</td>' + 
-	        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(servidor.get('ultimaColeta')) + '</td>' +
-	        				'</tr>'+
-    	        			'<tr>'+
-		        				'<td class="titulo">Sistema Operacional:</td>' + 
-		        				'<td>'+ so.get('descricao') + '</td>' +
-		        				'<td class="titulo">Fornecedor: </td>' + 
-		        				'<td>'+ so.get('fornecedor') + '</td>' +
-		        			'</tr>'+
-    	        			'<tr>'+
-	        					'<td class="titulo">Versão:</td>' + 
-		        				'<td>'+ so.get('versao') + msgPatch + '</td>' +
-		        				'<td class="titulo">Arquitetura: </td>' + 
-		        				'<td>'+ so.get('arquitetura') + '</td>' +	
-		        			'</tr>'+
-		        			'<tr>'+
-		        				'<td class="titulo">Processador:</td>'+
-		        				'<td>' + processadorMsg +  '</td>'+
-		        				'<td class="titulo">Memoria</td>'+
-		        				'<td>'+ MONITOR.utils.ConvertUtils.convertB(memoria.get('totalMemoria')) +'</td>' + 
-		        			'</tr>'+
-    	        		'</tbody> </table>';
+
     	        	
     	        	
     	        	
-    	        	tabs.add({
-    	                closable: true,
-    	                title: record.get('nome'),
-    	                padding: 10,
-    	                autoScroll: true,
-    	                items: [
-    	    	            {
-    	    	            	xtype: 'panel',
-    	    	            	title: 'Informações do Servidor',
-    	    	            	padding: 10,
-    	    	            	html: infoHtml            	
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'particoeslist',
-    	    	            	store: servidor.particoes(),
-    	    	            	padding: 10
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'alarmenolist',
-    	    	            	store: storeAlarmes,
-    	    	            	padding: 10    	    	            	
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'servidorgraficos',
-    	    	            	padding: 10,
-    	    	            },
-    	                ]
-    	            }).show();
+
     	        	        	
     	        }
     	        
@@ -536,79 +620,121 @@ Ext.define('MONITOR.controller.NoController', {
     	        		strStatus += "Não Gerenciavel";
     	        	}
     	        	
-    	        	var infoHtml =
-    	        		'<table class="tabelaInfo"> <tbody>'+
-    	        			'<tr>'+
-    	        				'<td class="titulo">Nome:</td>' + 
-    	        				'<td>'+ bd.get('nome') + '</td>' +
-    	        				'<td class="titulo">Hostname:</td>' + 
-    	        				'<td>'+ bd.get('hostname') + '</td>' +
-    	        			'</tr>'+
-    	        			'<tr>'+
-	        					'<td class="titulo">Status:</td>' + 
-	        					'<td>'+ strStatus + '</td>' +
-	        					'<td class="titulo">Ultima coleta:</td>' + 
-	        					'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(bd.get('ultimaColeta')) + '</td>' +
-	        				'</tr>'+
-    	        			'<tr>'+
-        					'<td class="titulo">Tipo:</td>' + 
-        						'<td>'+ bd.get('subTipo') + '</td>' +
-        						'<td class="titulo">Porta:</td>' + 
-        						'<td>'+ bd.get('port') + '</td>' +
-        					'</tr>'+
-        					'<td class="titulo">Versão:</td>' + 
-        						'<td>'+ bd.get('version') + '</td>' +
-        						'<td class="titulo">Edição:</td>' + 
-        						'<td>'+ bd.get('edition') + '</td>' +
-        					'</tr>'+
-        						'<td class="titulo">Collation:</td>' + 
-        						'<td>'+ bd.get('collation') + '</td>' +
-        						'<td class="titulo">Status:</td>' + 
-        						'<td>'+ bd.get('status') + '</td>' +
-    					'</tr>'+
-    	        		'</tbody> </table>';
     	        	
+    	        	var slaDiario = null;
+    	        	var slaMensal = null;
     	        	
-    	        	
-    	        	tabs.add({
-    	                closable: true,
-    	                title: record.get('nome'),
-    	                padding: 10,
-    	                autoScroll: true,
-    	                items: [
-    	    	            {
-    	    	            	xtype: 'panel',
-    	    	            	title: 'Informações do Banco de Dados',
-    	    	            	padding: 10,
-    	    	            	html: infoHtml,            	
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'listjobs',
-    	    	            	padding: 10,
-    	    	            	store: storeJobs
-    	    	            },
-    	    	            {  	    	            
-    	    	            	xtype: 'listfiles',
-    	    	            	padding: 10,
-    	    	            	store: storeFiles
-    	    	            },
-    	    	            {  	    	            
-    	    	            	xtype: 'listbackups',
-    	    	            	padding: 10,
-    	    	            	store: storeBackups
-    	    	            },
-    	    	            {
-    	    	            	xtype: 'alarmenolist',
-    	    	            	store: storeAlarmes,
-    	    	            	padding: 10    	    	            	
-    	    	            },
-    	    	            
-    	                ]
-    	            }).show();
-    	        	        	
+    	        	MONITOR.model.SlaCalculado.load(bd.get('id'),{
+    	        		params:{
+    	        			'tipo': 'mensal'
+    	        		},
+    	        		success: function(sla){
+    	        			slaMensal = sla;
+    	        			
+    	    	        	MONITOR.model.SlaCalculado.load(bd.get('id'),{
+    	    	        		params:{
+    	    	        			'tipo': 'diario'
+    	    	        		},
+    	    	        		success: function(sla){
+    	    	        			slaDiario = sla;
+    	    	    	        	var strSlaDiario = "Não disponível";
+    	    	    	        	var strSlaMensal = "Não disponível";
+    	    	    	        	
+    	    	    	        	if(slaDiario.get('controle') != null){
+    	    	    	        		strSlaDiario = slaDiario.get('percentual') + "%";
+    	    	    	        	}
+    	    	    	        	
+    	    	    	        	if(slaMensal.get('controle') != null){
+    	    	    	        		strSlaMensal = slaMensal.get('percentual') + "%";
+    	    	    	        	}
+    	    	    	        	
+    	    	    	        	var infoHtml =
+    	    	    	        		'<table class="tabelaInfo"> <tbody>'+
+    	    	    	        			'<tr>'+
+    	    	    	        				'<td class="titulo">Nome:</td>' + 
+    	    	    	        				'<td>'+ bd.get('nome') + '</td>' +
+    	    	    	        				'<td class="titulo">Hostname:</td>' + 
+    	    	    	        				'<td>'+ bd.get('hostname') + '</td>' +
+    	    	    	        			'</tr>'+
+    	    	    	        			'<tr>'+
+    	    	        						'<td class="titulo">Tipo:</td>' + 
+    	    	        						'<td>'+ bd.get('subTipo') + '</td>' +
+    	    	        						'<td class="titulo">Porta:</td>' + 
+    	    	        						'<td>'+ bd.get('port') + '</td>' +
+    	    	        					'</tr>'+
+    	    	        					'<tr>'+
+    	    	        						'<td class="titulo">Versão:</td>' + 
+    	    	        						'<td>'+ bd.get('version') + '</td>' +
+    	    	        						'<td class="titulo">Edição:</td>' + 
+    	    	        						'<td>'+ bd.get('edition') + '</td>' +
+    	    	        					'</tr>'+
+    	    	        					'<tr>'+
+    	    	        						'<td class="titulo">Collation:</td>' + 
+    	    	        						'<td>'+ bd.get('collation') + '</td>' +
+    	    	        						'<td class="titulo">Status:</td>' + 
+    	    	        						'<td>'+ bd.get('status') + '</td>' +
+    	    	        					'</tr>'+
+    	    						    	'<tr>'+
+    	    									'<td class="titulo">Sla Mensal:</td>' + 
+    	    									'<td>'+ strSlaMensal +'</td>' +
+    	    									'<td class="titulo">Sla Diário:</td>' + 
+    	    									'<td>'+ strSlaDiario + '</td>' +
+    	    								'</tr>'+
+    	    								'<tr>'+
+    	    	        						'<td class="titulo">Status:</td>' + 
+    	    	        						'<td>'+ strStatus + '</td>' +
+    	    	        						'<td class="titulo">Ultima coleta:</td>' + 
+    	    	        						'<td>'+ MONITOR.utils.DateUtils.toStringPtBr(bd.get('ultimaColeta')) + '</td>' +
+    	    	        					'</tr>'+
+    	    	        						
+    	    	    	        		'</tbody> </table>';
+    	    	    	        	
+    	    	    	        	
+    	    	    	        	
+    	    	    	        	tabs.add({
+    	    	    	                closable: true,
+    	    	    	                title: record.get('nome'),
+    	    	    	                padding: 10,
+    	    	    	                autoScroll: true,
+    	    	    	                items: [
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'panel',
+    	    	    	    	            	title: 'Informações do Banco de Dados',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            	html: infoHtml,            	
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'listjobs',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            	store: storeJobs
+    	    	    	    	            },
+    	    	    	    	            {  	    	            
+    	    	    	    	            	xtype: 'listfiles',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            	store: storeFiles
+    	    	    	    	            },
+    	    	    	    	            {  	    	            
+    	    	    	    	            	xtype: 'listbackups',
+    	    	    	    	            	padding: 10,
+    	    	    	    	            	store: storeBackups
+    	    	    	    	            },
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'alarmenolist',
+    	    	    	    	            	store: storeAlarmes,
+    	    	    	    	            	padding: 10    	    	            	
+    	    	    	    	            },
+    	    	    	    	            
+    	    	    	                ]
+    	    	    	            }).show();
+    	    	    	        	tabs.setLoading(false);   
+    	    	        		}
+    	    	        	});
+    	    	        	
+    	        		}
+    	        	});
     	        }
     	        
-    	        tabs.setLoading(false);
+    	        
     	    }
     	});
     },	

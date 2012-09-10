@@ -73,8 +73,8 @@ public class JBossColeta {
 	
 	public void initColeta(){
 		
-		this.agendamento = this.agendamentoBO.pegaAgendamentoNo(this.jboss);
 		this.dataColeta = new Date();
+		this.agendamento = this.agendamentoBO.pegaAgendamentoNo(this.jboss);
 		this.jboss.setUltimaColeta(dataColeta);
 		
 		// Pega utlima indisponibilidade
@@ -110,7 +110,6 @@ public class JBossColeta {
 				servidorAplicacaoBO.salvaColetasMemoria(coletasMemorias);
 				servidorAplicacaoBO.salvaColetasThread(threadColeta);
 				servidorAplicacaoBO.salvaMapDeployments(deployments);
-
 				
 				socket.close();
 
@@ -161,7 +160,6 @@ public class JBossColeta {
 		}catch(Exception ex){
 			
 			System.out.println("JBOSS Ind�spon�vel - "+ this.jboss.getHostname() +" - Falha no Http GET");
-			ex.printStackTrace();
 			this.jboss.setDisponivel(false);
 			this.jboss.setGerenciavel(false);
 			this.jboss.setUptime(null);
@@ -173,7 +171,7 @@ public class JBossColeta {
 			
 			this.jboss.setUltimaColeta(dataColeta);
 			
-			if (this.jboss.getDisponivel() && (ultimoStatus || this.indisp == null)){
+			if (!this.jboss.getDisponivel() && (ultimoStatus || this.indisp == null)){
 
 				if (this.indisp == null) {
 					this.indisp = new Indisponibilidade();
@@ -182,7 +180,7 @@ public class JBossColeta {
 				}
 				
 				
-			} else if (this.jboss.getDisponivel() && this.indisp !=null && !ultimoStatus){
+			} else if (this.jboss.getDisponivel() && this.indisp !=null){
 				this.indisp.setFim(this.dataColeta);
 			}
 			
@@ -212,7 +210,6 @@ public class JBossColeta {
 		try{
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get jboss.deployment"));
 			JSONArray jsonArray = json.getJSONArray("deployments");
-			System.out.println(json.toString());
 			
 			Map<String,ServidorAplicacaoDeployment> deployments = this.servidorAplicacaoBO.getMapDeploymentsServidor(this.jboss);
 			
@@ -254,7 +251,6 @@ public class JBossColeta {
 		
 		try{
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get jboss.thread"));
-			System.out.println(json.toString());
 			ServidorAplicacaoThreadColeta threadColeta = new ServidorAplicacaoThreadColeta();
 			
 			threadColeta.setDataColeta(this.dataColeta);

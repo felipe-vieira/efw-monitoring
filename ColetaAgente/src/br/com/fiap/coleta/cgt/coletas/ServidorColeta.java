@@ -59,11 +59,11 @@ public class ServidorColeta {
 
 	public void initColeta() {
 
+		// Seta a data da coleta
+		this.dataColeta = new Date();
 		// Pega utlima indisponibilidade
 		this.indisponibilidade = this.indisponibilidadeBO
 				.pegaUltimaInstanciaIndisponibilidade(this.servidor);
-		// Seta a data da coleta
-		this.dataColeta = new Date();
 
 		if (connect()) {
 
@@ -138,7 +138,7 @@ public class ServidorColeta {
 		} finally {
 			this.servidor.setUltimaColeta(dataColeta);
 			
-			if (this.servidor.getDisponivel() && (ultimoStatus || this.indisponibilidade == null)){
+			if (!this.servidor.getDisponivel() && (ultimoStatus || this.indisponibilidade == null)){
 
 				if (this.indisponibilidade == null) {
 					this.indisponibilidade = new Indisponibilidade();
@@ -147,7 +147,7 @@ public class ServidorColeta {
 				}
 				
 				
-			} else if (this.servidor.getDisponivel() && this.indisponibilidade !=null && !ultimoStatus){
+			} else if (this.servidor.getDisponivel() && this.indisponibilidade !=null){
 				this.indisponibilidade.setFim(this.dataColeta);
 			}
 			

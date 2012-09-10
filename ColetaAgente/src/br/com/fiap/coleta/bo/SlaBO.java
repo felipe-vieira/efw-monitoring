@@ -106,55 +106,56 @@ public class SlaBO {
 					List<Indisponibilidade> indisponibilidades = this.listIndisponibilidadesNo(no, 
 							dataHoraInicio, dataHoraFim);
 					
-					for (Indisponibilidade indisp : indisponibilidades) {
-						
-						List<JanelaSla> janelasIndisponibilidade = this.listaJanelasIndisponibilidade(indisp,janelas);
-						
-						Long tempo = indisp.getFim().getTime() - indisp.getInicio().getTime();
-						
-						Long tempoExpurgo = 0l;
-								
-						for (JanelaSla janela : janelasIndisponibilidade) {
-							if(janela.getHoraFim().after(janela.getHoraInicio())){
-								tempoExpurgo += janela.getHoraFim().getTime() -janela.getHoraInicio().getTime();
-							}else{
-								tempoExpurgo += janela.getHoraInicio().getTime() - janela.getHoraFim().getTime();
+					if(indisponibilidades!= null && indisponibilidades.size()>0){
+						for (Indisponibilidade indisp : indisponibilidades) {
+							
+							List<JanelaSla> janelasIndisponibilidade = this.listaJanelasIndisponibilidade(indisp,janelas);
+							
+							Long tempo = indisp.getFim().getTime() - indisp.getInicio().getTime();
+							
+							Long tempoExpurgo = 0l;
+									
+							for (JanelaSla janela : janelasIndisponibilidade) {
+								if(janela.getHoraFim().after(janela.getHoraInicio())){
+									tempoExpurgo += janela.getHoraFim().getTime() -janela.getHoraInicio().getTime();
+								}else{
+									tempoExpurgo += janela.getHoraInicio().getTime() - janela.getHoraFim().getTime();
+								}
 							}
+							
+							tempoIndisponivel += (tempo - tempoExpurgo);
+							
 						}
 						
-						tempoIndisponivel += (tempo - tempoExpurgo);
+						BigDecimal percentual = new BigDecimal(100 - ((tempoIndisponivel.doubleValue()/ (tempoTotal.doubleValue()-tempoJanelas.doubleValue()) ) * 100 ) );
 						
+						Session session = this.slaDAO.getSession();
+						Transaction t = session.beginTransaction();
+						
+						try{
+							SlaCalculado calculo = new SlaCalculado();
+							
+							calculo.setControle(dataInicio.getTime());
+							calculo.setSla(sla);
+							calculo.setNo(no);
+							calculo.setTempoTotal(tempoTotal);
+							calculo.setTempoJanela(tempoJanelas);
+							calculo.setTempoIndisponivel(tempoIndisponivel);
+							calculo.setPercentual(percentual);
+							calculo.setTipo(TipoSla.DIARIO);
+							
+							this.slaDAO.save(calculo);
+							this.slaDAO.update(sla);
+							
+							t.commit();
+							
+						}catch (Exception ex) {
+							ex.printStackTrace();
+							t.rollback();
+						}
+						
+						alarmeBO.geraAlarmeSlaDiario(sla, no, percentual);
 					}
-					
-					BigDecimal percentual = new BigDecimal(100 - ((tempoIndisponivel.doubleValue()/ (tempoTotal.doubleValue()-tempoJanelas.doubleValue()) ) * 100 ) );
-					
-					Session session = this.slaDAO.getSession();
-					Transaction t = session.beginTransaction();
-					
-					try{
-						SlaCalculado calculo = new SlaCalculado();
-						
-						calculo.setControle(dataInicio.getTime());
-						calculo.setSla(sla);
-						calculo.setNo(no);
-						calculo.setTempoTotal(tempoTotal);
-						calculo.setTempoJanela(tempoJanelas);
-						calculo.setTempoIndisponivel(tempoIndisponivel);
-						calculo.setPercentual(percentual);
-						calculo.setTipo(TipoSla.DIARIO);
-						
-						this.slaDAO.save(calculo);
-						this.slaDAO.update(sla);
-						
-						t.commit();
-						
-					}catch (Exception ex) {
-						ex.printStackTrace();
-						t.rollback();
-					}
-					
-					alarmeBO.geraAlarmeSlaDiario(sla, no, percentual);
-					
 				}
 				
 				//Atualiza a ultima coleta do sla
@@ -227,46 +228,49 @@ public class SlaBO {
 				Long tempoIndisponivel = 0l;
 				Long tempoJanela = 0l;
 				
+				if(slasDiarios != null && slasDiarios.size() > 0){
 				
-				for (SlaCalculado slaDiario : slasDiarios) {
-					
-					tempoTotal += slaDiario.getTempoTotal();
-					tempoIndisponivel += slaDiario.getTempoIndisponivel();
-					tempoJanela += slaDiario.getTempoJanela();
-					
-				}
-				
-				
-				
-				Session session = this.slaDAO.getSession();
-				Transaction t = session.beginTransaction();
-				
-				try{
-					
-					if(slaMes == null){
-						slaMes = new SlaCalculado();
-						slaMes.setSla(sla);
-						slaMes.setNo(no);
-						slaMes.setControle(dataInicio.getTime());
-						slaMes.setTipo(TipoSla.MENSAL);
+					for (SlaCalculado slaDiario : slasDiarios) {
+						
+						tempoTotal += slaDiario.getTempoTotal();
+						tempoIndisponivel += slaDiario.getTempoIndisponivel();
+						tempoJanela += slaDiario.getTempoJanela();
+						
 					}
 					
 					
-					BigDecimal percentual = new BigDecimal(100 - ((tempoIndisponivel.doubleValue()/ (tempoTotal.doubleValue()-tempoJanela.doubleValue()) ) * 100 ) );
 					
-					slaMes.setPercentual(percentual);
-					slaMes.setTempoIndisponivel(tempoIndisponivel);
-					slaMes.setTempoTotal(tempoTotal);
-					slaMes.setTempoJanela(tempoJanela);
+					Session session = this.slaDAO.getSession();
+					Transaction t = session.beginTransaction();
 					
-					this.slaDAO.save(slaMes);
-					t.commit();
-					
-					this.alarmeBO.geraAlarmeSlaMensal(sla, no, percentual);
-					
-				}catch (Exception ex) {
-					t.rollback();
-					ex.printStackTrace();
+					try{
+						
+						if(slaMes == null){
+							slaMes = new SlaCalculado();
+							slaMes.setSla(sla);
+							slaMes.setNo(no);
+							slaMes.setControle(dataInicio.getTime());
+							slaMes.setTipo(TipoSla.MENSAL);
+						}
+						
+						
+						BigDecimal percentual = new BigDecimal(100 - ((tempoIndisponivel.doubleValue()/ (tempoTotal.doubleValue()-tempoJanela.doubleValue()) ) * 100 ) );
+						
+						slaMes.setPercentual(percentual);
+						slaMes.setTempoIndisponivel(tempoIndisponivel);
+						slaMes.setTempoTotal(tempoTotal);
+						slaMes.setTempoJanela(tempoJanela);
+						
+						this.slaDAO.save(slaMes);
+						t.commit();
+						
+						this.alarmeBO.geraAlarmeSlaMensal(sla, no, percentual);
+						
+					}catch (Exception ex) {
+						t.rollback();
+						ex.printStackTrace();
+					}
+				
 				}
 				
 			}
