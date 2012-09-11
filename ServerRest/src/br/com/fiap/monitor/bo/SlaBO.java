@@ -567,4 +567,36 @@ public class SlaBO {
 		
 	}
 	
+	public Long contaSlasAbaixoMeta(){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Calendar firstDay = Calendar.getInstance();
+			firstDay.set(Calendar.DATE, 1);
+			
+			Calendar lastDay = Calendar.getInstance();
+			lastDay.set(Calendar.DATE, lastDay.getActualMaximum(Calendar.DATE));
+			
+			Query query = session.createQuery("SELECT count(*) FROM SlaCalculado where tipo = :tipo AND percentual < sla.meta "+
+												" AND controle BETWEEN :dataInicio and :dataFim");
+			
+			query.setParameter("tipo", TipoSla.MENSAL);
+			query.setParameter("dataInicio", firstDay.getTime());
+			query.setParameter("dataFim", lastDay.getTime());
+			
+			
+			Long total = (Long) query.uniqueResult();
+			t.commit();
+			
+			return total;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
 }

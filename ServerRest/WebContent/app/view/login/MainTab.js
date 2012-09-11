@@ -10,6 +10,7 @@ Ext.define('MONITOR.view.login.MainTab', {
 	           	xtype: 'inicioview',
 	           	closable: 'true'
 	        }
+	    ];
 		this.callParent();
     }
 

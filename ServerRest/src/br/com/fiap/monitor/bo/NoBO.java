@@ -181,5 +181,104 @@ public class NoBO {
 		
 	}
 	
+	public List<No> listaNosIndisponiveis(Integer start, Integer limit){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("FROM No where disponivel = :disp AND ativo = :ativo");
+			query.setBoolean("disp", false);
+			query.setBoolean("ativo", true);
+			
+			query.setFirstResult(start);
+			query.setMaxResults(limit);
+			
+			List<No> nos = this.genericDAO.queryList(query);
+			
+			t.commit();
+			
+			return nos;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	public Long contaNosIndisponiveis(){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("SELECT count(*) FROM No where disponivel = :disp AND ativo = :ativo");
+			query.setBoolean("disp", false);
+			query.setBoolean("ativo", true);
+			
+			Long total = (Long) query.uniqueResult();
+			
+			t.commit();
+			
+			return total;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	public List<No> listaNosNaoGerenciaveis(Integer start, Integer limit){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("FROM No where gerenciavel = :status AND ativo = :ativo");
+			query.setBoolean("status", false);
+			query.setBoolean("ativo", true);
+			
+			query.setFirstResult(start);
+			query.setMaxResults(limit);
+			
+			List<No> nos = this.genericDAO.queryList(query);
+			
+			t.commit();
+			
+			return nos;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	public Long contaNosNaoGerenciaveis(){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("SELECT count(*) FROM No where gerenciavel = :status AND ativo = :ativo");
+			query.setBoolean("status", false);
+			query.setBoolean("ativo", true);
+			
+			
+			Long total = (Long) query.uniqueResult();
+			
+			t.commit();
+			
+			return total;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
 	
 }
