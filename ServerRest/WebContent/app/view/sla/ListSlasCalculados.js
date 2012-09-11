@@ -8,20 +8,33 @@ Ext.define('MONITOR.view.sla.ListSlasCalculados' ,{
     	this.columns = [
 
     	    {header: 'Data',  dataIndex: 'controle',  flex: 1,
-   	    		renderer: function(val){
-   	    			return val+'%';
+   	    		renderer: function(val,cell,attr){
+   	    			if(attr.get('tipo') == "MENSAL"){
+   	    				return Ext.Date.format(val, 'm/Y');
+   	    			}else{
+   	    				return Ext.Date.format(val, 'd/m/Y');
+   	    			}
    	    		}
    	    	},
    	    	
    	    	{header: 'Disponibilidade',  dataIndex: 'percentual',
    	    		renderer: function(val){
-   	    			return MONITOR.utils.DateUtils.toDatePtBr(val);
+   	    			return val+'%';
    	    		}
    	    	}
     	                
     	];
+
+    	this.dockedItems = {
+         	xtype: 'pagingtoolbar',
+            dock: 'bottom',
+            displayInfo: true,
+            store: this.getStore()
+        };
     	
         this.callParent(arguments);
     }
+
+
 });
    

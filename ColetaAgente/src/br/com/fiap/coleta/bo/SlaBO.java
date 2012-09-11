@@ -1,6 +1,7 @@
 package br.com.fiap.coleta.bo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -128,6 +129,7 @@ public class SlaBO {
 						}
 						
 						BigDecimal percentual = new BigDecimal(100 - ((tempoIndisponivel.doubleValue()/ (tempoTotal.doubleValue()-tempoJanelas.doubleValue()) ) * 100 ) );
+						BigDecimal percentualCalculado = percentual.setScale(2, RoundingMode.HALF_UP);
 						
 						Session session = this.slaDAO.getSession();
 						Transaction t = session.beginTransaction();
@@ -141,7 +143,7 @@ public class SlaBO {
 							calculo.setTempoTotal(tempoTotal);
 							calculo.setTempoJanela(tempoJanelas);
 							calculo.setTempoIndisponivel(tempoIndisponivel);
-							calculo.setPercentual(percentual);
+							calculo.setPercentual(percentualCalculado);
 							calculo.setTipo(TipoSla.DIARIO);
 							
 							this.slaDAO.save(calculo);
@@ -154,7 +156,7 @@ public class SlaBO {
 							t.rollback();
 						}
 						
-						alarmeBO.geraAlarmeSlaDiario(sla, no, percentual);
+						alarmeBO.geraAlarmeSlaDiario(sla, no, percentualCalculado);
 					}
 				}
 				
@@ -255,8 +257,9 @@ public class SlaBO {
 						
 						
 						BigDecimal percentual = new BigDecimal(100 - ((tempoIndisponivel.doubleValue()/ (tempoTotal.doubleValue()-tempoJanela.doubleValue()) ) * 100 ) );
+						BigDecimal percentualCalculado = percentual.setScale(2, RoundingMode.HALF_UP);
 						
-						slaMes.setPercentual(percentual);
+						slaMes.setPercentual(percentualCalculado);
 						slaMes.setTempoIndisponivel(tempoIndisponivel);
 						slaMes.setTempoTotal(tempoTotal);
 						slaMes.setTempoJanela(tempoJanela);
@@ -264,7 +267,7 @@ public class SlaBO {
 						this.slaDAO.save(slaMes);
 						t.commit();
 						
-						this.alarmeBO.geraAlarmeSlaMensal(sla, no, percentual);
+						this.alarmeBO.geraAlarmeSlaMensal(sla, no, percentualCalculado);
 						
 					}catch (Exception ex) {
 						t.rollback();
@@ -299,9 +302,11 @@ public class SlaBO {
 		List<JanelaSla> janelasIndisponibilidade = new ArrayList<JanelaSla>();
 		SimpleDateFormat timeFormat = new SimpleDateFormat("k:m:s");
 		
-		Long inicio = Time.valueOf(timeFormat.format(indisponibilidade.getInicio())).getTime();
-		Long fim = Time.valueOf(timeFormat.format(indisponibilidade.getFim())).getTime();
+		Date inicioTime = Time.valueOf(timeFormat.format(indisponibilidade.getInicio()));
+		Date fimTime = Time.valueOf(timeFormat.format(indisponibilidade.getFim())); 
 		
+		Long inicio = inicioTime.getTime();
+		Long fim = fimTime.getTime();
 		
 		for (JanelaSla janela : janelas) {
 			Boolean valida = false;
@@ -311,19 +316,20 @@ public class SlaBO {
 			
 			if(inicioJanela >= inicio && fimJanela <= fim ){
 				valida = true;
+				
 			}else if(inicioJanela <= inicio && fimJanela >= fim){
 				
-				janela.setHoraInicio(indisponibilidade.getInicio());
-				janela.setHoraFim(indisponibilidade.getFim());
+				janela.setHoraInicio(inicioTime);
+				janela.setHoraFim(fimTime);
 				
 				valida = true;
 				
 			}else if(inicioJanela <= inicio && fimJanela > inicio){
 				
-				janela.setHoraInicio(indisponibilidade.getInicio());
+				janela.setHoraInicio(inicioTime);
 				
 				if(fimJanela > fim){
-					janela.setHoraFim(indisponibilidade.getFim());
+					janela.setHoraFim(fimTime);
 				}
 				
 				valida = true;			

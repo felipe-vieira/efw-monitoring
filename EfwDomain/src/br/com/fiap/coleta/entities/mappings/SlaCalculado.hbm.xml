@@ -8,8 +8,8 @@
 			<generator class="increment"/>
 		</id>
 		
-		<many-to-one name="sla" not-null="true"/>
-		<many-to-one name="no" not-null="true"/>
+		<many-to-one name="sla" not-null="true" lazy="false"/>
+		<many-to-one name="no" not-null="true" lazy="false"/>
 		
 		<property name="tipo">
 		   <type name="org.hibernate.type.EnumType">

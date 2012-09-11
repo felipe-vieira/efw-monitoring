@@ -52,10 +52,6 @@ Ext.define('MONITOR.controller.SlaController', {
     			click: this.listSlasCalculados
     		},
     		
-
-    		
-
-    		
     	});
     	
 
@@ -210,7 +206,6 @@ Ext.define('MONITOR.controller.SlaController', {
 	},
 	
 	listSlasCalculados: function(button){
-		
 	    var form    = button.up('form');
         var values = form.getValues();
         
@@ -220,27 +215,56 @@ Ext.define('MONITOR.controller.SlaController', {
 
 		var tipo = values.tipo;
 		
+		if(form.getForm().isValid()){
 		
-    	var storeAlarmes = Ext.create('MONITOR.store.SlasCalculados');       	
-    	storeAlarmes.load({
-    		params: {
-    			id: id,
-    			dataInicio: dataInicio,
-    			dataFim: dataFim,
-    			tipo: tipo,
-    			start: 0,
-    			limit: 30	
-    		}
-    	});
-    	
-    	storeAlarmes.on('beforeload',function(store, operation,eOpts){
-            operation.params={
-        		id: id,
-        		dataInicio: dataInicio,
-        		dataFim: dataFim,
-        		tipo: tipo,
-            };
-        });
+			if(tipo == null){
+				Ext.MessageBox.show({
+                    title: 'Erro',
+                    msg: 'O campo tipo é obrigatório',
+                    icon: Ext.MessageBox.WARNING,
+                    buttons: Ext.Msg.OK
+                });
+			}else{
+				var strTitulo = 'Histórico de SLA - '+dataInicio+' - '+dataFim; 
+		    	var storeCalculados = Ext.create('MONITOR.store.SlasCalculados');       	
+		    	storeCalculados.load({
+		    		params: {
+		    			id: id,
+		    			dataInicio: dataInicio,
+		    			dataFim: dataFim,
+		    			tipo: tipo,
+		    			start: 0,
+		    			limit: 30	
+		    		}
+		    	});
+		    	
+		    	storeCalculados.on('beforeload',function(store, operation,eOpts){
+		            params={
+		        		id: id,
+		        		dataInicio: dataInicio,
+		        		dataFim: dataFim,
+		        		tipo: tipo
+		            };
+		        });
+		    	
+		    	var view = form.up('consultasla');
+		    	
+		    	var tabs = view.down('slascalculadoslist');
+		    	if(tabs != null){
+		    		tabs.close();
+		    	}
+		    	
+		    	view.add([
+		    	    {
+		    	    	xtype: 'slascalculadoslist',
+		    	    	title: strTitulo,
+		    	    	store: storeCalculados,
+		    		}
+		    	]);
+		    	
+		    	
+			}	
+		}
 	}
   
 });

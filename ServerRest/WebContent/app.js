@@ -7,6 +7,7 @@ Ext.application({
         'LoginController',       
         'NoController',
         'SlaController',
+        'InicioController',
         'JanelaSlaController',
         'ThresholdController',
         'UsuarioController',

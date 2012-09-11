@@ -3,6 +3,8 @@ Ext.define('MONITOR.view.sla.ConsultaSla', {
     xtype: 'consultasla',
     padding: 10,
     border: 0,
+    autoScroll: 'auto',
+    
     initComponent: function(){
    
     	

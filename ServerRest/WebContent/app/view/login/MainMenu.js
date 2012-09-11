@@ -6,6 +6,28 @@ Ext.define('MONITOR.view.login.MainMenu', {
     initComponent: function(){
     	
     	this.items =  [
+				{
+				    text: 'Inicio',
+					handler: function(){
+						var tabs = Ext.ComponentQuery.query('#mainTab');
+						tabs[0].add({
+							closable: true,
+							title: 'Inicio',
+							xtype: 'inicioview'
+						}).show();
+				    }
+				},
+				{
+				    text: 'SLA',
+					handler: function(){
+						var tabs = Ext.ComponentQuery.query('#mainTab');
+						tabs[0].add({
+							closable: true,
+							title: 'Consulta de SLA',
+							xtype: 'consultasla'
+						}).show();
+				    }
+				},
     	        {
     	            xtype: 'splitbutton',
     	            text: 'Cadastros',
@@ -82,18 +104,8 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    
     	                ]
     	            }
-    	        },
-    	        {
-                    text: 'SLA',
-                	handler: function(){
-                		var tabs = Ext.ComponentQuery.query('#mainTab');
-                		tabs[0].add({
-                			closable: true,
-                			title: 'Consulta de SLA',
-                			xtype: 'consultasla'
-                		}).show();
-                    }
     	        }
+    	        
     	];
     	
     	this.callParent(arguments);

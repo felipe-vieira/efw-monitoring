@@ -2,6 +2,7 @@ package br.com.fiap.monitor.bo;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -530,6 +531,40 @@ public class SlaBO {
 		}
 	}
 	
+	public List<SlaCalculado> listaSlasMensaisAbaixoMeta(Integer start, Integer limit){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Calendar firstDay = Calendar.getInstance();
+			firstDay.set(Calendar.DATE, 1);
+			
+			Calendar lastDay = Calendar.getInstance();
+			lastDay.set(Calendar.DATE, lastDay.getActualMaximum(Calendar.DATE));
+			
+			Query query = session.createQuery("FROM SlaCalculado where tipo = :tipo AND percentual < sla.meta "+
+												" AND controle BETWEEN :dataInicio and :dataFim");
+			
+			query.setParameter("tipo", TipoSla.MENSAL);
+			query.setParameter("dataInicio", firstDay.getTime());
+			query.setParameter("dataFim", lastDay.getTime());
+			
+			query.setFirstResult(start);
+			query.setMaxResults(limit);
+			
+			List<SlaCalculado> lista = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return lista;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
 	
 }
-
