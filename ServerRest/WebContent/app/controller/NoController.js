@@ -186,7 +186,6 @@ Ext.define('MONITOR.controller.NoController', {
     		
     	MONITOR.model.ServidorAplicacao.load(record.get('id'),{
     		success: function (sa){
-    	    	
     	        if(sa != null){
     	        
     	        	var uptime = "--";

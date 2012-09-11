@@ -531,23 +531,21 @@ public class SlaBO {
 		}
 	}
 	
-	public List<SlaCalculado> listaSlasMensaisAbaixoMeta(Integer start, Integer limit){
+	public List<SlaCalculado> listaSlaAbaixoMeta(Integer start, Integer limit){
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
 		
 		try{
 			
-			Calendar firstDay = Calendar.getInstance();
-			firstDay.set(Calendar.DATE, 1);
-			
 			Calendar lastDay = Calendar.getInstance();
-			lastDay.set(Calendar.DATE, lastDay.getActualMaximum(Calendar.DATE));
 			
-			Query query = session.createQuery("FROM SlaCalculado where tipo = :tipo AND percentual < sla.meta "+
+			Calendar firstDay = Calendar.getInstance();
+			firstDay.roll(Calendar.DAY_OF_YEAR, -15);
+			
+			Query query = session.createQuery("FROM SlaCalculado where percentual < sla.meta "+
 												" AND controle BETWEEN :dataInicio and :dataFim");
 			
-			query.setParameter("tipo", TipoSla.MENSAL);
 			query.setParameter("dataInicio", firstDay.getTime());
 			query.setParameter("dataFim", lastDay.getTime());
 			

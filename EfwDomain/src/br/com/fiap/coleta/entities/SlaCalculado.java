@@ -26,7 +26,6 @@ public class SlaCalculado implements Serializable{
 	private Long tempoIndisponivel;
 	private Long tempoJanela;
 	
-	
 	public Long getId() {
 		return id;
 	}

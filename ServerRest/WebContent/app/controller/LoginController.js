@@ -1,5 +1,8 @@
 Ext.define('MONITOR.controller.LoginController', {
     extend: 'Ext.app.Controller',
+    require: [
+        'MONITOR.utils.LoginUtil'
+	],
     views: [
     	'login.Login',
     	'login.MainScreen',
@@ -7,18 +10,24 @@ Ext.define('MONITOR.controller.LoginController', {
     	'login.MainMenu'
     ],
     stores: [
-    	'UsuariosLogin'
+    	'UsuariosLogin',
     ],
     models: [
-    	'Usuario'
+    	'Usuario',
     ],
     
     init: function() {
+    	
+    	Ext.apply(this,{
+    		usuario: null
+    	});
+    	
         this.control({
         	'loginform button[action=login]':{
         		click : this.realizaLogin
         	}
         });
+        
     },
     
     realizaLogin: function(button){
@@ -39,6 +48,8 @@ Ext.define('MONITOR.controller.LoginController', {
     	    },
     	    callback: function(records, operation, success) {
     	        if(records.length > 0 ){
+    	        	//MONITOR.utils.LoginUtil.usuario = records[0];
+    	        	//console.log(MONITOR.utils.LoginUtil.usuario);
     	        	win.hide();
     	        	var viewport = win.up();
     	        	viewport.add({xtype: 'mainscreen', height: '100%', width: '100%'});

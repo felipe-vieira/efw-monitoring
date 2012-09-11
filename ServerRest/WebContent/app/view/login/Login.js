@@ -10,7 +10,7 @@ Ext.define('MONITOR.view.login.Login', {
     autoShow: true,
 
     initComponent: function() {
-    	    	
+    	
         this.items = [
             {
                 xtype: 'form',

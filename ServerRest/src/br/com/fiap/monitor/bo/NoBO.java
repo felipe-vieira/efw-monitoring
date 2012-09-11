@@ -236,8 +236,9 @@ public class NoBO {
 		Transaction t = session.beginTransaction();
 		
 		try{
-			Query query = session.createQuery("FROM No where gerenciavel = :status AND ativo = :ativo");
+			Query query = session.createQuery("FROM No where gerenciavel = :status AND disponivel = :disp AND ativo = :ativo");
 			query.setBoolean("status", false);
+			query.setBoolean("disp", true);
 			query.setBoolean("ativo", true);
 			
 			query.setFirstResult(start);
@@ -262,8 +263,9 @@ public class NoBO {
 		Transaction t = session.beginTransaction();
 		
 		try{
-			Query query = session.createQuery("SELECT count(*) FROM No where gerenciavel = :status AND ativo = :ativo");
+			Query query = session.createQuery("SELECT count(*) FROM No where gerenciavel = :status AND disponivel = :disp AND ativo = :ativo");
 			query.setBoolean("status", false);
+			query.setBoolean("disp", true);
 			query.setBoolean("ativo", true);
 			
 			

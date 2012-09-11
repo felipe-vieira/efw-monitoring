@@ -1,13 +1,15 @@
-Ext.define('MONITOR.view.sla.ListSlasCalculados' ,{
+Ext.define('MONITOR.view.inicio.ListSlasForaMeta' ,{
 	
 	extend: 'Ext.grid.Panel',
-    alias: 'widget.slascalculadoslist',
+    alias: 'widget.listslasforameta',
+    store: 'SlasForaMeta',
+    title: 'SLAs abaixo da meta - Ultimos 15 dias.',
     layout: 'anchor',
     
     initComponent: function() {
     	
     	this.columns = [
-
+    	    
     	    {header: 'No',  dataIndex: 'nomeNo',  flex: 1},
     	    
     	    {header: 'Tipo', dataIndex: 'tipo', flex: 1,
@@ -43,14 +45,16 @@ Ext.define('MONITOR.view.sla.ListSlasCalculados' ,{
    	    			return val+'%';
    	    		}
    	    	}
+   	    	
     	                
     	];
 
+    	
     	this.dockedItems = {
          	xtype: 'pagingtoolbar',
             dock: 'bottom',
             displayInfo: true,
-            store: this.getStore()
+            store: 'SlasForaMeta'
         };
     	
         this.callParent(arguments);
