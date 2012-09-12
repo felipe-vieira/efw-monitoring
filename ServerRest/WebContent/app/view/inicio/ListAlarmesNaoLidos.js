@@ -9,7 +9,11 @@ Ext.define('MONITOR.view.inicio.ListAlarmesNaoLidos' ,{
     initComponent: function() {
 
         this.columns = [
-                        
+                {header: 'Nó', flex: 1, tdCls:"celulaAlerta",
+                   	renderer: function(val,rec,attr){
+               		return attr.getNo().get('nome');
+              	}
+            },            
             {header: 'Tipo',  dataIndex: 'tipo',  flex: 1, tdCls:"celulaAlerta"},
             {header: 'Mensagem',  dataIndex: 'mensagem',  flex: 1, tdCls:"celulaAlerta",
             	renderer: function(val,metadata,record){

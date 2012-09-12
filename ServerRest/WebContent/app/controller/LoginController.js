@@ -1,6 +1,6 @@
 Ext.define('MONITOR.controller.LoginController', {
     extend: 'Ext.app.Controller',
-    require: [
+    requires: [
         'MONITOR.utils.LoginUtil'
 	],
     views: [
@@ -48,7 +48,8 @@ Ext.define('MONITOR.controller.LoginController', {
     	    },
     	    callback: function(records, operation, success) {
     	        if(records.length > 0 ){
-    	        	//MONITOR.utils.LoginUtil.usuario = records[0];
+    	        	console.log(MONITOR.utils.LoginUtil.usuario);
+    	        	MONITOR.utils.LoginUtil.usuario = records[0];
     	        	//console.log(MONITOR.utils.LoginUtil.usuario);
     	        	win.hide();
     	        	var viewport = win.up();

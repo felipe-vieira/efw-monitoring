@@ -1,5 +1,5 @@
 Ext.define('MONITOR.utils.LoginUtil', {
-    statics:{
-    	usuario: null
+	statics:{
+    	usuario: 0,
     }
 });

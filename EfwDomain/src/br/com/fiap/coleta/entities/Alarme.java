@@ -26,6 +26,7 @@ public class Alarme implements Serializable{
 	private String parametro;
 	private Integer contagem;
 	private CriticidadeAlarme criticidade;
+	private Solucao solucao;
 	
 	public Alarme(){
 		this.status = StatusAlarme.NAO_LIDO;
@@ -89,6 +90,14 @@ public class Alarme implements Serializable{
 
 	public void setCriticidade(CriticidadeAlarme criticidade) {
 		this.criticidade = criticidade;
+	}
+
+	public Solucao getSolucao() {
+		return solucao;
+	}
+
+	public void setSolucao(Solucao solucao) {
+		this.solucao = solucao;
 	}
 
 	@Override

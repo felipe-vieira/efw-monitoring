@@ -9,7 +9,7 @@ Ext.define('MONITOR.view.alarme.ListAlarmesNo' ,{
     initComponent: function() {
 
         this.columns = [
-                        
+            
             {header: 'Tipo',  dataIndex: 'tipo',  flex: 1, tdCls:"celulaAlerta"},
             {header: 'Mensagem',  dataIndex: 'mensagem',  flex: 1, tdCls:"celulaAlerta",
             	renderer: function(val,metadata,record){
