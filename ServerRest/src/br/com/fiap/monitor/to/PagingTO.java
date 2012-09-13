@@ -16,7 +16,7 @@ import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.coleta.entities.SlaCalculado;
 import br.com.fiap.coleta.entities.Threshold;
-import br.com.fiap.monitor.entities.Usuario;
+import br.com.fiap.coleta.entities.Usuario;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)

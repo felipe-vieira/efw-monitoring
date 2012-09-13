@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="br.com.fiap.monitor.entities.Usuario" table="usuario">
+	<class name="br.com.fiap.coleta.entities.Usuario" table="usuario">
 	
 		<id name="id" column = "id">
 			<generator class="increment"/>

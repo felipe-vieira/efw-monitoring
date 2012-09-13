@@ -12,8 +12,14 @@ public class Solucao implements Serializable{
 
 	private static final long serialVersionUID = -5090523114279419184L;
 	private Long id;
-	private String desc;
+	private String titulo;
+	private String descricao;
 	private TipoAlarme tipoAlarme;
+	private Usuario usuario;
+	private No no;	
+	private String tipo;
+	private String subTipo;
+	private String software;
 	
 	public Long getId() {
 		return id;
@@ -21,11 +27,11 @@ public class Solucao implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getDesc() {
-		return desc;
+	public String getDescricao() {
+		return descricao;
 	}
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 	public TipoAlarme getTipoAlarme() {
 		return tipoAlarme;
@@ -33,6 +39,43 @@ public class Solucao implements Serializable{
 	public void setTipoAlarme(TipoAlarme tipoAlarme) {
 		this.tipoAlarme = tipoAlarme;
 	}
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	public No getNo() {
+		return no;
+	}
+	public void setNo(No no) {
+		this.no = no;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public String getSubTipo() {
+		return subTipo;
+	}
+	public void setSubTipo(String subTipo) {
+		this.subTipo = subTipo;
+	}
+	public String getSoftware() {
+		return software;
+	}
+	public void setSoftware(String software) {
+		this.software = software;
+	}
+	public String getTitulo() {
+		return titulo;
+	}
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -56,9 +99,5 @@ public class Solucao implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
-	
 	
 }

@@ -11,6 +11,7 @@ import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
 import br.com.fiap.coleta.entities.enumerators.TipoSla;
 import br.com.fiap.monitor.dao.GenericDAO;
+import br.com.fiap.monitor.to.ReturnTO;
 
 public class AlarmeBO {
 	
@@ -133,6 +134,30 @@ public class AlarmeBO {
 			return null;
 		}
 		
+	}
+	
+	public ReturnTO updateAlarme(Alarme alarme){
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		
+		ReturnTO retorno = new ReturnTO();
+		retorno.setSuccess(false);
+		
+		try{
+			
+			session.merge(alarme);
+			t.commit();
+			retorno.setSuccess(true);
+			
+		}catch (Exception ex) {
+			
+			ex.printStackTrace();
+			retorno.setMessage(ex.getMessage());
+			t.rollback();
+			
+		}
+		
+		return retorno;
 	}
 	
 }

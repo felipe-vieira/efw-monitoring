@@ -6,9 +6,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.dao.UsuarioDAO;
-import br.com.fiap.monitor.entities.Usuario;
 import br.com.fiap.monitor.to.ReturnTO;
 
 public class UsuarioBO {

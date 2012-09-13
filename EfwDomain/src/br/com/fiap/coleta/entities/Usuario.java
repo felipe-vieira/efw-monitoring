@@ -1,4 +1,4 @@
-package br.com.fiap.monitor.entities;
+package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 

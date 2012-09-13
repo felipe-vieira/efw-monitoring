@@ -9,8 +9,8 @@ import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONObject;
 
+import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.monitor.bo.UsuarioBO;
-import br.com.fiap.monitor.entities.Usuario;
 
 
 @Path("/usuariosLogin")

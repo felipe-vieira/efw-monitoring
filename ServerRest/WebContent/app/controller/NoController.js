@@ -813,8 +813,6 @@ Ext.define('MONITOR.controller.NoController', {
 				
 				var thresholdId = no.getThreshold().get('id');
 				var slaId = no.getSla().get('id');
-				console.log(no);
-				console.log(slaId);
 		
 				var view = Ext.widget('formservidor');
 				view.down('form').down('#thresholdId').setValue(thresholdId);

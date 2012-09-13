@@ -76,7 +76,13 @@
 		<mapping resource="br/com/fiap/coleta/entities/mappings/JanelaSla.hbm.xml"/>
 		<mapping resource="br/com/fiap/coleta/entities/mappings/DiasSemanaJanelaSla.hbm.xml"/>
 		<mapping resource="br/com/fiap/coleta/entities/mappings/DiasSemanaSla.hbm.xml"/>
-							
+		
+		<!-- Usuario -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Usuario.hbm.xml" />
+		
+		<!-- Base de conhecimento -->
+		<mapping resource="br/com/fiap/coleta/entities/mappings/Solucao.hbm.xml" />
+		<mapping resource="br/com/fiap/coleta/entities/mappings/AvaliacaoSolucao.hbm.xml"/>							
 	</session-factory>
 
 </hibernate-configuration>

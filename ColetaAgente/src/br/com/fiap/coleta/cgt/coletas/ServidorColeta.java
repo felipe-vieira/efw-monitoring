@@ -22,6 +22,7 @@ import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.ProcessadorColeta;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.SistemaOperacional;
+import br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional;
 import br.com.fiap.coleta.util.socket.SocketUtil;
 
 public class ServidorColeta {
@@ -182,6 +183,16 @@ public class ServidorColeta {
 			so.setVersao(json.getString("version"));
 			so.setPatch(json.getString("patch"));
 			so.setFornecedor(json.getString("vendor"));
+			
+			String strTipo = json.getString("name");
+			
+			if(strTipo.equalsIgnoreCase("win32")){
+				so.setTipo(TipoSistemaOperacional.WINDOWS);
+			}else if(strTipo.equalsIgnoreCase("linux")){
+				so.setTipo(TipoSistemaOperacional.LINUX);
+			}else{
+				so.setTipo(TipoSistemaOperacional.OUTRO);
+			}
 
 		} catch (IOException ex) {
 			ex.printStackTrace();

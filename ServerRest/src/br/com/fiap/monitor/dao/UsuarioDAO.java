@@ -4,7 +4,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import br.com.fiap.monitor.entities.Usuario;
+import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.monitor.util.dao.DBUtil;
 
 public class UsuarioDAO {

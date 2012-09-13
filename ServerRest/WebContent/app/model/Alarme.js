@@ -10,18 +10,16 @@ Ext.define('MONITOR.model.Alarme', {
              {name: 'parametro', type: 'parametro'},
              {name: 'contagem',	type: 'int'},
              {name: 'tipo', type: 'string', mapping: 'tipo.descricao'},
-             {name: 'mensagem', type: 'string', mapping: 'tipo.mensagem'}
+             {name: 'mensagem', type: 'string', mapping: 'tipo.mensagem'},
+             {name: 'noNome', type: 'string', mapping: 'no.nome'}
              
     ],
     
     proxy: {
 		type: 'rest',
-		url: 'rest/usuarios/',
+		url: 'rest/alarme/',
         reader: {
             type: 'json',
-            root: 'usuario',
-            successProperty: 'success',
-            messageProperty: 'message'
         },
 		writer: {
 			type: 'json',
@@ -32,6 +30,5 @@ Ext.define('MONITOR.model.Alarme', {
     hasOne: [
         {model: 'MONITOR.model.TipoAlarme', foreignKey: 'id', associationKey: 'tipo', getterName: "getTipoAlarme"  },
         {model: 'MONITOR.model.No', foreignKey: 'id', associationKey: 'no', getterName: "getNo"  }
-        
     ]
 });

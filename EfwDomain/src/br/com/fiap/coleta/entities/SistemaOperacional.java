@@ -6,27 +6,32 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SistemaOperacional implements Serializable{
 
 	private static final long serialVersionUID = -1049191915492406568L;
 
-	public Integer id;
+	private Integer id;
 	
-	public Servidor servidor;
+	private Servidor servidor;
 	
-	public String nome;
+	private String nome;
 
-	public String descricao;
+	private String descricao;
 
-	public String fornecedor;
+	private String fornecedor;
 
-	public String versao;
+	private String versao;
 
-	public String patch;
+	private String patch;
 
-	public String arquitetura;
+	private String arquitetura;
+	
+	private TipoSistemaOperacional tipo;
+	
 
 	public SistemaOperacional(){
 		
@@ -98,6 +103,14 @@ public class SistemaOperacional implements Serializable{
 
 	public void setArquitetura(String arquitetura) {
 		this.arquitetura = arquitetura;
+	}
+
+	public TipoSistemaOperacional getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoSistemaOperacional tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override
