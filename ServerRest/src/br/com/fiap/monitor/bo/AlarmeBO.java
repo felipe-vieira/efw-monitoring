@@ -21,6 +21,26 @@ public class AlarmeBO {
 		this.dao = new GenericDAO();
 	}
 	
+	
+	public Alarme getAlarmeId(Long id){
+		Session session = dao.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+
+			Alarme alarme = (Alarme) session.get(Alarme.class, id);
+			t.commit();
+			
+			return alarme;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			t.rollback();
+			return null;
+		}
+	}
+	
+	
 	public List<Alarme> listaAlarmesNo(Integer id){
 
 		Session session = dao.getSession();
@@ -136,17 +156,36 @@ public class AlarmeBO {
 		
 	}
 	
-	public ReturnTO updateAlarme(Alarme alarme){
+	public ReturnTO updateAlarme(Long id, Alarme alarme){
 		Session session = dao.getSession();
 		Transaction t = session.beginTransaction();
 		
 		ReturnTO retorno = new ReturnTO();
 		retorno.setSuccess(false);
+		retorno.setId(id);
 		
 		try{
 			
-			session.merge(alarme);
-			t.commit();
+			Alarme original = (Alarme) session.get(Alarme.class,id);
+			
+			Boolean dirty = false;
+			
+			if(alarme.getStatus() != null && !alarme.getStatus().equals(StatusAlarme.NAO_LIDO)){
+				original.setStatus(alarme.getStatus());
+				dirty = true;
+			}
+			
+			if(dirty){
+				session.merge(original);
+				t.commit();
+			}else{
+				t.rollback();
+			}
+			
+			
+			
+			
+			retorno.setObj(original);
 			retorno.setSuccess(true);
 			
 		}catch (Exception ex) {

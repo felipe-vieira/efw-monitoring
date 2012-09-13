@@ -6,7 +6,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	type: 'hbox',
     	align: 'stretchmax',
     },
-    
+    title: 'Detalhes do Chamado',
     autoShow: true,
     modal: true,
 
@@ -18,7 +18,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	    	  border: false,
     	          frame: true,
     	          width: 300,
-    	          height: 400,
+    	          minHeight: 400,
     	          items: [
     	              {
     	                  xtype: 'displayfield',
@@ -33,17 +33,24 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	              {
     	            	  xtype: 'displayfield',
     	                  fieldLabel: 'Mensagem',
-    	                  name: 'mensagem'
+    	                  name: 'mensagemFormatada'
     	              },
     	              {
     	            	  xtype: 'displayfield',
     	            	  fieldLabel: 'Criticidade',
-    	            	  name: 'criticidade'
+    	            	  name: 'criticidade',
+    	            	  renderer: function(val){
+    	            		  if(val=="ALERTA"){
+    	            			  return "Alerta";
+    	            		  }else if(val=="CRITICO"){
+    	            			  return "Crítico";
+    	            		  }
+    	            	  }
     	              },
     	              {
     	            	  xtype: 'displayfield',
     	            	  fieldLabel: 'Data',
-    	            	  name: 'data'
+    	            	  name: 'dataFormatada'
     	              },
     	              {
     	            	  xtype: 'displayfield',
@@ -58,7 +65,17 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	              {
     	            	  xtype: 'displayfield',
     	            	  fieldLabel: 'Status',
-    	            	  name: 'status'
+    	            	  name: 'status',
+    	            	  renderer: function(val){
+    	            		  if(val=="NAO_LIDO"){
+    	            			  return "Não Lido";
+    	            		  }else if(val=="LIDO"){
+    	            			  return "Lido";
+    	            		  }else if(val=="RESOLVIDO"){
+    	            			  return "Não Lido";
+    	            		  }
+    	            	  }
+    	            
     	              },
     	              {
     	            	  xtype: 'checkboxfield',
@@ -70,14 +87,19 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	              {
     	            	  xtype: 'textfield',
     	            	  fieldLabel: 'Titulo',
-    	            	  name: 'titulo'
+    	            	  name: 'titulo',
+    	            	  labelWidth: 70,
+    	            	  width: 280
     	              },
     	              {
     	            	  xtype: 'textarea',
     	            	  fieldLabel: 'Solução',
-    	            	  name: 'soluçao'
-    	            	
+    	            	  name: 'soluçao',
+    	            	  labelWidth: 70,
+    	            	  width: 280,
+    	            	  rows: 8,
     	              }
+    	              
     	          ],
     	          
     	          buttons:[
@@ -96,7 +118,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	     {
     	    	  html: 'B',
     	          width: 400,
-    	          height: 400
+    	          minHeight: 400
     	     }
     	];
     	

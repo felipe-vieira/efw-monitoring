@@ -9,9 +9,9 @@ Ext.define('MONITOR.model.Alarme', {
              {name: 'valorLimite',	type: 'float'},
              {name: 'parametro', type: 'parametro'},
              {name: 'contagem',	type: 'int'},
-             {name: 'tipo', type: 'string', mapping: 'tipo.descricao'},
-             {name: 'mensagem', type: 'string', mapping: 'tipo.mensagem'},
-             {name: 'noNome', type: 'string', mapping: 'no.nome'}
+             {name: 'tipo', type: 'string', mapping: 'tipo.descricao', persist: false},
+             {name: 'mensagem', type: 'string', mapping: 'tipo.mensagem', persist: false},
+             {name: 'noNome', type: 'string', mapping: 'no.nome', persist: false}
              
     ],
     
@@ -20,10 +20,12 @@ Ext.define('MONITOR.model.Alarme', {
 		url: 'rest/alarme/',
         reader: {
             type: 'json',
+            root: 'obj',
         },
 		writer: {
 			type: 'json',
-			allowSingle: true
+			allowSingle: true,	
+			writeAllFields: false
 		},
 	},
 	

@@ -34,6 +34,23 @@ Ext.define('MONITOR.controller.BaseController', {
     abreDetalhesAlarme: function(grid,record){
     	var view = Ext.widget('alarmesdetalhes');
     	var form = view.down('form');
+    	
+    	var dataFormatada = Ext.Date.format(record.get('data'), 'd/m/Y H:i:s');
+    	
+    	var mensagem = record.get('mensagem');
+    	var params = record.get('parametro').split(';');
+    	
+		for(var i=0 ; i<params.length ; i++){
+			var atual = params[i];
+			mensagem = mensagem.replace("?",atual);
+		}
+    	
+    	
+    	form.getForm().setValues({
+    		'dataFormatada' : dataFormatada,
+    		'mensagemFormatada': mensagem
+    	});
+    	
     	form.loadRecord(record);
     },
     
@@ -42,7 +59,6 @@ Ext.define('MONITOR.controller.BaseController', {
         var form   = win.down('form');
         var record = form.getRecord();
         var values = form.getValues();
-	    console.log('opaaa');
         
 	    if(values.isResolvido == true){
 	    	record.set('status',"RESOLVIDO");
@@ -58,6 +74,7 @@ Ext.define('MONITOR.controller.BaseController', {
     				win.close();
     			},
     			failure: function(rec,op){
+    				console.log(op);
                     Ext.MessageBox.show({
                         title: 'Erro',
                         msg: op.request.scope.reader.jsonData["message"],
