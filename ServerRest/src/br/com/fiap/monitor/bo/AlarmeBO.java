@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.Alarme;
+import br.com.fiap.coleta.entities.Solucao;
 import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
 import br.com.fiap.coleta.entities.enumerators.TipoSla;
 import br.com.fiap.monitor.dao.GenericDAO;
@@ -182,9 +183,6 @@ public class AlarmeBO {
 				t.rollback();
 			}
 			
-			
-			
-			
 			retorno.setObj(original);
 			retorno.setSuccess(true);
 			
@@ -198,5 +196,16 @@ public class AlarmeBO {
 		
 		return retorno;
 	}
+	
+	public void updateSolucaoAlarme(Alarme alarme, Solucao solucao) throws Exception{
+		Session session = dao.getSession();
+		
+		alarme.setSolucao(solucao);
+		session.merge(alarme);
+		
+	}
+	
+	
+	
 	
 }

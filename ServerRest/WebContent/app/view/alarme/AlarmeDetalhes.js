@@ -94,7 +94,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	              {
     	            	  xtype: 'textarea',
     	            	  fieldLabel: 'Solução',
-    	            	  name: 'soluçao',
+    	            	  name: 'descricao',
     	            	  labelWidth: 70,
     	            	  width: 280,
     	            	  rows: 8,

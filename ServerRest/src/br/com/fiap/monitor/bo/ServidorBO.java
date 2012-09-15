@@ -20,10 +20,8 @@ import br.com.fiap.monitor.to.ReturnTO;
 public class ServidorBO {
 
 	private GenericDAO genericDAO;
-	private NoBO noBO;
 	
 	public ServidorBO(){
-		this.noBO = new NoBO();
 		this.genericDAO = new GenericDAO();
 	}
 	
@@ -136,15 +134,17 @@ public class ServidorBO {
 		
 		try{
 			
+			NoBO noBO = new NoBO();
+			
 			if(servidor.getNome() == null || servidor.getNome().equals("")){
 				retorno.setMessage("O campo nome é obrigatório.");
 			}else if(servidor.getHostname() == null || servidor.getHostname().equals("")){
 				retorno.setMessage("O campo hostname é obrigatório.");
 			}else if(servidor.getAgentPort() == null){
 				retorno.setMessage("O campo porta do agente é obrigatório");
-			}else if(this.noBO.verificaNoNome(servidor)){
+			}else if(noBO.verificaNoNome(servidor)){
 				retorno.setMessage("Ja existe um nó com esse nome.");
-			}else if(this.noBO.verificaIpPortaTipo(servidor)){
+			}else if(noBO.verificaIpPortaTipo(servidor)){
 				retorno.setMessage("Ja existe um nó com essa combinação de hostname, porta e tipo.");
 			}else{
 				

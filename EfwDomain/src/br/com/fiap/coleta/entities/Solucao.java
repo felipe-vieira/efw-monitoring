@@ -1,10 +1,14 @@
 package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import br.com.fiap.coleta.entities.enumerators.SubTipoNo;
+import br.com.fiap.coleta.entities.enumerators.TipoNo;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -12,14 +16,14 @@ public class Solucao implements Serializable{
 
 	private static final long serialVersionUID = -5090523114279419184L;
 	private Long id;
+	private Date data;
 	private String titulo;
 	private String descricao;
 	private TipoAlarme tipoAlarme;
 	private Usuario usuario;
 	private No no;	
-	private String tipo;
-	private String subTipo;
-	private String software;
+	private TipoNo tipo;
+	private SubTipoNo subTipo;
 	
 	public Long getId() {
 		return id;
@@ -32,6 +36,12 @@ public class Solucao implements Serializable{
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	public Date getData() {
+		return data;
+	}
+	public void setData(Date data) {
+		this.data = data;
 	}
 	public TipoAlarme getTipoAlarme() {
 		return tipoAlarme;
@@ -51,29 +61,23 @@ public class Solucao implements Serializable{
 	public void setNo(No no) {
 		this.no = no;
 	}
-	public String getTipo() {
-		return tipo;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-	public String getSubTipo() {
-		return subTipo;
-	}
-	public void setSubTipo(String subTipo) {
-		this.subTipo = subTipo;
-	}
-	public String getSoftware() {
-		return software;
-	}
-	public void setSoftware(String software) {
-		this.software = software;
-	}
 	public String getTitulo() {
 		return titulo;
 	}
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+	public TipoNo getTipo() {
+		return tipo;
+	}
+	public void setTipo(TipoNo tipo) {
+		this.tipo = tipo;
+	}
+	public SubTipoNo getSubTipo() {
+		return subTipo;
+	}
+	public void setSubTipo(SubTipoNo subTipo) {
+		this.subTipo = subTipo;
 	}
 	
 	@Override
@@ -83,6 +87,7 @@ public class Solucao implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

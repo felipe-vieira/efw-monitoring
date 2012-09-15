@@ -9,7 +9,18 @@ import org.hibernate.Transaction;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.dao.NoDAO;
 import br.com.fiap.monitor.to.ReturnTO;
+import br.com.fiap.coleta.entities.BancoDados;
+import br.com.fiap.coleta.entities.Glassfish;
+import br.com.fiap.coleta.entities.JBoss;
 import br.com.fiap.coleta.entities.No;
+import br.com.fiap.coleta.entities.Oracle;
+import br.com.fiap.coleta.entities.SQLServer;
+import br.com.fiap.coleta.entities.Servidor;
+import br.com.fiap.coleta.entities.ServidorAplicacao;
+import br.com.fiap.coleta.entities.SistemaOperacional;
+import br.com.fiap.coleta.entities.enumerators.SubTipoNo;
+import br.com.fiap.coleta.entities.enumerators.TipoNo;
+import br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional;
 
 public class NoBO {
 
@@ -280,6 +291,51 @@ public class NoBO {
 			t.rollback();
 			return null;
 		}
+	}
+	
+	public TipoNo verificaTipoNo(No no){
+
+		if(no instanceof Servidor){
+			return TipoNo.SERVIDOR;
+		}else if(no instanceof ServidorAplicacao){
+			return TipoNo.SERVIDOR_APLICACAO;
+		}else if(no instanceof BancoDados){
+			return TipoNo.BANCO_DADOS;
+		}
+
+		return TipoNo.DESCONHECIDO;
+	}
+	
+	public SubTipoNo verificaSubTipoNo(No no){
+		
+		if(no instanceof Servidor){
+			
+			ServidorBO servidorBO = new ServidorBO();
+			SistemaOperacional so = servidorBO.getSistemaOperacionalId(no.getId());
+			
+			if(so.getTipo().equals(TipoSistemaOperacional.WINDOWS)){
+				return SubTipoNo.WINDOWS;
+			}else if(so.getTipo().equals(TipoSistemaOperacional.LINUX)){
+				return SubTipoNo.LINUX;
+			}else{
+				return SubTipoNo.OUTRO;
+			}
+			
+		}else if(no instanceof ServidorAplicacao){
+			if(no instanceof JBoss){
+				return SubTipoNo.JBOSS;
+			}else if(no instanceof Glassfish){
+				return SubTipoNo.GLASSFISH;
+			}
+		}else if(no instanceof BancoDados){
+			if(no instanceof Oracle){
+				return SubTipoNo.ORACLE;
+			}else if(no instanceof SQLServer){
+				return SubTipoNo.SQL_SERVER;
+			}
+		}
+		
+		return SubTipoNo.DESCONHECIDO;
 	}
 	
 	

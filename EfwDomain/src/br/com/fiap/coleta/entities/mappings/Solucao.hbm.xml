@@ -12,19 +12,23 @@
 			<column name="descricao" sql-type="varchar(1024)"/>
 		</property>
 		
+		<property name="data" not-null="true"/>
+		
 		<many-to-one name="tipoAlarme"/>
 		<many-to-one name="no"/>
 		<many-to-one name="usuario"/>				
 		
-		<property name="tipo" not-null="true">
-			<column name="tipo" sql-type="varchar(30)"/>
-		</property>
-		<property name="subTipo" not-null="true">
-			<column name="subTipo" sql-type="varchar(30)"/>
-		</property>
-		<property name="software" not-null="true">
-			<column name="software" sql-type="varchar(30)"/>
+		<property name="tipo">
+		   <type name="org.hibernate.type.EnumType">
+		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.TipoNo</param>
+		   </type>
 		</property>
 		
+		<property name="subTipo">
+		   <type name="org.hibernate.type.EnumType">
+		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.SubTipoNo</param>
+		   </type>
+		</property>		
+				
 	</class> 
 </hibernate-mapping>

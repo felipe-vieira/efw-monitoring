@@ -12,6 +12,8 @@ Ext.define('MONITOR.controller.BaseController', {
           
     ],
     models: [
+        'Alarme',
+        'Solucao'
     ],
     
     init: function() {
@@ -68,10 +70,33 @@ Ext.define('MONITOR.controller.BaseController', {
 	    
     	record.set(values);
     	
-    	record.save(
-    		{
+    	var solucao = Ext.create('MONITOR.model.Solucao');
+    	
+    	solucao.set('titulo',values.titulo);
+    	solucao.set('descricao',values.descricao);
+    	console.log(MONITOR.utils.LoginUtil.usuario.get('id'));
+    	
+		record.save(
+    		{	
     			success: function(rec,op){
-    				win.close();
+    		    	solucao.save({
+    		    		params: {
+    		    			'idAlarme': record.get('id'),
+    		    			'idUsuario': MONITOR.utils.LoginUtil.usuario.get('id')
+    		    		},
+    		    		success: function(rec,op){
+    		    			win.close();
+    					},
+    					failure: function(rec,op){
+    						console.log(op);
+    		                Ext.MessageBox.show({
+    		                    title: 'Erro',
+    		                    msg: op.request.scope.reader.jsonData["message"],
+    		                    icon: Ext.MessageBox.ERROR,
+    		                    buttons: Ext.Msg.OK
+    		                });
+    					}
+    		    	});
     			},
     			failure: function(rec,op){
     				console.log(op);
@@ -83,7 +108,11 @@ Ext.define('MONITOR.controller.BaseController', {
                     });
     			}
     		}
-    	);
+		);
+    	
+    	
+    	
+    	
 	}
   
 });

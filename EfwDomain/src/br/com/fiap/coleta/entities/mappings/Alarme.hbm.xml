@@ -28,6 +28,7 @@
 		<property name="valor"/>
 		<property name="valorLimite"/>
 		<property name="parametro"/>
+		<many-to-one name="solucao"/>
 
 	</class> 
 </hibernate-mapping>
