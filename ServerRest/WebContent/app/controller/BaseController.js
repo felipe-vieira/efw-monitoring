@@ -29,7 +29,12 @@ Ext.define('MONITOR.controller.BaseController', {
     	
     		'alarmesdetalhes > form button[action=save]':{
     			click: this.saveOrUpdate
+    		},
+    		
+    		'alarmesdetalhes > form checkboxfield':{
+    			change: this.habilitaSolucao
     		}
+    		
     	});
     },
     
@@ -62,7 +67,9 @@ Ext.define('MONITOR.controller.BaseController', {
         var record = form.getRecord();
         var values = form.getValues();
         
-	    if(values.isResolvido == true){
+        console.log(values);
+        
+	    if(values.isSolucionado == true){
 	    	record.set('status',"RESOLVIDO");
 	    }else{
 	    	record.set('status',"LIDO");
@@ -70,33 +77,40 @@ Ext.define('MONITOR.controller.BaseController', {
 	    
     	record.set(values);
     	
+    	
     	var solucao = Ext.create('MONITOR.model.Solucao');
     	
     	solucao.set('titulo',values.titulo);
     	solucao.set('descricao',values.descricao);
-    	console.log(MONITOR.utils.LoginUtil.usuario.get('id'));
     	
 		record.save(
     		{	
     			success: function(rec,op){
-    		    	solucao.save({
-    		    		params: {
-    		    			'idAlarme': record.get('id'),
-    		    			'idUsuario': MONITOR.utils.LoginUtil.usuario.get('id')
-    		    		},
-    		    		success: function(rec,op){
-    		    			win.close();
-    					},
-    					failure: function(rec,op){
-    						console.log(op);
-    		                Ext.MessageBox.show({
-    		                    title: 'Erro',
-    		                    msg: op.request.scope.reader.jsonData["message"],
-    		                    icon: Ext.MessageBox.ERROR,
-    		                    buttons: Ext.Msg.OK
-    		                });
-    					}
-    		    	});
+    				
+    				if(record.get('status') == "RESOLVIDO"){
+    					console.log("OIOIOI");
+	    		    	solucao.save({
+	    		    		params: {
+	    		    			'idAlarme': record.get('id'),
+	    		    			'idUsuario': MONITOR.utils.LoginUtil.usuario.get('id')
+	    		    		},
+	    		    		success: function(rec,op){
+	    		    			win.close();
+	    					},
+	    					failure: function(rec,op){
+	    						console.log(op);
+	    		                Ext.MessageBox.show({
+	    		                    title: 'Erro',
+	    		                    msg: op.request.scope.reader.jsonData["message"],
+	    		                    icon: Ext.MessageBox.ERROR,
+	    		                    buttons: Ext.Msg.OK
+	    		                });
+	    					}
+	    		    	});
+    				}else{
+    					win.close();
+    				}
+    				
     			},
     			failure: function(rec,op){
     				console.log(op);
@@ -109,10 +123,23 @@ Ext.define('MONITOR.controller.BaseController', {
     			}
     		}
 		);
-    	
-    	
-    	
-    	
+	},
+    
+	habilitaSolucao: function(checkbox, newValue){
+		var formPanel =  checkbox.up('form');
+		var form = formPanel.getForm();
+		
+		var titulo = form.findField('titulo');
+		var descricao = form.findField('descricao');
+		
+		if(newValue == true){
+			titulo.enable();
+			descricao.enable();
+		}else{
+			titulo.disable();
+			descricao.disable();
+		}
 	}
+    
   
 });

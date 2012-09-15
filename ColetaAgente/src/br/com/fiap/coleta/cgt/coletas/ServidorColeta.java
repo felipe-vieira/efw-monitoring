@@ -187,11 +187,11 @@ public class ServidorColeta {
 			String strTipo = json.getString("name");
 			
 			if(strTipo.equalsIgnoreCase("win32")){
-				so.setTipo(TipoSistemaOperacional.WINDOWS);
+				servidor.setTipoSO(TipoSistemaOperacional.WINDOWS);
 			}else if(strTipo.equalsIgnoreCase("linux")){
-				so.setTipo(TipoSistemaOperacional.LINUX);
+				servidor.setTipoSO(TipoSistemaOperacional.LINUX);
 			}else{
-				so.setTipo(TipoSistemaOperacional.OUTRO);
+				servidor.setTipoSO(TipoSistemaOperacional.OUTRO);
 			}
 
 		} catch (IOException ex) {

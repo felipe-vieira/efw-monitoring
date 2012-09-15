@@ -8,6 +8,10 @@
 			<generator class="increment"/>
 		</id>
 		
+		<property name="titulo" not-null="true">
+			<column name="titulo" sql-type="varchar(30)"/>
+		</property>
+		
 		<property name="descricao" not-null="true">
 			<column name="descricao" sql-type="varchar(1024)"/>
 		</property>

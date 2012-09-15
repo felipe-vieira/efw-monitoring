@@ -89,7 +89,8 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	            	  fieldLabel: 'Titulo',
     	            	  name: 'titulo',
     	            	  labelWidth: 70,
-    	            	  width: 280
+    	            	  width: 280,
+    	            	  disabled: true
     	              },
     	              {
     	            	  xtype: 'textarea',
@@ -98,6 +99,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	            	  labelWidth: 70,
     	            	  width: 280,
     	            	  rows: 8,
+    	            	  disabled: true
     	              }
     	              
     	          ],

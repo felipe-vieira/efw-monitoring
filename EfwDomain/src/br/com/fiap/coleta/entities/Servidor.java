@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional;
+
 @XmlRootElement(name="servidor")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Servidor extends No implements Serializable{
@@ -18,6 +20,7 @@ public class Servidor extends No implements Serializable{
 	private Processador processador;
 	private Memoria memoria;
 	private List<Particao> particoes;
+	private TipoSistemaOperacional tipoSO;
 	
 	public SistemaOperacional getSistemaOperacional() {
 		return sistemaOperacional;
@@ -59,7 +62,12 @@ public class Servidor extends No implements Serializable{
 		this.threshold = threshold;
 	}
 
+	public TipoSistemaOperacional getTipoSO() {
+		return tipoSO;
+	}
 
-
+	public void setTipoSO(TipoSistemaOperacional tipoSO) {
+		this.tipoSO = tipoSO;
+	}
 
 }

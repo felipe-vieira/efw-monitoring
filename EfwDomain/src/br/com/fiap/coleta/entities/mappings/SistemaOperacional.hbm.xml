@@ -28,11 +28,5 @@
 			<column name="arquitetura" sql-type = "varchar(10)"/>
 		</property>
 			
-		<property name="tipo">
-		   <type name="org.hibernate.type.EnumType">
-		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional</param>
-		   </type>
-		</property>
-
 	</class> 
 </hibernate-mapping>

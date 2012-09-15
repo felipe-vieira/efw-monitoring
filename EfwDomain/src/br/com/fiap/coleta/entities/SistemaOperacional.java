@@ -30,8 +30,6 @@ public class SistemaOperacional implements Serializable{
 
 	private String arquitetura;
 	
-	private TipoSistemaOperacional tipo;
-	
 
 	public SistemaOperacional(){
 		
@@ -105,13 +103,6 @@ public class SistemaOperacional implements Serializable{
 		this.arquitetura = arquitetura;
 	}
 
-	public TipoSistemaOperacional getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoSistemaOperacional tipo) {
-		this.tipo = tipo;
-	}
 
 	@Override
 	public int hashCode() {

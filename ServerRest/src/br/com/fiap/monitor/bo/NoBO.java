@@ -309,13 +309,12 @@ public class NoBO {
 	public SubTipoNo verificaSubTipoNo(No no){
 		
 		if(no instanceof Servidor){
+
+			Servidor servidor = (Servidor) no;
 			
-			ServidorBO servidorBO = new ServidorBO();
-			SistemaOperacional so = servidorBO.getSistemaOperacionalId(no.getId());
-			
-			if(so.getTipo().equals(TipoSistemaOperacional.WINDOWS)){
+			if(servidor.getTipoSO().equals(TipoSistemaOperacional.WINDOWS)){
 				return SubTipoNo.WINDOWS;
-			}else if(so.getTipo().equals(TipoSistemaOperacional.LINUX)){
+			}else if(servidor.getTipoSO().equals(TipoSistemaOperacional.LINUX)){
 				return SubTipoNo.LINUX;
 			}else{
 				return SubTipoNo.OUTRO;
@@ -333,7 +332,7 @@ public class NoBO {
 			}else if(no instanceof SQLServer){
 				return SubTipoNo.SQL_SERVER;
 			}
-		}
+	    }
 		
 		return SubTipoNo.DESCONHECIDO;
 	}
