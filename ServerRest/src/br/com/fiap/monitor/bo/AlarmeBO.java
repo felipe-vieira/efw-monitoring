@@ -75,7 +75,7 @@ public class AlarmeBO {
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			
-			List<Alarme> retorno =  query.list();
+			List<Alarme> retorno =  (List<Alarme>) query.list();
 			t.commit();
 			
 			return retorno;

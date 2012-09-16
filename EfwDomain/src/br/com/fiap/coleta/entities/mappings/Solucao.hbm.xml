@@ -18,9 +18,9 @@
 		
 		<property name="data" not-null="true"/>
 		
-		<many-to-one name="tipoAlarme"/>
-		<many-to-one name="no"/>
-		<many-to-one name="usuario"/>				
+		<many-to-one name="tipoAlarme" lazy="false"/>
+		<many-to-one name="no" lazy="false"/>
+		<many-to-one name="usuario" lazy="false"/>				
 		
 		<property name="tipo">
 		   <type name="org.hibernate.type.EnumType">

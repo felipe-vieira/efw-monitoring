@@ -46,16 +46,50 @@ Ext.define('MONITOR.controller.BaseController', {
     	
     	var mensagem = record.get('mensagem');
     	var params = record.get('parametro').split(';');
-    	
+
 		for(var i=0 ; i<params.length ; i++){
 			var atual = params[i];
 			mensagem = mensagem.replace("?",atual);
 		}
     	
-    	
+		var isSolucionado = false;
+		var titulo = "";
+		var descricao = "";
+		
+		var solucao = record.getSolucao();
+		
+		console.log(solucao);
+		
+		
+		
+		if(solucao.get('id') != 0){
+			
+			console.log('oi');
+			
+			isSelecionado = true;
+			var solucao = record.getSolucao();
+			titulo = solucao.get('titulo');
+			descricao = solucao.get('descricao');
+			
+			var checkbox = form.getForm().findField('isSolucionado');
+			var tituloField = form.getForm().findField('titulo');
+			var descField = form.getForm().findField('descricao');
+			
+			checkbox.disable();
+			tituloField.disable();
+			descField.disable();
+			
+		}
+		
+		console.log('tchaui');
+		
     	form.getForm().setValues({
     		'dataFormatada' : dataFormatada,
-    		'mensagemFormatada': mensagem
+    		'mensagemFormatada': mensagem,
+    		'titulo': titulo,
+    		'descricao': descricao,
+    		'isSolucionado': isSolucionado
+    		
     	});
     	
     	form.loadRecord(record);
@@ -67,8 +101,6 @@ Ext.define('MONITOR.controller.BaseController', {
         var record = form.getRecord();
         var values = form.getValues();
         
-        console.log(values);
-        
 	    if(values.isSolucionado == true){
 	    	record.set('status',"RESOLVIDO");
 	    }else{
@@ -76,7 +108,6 @@ Ext.define('MONITOR.controller.BaseController', {
 	    }
 	    
     	record.set(values);
-    	
     	
     	var solucao = Ext.create('MONITOR.model.Solucao');
     	
@@ -88,7 +119,6 @@ Ext.define('MONITOR.controller.BaseController', {
     			success: function(rec,op){
     				
     				if(record.get('status') == "RESOLVIDO"){
-    					console.log("OIOIOI");
 	    		    	solucao.save({
 	    		    		params: {
 	    		    			'idAlarme': record.get('id'),

@@ -26,3 +26,6 @@ INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(17,'Temp
 /* Alarmes de SLA */
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(18,'SLA Diário', 'O SLA diário não antingiu a meta.',1,'%');
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(19,'SLA Mensal', 'O SLA mensal está abaixo da meta',1,'%');
+
+/* Usuario ADM */
+insert into usuario (id,login,senha,administrador,ativo) VALUES(1,'adm','pdcpdc',1,1);

@@ -268,12 +268,10 @@ Ext.define('MONITOR.controller.NoController', {
     	    	    	        	var strSlaMensal = "Não Disponível";
     	    	    	        	
     	    	    	        	if(slaMensal.get('controle') != null){
-    	    	    	        		console.log(slaDiario);
     	    	    	        		strSlaDiario = slaDiario.get('percentual') + "%";
     	    	    	        	}
     	    	    	        	
     	    	    	        	if(slaMensal.get('controle') != null){
-    	    	    	        		console.log(slaMensal);
     	    	    	        		strSlaMensal = slaMensal.get('percentual') + "%";
     	    	    	        	}
     	    	    	        	
@@ -393,11 +391,9 @@ Ext.define('MONITOR.controller.NoController', {
 
     	            });
     	        	
-    	        	
     	        	if(so.get('patch') != null && so.get('patch') != ""){
     	        		msgPatch = " - " + so.get('patch');
     	        	}
-    	        	
     	        	if(processador.get('cores') > 1){
     	        		processadorMsg = processador.get('fabricante') +' '
     	        			+ processador.get('modelo') + ' (' + processador.get('cores') + ' cores - Clocks: ' + processador.get('clock') + 'MHz)'; 
@@ -405,33 +401,28 @@ Ext.define('MONITOR.controller.NoController', {
     	        		processadorMsg = processador.get('fabricante') +' '
 	        				+ processador.get('modelo') + ' (' + processador.get('cores') + ' core - Clock: ' + processador.get('clock') + 'MHz)';
     	        	}
-    	        	
     	        	var strStatus = "";
-    	        	
     	        	if(servidor.get('disponivel') == true){
     	        		strStatus += "Disponível";
     	        	}else{
     	        		strStatus += "Não Disponível";
     	        	}
-    	        	
     	        	strStatus += " / ";
-    	        	
     	        	if(servidor.get('gerenciavel') == true){
     	        		strStatus += "Gerenciavel";
     	        	}else{
     	        		strStatus += "Não Gerenciavel";
     	        	}
+    	        	var slaMensal = "";
+    	        	var slaDiario = ""; 
     	        	
-    	        	var slaMensal = "opa";
-    	        	var slaDiario = "opa"; 
-    	        		
     	        	MONITOR.model.SlaCalculado.load(servidor.get('id'),{
     	        		scope: this,
     	        		synchronous: true,
     	        		params:{
     	        			'tipo': 'mensal'
     	        		},
-    	        		success: function(sla){
+    	        		callback: function(sla){
     	        			slaMensal = sla;
     	        			
     	    	        	MONITOR.model.SlaCalculado.load(servidor.get('id'),{
@@ -440,7 +431,7 @@ Ext.define('MONITOR.controller.NoController', {
     	    	        		params:{
     	    	        			'tipo': 'diario'
     	    	        		},
-    	    	        		success: function(sla){
+    	    	        		callback: function(sla){
     	    	        			slaDiario = sla;
     	    	    	        	var strSlaDiario = "Não disponível";
     	    	    	        	var strSlaMensal = "Não disponível";

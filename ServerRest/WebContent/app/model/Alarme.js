@@ -23,6 +23,7 @@ Ext.define('MONITOR.model.Alarme', {
         reader: {
             type: 'json',
             root: 'obj',
+            useSimpleAccessors: true
         },
 		writer: {
 			type: 'json',
@@ -33,6 +34,7 @@ Ext.define('MONITOR.model.Alarme', {
 	
     hasOne: [
          {model: 'MONITOR.model.TipoAlarme', foreignKey: 'id', associationKey: 'tipo', getterName: "getTipoAlarme"  },
-         {model: 'MONITOR.model.No', foreignKey: 'id', associationKey: 'no', getterName: "getNo"  }
+         {model: 'MONITOR.model.No', foreignKey: 'id', associationKey: 'no', getterName: "getNo"  },
+         {model: 'MONITOR.model.Solucao', foreignKey: 'solucao.id', associationKey: 'solucao', getterName: "getSolucao"}
     ]
 });

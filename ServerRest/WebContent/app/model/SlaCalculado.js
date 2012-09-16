@@ -9,15 +9,16 @@ Ext.define('MONITOR.model.SlaCalculado', {
         {name:'tempoTotal', type:'int'},
         {name:'tempoIndisponivel', type:'int'},
         {name:'tempoJanela', type:'int'},
-        {name:'nomeNo', type: 'string', mapping:'no.nome'},
-        {name:'meta', type: 'float', mapping:'sla.meta'},
+        {name:'nomeNo', type: 'string', mapping:'no.nome', persist:false},
+        {name:'meta', type: 'float', mapping:'sla.meta', persist: false},
     ],
     
     proxy: {
 		type: 'rest',
 		url: 'rest/slaCalculado/',
         reader: {
-            type: 'json'
+            type: 'json',
+            useSimpleAccessors: true
         },
 		writer: {
 			type: 'json',

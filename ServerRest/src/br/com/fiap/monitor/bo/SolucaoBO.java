@@ -87,4 +87,34 @@ public class SolucaoBO {
 		
 	}
 	
+	public ReturnTO getSolucaoId(Long id){
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		ReturnTO retorno = new ReturnTO();
+		retorno.setSuccess(false);
+		
+		try{
+			
+			Solucao solucao = (Solucao) this.genericDAO.getById(Solucao.class, id);
+			
+			t.commit();
+			
+			retorno.setSuccess(true);
+			retorno.setObj(solucao);
+			
+			return retorno;
+			
+			
+		}catch(Exception ex){
+			
+			retorno.setSuccess(false);
+			retorno.setMessage(ex.getMessage());
+			t.rollback();
+		}
+		
+		return retorno;
+		
+	}
+	
 }

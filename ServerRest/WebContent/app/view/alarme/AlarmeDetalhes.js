@@ -6,7 +6,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	type: 'hbox',
     	align: 'stretchmax',
     },
-    title: 'Detalhes do Chamado',
+    title: 'Detalhes do Alerta',
     autoShow: true,
     modal: true,
 
@@ -72,7 +72,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	            		  }else if(val=="LIDO"){
     	            			  return "Lido";
     	            		  }else if(val=="RESOLVIDO"){
-    	            			  return "Não Lido";
+    	            			  return "Resolvido";
     	            		  }
     	            	  }
     	            

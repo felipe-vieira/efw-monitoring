@@ -11,6 +11,7 @@
 		
 		<many-to-one name="no" not-null="true" lazy="false"/>
 		<many-to-one name="tipo" not-null="true" lazy="false"/>
+		<many-to-one name="solucao" lazy="false"/>
 	
 		<property name="status">
 		   <type name="org.hibernate.type.EnumType">
@@ -28,7 +29,7 @@
 		<property name="valor"/>
 		<property name="valorLimite"/>
 		<property name="parametro"/>
-		<many-to-one name="solucao"/>
+		
 
 	</class> 
 </hibernate-mapping>
