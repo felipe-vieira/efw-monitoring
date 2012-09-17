@@ -32,7 +32,14 @@
 		   <type name="org.hibernate.type.EnumType">
 		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.SubTipoNo</param>
 		   </type>
-		</property>		
-				
+		</property>
+		
+		
+	 	<property name= "avaliacao"
+	 		    formula="( SELECT SUM(a.avaliacao) FROM  avaliacao_solucao a
+                		   WHERE a.solucao = id )"
+        />
+			
+		
 	</class> 
 </hibernate-mapping>

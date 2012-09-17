@@ -3,7 +3,8 @@ Ext.define('MONITOR.model.Solucao', {
     fields: [
         {name: 'id',	type: 'int'},
         {name: 'titulo',	type: 'string'},
-        {name: 'descricao',	type: 'string'}
+        {name: 'descricao',	type: 'string'},
+        {name: 'avaliacao',	type: 'int'},
     ],
     
     proxy: {

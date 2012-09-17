@@ -3,6 +3,7 @@ package br.com.fiap.monitor.rest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -53,7 +54,8 @@ public class ServidorRest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ReturnTO saveServidor(Servidor servidor, @QueryParam("thresholdId") Integer thresholdId, @QueryParam("slaId") Long slaId){
+	public ReturnTO saveServidor(Servidor servidor, @QueryParam("thresholdId") @DefaultValue("0") Integer thresholdId, 
+				@QueryParam("slaId") @DefaultValue("0") Long slaId){
 		ServidorBO bo = new ServidorBO();
 		return bo.saveServidor(servidor,thresholdId,slaId);		
 	}

@@ -24,6 +24,7 @@ public class Solucao implements Serializable{
 	private No no;	
 	private TipoNo tipo;
 	private SubTipoNo subTipo;
+	private Long avaliacao;
 	
 	public Long getId() {
 		return id;
@@ -78,6 +79,12 @@ public class Solucao implements Serializable{
 	}
 	public void setSubTipo(SubTipoNo subTipo) {
 		this.subTipo = subTipo;
+	}
+	public Long getAvaliacao() {
+		return avaliacao;
+	}
+	public void setAvaliacao(Long avaliacao) {
+		this.avaliacao = avaliacao;
 	}
 	
 	@Override

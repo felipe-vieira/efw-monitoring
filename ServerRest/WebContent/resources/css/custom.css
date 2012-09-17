@@ -36,3 +36,19 @@ h1{
 	background-color: #FFB3B3;
 }
 
+.positiva .avaliacao{
+	color: #068000;
+}
+
+.avaliacao .neutra{
+	color: #000000;
+}
+
+.negativa .avaliacao{
+	color: #FF0000;
+}
+
+.readOnlyClass:{
+	opacity: 1
+}
+

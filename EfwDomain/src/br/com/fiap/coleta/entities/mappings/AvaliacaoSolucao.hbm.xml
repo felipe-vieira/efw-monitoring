@@ -11,11 +11,7 @@
 		<many-to-one name="usuario"/>
 		<many-to-one name="solucao"/>
 		
-		<property name="tipo">
-		   <type name="org.hibernate.type.EnumType">
-		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.TipoAvaliacao</param>
-		   </type>
-		</property>
+		<property name="avaliacao"/>
 
 	</class> 
 </hibernate-mapping>

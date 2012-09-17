@@ -11,7 +11,7 @@ public class AvaliacaoSolucao implements Serializable{
 	private Long id;
 	private Usuario usuario;
 	private Solucao solucao;
-	private TipoAvaliacao tipo;
+	private Integer avaliacao;
 	
 	public Long getId() {
 		return id;
@@ -31,14 +31,11 @@ public class AvaliacaoSolucao implements Serializable{
 	public void setSolucao(Solucao solucao) {
 		this.solucao = solucao;
 	}
-	public TipoAvaliacao getTipo() {
-		return tipo;
+	public Integer getAvaliacao() {
+		return avaliacao;
 	}
-	public void setTipo(TipoAvaliacao tipo) {
-		this.tipo = tipo;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public void setAvaliacao(Integer avaliacao) {
+		this.avaliacao = avaliacao;
 	}
 	@Override
 	public int hashCode() {

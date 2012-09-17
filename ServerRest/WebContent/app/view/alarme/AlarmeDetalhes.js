@@ -1,7 +1,6 @@
 Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     extend: 'Ext.window.Window',
     xtype: 'alarmesdetalhes',
-    border: false,
     layout: {
     	type: 'hbox',
     	align: 'stretchmax',
@@ -18,7 +17,7 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	    	  border: false,
     	          frame: true,
     	          width: 300,
-    	          minHeight: 400,
+    	          minHeight: 450,
     	          items: [
     	              {
     	                  xtype: 'displayfield',
@@ -81,13 +80,15 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	            	  xtype: 'checkboxfield',
                       	  inputValue: true,
                       	  uncheckedValue: false,
-                          fieldLabel: 'Solucionado',
+                          fieldLabel: 'Resolvido',
   	            	      name: 'isSolucionado'
     	              },
     	              {
     	            	  xtype: 'textfield',
     	            	  fieldLabel: 'Titulo',
     	            	  name: 'titulo',
+    	            	  maxLength: 30,
+    	            	  enforceMaxLength: true,
     	            	  labelWidth: 70,
     	            	  width: 280,
     	            	  disabled: true
@@ -96,11 +97,14 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	            	  xtype: 'textarea',
     	            	  fieldLabel: 'Solução',
     	            	  name: 'descricao',
+    	            	  maxLength: 1024,
+    	            	  enforceMaxLength: true,
     	            	  labelWidth: 70,
     	            	  width: 280,
-    	            	  rows: 8,
+    	            	  rows: 12,
     	            	  disabled: true
-    	              }
+    	              },
+    	              
     	              
     	          ],
     	          
@@ -118,9 +122,15 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	          ]
     	     },
     	     {
-    	    	  html: 'B',
+    	    	 
+    	    	  xtype: 'panel',
+	    	      id: 'panelsolucoes',
     	          width: 400,
-    	          minHeight: 400
+    	          minHeight: 450,
+    	          layout: {
+    	        	  type: 'vbox',
+    	        	  align: 'stretch'
+    	          }
     	     }
     	];
     	

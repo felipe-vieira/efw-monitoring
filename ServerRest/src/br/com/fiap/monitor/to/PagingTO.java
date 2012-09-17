@@ -15,12 +15,13 @@ import br.com.fiap.coleta.entities.JanelaSla;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.coleta.entities.SlaCalculado;
+import br.com.fiap.coleta.entities.Solucao;
 import br.com.fiap.coleta.entities.Threshold;
 import br.com.fiap.coleta.entities.Usuario;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({Alarme.class,Agendamento.class,BancoBackup.class,Threshold.class,Usuario.class,No.class,Sla.class,JanelaSla.class,SlaCalculado.class})
+@XmlSeeAlso({Alarme.class,Agendamento.class,BancoBackup.class,Threshold.class,Usuario.class,No.class,Sla.class,JanelaSla.class,SlaCalculado.class,Solucao.class})
 public class PagingTO<T> implements Serializable{
 	
 	private static final long serialVersionUID = -8979816907608844943L;
@@ -49,5 +50,6 @@ public class PagingTO<T> implements Serializable{
 	public List<T> getRecords() {
 		return records;
 	}
+	
 
 }

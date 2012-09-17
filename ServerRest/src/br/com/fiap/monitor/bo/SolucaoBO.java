@@ -1,7 +1,9 @@
 package br.com.fiap.monitor.bo;
 
 import java.util.Date;
+import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -13,6 +15,7 @@ import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.coleta.entities.enumerators.SubTipoNo;
 import br.com.fiap.coleta.entities.enumerators.TipoNo;
 import br.com.fiap.monitor.dao.GenericDAO;
+import br.com.fiap.monitor.to.PagingTO;
 import br.com.fiap.monitor.to.ReturnTO;
 
 public class SolucaoBO {
@@ -115,6 +118,60 @@ public class SolucaoBO {
 		
 		return retorno;
 		
+	}
+	
+	public List<Solucao> listaSolucoesNo(Long idNo, Integer idTipoAlarme, Integer start, Integer limit) {
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("FROM Solucao WHERE no.id = :idNo AND tipoAlarme.id = :idTipoAlarme ORDER BY avaliacao desc");
+						
+			
+			query.setLong("idNo", idNo);
+			query.setLong("idTipoAlarme", idTipoAlarme);
+			
+			query.setFirstResult(start);
+			query.setMaxResults(limit);
+			
+			List<Solucao> records = (List<Solucao>) query.list();
+			
+			t.commit();
+			
+			return records;	
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public Long contaSolucoesNo(Long idNo, Integer idTipoAlarme){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("SELECT count(*) FROM Solucao WHERE no.id = :idNo AND tipoAlarme.id = :idTipoAlarme");
+						
+			
+			query.setLong("idNo", idNo);
+			query.setInteger("idTipoAlarme", idTipoAlarme);
+			
+			Long total = (Long) query.uniqueResult();
+			
+			t.commit();
+			
+			return total;
+			
+		}catch (Exception e) {
+			t.rollback();
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }

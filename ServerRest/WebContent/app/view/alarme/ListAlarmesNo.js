@@ -1,6 +1,6 @@
 Ext.define('MONITOR.view.alarme.ListAlarmesNo' ,{
 	
-	title: 'Alarmes (Duplo click para mais detalhes)',
+	title: 'Alarmes (Duplo clique para mais detalhes)',
     extend: 'Ext.grid.Panel',
     alias: 'widget.alarmenolist',
     requires: ['MONITOR.utils.ConvertUtils','MONITOR.utils.DateUtils'],

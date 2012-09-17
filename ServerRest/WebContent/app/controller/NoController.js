@@ -763,10 +763,8 @@ Ext.define('MONITOR.controller.NoController', {
     editNo: function(button){
 		if(this.itemSelected != null){
 			
-			
 			var tipo = this.itemSelected.get('tipo');
 			var subTipo = this.itemSelected.get('subTipo');
-			
 			
 	    	if(tipo == "Servidor"){
 	    		this.editServidor(this.itemSelected);

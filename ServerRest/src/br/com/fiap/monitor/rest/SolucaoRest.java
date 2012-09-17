@@ -38,5 +38,8 @@ public class SolucaoRest {
 		
 	}
 	
-	
+	@GET
+	public ReturnTO getSolucaoSemId(){
+		return null;
+	}
 }
