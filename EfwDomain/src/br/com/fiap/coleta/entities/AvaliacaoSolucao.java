@@ -2,8 +2,14 @@ package br.com.fiap.coleta.entities;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import br.com.fiap.coleta.entities.enumerators.TipoAvaliacao;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AvaliacaoSolucao implements Serializable{
 	
 	private static final long serialVersionUID = -4447167017135143492L;
@@ -12,7 +18,14 @@ public class AvaliacaoSolucao implements Serializable{
 	private Usuario usuario;
 	private Solucao solucao;
 	private Integer avaliacao;
+	private TipoAvaliacao tipoAvaliacao;
 	
+	public TipoAvaliacao getTipoAvaliacao() {
+		return tipoAvaliacao;
+	}
+	public void setTipoAvaliacao(TipoAvaliacao tipoAvaliacao) {
+		this.tipoAvaliacao = tipoAvaliacao;
+	}
 	public Long getId() {
 		return id;
 	}

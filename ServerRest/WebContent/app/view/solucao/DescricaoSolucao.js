@@ -24,21 +24,39 @@ Ext.define('MONITOR.view.solucao.DescricaoSolucao', {
 	        id: 'toolbardescricaosolucao',
 	        items:
 	        [
-	         	'Avalie:',
-	         	
+	         	{
+	         		xtype: 'tbtext',
+	         		text: 'Selecione uma solução',
+	         		id: 'txtSelecione'
+	         	},
+	         	{
+	         		xtype: 'tbtext',
+	         		text: 'Avalie:',
+	         		id: 'txtAvalie',
+	         		hidden: true,
+	         		
+	         	}, 	
 	            {
 	        	    text: '-',
-	        	    name: 'negativar'
+	        	    action: 'negativar',
+	        	    id: 'btnNegativar',
+	        	    disabled: true,
+	        	    hidden: true
                 },
-                '',
                 {
 	        	    text: '+',
 	        	    action: 'positivar',
+	        	    id: 'btnPositivar',
+	        	    disabled: true,
+	        	    hidden: true
                 },
                 '->',
+                '-',
                 {
 	        	    text: 'Usar essa solução',
-            	    action: 'usar'
+	        	    action: 'usar',
+	        	    id: 'btnUsar',
+	        	    disabled: 'true'
                 },
 	        ]
     	}];

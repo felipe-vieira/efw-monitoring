@@ -25,12 +25,12 @@ Ext.define('MONITOR.view.solucao.ListSolucoes', {
                     '-',
                     {
     	        	    text: 'Para esse Software',
-    	        	    action: 'edit',
+    	        	    action: 'listSoftware',
                     },
                     '-',
                     {
     	        	    text: 'Para esse Tipo',
-                	    action: 'delete'
+    	        	    action: 'listTipo'
                     },
     	        ]
     	    },

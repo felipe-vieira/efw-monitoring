@@ -13,5 +13,11 @@
 		
 		<property name="avaliacao"/>
 
+		<property name="tipoAvaliacao">
+		   <type name="org.hibernate.type.EnumType">
+		       <param name="enumClass">br.com.fiap.coleta.entities.enumerators.TipoAvaliacao</param>
+		   </type>
+		</property>
+
 	</class> 
 </hibernate-mapping>

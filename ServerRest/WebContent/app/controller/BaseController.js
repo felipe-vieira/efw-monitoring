@@ -16,7 +16,8 @@ Ext.define('MONITOR.controller.BaseController', {
     ],
     models: [
         'Alarme',
-        'Solucao'
+        'Solucao',
+        'AvaliacaoSolucao'
     ],
     
     init: function() {
@@ -45,8 +46,15 @@ Ext.define('MONITOR.controller.BaseController', {
     		'listsolucoes':{
     			beforerender: this.resetRegister,
     			itemclick: this.selectItem
-    		}
+    		},
+    		    		
+    		'#toolbardescricaosolucao button[action=positivar]':{
+    			click: this.positivar
+    		},
     		
+    		'#toolbardescricaosolucao button[action=negativar]':{
+    			click: this.negativar
+    		}
     		
     		
     	});
@@ -57,10 +65,13 @@ Ext.define('MONITOR.controller.BaseController', {
     },
     
 	selectItem: function(grid, record){
+		
 		this.itemSelected = record;
 		var view = grid.up('panel').up('panel');
 		var descPanel = view.down('descricaosolucao').down('#descpanel');
+		this.changeToolbarDescricao(record);
 		descPanel.update(record.get('descricao'));
+	
 	},
 	
     
@@ -83,9 +94,6 @@ Ext.define('MONITOR.controller.BaseController', {
 		var descricao = "";
 		
 		var solucao = record.getSolucao();
-		
-		
-		
 		
 		if(solucao.get('id') != 0){
 			
@@ -217,10 +225,6 @@ Ext.define('MONITOR.controller.BaseController', {
 		var idNo  = record.get('idNo');
 		var idTipoAlarme = record.get('idTipoAlarme');
 		
-		
-		console.log(idNo);
-		console.log(idTipoAlarme);
-		
     	var storeSolucoes = Ext.create('MONITOR.store.SolucoesNo');
     	storeSolucoes.load({
     		params: {
@@ -239,7 +243,91 @@ Ext.define('MONITOR.controller.BaseController', {
         });
     	
     	return storeSolucoes;
+	},
+	
+	positivar: function(button){
+		this.avaliarSolucao(button,'POSITIVO');
+	},
+	
+	negativar: function(button){
+		this.avaliarSolucao(button,'NEGATIVO');
+	},
+		
+	avaliarSolucao: function(button,tipo){
+		
+		var win = button.up('panel').up('panel').up('window');
+		var grid = button.up('panel').up('panel').down('listsolucoes');
+		
+		win.setLoading(true);
+		
+		var model = Ext.create('MONITOR.model.AvaliacaoSolucao');
+		
+		model.set('tipoAvaliacao',tipo);
+		
+		var idUsuario = MONITOR.utils.LoginUtil.usuario.get('id');
+		var idSolucao = this.itemSelected.get('id');
+		
+		model.save({
+			
+			params:{
+				idUsuario: idUsuario,
+				idSolucao: idSolucao
+			},
+			
+			success: function(rec,op){
+				grid.getStore().reload();
+				win.setLoading(false);
+			},
+			
+			failure: function(rec,op){
+                win.setLoading(false);
+                
+				Ext.MessageBox.show({
+                    title: 'Erro',
+                    msg: op.request.scope.reader.jsonData["message"],
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+                
+			}
+			
+		});
+	},
+	
+	changeToolbarDescricao: function(record){
+		
+		var arr = Ext.ComponentQuery.query('#toolbardescricaosolucao');
+		var toolbar = arr[0];
+		
+		if(record == null){
+			
+			toolbar.down('#txtSelecione').show();
+			toolbar.down('#txtAvalie').hide();
+			
+			toolbar.down('#btnNegativar').hide();
+			toolbar.down('#btnPositivar').hide();
+			
+			toolbar.down('#btnNegativar').disable();
+			toolbar.down('#btnPositivar').disable();
+			toolbar.down('#btnUsar').disable();
+			
+		}else{
+			
+			toolbar.down('#txtSelecione').hide();
+			
+			toolbar.down('#txtAvalie').show();
+			
+			toolbar.down('#btnNegativar').show();
+			toolbar.down('#btnPositivar').show();
+			
+			toolbar.down('#btnNegativar').enable();
+			toolbar.down('#btnPositivar').enable();
+			toolbar.down('#btnUsar').enable();
+			
+		}
 	}
+	
+	
     
   
 });

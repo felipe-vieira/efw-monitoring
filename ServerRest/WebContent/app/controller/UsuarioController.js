@@ -134,10 +134,7 @@ Ext.define('MONITOR.controller.UsuarioController', {
         			}
         		}
         	);
-        	
-        	
         }
-        
 	},
 	
   
