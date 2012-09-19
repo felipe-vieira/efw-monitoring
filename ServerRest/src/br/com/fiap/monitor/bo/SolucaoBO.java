@@ -120,7 +120,7 @@ public class SolucaoBO {
 		
 	}
 	
-	public List<Solucao> listaSolucoesNo(Long idNo, Integer idTipoAlarme, Integer start, Integer limit) {
+	public List<Solucao> listaSolucoesNo(Integer idNo, Integer idTipoAlarme, Integer start, Integer limit) {
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -130,7 +130,7 @@ public class SolucaoBO {
 						
 			
 			query.setLong("idNo", idNo);
-			query.setLong("idTipoAlarme", idTipoAlarme);
+			query.setInteger("idTipoAlarme", idTipoAlarme);
 			
 			query.setFirstResult(start);
 			query.setMaxResults(limit);
@@ -149,7 +149,7 @@ public class SolucaoBO {
 		
 	}
 	
-	public Long contaSolucoesNo(Long idNo, Integer idTipoAlarme){
+	public Long contaSolucoesNo(Integer idNo, Integer idTipoAlarme){
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -158,7 +158,7 @@ public class SolucaoBO {
 			Query query = session.createQuery("SELECT count(*) FROM Solucao WHERE no.id = :idNo AND tipoAlarme.id = :idTipoAlarme");
 						
 			
-			query.setLong("idNo", idNo);
+			query.setInteger("idNo", idNo);
 			query.setInteger("idTipoAlarme", idTipoAlarme);
 			
 			Long total = (Long) query.uniqueResult();
@@ -174,7 +174,7 @@ public class SolucaoBO {
 		}
 	}
 
-	public List<Solucao> listaSolucoesSoftware(Long idNo, Integer idTipoAlarme, Integer start, Integer limit) {
+	public List<Solucao> listaSolucoesSoftware(Integer idNo, Integer idTipoAlarme, Integer start, Integer limit) {
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -186,7 +186,7 @@ public class SolucaoBO {
 			No no = (No) session.get(No.class, idNo);
 			
 			query.setParameter("subTipo", this.noBO.verificaSubTipoNo(no));
-			query.setLong("idTipoAlarme", idTipoAlarme);
+			query.setInteger("idTipoAlarme", idTipoAlarme);
 			
 			query.setFirstResult(start);
 			query.setMaxResults(limit);
@@ -205,7 +205,7 @@ public class SolucaoBO {
 		
 	}
 	
-	public Long contaSolucoesSoftware(Long idNo, Integer idTipoAlarme){
+	public Long contaSolucoesSoftware(Integer idNo, Integer idTipoAlarme){
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -232,7 +232,7 @@ public class SolucaoBO {
 		}
 	}
 	
-	public List<Solucao> listaSolucoesTipo(Long idNo, Integer idTipoAlarme, Integer start, Integer limit) {
+	public List<Solucao> listaSolucoesTipo(Integer idNo, Integer idTipoAlarme, Integer start, Integer limit) {
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
@@ -243,7 +243,7 @@ public class SolucaoBO {
 			No no = (No) session.get(No.class, idNo);
 			
 			query.setParameter("tipo", this.noBO.verificaTipoNo(no));
-			query.setLong("idTipoAlarme", idTipoAlarme);
+			query.setInteger("idTipoAlarme", idTipoAlarme);
 			
 			query.setFirstResult(start);
 			query.setMaxResults(limit);
@@ -262,7 +262,7 @@ public class SolucaoBO {
 		
 	}
 	
-	public Long contaSolucoesTipo(Long idNo, Integer idTipoAlarme){
+	public Long contaSolucoesTipo(Integer idNo, Integer idTipoAlarme){
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();

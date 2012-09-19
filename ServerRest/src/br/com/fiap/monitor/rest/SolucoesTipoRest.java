@@ -17,7 +17,7 @@ public class SolucoesTipoRest {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public PagingTO<Solucao> listaSolucoesNo(@QueryParam("idNo") Long idNo, @QueryParam("idTipoAlarme") Integer idTipoAlarme,
+	public PagingTO<Solucao> listaSolucoesNo(@QueryParam("idNo") Integer idNo, @QueryParam("idTipoAlarme") Integer idTipoAlarme,
 			@QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
 		
 		PagingTO<Solucao> paging = new PagingTO<Solucao>();

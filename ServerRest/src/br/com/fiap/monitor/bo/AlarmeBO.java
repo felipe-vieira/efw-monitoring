@@ -158,6 +158,10 @@ public class AlarmeBO {
 	}
 	
 	public ReturnTO updateAlarme(Long id, Alarme alarme){
+		return this.updateAlarme(id, alarme,null);
+	}
+	
+	public ReturnTO updateAlarme(Long id, Alarme alarme, Long idSolucao){
 		Session session = dao.getSession();
 		Transaction t = session.beginTransaction();
 		
@@ -174,6 +178,17 @@ public class AlarmeBO {
 			if(alarme.getStatus() != null && !alarme.getStatus().equals(StatusAlarme.NAO_LIDO)){
 				original.setStatus(alarme.getStatus());
 				dirty = true;
+			}
+			
+			
+			if(idSolucao != null && idSolucao != 0l){
+				Solucao solucao = (Solucao) this.dao.getById(Solucao.class, idSolucao);
+				
+				if(solucao != null){
+					original.setSolucao(solucao);
+					dirty = true;
+				}
+				
 			}
 			
 			if(dirty){

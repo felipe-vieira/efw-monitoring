@@ -27,7 +27,8 @@ Ext.define('MONITOR.controller.BaseController', {
     	Ext.apply(this,{
     		itemSelected: null,
     		avaliacaoSelected: null,
-    		alarmeSelected: null
+    		alarmeSelected: null,
+    		solucaoUsada: null,
     	});
     	
     	this.control({
@@ -74,6 +75,10 @@ Ext.define('MONITOR.controller.BaseController', {
     		
     		'#toolbardescricaosolucao button[action=desfazer]':{
     			click: this.desfazerAvaliacao
+    		},
+    		
+    		'#toolbardescricaosolucao button[action=usar]':{
+    			click: this.usarSolucao
     		}
     		
     	});
@@ -81,6 +86,8 @@ Ext.define('MONITOR.controller.BaseController', {
     
     resetRegister: function(){
     	this.itemSelected = null;
+		this.avaliacaoSelected =  null;
+		this.solucaoUsada = null;
     },
     
 	selectItem: function(grid, record){
@@ -104,6 +111,7 @@ Ext.define('MONITOR.controller.BaseController', {
     	var params = record.get('parametro').split(';');
 
     	this.alarmeSelected = record;
+    	this.solucaoUsada = null;
     	
 		for(var i=0 ; i<params.length ; i++){
 			var atual = params[i];
@@ -162,6 +170,19 @@ Ext.define('MONITOR.controller.BaseController', {
     	
     },
     
+    usarSolucao: function(button){
+    	var form = button.up('panel').up('panel').up('alarmesdetalhes').down('form');
+    	this.solucaoUsada = this.itemSelected;
+    	
+    	form.getForm().setValues({
+    		titulo: this.solucaoUsada.get('titulo'),
+    		descricao: this.solucaoUsada.get('descricao')
+    	});
+    	
+    	
+    	
+    },
+    
 	saveOrUpdate: function(button){
 	    var win    = button.up('window');
         var form   = win.down('form');
@@ -185,17 +206,20 @@ Ext.define('MONITOR.controller.BaseController', {
     	
 		record.save(
     		{	
+    			scope: this,
     			success: function(rec,op){
     				
     				if(record.get('status') == "RESOLVIDO"){
 	    		    	solucao.save({
 	    		    		params: {
 	    		    			'idAlarme': record.get('id'),
-	    		    			'idUsuario': MONITOR.utils.LoginUtil.usuario.get('id')
+	    		    			'idUsuario': MONITOR.utils.LoginUtil.usuario.get('id'),
+	    		    			'idSolucao': this.solucaoUsada
 	    		    		},
 	    		    		success: function(rec,op){
 	    		    			win.setLoading(false);
 	    		    			win.close();
+	    		    			this.solucaoUsada = null;
 	    		    	    },
 	    					failure: function(rec,op){
 	    		                Ext.MessageBox.show({
@@ -246,7 +270,7 @@ Ext.define('MONITOR.controller.BaseController', {
 		
 		var grid = button.up('listsolucoes');
 		var store = this.loadSolucoesNo();
-		grid.setStore(store);
+		grid.reconfigure(store);
 
 	},
 
@@ -254,7 +278,7 @@ Ext.define('MONITOR.controller.BaseController', {
 		
 		var grid = button.up('listsolucoes');
 		var store = this.loadSolucoesSoftware();
-		grid.setStore(store);
+		grid.reconfigure(store);
 
 	},
 	
@@ -262,14 +286,14 @@ Ext.define('MONITOR.controller.BaseController', {
 		
 		var grid = button.up('listsolucoes');
 		var store = this.loadSolucoesTipo();
-		grid.setStore(store);
+		grid.reconfigure(store);
 
 	},
 	
 	loadSolucoesNo: function(record){
 		
-		var idNo  = record.get('idNo');
-		var idTipoAlarme = record.get('idTipoAlarme');
+		var idNo  = this.alarmeSelected.get('idNo');
+		var idTipoAlarme = this.alarmeSelected.get('idTipoAlarme');
 		
     	var storeSolucoes = Ext.create('MONITOR.store.SolucoesNo');
     	storeSolucoes.load({
@@ -293,8 +317,8 @@ Ext.define('MONITOR.controller.BaseController', {
 	
 	loadSolucoesSoftware: function(record){
 		
-		var idNo  = record.get('idNo');
-		var idTipoAlarme = record.get('idTipoAlarme');
+		var idNo  = this.alarmeSelected.get('idNo');
+		var idTipoAlarme = this.alarmeSelected.get('idTipoAlarme');
 		
     	var storeSolucoes = Ext.create('MONITOR.store.SolucoesSoftware');
     	storeSolucoes.load({
@@ -318,8 +342,8 @@ Ext.define('MONITOR.controller.BaseController', {
 	
 	loadSolucoesTipo: function(record){
 		
-		var idNo  = record.get('idNo');
-		var idTipoAlarme = record.get('idTipoAlarme');
+		var idNo  = this.alarmeSelected.get('idNo');
+		var idTipoAlarme = this.alarmeSelected.get('idTipoAlarme');
 		
     	var storeSolucoes = Ext.create('MONITOR.store.SolucoesTipo');
     	storeSolucoes.load({
@@ -464,6 +488,7 @@ Ext.define('MONITOR.controller.BaseController', {
 		toolbar.down('#btnPositivar').disable();
 		toolbar.down('#btnDesfazer').disable();
 		
+		
 		toolbar.down('#btnUsar').disable();
 	},
 	
@@ -481,7 +506,12 @@ Ext.define('MONITOR.controller.BaseController', {
 		toolbar.down('#btnPositivar').enable();
 		toolbar.down('#btnDesfazer').disable();
 		
-		toolbar.down('#btnUsar').enable();
+		if(this.alarmeSelected.get('status') == "RESOLVIDO"){
+			toolbar.down('#btnUsar').disable();
+		}else{
+			toolbar.down('#btnUsar').enable();
+		}
+		
 	},
 	
 	renderAvaliacaoAvaliada: function(toolbar,avaliacao){
@@ -505,7 +535,11 @@ Ext.define('MONITOR.controller.BaseController', {
 		toolbar.down('#btnPositivar').disable();
 		toolbar.down('#btnDesfazer').enable();
 		
-		toolbar.down('#btnUsar').enable();
+		if(this.alarmeSelected.get('status') == "RESOLVIDO"){
+			toolbar.down('#btnUsar').disable();
+		}else{
+			toolbar.down('#btnUsar').enable();
+		}
 	}
 	
 });

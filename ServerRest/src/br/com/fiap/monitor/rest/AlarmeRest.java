@@ -6,6 +6,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 
@@ -20,9 +21,9 @@ public class AlarmeRest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ReturnTO updateAlarme(@PathParam("id") Long id, Alarme alarme){
+	public ReturnTO updateAlarme(@PathParam("id") Long id, Alarme alarme, @QueryParam("idSolucao") Long idSolucao){
 		AlarmeBO alarmeBO = new AlarmeBO();
-		return alarmeBO.updateAlarme(id,alarme);
+		return alarmeBO.updateAlarme(id,alarme,idSolucao);
 	}
 	
 	
