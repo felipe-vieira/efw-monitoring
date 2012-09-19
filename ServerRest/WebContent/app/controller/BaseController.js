@@ -12,7 +12,9 @@ Ext.define('MONITOR.controller.BaseController', {
         'inicio.ListAlarmesNaoLidos',
     ],
     stores: [
-        'SolucoesNo'
+        'SolucoesNo',
+        'SolucoesSoftware',
+        'SolucoesTipo'
     ],
     models: [
         'Alarme',
@@ -23,7 +25,9 @@ Ext.define('MONITOR.controller.BaseController', {
     init: function() {
     	
     	Ext.apply(this,{
-    		itemSelected: null
+    		itemSelected: null,
+    		avaliacaoSelected: null,
+    		alarmeSelected: null
     	});
     	
     	this.control({
@@ -47,6 +51,18 @@ Ext.define('MONITOR.controller.BaseController', {
     			beforerender: this.resetRegister,
     			itemclick: this.selectItem
     		},
+    		
+    		'#toolbarsolucoes button[action=listNo]':{
+    			click: this.loadGridSolucoesNo
+    		},
+    		
+    		'#toolbarsolucoes button[action=listSoftware]':{
+    			click: this.loadGridSolucoesSoftware
+    		},
+    		
+    		'#toolbarsolucoes button[action=listTipo]':{
+    			click: this.loadGridSolucoesTipo
+    		},
     		    		
     		'#toolbardescricaosolucao button[action=positivar]':{
     			click: this.positivar
@@ -54,8 +70,11 @@ Ext.define('MONITOR.controller.BaseController', {
     		
     		'#toolbardescricaosolucao button[action=negativar]':{
     			click: this.negativar
-    		}
+    		},
     		
+    		'#toolbardescricaosolucao button[action=desfazer]':{
+    			click: this.desfazerAvaliacao
+    		}
     		
     	});
     },
@@ -84,6 +103,8 @@ Ext.define('MONITOR.controller.BaseController', {
     	var mensagem = record.get('mensagem');
     	var params = record.get('parametro').split(';');
 
+    	this.alarmeSelected = record;
+    	
 		for(var i=0 ; i<params.length ; i++){
 			var atual = params[i];
 			mensagem = mensagem.replace("?",atual);
@@ -220,6 +241,31 @@ Ext.define('MONITOR.controller.BaseController', {
 		}
 	},
 	
+	
+	loadGridSolucoesNo: function(button){
+		
+		var grid = button.up('listsolucoes');
+		var store = this.loadSolucoesNo();
+		grid.setStore(store);
+
+	},
+
+	loadGridSolucoesSoftware: function(button){
+		
+		var grid = button.up('listsolucoes');
+		var store = this.loadSolucoesSoftware();
+		grid.setStore(store);
+
+	},
+	
+	loadGridSolucoesTipo: function(button){
+		
+		var grid = button.up('listsolucoes');
+		var store = this.loadSolucoesTipo();
+		grid.setStore(store);
+
+	},
+	
 	loadSolucoesNo: function(record){
 		
 		var idNo  = record.get('idNo');
@@ -245,6 +291,58 @@ Ext.define('MONITOR.controller.BaseController', {
     	return storeSolucoes;
 	},
 	
+	loadSolucoesSoftware: function(record){
+		
+		var idNo  = record.get('idNo');
+		var idTipoAlarme = record.get('idTipoAlarme');
+		
+    	var storeSolucoes = Ext.create('MONITOR.store.SolucoesSoftware');
+    	storeSolucoes.load({
+    		params: {
+    			idNo: idNo,
+    			idTipoAlarme: idTipoAlarme,
+    			start: 0,
+    			limit: 7
+    		}    		
+    	});
+    	
+    	storeSolucoes.on('beforeload',function(store, operation,eOpts){
+            operation.params={
+        		idNo: idNo,
+        		idTipoAlarme: idTipoAlarme
+            };
+        });
+    	
+    	return storeSolucoes;
+	},
+	
+	loadSolucoesTipo: function(record){
+		
+		var idNo  = record.get('idNo');
+		var idTipoAlarme = record.get('idTipoAlarme');
+		
+    	var storeSolucoes = Ext.create('MONITOR.store.SolucoesTipo');
+    	storeSolucoes.load({
+    		params: {
+    			idNo: idNo,
+    			idTipoAlarme: idTipoAlarme,
+    			start: 0,
+    			limit: 7
+    		}    		
+    	});
+    	
+    	storeSolucoes.on('beforeload',function(store, operation,eOpts){
+            operation.params={
+        		idNo: idNo,
+        		idTipoAlarme: idTipoAlarme
+            };
+        });
+    	
+    	return storeSolucoes;
+	},
+	
+	
+	
 	positivar: function(button){
 		this.avaliarSolucao(button,'POSITIVO');
 	},
@@ -269,6 +367,8 @@ Ext.define('MONITOR.controller.BaseController', {
 		
 		model.save({
 			
+			scope: this,
+			
 			params:{
 				idUsuario: idUsuario,
 				idSolucao: idSolucao
@@ -276,7 +376,9 @@ Ext.define('MONITOR.controller.BaseController', {
 			
 			success: function(rec,op){
 				grid.getStore().reload();
+				this.changeToolbarDescricao(this.itemSelected);
 				win.setLoading(false);
+				
 			},
 			
 			failure: function(rec,op){
@@ -294,40 +396,116 @@ Ext.define('MONITOR.controller.BaseController', {
 		});
 	},
 	
+	
+	desfazerAvaliacao: function(button){
+		var grid = button.up('panel').up('panel').down('listsolucoes');
+		
+		
+		this.avalicaoSelected.destroy({
+			scope:this,
+			
+			success: function(rec,op){
+				this.avalicaoSelected = null;
+				this.changeToolbarDescricao(this.itemSelected);
+				grid.getStore().reload();
+			}
+		});
+		
+	},
+	
 	changeToolbarDescricao: function(record){
 		
 		var arr = Ext.ComponentQuery.query('#toolbardescricaosolucao');
 		var toolbar = arr[0];
 		
 		if(record == null){
-			
-			toolbar.down('#txtSelecione').show();
-			toolbar.down('#txtAvalie').hide();
-			
-			toolbar.down('#btnNegativar').hide();
-			toolbar.down('#btnPositivar').hide();
-			
-			toolbar.down('#btnNegativar').disable();
-			toolbar.down('#btnPositivar').disable();
-			toolbar.down('#btnUsar').disable();
+			this.renderAvaliacaoNull(toolbar);
+			this.avalicaoSelected = null;
 			
 		}else{
 			
-			toolbar.down('#txtSelecione').hide();
+			var idUsuario = MONITOR.utils.LoginUtil.usuario.get('id');
+			var idSolucao = record.get('id');
 			
-			toolbar.down('#txtAvalie').show();
-			
-			toolbar.down('#btnNegativar').show();
-			toolbar.down('#btnPositivar').show();
-			
-			toolbar.down('#btnNegativar').enable();
-			toolbar.down('#btnPositivar').enable();
-			toolbar.down('#btnUsar').enable();
-			
+			MONITOR.model.AvaliacaoSolucao.load(0,{
+				scope: this,
+				params:{
+					idUsuario: idUsuario,
+					idSolucao: idSolucao
+				},
+				
+				success: function(rec,op){
+					
+					console.log(rec);
+					if(rec == null || rec.get('avaliacao') == 0){
+						this.renderAvaliacaoNaoAvaliada(toolbar);
+						this.avalicaoSelected = null;
+					}else{
+						this.avalicaoSelected = rec;
+						this.renderAvaliacaoAvaliada(toolbar,rec);
+					}
+				}
+				
+			});
 		}
+	},
+	
+	renderAvaliacaoNull: function(toolbar){
+		toolbar.down('#txtSelecione').show();
+		toolbar.down('#txtAvalie').hide();
+		toolbar.down('#txtAvaliadaPositiva').hide();
+		toolbar.down('#txtAvaliadaNegativa').hide();
+		
+		toolbar.down('#btnNegativar').hide();
+		toolbar.down('#btnPositivar').hide();
+		toolbar.down('#btnDesfazer').hide();
+		
+		toolbar.down('#btnNegativar').disable();
+		toolbar.down('#btnPositivar').disable();
+		toolbar.down('#btnDesfazer').disable();
+		
+		toolbar.down('#btnUsar').disable();
+	},
+	
+	renderAvaliacaoNaoAvaliada: function(toolbar){
+		toolbar.down('#txtSelecione').hide();
+		toolbar.down('#txtAvalie').show();
+		toolbar.down('#txtAvaliadaPositiva').hide();
+		toolbar.down('#txtAvaliadaNegativa').hide();
+		
+		toolbar.down('#btnNegativar').show();
+		toolbar.down('#btnPositivar').show();
+		toolbar.down('#btnDesfazer').hide();
+			
+		toolbar.down('#btnNegativar').enable();
+		toolbar.down('#btnPositivar').enable();
+		toolbar.down('#btnDesfazer').disable();
+		
+		toolbar.down('#btnUsar').enable();
+	},
+	
+	renderAvaliacaoAvaliada: function(toolbar,avaliacao){
+		
+		toolbar.down('#txtSelecione').hide();
+		toolbar.down('#txtAvalie').hide();
+		
+		if(avaliacao.get('tipoAvaliacao') == "POSITIVO"){
+			toolbar.down('#txtAvaliadaPositiva').show();
+			toolbar.down('#txtAvaliadaNegativa').hide();
+		}else{
+			toolbar.down('#txtAvaliadaPositiva').hide();
+			toolbar.down('#txtAvaliadaNegativa').show();	
+		}
+		
+		toolbar.down('#btnNegativar').hide();
+		toolbar.down('#btnPositivar').hide();
+		toolbar.down('#btnDesfazer').show();
+			
+		toolbar.down('#btnNegativar').disable();
+		toolbar.down('#btnPositivar').disable();
+		toolbar.down('#btnDesfazer').enable();
+		
+		toolbar.down('#btnUsar').enable();
 	}
 	
-	
-    
-  
 });

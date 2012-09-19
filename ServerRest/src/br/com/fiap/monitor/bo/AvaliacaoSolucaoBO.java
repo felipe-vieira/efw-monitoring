@@ -1,5 +1,6 @@
 package br.com.fiap.monitor.bo;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -64,6 +65,58 @@ public class AvaliacaoSolucaoBO {
 	}
 	
 	
+	public AvaliacaoSolucao pegaAvaliacaoUsuario(Long idUsuario, Long idSolucao){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM AvaliacaoSolucao where usuario.id = :idUsuario and solucao.id = :idSolucao");
+			query.setLong("idUsuario", idUsuario);
+			query.setLong("idSolucao", idSolucao);
+				
+			AvaliacaoSolucao avaliacao = (AvaliacaoSolucao) query.uniqueResult();
+			t.commit();
+			return avaliacao;
+			
+		}catch(Exception ex){
+			
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+
+	public ReturnTO deletaAvaliacao(Long id){
+
+		Session session =  this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		ReturnTO retorno = new ReturnTO();
+		retorno.setSuccess(false);
+		
+		try{
+
+			AvaliacaoSolucao avaliacao = (AvaliacaoSolucao) session.get(AvaliacaoSolucao.class, id);
+			if(avaliacao != null){
+				session.delete(avaliacao);
+			}
+			
+			t.commit();
+			retorno.setSuccess(true);
+			
+		}catch(Exception ex){
+
+			ex.printStackTrace();
+			retorno.setMessage(ex.getMessage());
+			t.rollback();
+		}
+
+		return retorno;
+		
+	}
 	
 	
 	

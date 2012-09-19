@@ -173,5 +173,120 @@ public class SolucaoBO {
 			return null;
 		}
 	}
+
+	public List<Solucao> listaSolucoesSoftware(Long idNo, Integer idTipoAlarme, Integer start, Integer limit) {
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("FROM Solucao WHERE subTipo = :subTipo AND tipoAlarme.id = :idTipoAlarme ORDER BY avaliacao desc");
+						
+			
+			No no = (No) session.get(No.class, idNo);
+			
+			query.setParameter("subTipo", this.noBO.verificaSubTipoNo(no));
+			query.setLong("idTipoAlarme", idTipoAlarme);
+			
+			query.setFirstResult(start);
+			query.setMaxResults(limit);
+			
+			List<Solucao> records = (List<Solucao>) query.list();
+			
+			t.commit();
+			
+			return records;	
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public Long contaSolucoesSoftware(Long idNo, Integer idTipoAlarme){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("SELECT count(*) FROM Solucao WHERE subTipo = :subTipo AND tipoAlarme.id = :idTipoAlarme");
+						
+			
+			No no = (No) session.get(No.class, idNo);
+			
+			query.setParameter("subTipo", this.noBO.verificaSubTipoNo(no));
+			query.setInteger("idTipoAlarme", idTipoAlarme);
+			
+			Long total = (Long) query.uniqueResult();
+			
+			t.commit();
+			
+			return total;
+			
+		}catch (Exception e) {
+			t.rollback();
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Solucao> listaSolucoesTipo(Long idNo, Integer idTipoAlarme, Integer start, Integer limit) {
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("FROM Solucao WHERE tipo = :tipo AND tipoAlarme.id = :idTipoAlarme ORDER BY avaliacao desc");
+			
+			No no = (No) session.get(No.class, idNo);
+			
+			query.setParameter("tipo", this.noBO.verificaTipoNo(no));
+			query.setLong("idTipoAlarme", idTipoAlarme);
+			
+			query.setFirstResult(start);
+			query.setMaxResults(limit);
+			
+			List<Solucao> records = (List<Solucao>) query.list();
+			
+			t.commit();
+			
+			return records;	
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public Long contaSolucoesTipo(Long idNo, Integer idTipoAlarme){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			Query query = session.createQuery("SELECT count(*) FROM Solucao WHERE tipo = :tipo AND tipoAlarme.id = :idTipoAlarme");
+						
+			
+			No no = (No) session.get(No.class, idNo);
+			
+			query.setParameter("tipo", this.noBO.verificaTipoNo(no));
+			query.setInteger("idTipoAlarme", idTipoAlarme);
+			
+			Long total = (Long) query.uniqueResult();
+			
+			t.commit();
+			
+			return total;
+			
+		}catch (Exception e) {
+			t.rollback();
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 }

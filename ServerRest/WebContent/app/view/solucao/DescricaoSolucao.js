@@ -35,7 +35,28 @@ Ext.define('MONITOR.view.solucao.DescricaoSolucao', {
 	         		id: 'txtAvalie',
 	         		hidden: true,
 	         		
-	         	}, 	
+	         	},
+	         	{
+	         		xtype: 'tbtext',
+	         		text: 'Solução avaliada como positiva.',
+	         		id: 'txtAvaliadaPositiva',
+	         		hidden: true,
+	         		
+	         	},
+	         	{
+	         		xtype: 'tbtext',
+	         		text: 'Solução avaliada como Negativa.',
+	         		id: 'txtAvaliadaNegativa',
+	         		hidden: true,
+	         		
+	         	},
+	         	{
+	        	    text: '(Desfazer)',
+	        	    action: 'desfazer',
+	        	    id: 'btnDesfazer',
+	        	    disabled: true,
+	        	    hidden: true
+                },
 	            {
 	        	    text: '-',
 	        	    action: 'negativar',

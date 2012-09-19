@@ -8,8 +8,8 @@
 			<generator class="increment"/>
     	</id>
 		
-		<many-to-one name="usuario"/>
-		<many-to-one name="solucao"/>
+		<many-to-one name="usuario" lazy="false"/>
+		<many-to-one name="solucao" lazy="false"/>
 		
 		<property name="avaliacao"/>
 
