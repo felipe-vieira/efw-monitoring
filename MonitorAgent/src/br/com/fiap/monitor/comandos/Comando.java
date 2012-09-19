@@ -70,36 +70,54 @@ public class Comando {
 					}
 				}else if(arg[1].equals("mssql.memory")){
 					//retorno = new SqlServer().getMemory();
+					sql.connect();
 					retorno = sql.getMemory();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.config.memory")){
 					//retorno = new SqlServer().getConfigMemory();
+					sql.connect();
 					retorno = sql.getConfigMemory();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.config.version")){
 					//retorno = new SqlServer().getConfigVersion();
+					sql.connect();
 					retorno = sql.getConfigVersion();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.config.drive")){
 					//retorno = new SqlServer().getConfigDrive();
+					sql.connect();
 					retorno = sql.getConfigDrive();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.config.files")){
 					//retorno = new SqlServer().getConfigFiles();
+					sql.connect();
 					retorno = sql.getConfigFiles();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.config.collation")){
 					if(arg.length > 2){
 						//retorno = new SqlServer().getConfigCollation(arg[2]);
+						sql.connect();
 						retorno = sql.getConfigCollation(arg[2]);
+						sql.disconnect();
 					}
 				}else if(arg[1].equals("mssql.logspace")){
 					//retorno = new SqlServer().getLogSpace();
+					sql.connect();
 					retorno = sql.getLogSpace();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.status")){
 					if(arg.length > 2){
 						//retorno = new SqlServer().getStatus(arg[2]);
+						sql.connect();
 						retorno = sql.getStatus(arg[2]);
+						sql.disconnect();
 					}
 				}else if(arg[1].equals("mssql.config.collation")){
 					if(arg.length > 2){
 						//retorno = new SqlServer().getConfigCollation(arg[2]);
+						sql.connect();
 						retorno = sql.getConfigCollation(arg[2]);
+						sql.disconnect();
 					}
 				}else if(arg[1].equals("mssql.config.backup")){
 					Long setCount = 0l;
@@ -112,17 +130,25 @@ public class Comando {
 						}
 					}
 					//retorno = new SqlServer().getBackup(setCount);
+					sql.connect();
 					retorno = sql.getBackup(setCount);
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.config.jobs")){
 					//retorno = new SqlServer().getConfigJobs();
+					sql.connect();
 					retorno = sql.getConfigJobs();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.jobHistory")){
 					//retorno = new SqlServer().getJobHistory();
+					sql.connect();
 					retorno = sql.getJobHistory();
+					sql.disconnect();
 				}else if(arg[1].equals("mssql.status")){
 					if(arg.length > 2){
 						//retorno = new SqlServer().getConfigCollation(arg[2]);
+						sql.connect();
 						retorno = sql.getConfigCollation(arg[2]);
+						sql.disconnect();
 					}
 				}else if(arg[1].equals("ora.credentials")){
 					
@@ -135,22 +161,34 @@ public class Comando {
 					}
 				}else if(arg[1].equals("ora.config.memory")){
 					//retorno = new Oracle().getConfigMemory();
+					oracle.connect();
 					retorno = oracle.getConfigMemory();
+					oracle.disconnect();
 				}else if(arg[1].equals("ora.memory")){
 					//retorno = new Oracle().getMemory();
+					oracle.connect();
 					retorno = oracle.getMemory();
+					oracle.disconnect();
 				}else if(arg[1].equals("ora.config.version")){
 					//retorno = new Oracle().getConfigVersion();
+					oracle.connect();
 					retorno = oracle.getConfigVersion();
+					oracle.disconnect();
 				}else if(arg[1].equals("ora.status")){
 					//retorno = new Oracle().getStatus();
+					oracle.connect();
 					retorno = oracle.getStatus();
+					oracle.disconnect();
 				}else if(arg[1].equals("ora.config.collation")){
 					//retorno = new Oracle().getConfigCollation();
+					oracle.connect();
 					retorno = oracle.getConfigCollation();
+					oracle.disconnect();
 				}else if(arg[1].equals("ora.config.files")){
 					//retorno = new Oracle().getConfigFiles();
+					oracle.connect();
 					retorno = oracle.getConfigFiles();
+					oracle.disconnect();
 				}else if(arg[1].equals("ora.config.backup")){
 					Long setCount = 0l;
 					
@@ -163,11 +201,15 @@ public class Comando {
 					}
 					
 					//retorno = new Oracle().getConfigBackup(setCount);
+					oracle.connect();
 					retorno = oracle.getConfigBackup(setCount);
+					oracle.disconnect();
 					
 				}else if(arg[1].equals("ora.config.jobHistory")){
 					//retorno = new Oracle().getConfigJobHistory();
+					oracle.connect();
 					retorno = oracle.getConfigJobHistory();
+					oracle.disconnect();
 				}else if(arg[1].equals("jboss.status")){
 					retorno = app.getStatus();
 				}else if(arg[1].equals("glassfish.credentials")){

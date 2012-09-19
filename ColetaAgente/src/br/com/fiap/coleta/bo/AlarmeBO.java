@@ -24,16 +24,30 @@ import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.coleta.entities.TipoAlarme;
 import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
+import br.com.fiap.coleta.util.cgt.SendEmail;
 
 public class AlarmeBO {
 
 	private ColetaDAO coletaDAO;
 	private Map<Integer,TipoAlarme> tipos;
-
+    private SendEmail email;
 	
 	public AlarmeBO(){
 		this.coletaDAO = new ColetaDAO();
+		this.email = new SendEmail();
 		geraMapaAlarmes();
+	}
+	
+	public void enviaEmail(String[] destinatario, String remetente, String assunto, String msg, String host, String usuario, String senha, int porta){
+		this.email.setTo(destinatario);
+		this.email.setFrom(remetente);
+		this.email.setSubject(assunto);
+		this.email.setMessage(msg);
+		this.email.setHost(host);
+		this.email.setUser(usuario);
+		this.email.setPassword(senha);
+		this.email.setPort(porta);
+		this.email.send();
 	}
 	
 	public void geraMapaAlarmes(){
@@ -57,6 +71,12 @@ public class AlarmeBO {
 			alarme.setTipo(tipos.get(1));
 			alarme.setNo(no);
 			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
+			
+			String[] destinatario = new String[100];
+			destinatario[0] = "wagnerspi@gmail.com";
+			
+			this.enviaEmail(destinatario, "spam@wspi.com.br", "Teste TCC", "Teste de envio de email", "smtp.gmail.com", "spam@wspi.com.br", "123456", 110);
+			System.out.println("email enviado");
 			
 			coletaDAO.salvaColeta(alarme);
 		}

@@ -43,11 +43,19 @@ public class SqlServer {
 		this.port = port;
 	}
     
-	public SqlServer(){
+	public void connect(){
 		try{
 			this.conn = SqlServerConnectionFactory.getConnection(this.user, this.password, this.host, this.port);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	public void disconnect(){
+		try{
+			this.conn.close();
+		} catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 	
