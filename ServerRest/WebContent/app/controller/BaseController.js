@@ -44,6 +44,10 @@ Ext.define('MONITOR.controller.BaseController', {
     			click: this.saveOrUpdate
     		},
     		
+    		'alarmesdetalhes > form button[action=limparSolucao]':{
+    			click: this.limparSolucao
+    		},
+    		
     		'alarmesdetalhes > form checkboxfield':{
     			change: this.habilitaSolucao
     		},
@@ -110,6 +114,10 @@ Ext.define('MONITOR.controller.BaseController', {
     	var mensagem = record.get('mensagem');
     	var params = record.get('parametro').split(';');
 
+		var checkbox = form.getForm().findField('isSolucionado');
+		var tituloField = form.getForm().findField('titulo');
+		var descField = form.getForm().findField('descricao');
+    	
     	this.alarmeSelected = record;
     	this.solucaoUsada = null;
     	
@@ -124,17 +132,14 @@ Ext.define('MONITOR.controller.BaseController', {
 		
 		var solucao = record.getSolucao();
 		
-		if(solucao.get('id') != 0){
+		
+		if(record.get('status') == 'RESOLVIDO' && solucao != null  && solucao.get('id') != 0){
 			
 			
-			isSelecionado = true;
+			isSolucionado = true;
 			var solucao = record.getSolucao();
 			titulo = solucao.get('titulo');
 			descricao = solucao.get('descricao');
-			
-			var checkbox = form.getForm().findField('isSolucionado');
-			var tituloField = form.getForm().findField('titulo');
-			var descField = form.getForm().findField('descricao');
 			
 			checkbox.disable();
 			tituloField.enable();
@@ -142,6 +147,12 @@ Ext.define('MONITOR.controller.BaseController', {
 			tituloField.setReadOnly(true);
 			descField.setReadOnly(true);
 			
+		}else{
+			checkbox.enable;
+			tituloField.setReadOnly(false);
+			descField.setReadOnly(false);
+			tituloField.disable();
+			descField.disable();
 		}
 		
 		
@@ -171,15 +182,39 @@ Ext.define('MONITOR.controller.BaseController', {
     },
     
     usarSolucao: function(button){
-    	var form = button.up('panel').up('panel').up('alarmesdetalhes').down('form');
+    	var form = button.up('panel').up('panel').up('alarmesdetalhes').down('form').getForm();
     	this.solucaoUsada = this.itemSelected;
     	
-    	form.getForm().setValues({
+		var txtTitulo = form.findField('titulo');
+		var txtDescricao = form.findField('descricao');
+		
+    	form.setValues({
     		titulo: this.solucaoUsada.get('titulo'),
-    		descricao: this.solucaoUsada.get('descricao')
+    		descricao: this.solucaoUsada.get('descricao'),
+    		isSolucionado: true
     	});
     	
+    	txtTitulo.setReadOnly(true);
+		txtDescricao.setReadOnly(true);
     	
+    },
+    
+    limparSolucao: function(button){
+    	
+    	var form = button.up('form').getForm();
+    	this.solucaoUsada = null;
+    	
+		var txtTitulo = form.findField('titulo');
+		var txtDescricao = form.findField('descricao');
+		
+    	form.setValues({
+    		titulo: '',
+    		descricao: '',
+    		isSolucionado: false
+    	});
+    	
+    	txtTitulo.setReadOnly(false);
+		txtDescricao.setReadOnly(false);
     	
     },
     
@@ -204,17 +239,25 @@ Ext.define('MONITOR.controller.BaseController', {
     	solucao.set('titulo',values.titulo);
     	solucao.set('descricao',values.descricao);
     	
+    	var idSolucaoUsada = 0;
+    	
+    	if(this.solucaoUsada != null ){
+    		this.solucaoUsada.get('id');
+    	}
+    	
 		record.save(
     		{	
     			scope: this,
+    			params: {
+    				idSolucao: idSolucaoUsada
+    			},
     			success: function(rec,op){
     				
-    				if(record.get('status') == "RESOLVIDO"){
+    				if(record.get('status') == "RESOLVIDO" && this.solucaoUsada == null){
 	    		    	solucao.save({
 	    		    		params: {
 	    		    			'idAlarme': record.get('id'),
 	    		    			'idUsuario': MONITOR.utils.LoginUtil.usuario.get('id'),
-	    		    			'idSolucao': this.solucaoUsada
 	    		    		},
 	    		    		success: function(rec,op){
 	    		    			win.setLoading(false);

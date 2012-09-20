@@ -118,6 +118,10 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	        	      action: 'cancel',
     	        	      scope: this,
     	        	      handler: this.close
+    	              },
+    	              {
+    	        	      text: 'Limpar Solução',
+    	        	      action: 'limparSolucao',
     	              }
     	          ]
     	     },
