@@ -39,6 +39,7 @@ public class AlarmeBO {
 	}
 	
 	public void enviaEmail(String[] destinatario, String remetente, String assunto, String msg, String host, String usuario, String senha, int porta){
+		System.out.println(destinatario[0]);
 		this.email.setTo(destinatario);
 		this.email.setFrom(remetente);
 		this.email.setSubject(assunto);
@@ -72,11 +73,9 @@ public class AlarmeBO {
 			alarme.setNo(no);
 			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
 			
-			String[] destinatario = new String[100];
-			destinatario[0] = "wagnerspi@gmail.com";
+			String[] destinatario = {"wagnerspi@gmail.com", "shadow.frv@gmail.com", "edu.vladimir@gmail.com"};
 			
-			this.enviaEmail(destinatario, "spam@wspi.com.br", "Teste TCC", "Teste de envio de email", "smtp.gmail.com", "spam@wspi.com.br", "123456", 110);
-			System.out.println("email enviado");
+			this.enviaEmail(destinatario, "tcc@wspi.com.br", "Alerta TCC", "Servidor " + no.getNome() + " indisponivel", "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 			
 			coletaDAO.salvaColeta(alarme);
 		}

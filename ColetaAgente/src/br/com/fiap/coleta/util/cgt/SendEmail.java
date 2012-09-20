@@ -1,114 +1,150 @@
 package br.com.fiap.coleta.util.cgt;
 
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage; 
 
-public class SendEmail
-{
+
+public class SendEmail {
 	
-   private String[] to = null;
-   private String from = "";
-   private String subject = "";
-   private String message = "";
-   private String host = "";
-   private String user = "";
-   private String password = "";
-   private int port = 25;
+	private String[] to = null;
+   	private String from = "";
+	private String subject = "";
+	private String message = "";
+	private String host = "";
+	private String user = "";
+    private String password = "";
+    private int port = 25;
+
+	private String mailSMTPServer;
+	private int mailSMTPServerPort;
 	
-   public void send()
-   {
-      Properties properties = System.getProperties();
 
-      properties.setProperty("mail.smtp.host", this.host);
-      properties.setProperty("mail.user", this.user);
-      properties.setProperty("mail.password", this.password);
-      properties.setProperty("mail.port", "" + this.port);
+	public SendEmail() { //Para o GMAIL 
+		mailSMTPServer = this.host;
+		mailSMTPServerPort = this.port;
+	}
 
-      Session session = Session.getDefaultInstance(properties);
+	public String[] getTo() {
+		return to;
+	}
 
-      try{
-         MimeMessage message = new MimeMessage(session);
+	public void setTo(String[] to) {
+		this.to = to;
+	}
 
-         message.setFrom(new InternetAddress(from));
-    
-         for (int i=0; to.length > i; i++)
-         {
-        	 message.addRecipient(Message.RecipientType.TO,
-                     new InternetAddress(to[i]));
-         }       
+	public String getFrom() {
+		return from;
+	}
 
-         message.setSubject(this.subject);
+	public void setFrom(String from) {
+		this.from = from;
+	}
 
-         message.setText(this.message);
+	public String getSubject() {
+		return subject;
+	}
 
-         Transport.send(message);
-      }catch (MessagingException mex) {
-         mex.printStackTrace();
-      }
-   }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-public String[] getTo() {
-	return to;
-}
+	public String getMessage() {
+		return message;
+	}
 
-public void setTo(String[] to) {
-	this.to = to;
-}
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-public String getFrom() {
-	return from;
-}
+	public String getHost() {
+		return host;
+	}
 
-public void setFrom(String from) {
-	this.from = from;
-}
+	public void setHost(String host) {
+		this.host = host;
+	}
 
-public String getSubject() {
-	return subject;
-}
+	public String getUser() {
+		return user;
+	}
 
-public void setSubject(String subject) {
-	this.subject = subject;
-}
+	public void setUser(String user) {
+		this.user = user;
+	}
 
-public String getMessage() {
-	return message;
-}
+	public String getPassword() {
+		return password;
+	}
 
-public void setMessage(String message) {
-	this.message = message;
-}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-public String getHost() {
-	return host;
-}
+	public int getPort() {
+		return port;
+	}
 
-public void setHost(String host) {
-	this.host = host;
-}
+	public void setPort(int port) {
+		this.port = port;
+	}
 
-public String getUser() {
-	return user;
-}
+	SendEmail(String mailSMTPServer, int mailSMTPServerPort) { 
+		this.mailSMTPServer = mailSMTPServer;
+		this.mailSMTPServerPort = mailSMTPServerPort;
+	}
+	
+	public void send() {
+		
+		Properties props = new Properties();       
 
-public void setUser(String user) {
-	this.user = user;
-}
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.starttls.enable","true"); 
+		props.put("mail.smtp.host", this.host); 
+		props.put("mail.smtp.auth", "true"); 
+		props.put("mail.smtp.user", this.from);
+		props.put("mail.debug", "false");
+		props.put("mail.smtp.port", mailSMTPServerPort);
+		
+		Session session = Session.getDefaultInstance(props);
+		session.setDebug(false); 
 
-public String getPassword() {
-	return password;
-}
+		Message msg = new MimeMessage(session);
 
-public void setPassword(String password) {
-	this.password = password;
-}
+		try {
+			
+			for (int i=0; this.to.length > i; i++){
+				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to[i]));	
+			}
+			
+			msg.setFrom(new InternetAddress(this.from));
+			
+			msg.setSubject(this.subject);
+			
+			msg.setContent(this.message,"text/plain");
 
-public Integer getPort() {
-	return port;
-}
+		} catch (Exception e) {
+			System.out.println(">> Erro: Completar Mensagem");
+			e.printStackTrace();
+		}
+		
+		Transport tr;
+		try {
+			tr = session.getTransport("smtp");
+			
+			tr.connect(this.host, this.user, this.password);
+			
+			
+			tr.sendMessage(msg, msg.getAllRecipients());
+			tr.close();
+		} catch (Exception e) {
+			
+			System.out.println(">> Erro: Envio Mensagem");
+			e.printStackTrace();
+		}
 
-public void setPort(int port) {
-	this.port = port;
-}
+	}
 }
