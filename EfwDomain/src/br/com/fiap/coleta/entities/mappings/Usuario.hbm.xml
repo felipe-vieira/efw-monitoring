@@ -18,7 +18,8 @@
 		<property name="administrador" not-null="true"/>
 		<property name="ativo" not-null="true"/>
 		
-	
+		<property name="enviarEmail" not-null="true"/>
+		<property name="email"/>
 
 	</class> 
 </hibernate-mapping>

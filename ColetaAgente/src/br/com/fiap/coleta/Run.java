@@ -1,7 +1,11 @@
 package br.com.fiap.coleta;
 
+import java.util.List;
+
 import br.com.fiap.coleta.bo.SlaBO;
+import br.com.fiap.coleta.bo.UsuarioBO;
 import br.com.fiap.coleta.cgt.GerenciadorFila;
+import br.com.fiap.coleta.entities.Usuario;
 
 public class Run {
 	
@@ -10,8 +14,6 @@ public class Run {
 
 		GerenciadorFila gerenciador = new GerenciadorFila();
 		gerenciador.iniciaGerenciador();
-		
-		
 		
 	}
 	

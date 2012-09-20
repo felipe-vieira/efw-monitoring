@@ -13,6 +13,8 @@ public class Usuario implements Serializable {
 	private String senha;
 	private Boolean administrador;
 	private Boolean ativo;
+	private Boolean enviarEmail;
+	private String email;
 	
 	public Long getId() {
 		return id;
@@ -45,6 +47,20 @@ public class Usuario implements Serializable {
 	}
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	
+	
+	public Boolean getEnviarEmail() {
+		return enviarEmail;
+	}
+	public void setEnviarEmail(Boolean enviarEmail) {
+		this.enviarEmail = enviarEmail;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	@Override
 	public int hashCode() {
