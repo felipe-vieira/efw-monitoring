@@ -79,7 +79,7 @@ public class AlarmeBO {
 			String mensagem = "<table>" +  
 					"<tr><th colspan=2>Servidor " + no.getNome() + " indisponível</th></tr>" +
 					"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
-					"<tr><td><b>Hora:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
 					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
 					"<tr><td><b>Valor:</b></td><td>" + no.getDisponivel() + "</td></tr></table>";
 			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", "Alerta TCC", mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
