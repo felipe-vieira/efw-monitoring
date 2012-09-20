@@ -1,16 +1,19 @@
 package br.com.fiap.coleta.util.cgt;
 
+import java.util.List;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage; 
+import br.com.fiap.coleta.entities.Usuario;
 
 
 public class SendEmail {
 	
-	private String[] to = null;
+	//private String[] to = null;
+	private List<Usuario> to = null;
    	private String from = "";
 	private String subject = "";
 	private String message = "";
@@ -28,11 +31,11 @@ public class SendEmail {
 		mailSMTPServerPort = this.port;
 	}
 
-	public String[] getTo() {
+	public List<Usuario> getTo() {
 		return to;
 	}
 
-	public void setTo(String[] to) {
+	public void setTo(List<Usuario> to) {
 		this.to = to;
 	}
 
@@ -116,15 +119,16 @@ public class SendEmail {
 
 		try {
 			
-			for (int i=0; this.to.length > i; i++){
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to[i]));	
+			for (int i=0; this.to.size() > i; i++){
+				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to.get(i).getEmail()));	
 			}
 			
 			msg.setFrom(new InternetAddress(this.from));
 			
 			msg.setSubject(this.subject);
 			
-			msg.setContent(this.message,"text/plain");
+			//msg.setContent(this.message,"text/plain");
+			msg.setContent(this.message,"text/html");
 
 		} catch (Exception e) {
 			System.out.println(">> Erro: Completar Mensagem");

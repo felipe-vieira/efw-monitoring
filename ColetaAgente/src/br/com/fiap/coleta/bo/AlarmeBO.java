@@ -23,23 +23,26 @@ import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
 import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.coleta.entities.TipoAlarme;
+import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.coleta.entities.enumerators.CriticidadeAlarme;
 import br.com.fiap.coleta.util.cgt.SendEmail;
 
 public class AlarmeBO {
 
+	private UsuarioBO usuario;
 	private ColetaDAO coletaDAO;
 	private Map<Integer,TipoAlarme> tipos;
     private SendEmail email;
 	
 	public AlarmeBO(){
+		
+		this.usuario = new UsuarioBO();
 		this.coletaDAO = new ColetaDAO();
 		this.email = new SendEmail();
 		geraMapaAlarmes();
 	}
 	
-	public void enviaEmail(String[] destinatario, String remetente, String assunto, String msg, String host, String usuario, String senha, int porta){
-		System.out.println(destinatario[0]);
+	public void enviaEmail(List<Usuario> destinatario, String remetente, String assunto, String msg, String host, String usuario, String senha, int porta){
 		this.email.setTo(destinatario);
 		this.email.setFrom(remetente);
 		this.email.setSubject(assunto);
@@ -73,9 +76,13 @@ public class AlarmeBO {
 			alarme.setNo(no);
 			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
 			
-			String[] destinatario = {"wagnerspi@gmail.com", "shadow.frv@gmail.com", "edu.vladimir@gmail.com"};
-			
-			this.enviaEmail(destinatario, "tcc@wspi.com.br", "Alerta TCC", "Servidor " + no.getNome() + " indisponivel", "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+			String mensagem = "<table>" +  
+					"<tr><th colspan=2>Servidor " + no.getNome() + " indisponível</th></tr>" +
+					"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
+					"<tr><td><b>Hora:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+					"<tr><td><b>Valor:</b></td><td>" + no.getDisponivel() + "</td></tr></table>";
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", "Alerta TCC", mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 			
 			coletaDAO.salvaColeta(alarme);
 		}
