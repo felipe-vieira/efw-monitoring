@@ -31,9 +31,7 @@ Ext.define("MONITOR.utils.DateUtils", {
 			}else{
 				var parse = arr[0]+':'+arr[1]+':'+'00';
 
-				console.log(parse);
 				d = Ext.Date.parse(parse, "H:i:s", true);
-				console.log(d);
 			}
 		}
 		

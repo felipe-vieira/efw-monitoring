@@ -19,7 +19,6 @@ Ext.define('MONITOR.view.usuario.CrudUsuario', {
     	    	   {text: 'Login', dataIndex: 'login', flex:1,},
     	    	   {text: 'Administrador', dataIndex: 'administrador', flex:1,
     	    	       renderer: function(val){
-    	    	    	   console.log(val);
     	    	    	   if(val == true){
     	    	    		   return "Sim";
     	    	    	   }else{

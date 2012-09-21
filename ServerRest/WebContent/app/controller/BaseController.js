@@ -25,6 +25,7 @@ Ext.define('MONITOR.controller.BaseController', {
     init: function() {
     	
     	Ext.apply(this,{
+    		gridAtiva : null,
     		itemSelected: null,
     		avaliacaoSelected: null,
     		alarmeSelected: null,
@@ -106,6 +107,7 @@ Ext.define('MONITOR.controller.BaseController', {
 	
     
     abreDetalhesAlarme: function(grid,record){
+    	
     	var view = Ext.widget('alarmesdetalhes');
     	var form = view.down('form');
     	var panelSolucoes = view.down('#panelsolucoes');
@@ -114,17 +116,29 @@ Ext.define('MONITOR.controller.BaseController', {
     	var mensagem = record.get('mensagem');
     	var params = record.get('parametro').split(';');
 
+    	var valor = this.renderValor(record.get('valor'), record);
+    	var valorLimite = this.renderValor(record.get('valorLimite'), record);
+    	
 		var checkbox = form.getForm().findField('isSolucionado');
 		var tituloField = form.getForm().findField('titulo');
 		var descField = form.getForm().findField('descricao');
     	
+		var btnLimpar = form.down('button[action=limparSolucao]');
+		
     	this.alarmeSelected = record;
+    	this.gridAtiva = grid;
     	this.solucaoUsada = null;
+    	
     	
 		for(var i=0 ; i<params.length ; i++){
 			var atual = params[i];
 			mensagem = mensagem.replace("?",atual);
 		}
+		
+		
+		
+		
+   		
     	
 		var isSolucionado = false;
 		var titulo = "";
@@ -135,11 +149,12 @@ Ext.define('MONITOR.controller.BaseController', {
 		
 		if(record.get('status') == 'RESOLVIDO' && solucao != null  && solucao.get('id') != 0){
 			
-			
 			isSolucionado = true;
 			var solucao = record.getSolucao();
 			titulo = solucao.get('titulo');
 			descricao = solucao.get('descricao');
+			
+			btnLimpar.disable();
 			
 			checkbox.disable();
 			tituloField.enable();
@@ -159,9 +174,11 @@ Ext.define('MONITOR.controller.BaseController', {
     	form.getForm().setValues({
     		'dataFormatada' : dataFormatada,
     		'mensagemFormatada': mensagem,
+    		'strValor': valor,
+    		'strValorLimite': valorLimite,
     		'titulo': titulo,
     		'descricao': descricao,
-    		'isSolucionado': isSolucionado
+    		'isSolucionado': isSolucionado,
     		
     	});
     	
@@ -201,20 +218,23 @@ Ext.define('MONITOR.controller.BaseController', {
     
     limparSolucao: function(button){
     	
-    	var form = button.up('form').getForm();
-    	this.solucaoUsada = null;
     	
-		var txtTitulo = form.findField('titulo');
-		var txtDescricao = form.findField('descricao');
-		
-    	form.setValues({
-    		titulo: '',
-    		descricao: '',
-    		isSolucionado: false
-    	});
-    	
-    	txtTitulo.setReadOnly(false);
+    	if(this.alarmeSelected.get('status') != "RESOLVIDO"){
+	    	var form = button.up('form').getForm();
+	    	this.solucaoUsada = null;
+	    	
+			var txtTitulo = form.findField('titulo');
+			var txtDescricao = form.findField('descricao');
+			
+	    	form.setValues({
+	    		titulo: '',
+	    		descricao: '',
+	    		isSolucionado: false
+	    	});
+	    	
+	    	txtTitulo.setReadOnly(false);
 		txtDescricao.setReadOnly(false);
+    	}
     	
     },
     
@@ -261,6 +281,7 @@ Ext.define('MONITOR.controller.BaseController', {
 	    		    		},
 	    		    		success: function(rec,op){
 	    		    			win.setLoading(false);
+	    		    			this.gridAtiva.getStore().reload();
 	    		    			win.close();
 	    		    			this.solucaoUsada = null;
 	    		    	    },
@@ -276,6 +297,7 @@ Ext.define('MONITOR.controller.BaseController', {
 	    		    	});
     				}else{
     					win.setLoading(false);
+    					this.gridAtiva.getStore().reload();
     					win.close();
     				}
     				
@@ -503,7 +525,6 @@ Ext.define('MONITOR.controller.BaseController', {
 				
 				success: function(rec,op){
 					
-					console.log(rec);
 					if(rec == null || rec.get('avaliacao') == 0){
 						this.renderAvaliacaoNaoAvaliada(toolbar);
 						this.avalicaoSelected = null;
@@ -583,6 +604,15 @@ Ext.define('MONITOR.controller.BaseController', {
 		}else{
 			toolbar.down('#btnUsar').enable();
 		}
+	},
+	
+	renderValor: function(val,record){
+		
+		if(val == null || val == 0){
+   			return "N/A";
+   		}else{
+   			return val + record.getTipoAlarme().get('unidade');
+   		}
 	}
 	
 });

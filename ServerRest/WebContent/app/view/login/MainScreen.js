@@ -37,7 +37,6 @@ Ext.define('MONITOR.view.login.MainScreen', {
 	        }
 	    ];
 	    
-	    console.log(this.items);
 	    
 	    this.callParent(arguments);
     }

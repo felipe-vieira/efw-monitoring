@@ -54,12 +54,12 @@ Ext.define('MONITOR.view.alarme.AlarmeDetalhes', {
     	              {
     	            	  xtype: 'displayfield',
     	            	  fieldLabel: 'Valor da Coleta',
-    	            	  name: 'valor'
+    	            	  name: 'strValor',
     	              },
     	              {
     	            	  xtype: 'displayfield',
     	            	  fieldLabel: 'Threshold',
-    	            	  name: 'valorLimite'
+    	            	  name: 'strValorLimite'
     	              },
     	              {
     	            	  xtype: 'displayfield',
