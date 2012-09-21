@@ -42,6 +42,183 @@ public class AlarmeBO {
 		geraMapaAlarmes();
 	}
 	
+	public void processaEmail(No no, Alarme alarme, String problema){
+		
+		TipoAlarme tipo = alarme.getTipo();
+		
+		String valor = alarme.getValor().toString();
+		String threshold = alarme.getValorLimite().toString();
+		String mensagem = "";
+		
+		
+		if (tipo.getThreshold() == true){
+			valor += tipo.getUnidade();
+			threshold += tipo.getUnidade();
+		}
+		
+		if (tipo.getMensagem() != null){
+			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+		}
+		else{
+			mensagem = problema;
+		}
+		
+		String email = "<table>" +  
+				"<tr><th colspan=2>" + problema + "</th></tr>" +
+				"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
+				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+				"</table>";
+		coletaDAO.salvaColeta(alarme);
+		
+		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+	}
+	
+	public void processaEmail(Servidor servidor, Alarme alarme, String problema){
+		
+		TipoAlarme tipo = alarme.getTipo();
+		
+		String valor = alarme.getValor().toString();
+		String threshold = alarme.getValorLimite().toString();
+		String mensagem = "";
+		
+		
+		if (tipo.getThreshold() == true){
+			valor += tipo.getUnidade();
+			threshold += tipo.getUnidade();
+		}
+		
+		if (tipo.getMensagem() != null){
+			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+		}
+		else{
+			mensagem = problema;
+		}
+		
+		String email = "<table>" +  
+				"<tr><th colspan=2>" + problema + "</th></tr>" +
+				"<tr><td><b>Hostname:</b></td><td>" + servidor.getHostname() + "</td></tr>" +
+				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+				"</table>";
+		coletaDAO.salvaColeta(alarme);
+		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+	}
+	
+	public void processaEmail(ServidorAplicacao sa, Alarme alarme, String problema){
+		
+		TipoAlarme tipo = alarme.getTipo();
+		
+		String valor = alarme.getValor().toString();
+		String threshold = alarme.getValorLimite().toString();
+		String mensagem = "";
+		
+		
+		if (tipo.getThreshold() == true){
+			valor += tipo.getUnidade();
+			threshold += tipo.getUnidade();
+		}
+		
+		if (tipo.getMensagem() != null){
+			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+		}
+		else{
+			mensagem = problema;
+		}
+		
+		String email = "<table>" +  
+				"<tr><th colspan=2>" + problema + "</th></tr>" +
+				"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
+				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+				"</table>";
+		
+		coletaDAO.salvaColeta(alarme);
+		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+	}
+	
+	public void processaEmail(Sla sla, Alarme alarme, String problema){
+		
+		TipoAlarme tipo = alarme.getTipo();
+		
+		String valor = alarme.getValor().toString();
+		String threshold = alarme.getValorLimite().toString();
+		String mensagem = "";
+		
+		
+		if (tipo.getThreshold() == true){
+			valor += tipo.getUnidade();
+			threshold += tipo.getUnidade();
+		}
+		
+		if (tipo.getMensagem() != null){
+			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+		}
+		else{
+			mensagem = problema;
+		}
+		
+		String email = "<table>" +  
+				"<tr><th colspan=2>" + problema + "</th></tr>" +
+				"<tr><td><b>Nome:</b></td><td>" + sla.getNome() + "</td></tr>" +
+				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+				"</table>";
+		coletaDAO.salvaColeta(alarme);
+		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+	}
+	
+public void processaEmail(BancoDados bd, Alarme alarme, String problema){
+		
+		TipoAlarme tipo = alarme.getTipo();
+		
+		String valor = alarme.getValor().toString();
+		String threshold = alarme.getValorLimite().toString();
+		String mensagem = "";
+		
+		
+		if (tipo.getThreshold() == true){
+			valor += tipo.getUnidade();
+			threshold += tipo.getUnidade();
+		}
+		
+		if (tipo.getMensagem() != null){
+			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+		}
+		else{
+			mensagem = problema;
+		}
+		
+		String email = "<table>" +  
+				"<tr><th colspan=2>" + problema + "</th></tr>" +
+				"<tr><td><b>Nome:</b></td><td>" + bd.getNome() + "</td></tr>" +
+				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+				"</table>";
+		coletaDAO.salvaColeta(alarme);
+		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+	}
+	
 	public void enviaEmail(List<Usuario> destinatario, String remetente, String assunto, String msg, String host, String usuario, String senha, int porta){
 		this.email.setTo(destinatario);
 		this.email.setFrom(remetente);
@@ -78,15 +255,9 @@ public class AlarmeBO {
 			
 			String problema = "Servidor " + no.getNome() + " indisponível";
 			
-			String mensagem = "<table>" +  
-					"<tr><th colspan=2>" + problema + "</th></tr>" +
-					"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-					"<tr><td><b>Valor:</b></td><td>" + no.getDisponivel() + "</td></tr></table>";
-			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+			processaEmail(no, alarme, problema);
 			
-			coletaDAO.salvaColeta(alarme);
+			
 		}
 	}
 	
@@ -100,15 +271,7 @@ public class AlarmeBO {
 			
 			String problema = "Servidor " + no.getNome() + " não gerenciável";
 			
-			String mensagem = "<table>" +  
-					"<tr><th colspan=2>" + problema + "</th></tr>" +
-					"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-					"<tr><td><b>Valor:</b></td><td>" + no.getGerenciavel() + "</td></tr></table>";
-			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-			
-			coletaDAO.salvaColeta(alarme);
+			processaEmail(no, alarme, problema);
 		}
 	}
 	
@@ -128,15 +291,7 @@ public class AlarmeBO {
 				
 				String problema = "Utilização da CPU do servidor " + servidor.getNome() + " muito alta";
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + servidor.getHostname() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + utilizacao + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(servidor, alarme, problema);
 			}
 		}
 		
@@ -158,15 +313,7 @@ public class AlarmeBO {
 				
 				String problema = "Utilização da memória do servidor " + servidor.getNome() + " muito alta";
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + servidor.getHostname() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + utilizacao + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(servidor, alarme, problema);
 			}
 		}
 				
@@ -190,15 +337,7 @@ public class AlarmeBO {
 				
 				String problema = "Utilização do disco do servidor " + servidor.getNome() + " muito alto";
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + servidor.getHostname() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + utilizacao + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(servidor, alarme, problema);
 			}			
 		}
 	}
@@ -218,15 +357,7 @@ public class AlarmeBO {
 				
 				String problema = "Utilização da memória Heap do servidor de aplicação " + sa.getNome() + " muito alto";
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + utilizacao + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(sa, alarme, problema);
 			}	
 		}
 		
@@ -247,15 +378,7 @@ public class AlarmeBO {
 				
 				String problema = "Utilização da memória nonHeap do servidor de aplicação " + sa.getNome() + " muito alto";
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + utilizacao + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(sa, alarme, problema);
 			}	
 		}
 		
@@ -281,15 +404,7 @@ public class AlarmeBO {
 					
 					String problema = "Aplicação " + deployment.getNome() + " do servidor de aplicação " + sa.getNome() + " está indisponível";
 					
-					String mensagem = "<table>" +  
-							"<tr><th colspan=2>" + problema + "</th></tr>" +
-							"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
-							"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-							"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-							"<tr><td><b>Valor:</b></td><td>" + deployment.getNome() + " indisponível</td></tr></table>";
-					this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-					
-					coletaDAO.salvaColeta(alarme);					
+					processaEmail(sa, alarme, problema);				
 				}
 			}
 		}
@@ -303,15 +418,7 @@ public class AlarmeBO {
 			
 			String problema = "Nenhuma aplicação rodando no servidor de aplicação " + sa.getNome();
 			
-			String mensagem = "<table>" +  
-					"<tr><th colspan=2>" + problema + "</th></tr>" +
-					"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-					"<tr><td><b>Valor:</b></td><td>" + deployCount + "</td></tr></table>";
-			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-			
-			coletaDAO.salvaColeta(alarme);			
+			processaEmail(sa, alarme, problema);		
 		}
 	}
 
@@ -331,15 +438,7 @@ public class AlarmeBO {
 				
 				String problema = "Utilização da memória do servidor de banco de dados " + bd.getNome() + " muito alta";
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + bd.getHostname() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + threshold + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(bd, alarme, problema);
 			}
 		}
 		
@@ -362,15 +461,7 @@ public class AlarmeBO {
 				
 				String problema = "Tamanho do arquivo do banco de dados " + bd.getNome() + " acima do normal";
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + bd.getHostname() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + threshold + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(bd, alarme, problema);
 			}
 			
 		}
@@ -449,15 +540,7 @@ public class AlarmeBO {
 				
 				String problema = "SLA diário " + sla.getNome();
 				
-				String mensagem = "<table>" +  
-						"<tr><th colspan=2>" + problema + "</th></tr>" +
-						"<tr><td><b>Hostname:</b></td><td>" + sla.getNome() + "</td></tr>" +
-						"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-						"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-						"<tr><td><b>Valor:</b></td><td>" + percentual + "</td></tr></table>";
-				this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-				
-				coletaDAO.salvaColeta(alarme);
+				processaEmail(sla, alarme, problema);
 			}
 	}
 
@@ -474,15 +557,7 @@ public class AlarmeBO {
 		
 			String problema = "SLA mensal " + sla.getNome();
 			
-			String mensagem = "<table>" +  
-					"<tr><th colspan=2>" + problema + "</th></tr>" +
-					"<tr><td><b>Hostname:</b></td><td>" + sla.getNome() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-					"<tr><td><b>Valor:</b></td><td>" + percentual + "</td></tr></table>";
-			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, mensagem, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-			
-			coletaDAO.salvaColeta(alarme);
+			processaEmail(sla, alarme, problema);
 		}
 	
 	}
