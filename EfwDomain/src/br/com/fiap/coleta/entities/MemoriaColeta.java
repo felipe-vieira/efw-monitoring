@@ -3,7 +3,12 @@ package br.com.fiap.coleta.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class MemoriaColeta implements Serializable {
 	
 	private static final long serialVersionUID = -3869570568840043059L;

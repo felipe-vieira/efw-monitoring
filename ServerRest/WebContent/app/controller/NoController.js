@@ -25,7 +25,9 @@ Ext.define('MONITOR.controller.NoController', {
     	
     	'alarme.ListAlarmesNo',
     	
-    	'login.MainTab'
+    	'login.MainTab',
+    	
+    	'grafico.GraficoPadrao'
     
     ],
     stores: [
@@ -145,11 +147,12 @@ Ext.define('MONITOR.controller.NoController', {
 			
 			'formglassfish button[action=save]': {
 				click: this.saveOrUpdate
-			},
-        
+			}
+			
         });
     },
 
+    
     addTabNo: function(grid, record){
     	
     	var viewport = grid.up('viewport');
@@ -509,6 +512,7 @@ Ext.define('MONITOR.controller.NoController', {
     	    	    	    	            {
     	    	    	    	            	xtype: 'servidorgraficos',
     	    	    	    	            	padding: 10,
+    	    	    	    	            	idNo: servidor.get('id')
     	    	    	    	            },
     	    	    	                ]
     	    	    	            }).show();

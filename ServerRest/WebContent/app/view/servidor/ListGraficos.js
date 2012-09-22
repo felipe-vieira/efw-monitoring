@@ -1,26 +1,45 @@
 Ext.define('MONITOR.view.servidor.ListGraficos', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.servidorgraficos',
-    layout: 'column',
+	layout: {
+		type: 'hbox',
+		align: 'stretchmax'
+	},
     height: 400,
-    title: 'Informações de coletas',
+    config: {
+    	idNo: null
+    },
     
     initComponent: function() {
-    
+    	
+    	var storeMetricas = Ext.create('Ext.data.Store', {
+    	     model: 'MONITOR.model.Metrica',
+    	     data : [
+    	         {tipo: 'cpu', nome: 'CPU' },
+    	         {tipo: 'memoria', nome: 'Memória'},
+    	         {tipo: 'particoes', nome: 'Partições'}
+    	     ]	
+    	 });
+    	
 	    this.items = [
 	        {
-	        	title: 'Metricas',
-	        	columnWidth: 0.2	        	
+	        	xtype: 'listmetricas',
+	        	width: '20%',
+	        	minHeight: 400,
+	        	store: storeMetricas
 	        },
 	        {
-	        	title: 'Graficos',
-	        	columnWidth: 0.8
+	        	
+    	        xtype:'graficopadrao',
+    	        width: '80%',
+    	        minHeight: 400
 	        		
 	        }
 	    	
 	    ];
 	    
 	    this.callParent(arguments);
+	    
     }
 
 });

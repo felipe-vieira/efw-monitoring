@@ -11,7 +11,8 @@ Ext.application({
         'JanelaSlaController',
         'ThresholdController',
         'UsuarioController',
-        'BaseController'
+        'BaseController',
+        'GraficoController'
         
     ],
     launch: function() {
