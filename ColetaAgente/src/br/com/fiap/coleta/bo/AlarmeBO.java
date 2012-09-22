@@ -92,8 +92,10 @@ public class AlarmeBO {
 			threshold += tipo.getUnidade();
 		}
 		
-		if (tipo.getMensagem() != null){
-			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+		if (tipo.getMensagem() != null && !tipo.getMensagem().equals("")){
+			if(alarme.getParametro() != null) {
+				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+			}
 		}
 		else{
 			mensagem = problema;

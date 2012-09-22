@@ -13,10 +13,7 @@ public class NoDAO {
 		try{
 			Session sessao = DBUtil.getCurrentSession();
 			Transaction t = sessao.beginTransaction();
-			
-		
-			 no = (No) sessao.get(No.class, id);
-			
+			no = (No) sessao.get(No.class, id);
 			t.commit();
 		}catch (Exception e) {
 			e.printStackTrace();

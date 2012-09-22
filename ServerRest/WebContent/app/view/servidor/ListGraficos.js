@@ -5,7 +5,7 @@ Ext.define('MONITOR.view.servidor.ListGraficos', {
 		type: 'hbox',
 		align: 'stretchmax'
 	},
-    height: 400,
+    minHeight: 400,
     config: {
     	idNo: null
     },
