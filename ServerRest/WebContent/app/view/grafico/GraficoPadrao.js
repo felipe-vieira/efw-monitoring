@@ -8,13 +8,14 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
     	    	title: 'Gráficos',
     	    	xtype: 'form',
     	    	border: false,
+    	    	bodyPadding: 10,
     	    	buttonAlign: 'left',
     	    	items:[
                     {
                        xtype: 'fieldcontainer',
                        fieldLabel: 'Inicio',
+                       labelWidth: '50',
                    	   layout: 'hbox',
-                   	   bodyPadding: 10,
                    	   items: [
 	    	     	              {
 	    	                         	xtype: 'datefield',
@@ -37,6 +38,7 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
                         xtype: 'fieldcontainer',
                         fieldLabel: 'Fim',
                     	layout: 'hbox',
+                    	labelWidth: '50',
                     	items: [
  	    	     	              {
  	    	                         	xtype: 'datefield',
@@ -67,7 +69,7 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
                 ]
     	    },
     	    {
-    	    	xtype:'panel'
+    	    	xtype:'graficopanel'
     	    }
     	];
     	

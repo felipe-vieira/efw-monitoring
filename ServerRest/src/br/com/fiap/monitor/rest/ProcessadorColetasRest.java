@@ -15,8 +15,8 @@ import javax.ws.rs.core.MediaType;
 import br.com.fiap.monitor.bo.MetricasBO;
 import br.com.fiap.monitor.to.MetricaTO;
 
-@Path("/memoriaColetas")
-public class MemoriaColetasRest {
+@Path("/processadorColetas")
+public class ProcessadorColetasRest {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -31,7 +31,7 @@ public class MemoriaColetasRest {
 			
 			MetricasBO bo = new MetricasBO();
 			
-			List<MetricaTO> lista =  bo.listMemoriaColeta(idNo, inicio, fim);
+			List<MetricaTO> lista =  bo.listProcessadorColeta(idNo, inicio, fim);
 			
 			return lista;
 			

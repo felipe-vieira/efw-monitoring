@@ -5,8 +5,10 @@ Ext.define('MONITOR.view.inicio.ListSlasForaMeta' ,{
     store: 'SlasForaMeta',
     title: 'SLAs abaixo da meta - Ultimos 15 dias.',
     layout: 'anchor',
+    emptyText: 'Nenhum SLA fora da meta no período.',
     
     initComponent: function() {
+    	
     	
     	this.columns = [
     	    

@@ -1,10 +1,10 @@
-Ext.define('MONITOR.store.MemoriaColetas', {
+Ext.define('MONITOR.store.ProcessadorColetas', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.MetricaColeta',
 
     proxy: {
         type: 'rest',
-		url: 'rest/memoriaColetas/',
+		url: 'rest/processadorColetas/',
         reader: {
             type: 'json',
             root: 'metricaTO'
