@@ -24,14 +24,14 @@ Ext.define('MONITOR.view.servidor.ListGraficos', {
 	    this.items = [
 	        {
 	        	xtype: 'listmetricas',
-	        	width: '20%',
+	        	width: '15%',
 	        	minHeight: 400,
 	        	store: storeMetricas
 	        },
 	        {
 	        	
     	        xtype:'graficopadrao',
-    	        width: '80%',
+    	        width: '85%',
     	        minHeight: 400
 	        		
 	        }

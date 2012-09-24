@@ -10,6 +10,29 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
     	    	border: false,
     	    	bodyPadding: 10,
     	    	buttonAlign: 'left',
+    	    	listeners:{
+    	    		afterrender: function(form){
+    	    			
+    	    			var date1Hour = Ext.Date.add(new Date(),Ext.Date.HOUR, -1);
+    	    			var dateNow = new Date();
+
+    	    			var strDate1Hour = Ext.Date.format(date1Hour, 'd/m/Y');
+    	    			var strDateNow = Ext.Date.format(dateNow, 'd/m/Y');
+    	    			
+    	    			var strHora1Hour = Ext.Date.format(date1Hour, 'H:i');
+    	    			var strHoraNow = Ext.Date.format(dateNow, 'H:i');
+    	    			
+    	    			
+    	    			form.getForm().setValues({
+    	    				dataInicio: strDate1Hour,
+    	    				horaInicio: strHora1Hour,
+    	    				dataFim: strDateNow,
+    	    				horaFim: strHoraNow
+    	    			});
+    	    			
+    	    		}
+    	    	},
+    	    	
     	    	items:[
                     {
                        xtype: 'fieldcontainer',
@@ -55,7 +78,7 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
 				                        maxValue: '23:59 ',
 				                        increment: 30,
 				                        format : 'H:i',
-				                        allowBlank: false
+				                        allowBlank: false	
  	    	     	              }
  	    	     	     ]
                      }

@@ -30,7 +30,11 @@ Ext.define('MONITOR.controller.GraficoController', {
     			beforerender: this.resetRegister,
     			itemclick: this.selectItem
     		}, 
-    	
+    		
+    		'servidorgraficos':{
+    			afterrender : this.renderGraficosServidor
+    		},
+    		
     		'servidorgraficos > graficopadrao > form button[action=filtrar]': {
     			click: this.abreGraficoServidor
     		}
@@ -49,10 +53,27 @@ Ext.define('MONITOR.controller.GraficoController', {
 		this.itemSelected = record.get('tipo');
 	},
 	
+	renderGraficosServidor: function(mainPanel){
+		
+		var panel = mainPanel.down('graficopadrao').down('graficopanel');
+		var form = mainPanel.down('graficopadrao').down('form');
+		var values = form.getValues();
+		
+		var idNo = mainPanel.getIdNo();
+		this.itemSelected = 'cpu';
+		var strInicio = values.dataInicio + " " + values.horaInicio;
+		var strFim = values.dataFim + " " + values.horaFim;
+			
+		this.loadGraficoProcessador(panel,idNo,strInicio,strFim);
+		
+	},
+	
 	abreGraficoServidor: function(button){
+		
 		var main = button.up('form').up('graficopadrao').up('servidorgraficos');
 		var panel = button.up('form').up('graficopadrao').down('graficopanel');
 		var values = button.up('form').getValues();
+
 		
 		var strInicio = values.dataInicio + " " + values.horaInicio;
 		var strFim = values.dataFim + " " + values.horaFim;
