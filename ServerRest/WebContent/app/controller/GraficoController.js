@@ -69,6 +69,7 @@ Ext.define('MONITOR.controller.GraficoController', {
 	
 	//Graficos
     loadGraficoMemoria: function(panel,idNo,inicio,fim){
+    	panel.update("");
     	panel.removeAll();
     	panel.setLoading(true);
     	var store = Ext.create('MONITOR.store.MemoriaColetas');
@@ -80,7 +81,7 @@ Ext.define('MONITOR.controller.GraficoController', {
     		},
     		callback: function(records, operation, success){
     			
-    			if(success){
+    			if(success && records.length > 0){
     				
     				var chart = Ext.create('Ext.chart.Chart', {
         				width:  700,
@@ -139,6 +140,8 @@ Ext.define('MONITOR.controller.GraficoController', {
     				
     				panel.add(chart);
     				
+    			}else{
+    				panel.update('Nenhum dado no período selecionado');
     			}
     			
     			panel.setLoading(false);
@@ -149,6 +152,7 @@ Ext.define('MONITOR.controller.GraficoController', {
     },
     
     loadGraficoProcessador: function(panel,idNo,inicio,fim){
+    	panel.update("");
     	panel.removeAll();
     	panel.setLoading(true);
     	var store = Ext.create('MONITOR.store.ProcessadorColetas');
@@ -160,7 +164,7 @@ Ext.define('MONITOR.controller.GraficoController', {
     		},
     		callback: function(records, operation, success){
     			
-    			if(success){
+    			if(success && records.length > 0){
     				
     				var chart = Ext.create('Ext.chart.Chart', {
         				width:  700,
@@ -217,6 +221,8 @@ Ext.define('MONITOR.controller.GraficoController', {
     				
     				panel.add(chart);
     				
+    			}else{
+    				panel.update('Nenhum dado no período selecionado');
     			}
     			
     			panel.setLoading(false);

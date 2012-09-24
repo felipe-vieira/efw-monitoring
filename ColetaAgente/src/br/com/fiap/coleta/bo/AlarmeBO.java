@@ -56,7 +56,7 @@ public class AlarmeBO {
 			threshold += tipo.getUnidade();
 		}
 		
-		if (tipo.getMensagem() != null){
+		if (tipo.getMensagem() != null && alarme.getParametro() != null){
 			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
 		}
 		else{
@@ -92,10 +92,8 @@ public class AlarmeBO {
 			threshold += tipo.getUnidade();
 		}
 		
-		if (tipo.getMensagem() != null && !tipo.getMensagem().equals("")){
-			if(alarme.getParametro() != null) {
-				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
-			}
+		if (tipo.getMensagem() != null && alarme.getParametro() != null){
+			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
 		}
 		else{
 			mensagem = problema;
@@ -129,7 +127,7 @@ public class AlarmeBO {
 			threshold += tipo.getUnidade();
 		}
 		
-		if (tipo.getMensagem() != null){
+		if (tipo.getMensagem() != null && alarme.getParametro() != null){
 			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
 		}
 		else{
@@ -165,7 +163,7 @@ public class AlarmeBO {
 			threshold += tipo.getUnidade();
 		}
 		
-		if (tipo.getMensagem() != null){
+		if (tipo.getMensagem() != null && alarme.getParametro() != null){
 			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
 		}
 		else{
@@ -200,7 +198,7 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 			threshold += tipo.getUnidade();
 		}
 		
-		if (tipo.getMensagem() != null){
+		if (tipo.getMensagem() != null && alarme.getParametro() != null){
 			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
 		}
 		else{

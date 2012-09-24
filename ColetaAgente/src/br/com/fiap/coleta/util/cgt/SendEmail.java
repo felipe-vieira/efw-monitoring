@@ -119,8 +119,12 @@ public class SendEmail {
 
 		try {
 			
-			for (int i=0; this.to.size() > i; i++){
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to.get(i).getEmail()));	
+			if(this.to != null){
+				for (int i=0; i < this.to.size(); i++){
+					if(to.get(i).getEmail() != null){
+						msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to.get(i).getEmail()));
+					}
+				}
 			}
 			
 			msg.setFrom(new InternetAddress(this.from));
@@ -137,13 +141,16 @@ public class SendEmail {
 		
 		Transport tr;
 		try {
-			tr = session.getTransport("smtp");
 			
-			tr.connect(this.host, this.user, this.password);
-			
-			
-			tr.sendMessage(msg, msg.getAllRecipients());
-			tr.close();
+			if(msg.getAllRecipients() != null){
+				tr = session.getTransport("smtp");
+				
+				tr.connect(this.host, this.user, this.password);
+				
+				
+				tr.sendMessage(msg, msg.getAllRecipients());
+				tr.close();
+			}
 		} catch (Exception e) {
 			
 			System.out.println(">> Erro: Envio Mensagem");
