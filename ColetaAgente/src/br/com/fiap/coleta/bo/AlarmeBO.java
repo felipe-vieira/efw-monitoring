@@ -44,179 +44,209 @@ public class AlarmeBO {
 	
 	public void processaEmail(No no, Alarme alarme, String problema){
 		
-		TipoAlarme tipo = alarme.getTipo();
+		try{
+			
+			TipoAlarme tipo = alarme.getTipo();
+			
+			String valor = alarme.getValor().toString();
+			String threshold = alarme.getValorLimite().toString();
+			String mensagem = "";
+			
+			
+			if (tipo.getThreshold() == true){
+				valor += tipo.getUnidade();
+				threshold += tipo.getUnidade();
+			}
+			
+			if (tipo.getMensagem() != null && alarme.getParametro() != null){
+				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+			}
+			else{
+				mensagem = problema;
+			}
+			
+			String email = "<table>" +  
+					"<tr><th colspan=2>" + problema + "</th></tr>" +
+					"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+					"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+					"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+					"</table>";
+			coletaDAO.salvaColeta(alarme);
+			
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 		
-		String valor = alarme.getValor().toString();
-		String threshold = alarme.getValorLimite().toString();
-		String mensagem = "";
-		
-		
-		if (tipo.getThreshold() == true){
-			valor += tipo.getUnidade();
-			threshold += tipo.getUnidade();
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		
-		if (tipo.getMensagem() != null && alarme.getParametro() != null){
-			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
-		}
-		else{
-			mensagem = problema;
-		}
-		
-		String email = "<table>" +  
-				"<tr><th colspan=2>" + problema + "</th></tr>" +
-				"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
-				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
-				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
-				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
-				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
-				"</table>";
-		coletaDAO.salvaColeta(alarme);
-		
-		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 	}
 	
 	public void processaEmail(Servidor servidor, Alarme alarme, String problema){
 		
-		TipoAlarme tipo = alarme.getTipo();
-		
-		String valor = alarme.getValor().toString();
-		String threshold = alarme.getValorLimite().toString();
-		String mensagem = "";
-		
-		
-		if (tipo.getThreshold() == true){
-			valor += tipo.getUnidade();
-			threshold += tipo.getUnidade();
+		try{
+			
+			TipoAlarme tipo = alarme.getTipo();
+			
+			String valor = alarme.getValor().toString();
+			String threshold = alarme.getValorLimite().toString();
+			String mensagem = "";
+			
+			
+			if (tipo.getThreshold() == true){
+				valor += tipo.getUnidade();
+				threshold += tipo.getUnidade();
+			}
+			
+			if (tipo.getMensagem() != null && alarme.getParametro() != null){
+				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+			}
+			else{
+				mensagem = problema;
+			}
+			
+			String email = "<table>" +  
+					"<tr><th colspan=2>" + problema + "</th></tr>" +
+					"<tr><td><b>Hostname:</b></td><td>" + servidor.getHostname() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+					"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+					"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+					"</table>";
+			coletaDAO.salvaColeta(alarme);
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		
-		if (tipo.getMensagem() != null && alarme.getParametro() != null){
-			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
-		}
-		else{
-			mensagem = problema;
-		}
-		
-		String email = "<table>" +  
-				"<tr><th colspan=2>" + problema + "</th></tr>" +
-				"<tr><td><b>Hostname:</b></td><td>" + servidor.getHostname() + "</td></tr>" +
-				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
-				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
-				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
-				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
-				"</table>";
-		coletaDAO.salvaColeta(alarme);
-		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 	}
 	
 	public void processaEmail(ServidorAplicacao sa, Alarme alarme, String problema){
 		
-		TipoAlarme tipo = alarme.getTipo();
+		try{
+			
+			TipoAlarme tipo = alarme.getTipo();
+			
+			String valor = alarme.getValor().toString();
+			String threshold = alarme.getValorLimite().toString();
+			String mensagem = "";
+			
+			
+			if (tipo.getThreshold() == true){
+				valor += tipo.getUnidade();
+				threshold += tipo.getUnidade();
+			}
+			
+			if (tipo.getMensagem() != null && alarme.getParametro() != null){
+				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+			}
+			else{
+				mensagem = problema;
+			}
+			
+			String email = "<table>" +  
+					"<tr><th colspan=2>" + problema + "</th></tr>" +
+					"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+					"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+					"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+					"</table>";
+			
+			coletaDAO.salvaColeta(alarme);
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 		
-		String valor = alarme.getValor().toString();
-		String threshold = alarme.getValorLimite().toString();
-		String mensagem = "";
-		
-		
-		if (tipo.getThreshold() == true){
-			valor += tipo.getUnidade();
-			threshold += tipo.getUnidade();
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		
-		if (tipo.getMensagem() != null && alarme.getParametro() != null){
-			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
-		}
-		else{
-			mensagem = problema;
-		}
-		
-		String email = "<table>" +  
-				"<tr><th colspan=2>" + problema + "</th></tr>" +
-				"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
-				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
-				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
-				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
-				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
-				"</table>";
-		
-		coletaDAO.salvaColeta(alarme);
-		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 	}
 	
 	public void processaEmail(Sla sla, Alarme alarme, String problema){
 		
-		TipoAlarme tipo = alarme.getTipo();
-		
-		String valor = alarme.getValor().toString();
-		String threshold = alarme.getValorLimite().toString();
-		String mensagem = "";
-		
-		
-		if (tipo.getThreshold() == true){
-			valor += tipo.getUnidade();
-			threshold += tipo.getUnidade();
+		try{
+			
+			TipoAlarme tipo = alarme.getTipo();
+			
+			String valor = alarme.getValor().toString();
+			String threshold = alarme.getValorLimite().toString();
+			String mensagem = "";
+			
+			
+			if (tipo.getThreshold() == true){
+				valor += tipo.getUnidade();
+				threshold += tipo.getUnidade();
+			}
+			
+			if (tipo.getMensagem() != null && alarme.getParametro() != null){
+				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+			}
+			else{
+				mensagem = problema;
+			}
+			
+			String email = "<table>" +  
+					"<tr><th colspan=2>" + problema + "</th></tr>" +
+					"<tr><td><b>Nome:</b></td><td>" + sla.getNome() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+					"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+					"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+					"</table>";
+			coletaDAO.salvaColeta(alarme);
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		
-		if (tipo.getMensagem() != null && alarme.getParametro() != null){
-			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
-		}
-		else{
-			mensagem = problema;
-		}
-		
-		String email = "<table>" +  
-				"<tr><th colspan=2>" + problema + "</th></tr>" +
-				"<tr><td><b>Nome:</b></td><td>" + sla.getNome() + "</td></tr>" +
-				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
-				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
-				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
-				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
-				"</table>";
-		coletaDAO.salvaColeta(alarme);
-		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 	}
 	
 public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 		
-		TipoAlarme tipo = alarme.getTipo();
+		try{
+				
+			TipoAlarme tipo = alarme.getTipo();
+			
+			String valor = alarme.getValor().toString();
+			String threshold = alarme.getValorLimite().toString();
+			String mensagem = "";
+			
+			
+			if (tipo.getThreshold() == true){
+				valor += tipo.getUnidade();
+				threshold += tipo.getUnidade();
+			}
+			
+			if (tipo.getMensagem() != null && alarme.getParametro() != null){
+				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+			}
+			else{
+				mensagem = problema;
+			}
+			
+			String email = "<table>" +  
+					"<tr><th colspan=2>" + problema + "</th></tr>" +
+					"<tr><td><b>Nome:</b></td><td>" + bd.getNome() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+					"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
+					"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
+					"</table>";
+			coletaDAO.salvaColeta(alarme);
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 		
-		String valor = alarme.getValor().toString();
-		String threshold = alarme.getValorLimite().toString();
-		String mensagem = "";
-		
-		
-		if (tipo.getThreshold() == true){
-			valor += tipo.getUnidade();
-			threshold += tipo.getUnidade();
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		
-		if (tipo.getMensagem() != null && alarme.getParametro() != null){
-			mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
-		}
-		else{
-			mensagem = problema;
-		}
-		
-		String email = "<table>" +  
-				"<tr><th colspan=2>" + problema + "</th></tr>" +
-				"<tr><td><b>Nome:</b></td><td>" + bd.getNome() + "</td></tr>" +
-				"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
-				"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
-				"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
-				"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-				"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
-				"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
-				"</table>";
-		coletaDAO.salvaColeta(alarme);
-		this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 	}
 	
 	public void enviaEmail(List<Usuario> destinatario, String remetente, String assunto, String msg, String host, String usuario, String senha, int porta){

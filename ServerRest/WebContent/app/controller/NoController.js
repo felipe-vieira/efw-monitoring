@@ -16,12 +16,14 @@ Ext.define('MONITOR.controller.NoController', {
     	'servidorAplicacao.ListMemorias',
     	'servidorAplicacao.FormGlassFish',
     	'servidorAplicacao.FormJBoss',
+    	'servidorAplicacao.ListGraficosServidorAplicacao',
     	
     	'bancoDados.ListJobs',
     	'bancoDados.ListFiles',
     	'bancoDados.ListBackups',
     	'bancoDados.FormOracle',
     	'bancoDados.FormSQLServer',
+    	'bancoDados.ListGraficosBancoDados',
     	
     	'alarme.ListAlarmesNo',
     	
@@ -340,7 +342,7 @@ Ext.define('MONITOR.controller.NoController', {
     	    	    	    	            	padding: 10    	    	            	
     	    	    	    	            },
     	    	    	    	            {
-    	    	    	    	            	xtype: 'servidorgraficos',
+    	    	    	    	            	xtype: 'servidoraplicacaograficos',
     	    	    	    	            	padding: 10,
     	    	    	    	            },
     	    	    	                ]
@@ -716,6 +718,11 @@ Ext.define('MONITOR.controller.NoController', {
     	    	    	    	            	xtype: 'alarmenolist',
     	    	    	    	            	store: storeAlarmes,
     	    	    	    	            	padding: 10    	    	            	
+    	    	    	    	            },
+    	    	    	    	            
+    	    	    	    	            {
+    	    	    	    	            	xtype: 'bancodadosgraficos',
+    	    	    	    	            	padding: 10,
     	    	    	    	            },
     	    	    	    	            
     	    	    	                ]

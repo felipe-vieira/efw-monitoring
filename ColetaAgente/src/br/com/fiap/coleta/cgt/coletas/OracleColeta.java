@@ -112,7 +112,7 @@ public class OracleColeta {
 					files = this.bancoDadosBO.pegaMapFilesBancoDados(this.oracle);
 					
 					//Realiza as coletas
-					BancoMemoriaColeta memoriaColeta= this.getMemoriaColeta();
+					BancoMemoriaColeta memoriaColeta = this.getMemoriaColeta();
 					List<BancoFileColeta> filesColeta = this.getFilesColeta();
 					List<BancoJobColeta> jobsColeta = this.getJobsColeta();
 					
