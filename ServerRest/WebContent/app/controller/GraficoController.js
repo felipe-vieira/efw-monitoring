@@ -12,6 +12,7 @@ Ext.define('MONITOR.controller.GraficoController', {
     	'grafico.GraficoPanel'
     ],
     stores: [
+        'Particoes'    
     ],
     models: [
         'Metrica' ,
@@ -28,7 +29,7 @@ Ext.define('MONITOR.controller.GraficoController', {
     		
     		'listmetricas': {
     			beforerender: this.resetRegister,
-    			itemclick: this.selectItem
+    			itemclick: this.selectItemServidor
     		}, 
     		
     		'servidorgraficos':{
@@ -49,8 +50,29 @@ Ext.define('MONITOR.controller.GraficoController', {
     	this.itemSelected = null;
     },
     
-    selectItem: function(grid, record){
+    selectItemServidor: function(grid, record){
 		this.itemSelected = record.get('tipo');
+		
+		var main = grid.up('servidorgraficos');
+		var combobox = main.down('graficopadrao').down('form').down('combobox[name=particaoId]');
+		
+		if(this.itemSelected == "particoes"){
+			
+			Ext.create('MONITOR.store.Particoes').load({
+				params:{
+					idNo: main.getIdNo()
+				},
+				callback: function (records){
+					combobox.setVisible(true);
+					console.log(combobox);
+					combobox.bindStore(this);
+					console.log(combobox);
+				}
+			});
+		}else{
+			combobox.setVisible(false);
+		}
+		
 	},
 	
 	renderGraficosServidor: function(mainPanel){

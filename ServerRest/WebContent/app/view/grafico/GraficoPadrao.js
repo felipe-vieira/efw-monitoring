@@ -54,6 +54,22 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
 				                        increment: 30,
 				                        format : 'H:i',
 				                        allowBlank: false
+	    	     	              },
+	    	     	              {
+		    	                      	xtype: 'combobox',
+		    	                    	name: 'particaoId',
+		    	                    	store: 'Particoes',
+		    	                    	fieldLabel: 'Partição',
+		    	                    	valueField: 'id',
+		    	                    	displayField: 'nome',
+		    	                    	queryMode: 'local',
+		    	                    	emptyText: 'Selecione',
+		    	                    	labelWidth: 60,
+		    	                    	padding: '0 10',
+		    	                    	labelAlign: 'center',
+		    	                    	forceSelection: true,
+		    	                    	hidden: true
+		    	                    	
 	    	     	              }
 	    	     	   ]
                     },

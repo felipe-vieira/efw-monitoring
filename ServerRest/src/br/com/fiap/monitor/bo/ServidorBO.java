@@ -188,4 +188,27 @@ public class ServidorBO {
 		
 	}
 	
+	public List<Particao> listParticoesServidor(Integer idNo){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM Particao where servidor.id = :idNo");
+			query.setInteger("idNo",idNo);
+			
+			List<Particao> lista =  this.genericDAO.queryList(query);
+			t.commit();
+			
+			return lista;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
 }
