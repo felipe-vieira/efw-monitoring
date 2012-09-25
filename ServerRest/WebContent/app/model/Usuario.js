@@ -5,7 +5,9 @@ Ext.define('MONITOR.model.Usuario', {
        {name: 'login' , type:'string'},
        {name: 'senha' , type:'string'},
        {name: 'administrador',type:'boolean'},
-       {name: 'ativo',type:'boolean'}
+       {name: 'ativo',type:'boolean'},
+       {name: 'enviarEmail',type:'boolean'},
+       {name: 'email',type:'string'},
     ],
     validations: [
         {type: 'presence', field: 'login'},
@@ -16,7 +18,6 @@ Ext.define('MONITOR.model.Usuario', {
 		url: 'rest/usuarios/',
         reader: {
             type: 'json',
-            root: 'alarme'
         },
 		writer: {
 			type: 'json',

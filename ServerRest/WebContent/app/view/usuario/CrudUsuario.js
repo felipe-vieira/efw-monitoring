@@ -25,7 +25,25 @@ Ext.define('MONITOR.view.usuario.CrudUsuario', {
     	    	    		   return "Não";
     	    	    	   }
     	    	       }
-    	    	   }
+    	    	   },
+    	    	   {text: 'Recebe e-mails', dataIndex: 'enviarEmail', flex:1,
+    	    	       renderer: function(val){
+    	    	    	   if(val == true){
+    	    	    		   return "Sim";
+    	    	    	   }else{
+    	    	    		   return "Não";
+    	    	    	   }
+    	    	       }
+    	    	   },
+    	    	   {text: 'E-mail', dataIndex: 'email', flex:1,
+    	    	       renderer: function(val){
+    	    	    	   if(val == null || val == "" ){
+    	    	    		   return "Não configurado";
+    	    	    	   }else{
+    	    	    		   return val;
+    	    	    	   }
+    	    	       }
+    	    	   },
     	    	],
     	    	dockedItems : [
     	    	    {

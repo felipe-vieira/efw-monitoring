@@ -24,6 +24,10 @@ Ext.define('MONITOR.controller.UsuarioController', {
     			itemclick: this.selectUser
     		},
     		
+    		'formusuario checkbox[name=enviarEmail]':{
+    			change: this.enableFieldEmail
+    		},
+    		
     		'#toolbarusuario button[action=create]': {
     			click: this.create
     		},
@@ -49,6 +53,17 @@ Ext.define('MONITOR.controller.UsuarioController', {
     
     resetRegister: function(){
     	this.itemSelected = null;
+    },
+    
+    enableFieldEmail: function(check,newValue){
+    	
+    	var email = check.up('form').down('textfield[name=email]');
+
+    	if(newValue == true){
+    		email.setDisabled(false);
+    	}else{
+    		email.setDisabled(true);
+    	}
     },
     
 	selectUser: function(grid, record){

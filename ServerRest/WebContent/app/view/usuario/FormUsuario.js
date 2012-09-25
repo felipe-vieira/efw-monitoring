@@ -32,7 +32,20 @@ Ext.define('MONITOR.view.usuario.FormUsuario', {
                     	uncheckedValue: false,
                     	name: 'administrador',
                     	fieldLabel: 'Administador'
-                    }
+                    },
+                    {
+                    	xtype: 'checkboxfield',
+                    	inputValue: true,
+                    	uncheckedValue: false,
+                    	name: 'enviarEmail',
+                    	fieldLabel: 'Enviar alarmes por E-mail'
+                    },
+                    {
+                    	xtype: 'textfield',
+                    	disabled: true,
+                    	name: 'email',
+                    	fieldLabel: 'E-mail'
+                    },
                 ]
             }
         ];

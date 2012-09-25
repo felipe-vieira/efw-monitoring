@@ -73,18 +73,28 @@ public class UsuarioBO {
 		Transaction t = session.beginTransaction();
 		ReturnTO retorno = new ReturnTO();
 		
+		retorno.setSuccess(false);
+		
 		try{
-			if(!this.verificaUsuarioLogin(usuario.getLogin())){
-				
+			
+			if(usuario.getLogin() == null || usuario.getLogin().equals("")){
+				retorno.setMessage("O campo usuário é obrigatório");
+				t.rollback();
+			}else if(usuario.getSenha() == null || usuario.getSenha().equals("")){
+				retorno.setMessage("O campo senha é obrigatório");
+				t.rollback();
+			}else if(usuario.getEnviarEmail() && (usuario.getEmail() == null || usuario.getEmail().equals(""))){
+				retorno.setMessage("O campo e-mail é obrigatório.");
+				t.rollback();
+			}else if(this.verificaUsuarioLogin(usuario.getLogin())){
+				retorno.setMessage("Já existe um usuário com esse login.");
+				t.rollback();
+			}else{
 				usuario.setAtivo(true);
 				dao.save(usuario);
+				t.commit();
 				retorno.setSuccess(true);
-			}else{
-				retorno.setSuccess(false);
-				retorno.setMessage("Já existe um usuário com esse login.");
 			}	
-			
-			t.commit();
 			
 		}catch(Exception ex){
 			ex.printStackTrace();
