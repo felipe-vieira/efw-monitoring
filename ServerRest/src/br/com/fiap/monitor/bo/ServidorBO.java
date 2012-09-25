@@ -92,7 +92,7 @@ public class ServidorBO {
 		Transaction t = session.beginTransaction();
 				
 		try{
-			Query query = session.createQuery("FROM Particao where servidor.id = :id");
+			Query query = session.createQuery("FROM Particao where servidor.id = :id order by nome");
 			
 			query.setInteger("id", id);
 			List<Particao> particoes = this.genericDAO.queryList(query);
@@ -187,28 +187,4 @@ public class ServidorBO {
 		return retorno;
 		
 	}
-	
-	public List<Particao> listParticoesServidor(Integer idNo){
-		
-		Session session = this.genericDAO.getSession();
-		Transaction t = session.beginTransaction();
-		
-		try{
-			
-			Query query = session.createQuery("FROM Particao where servidor.id = :idNo");
-			query.setInteger("idNo",idNo);
-			
-			List<Particao> lista =  this.genericDAO.queryList(query);
-			t.commit();
-			
-			return lista;
-			
-		}catch(Exception ex){
-			ex.printStackTrace();
-			t.rollback();
-			return null;
-		}
-		
-	}
-	
 }

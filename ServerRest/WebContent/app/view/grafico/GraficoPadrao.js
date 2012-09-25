@@ -37,7 +37,7 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
                     {
                        xtype: 'fieldcontainer',
                        fieldLabel: 'Inicio',
-                       labelWidth: '50',
+                       labelWidth: '40',
                    	   layout: 'hbox',
                    	   items: [
 	    	     	              {
@@ -57,15 +57,18 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
 	    	     	              },
 	    	     	              {
 		    	                      	xtype: 'combobox',
-		    	                    	name: 'particaoId',
+		    	                    	name: 'idParticao',
 		    	                    	store: 'Particoes',
 		    	                    	fieldLabel: 'Partição',
 		    	                    	valueField: 'id',
 		    	                    	displayField: 'nome',
 		    	                    	queryMode: 'local',
 		    	                    	emptyText: 'Selecione',
-		    	                    	labelWidth: 60,
-		    	                    	padding: '0 10',
+		    	                    	labelWidth: 55,
+		    	                    	forceSelection: true,
+ 	    	     	            	  	margin:{
+ 	    	     	            	  		left: 10
+ 	    	     	            	  	},
 		    	                    	labelAlign: 'center',
 		    	                    	forceSelection: true,
 		    	                    	hidden: true
@@ -77,7 +80,7 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
                         xtype: 'fieldcontainer',
                         fieldLabel: 'Fim',
                     	layout: 'hbox',
-                    	labelWidth: '50',
+                    	labelWidth: '40',
                     	items: [
  	    	     	              {
  	    	                         	xtype: 'datefield',
@@ -95,17 +98,19 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
 				                        increment: 30,
 				                        format : 'H:i',
 				                        allowBlank: false	
+ 	    	     	              },
+ 	    	     	              {
+ 	    	     	            	  	xtype: 'button',
+ 	    	     	            	  	text: 'Ok',
+ 	    	     	            	  	action: 'filtrar',
+ 	    	     	            	  	margin:{
+ 	    	     	            	  		left: 10
+ 	    	     	            	  	}
  	    	     	              }
  	    	     	     ]
                      }
-                ],
-                
-                buttons: [
-                	{
-                		text: 'Ok',
-                		action: 'filtrar',
-                	}
                 ]
+    	    	
     	    },
     	    {
     	    	xtype:'graficopanel'

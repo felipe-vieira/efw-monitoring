@@ -54,7 +54,7 @@ Ext.define('MONITOR.controller.GraficoController', {
 		this.itemSelected = record.get('tipo');
 		
 		var main = grid.up('servidorgraficos');
-		var combobox = main.down('graficopadrao').down('form').down('combobox[name=particaoId]');
+		var combobox = main.down('graficopadrao').down('form').down('combobox[name=idParticao]');
 		
 		if(this.itemSelected == "particoes"){
 			
@@ -82,7 +82,9 @@ Ext.define('MONITOR.controller.GraficoController', {
 		var values = form.getValues();
 		
 		var idNo = mainPanel.getIdNo();
+		
 		this.itemSelected = 'cpu';
+		
 		var strInicio = values.dataInicio + " " + values.horaInicio;
 		var strFim = values.dataFim + " " + values.horaFim;
 			
@@ -100,12 +102,22 @@ Ext.define('MONITOR.controller.GraficoController', {
 		var strInicio = values.dataInicio + " " + values.horaInicio;
 		var strFim = values.dataFim + " " + values.horaFim;
 		
+		var idParticao = values.idParticao;
+		
 		var idNo = main.getIdNo();
 		
 		if(this.itemSelected == "memoria"){
 			this.loadGraficoMemoria(panel,idNo,strInicio,strFim);
 		}else if(this.itemSelected == "cpu"){
 			this.loadGraficoProcessador(panel,idNo,strInicio,strFim);
+		}else if(this.itemSelected == "particoes"){
+			
+			if(idParticao != null && idParticao > 0){
+				this.loadGraficoParticoes(panel,idParticao,strInicio,strFim);
+			}else{
+				Ext.MessageBox.alert("Alerta","Selecione uma partição.");
+			}
+			
 		}
 			
 	},
@@ -130,6 +142,7 @@ Ext.define('MONITOR.controller.GraficoController', {
         				width:  700,
         				height: 300,
         				store: this,
+        				animate: true,
         				
         				axes:[
 	        				{
@@ -137,6 +150,8 @@ Ext.define('MONITOR.controller.GraficoController', {
 	        					type: 'Numeric',
 	        					position: 'left',
 	        					fields: ['valorPercentual'],
+	        					minimum: 0,
+	        					maximum: 100,
 	        				    grid: {
 	        				        odd: {
 	        				            opacity: 1,
@@ -183,6 +198,7 @@ Ext.define('MONITOR.controller.GraficoController', {
     				
     				panel.add(chart);
     				
+    				
     			}else{
     				panel.update('Nenhum dado no período selecionado');
     			}
@@ -213,6 +229,7 @@ Ext.define('MONITOR.controller.GraficoController', {
         				width:  700,
         				height: 300,
         				store: this,
+        				animate: true,
         				
         				axes:[
 	        				{
@@ -220,6 +237,8 @@ Ext.define('MONITOR.controller.GraficoController', {
 	        					type: 'Numeric',
 	        					position: 'left',
 	        					fields: ['valorPercentual'],
+	        					minimum: 0,
+	        					maximum: 100,
 	        				    grid: {
 	        				        odd: {
 	        				            opacity: 1,
@@ -273,5 +292,92 @@ Ext.define('MONITOR.controller.GraficoController', {
     		}
     	});
     	
-    }
+    },
+    
+    loadGraficoParticoes: function(panel,idParticao,inicio,fim){
+    	panel.update("");
+    	panel.removeAll();
+    	panel.setLoading(true);
+    	var store = Ext.create('MONITOR.store.ParticaoColetas');
+      	store.load({
+    		params: {
+    			idParticao: idParticao,
+    			inicio: inicio,
+    			fim: fim
+    		},
+    		callback: function(records, operation, success){
+    			
+    			if(success && records.length > 0){
+    				
+    				var chart = Ext.create('Ext.chart.Chart', {
+        				width:  700,
+        				height: 300,
+        				store: this,
+        				animate: true,
+        				
+        				axes:[
+	        				{
+	        					title: 'Valor (%)',
+	        					type: 'Numeric',
+	        					position: 'left',
+	        					fields: ['valorPercentual'],
+	        					minimum: 0,
+	        					maximum: 100,
+	        				    grid: {
+	        				        odd: {
+	        				            opacity: 1,
+	        				            fill: '#ddd',
+	        				            stroke: '#bbb',
+	        				            'stroke-width': 1
+	        				        }
+	        				    }
+	        				
+	        				},
+	        				{
+	        					title: 'Data',
+	        		            type: 'Time',
+	        		            position: 'bottom',
+	        		            fields: ['data'],
+	        		            dateFormat: 'd/m/Y H:i',
+	        		            step: [Ext.Date.HOUR, 1],
+	        				}
+        				],
+        			    series: [
+        			         {
+        			             type: 'line',
+        			             xField: 'data',
+        			             yField: 'valorPercentual',
+        			             tips: {
+        			            	trackMouse: true,
+        			            	width: 160,
+        			            	height: 80,
+        			            	renderer: function(record, item) {
+        			            		
+        			            		var html = 'Data: ' + Ext.Date.format(record.get('data'), 'd/m/Y H:i:s')  +'<br/>';
+        			            		html += 'Utilizado:  ' + MONITOR.utils.ConvertUtils.convertKb(record.get('valor')) + '<br/>';
+        			            		html += 'Total: ' +  MONITOR.utils.ConvertUtils.convertKb(record.get('max'))  + '<br/>';
+        			            		html += 'Percentual: ' + record.get('valorPercentual') + ' %';
+        			            		
+        			            	    this.setTitle('Partição');
+        			            	    this.update(html);
+        			            	    
+        			            	}
+        			            }	 
+        			         }
+        			    ]
+        			});
+    				
+    				panel.add(chart);
+    				
+    				
+    			}else{
+    				panel.update('Nenhum dado no período selecionado');
+    			}
+    			
+    			panel.setLoading(false);
+    			
+    		}
+    	});
+    	
+    },
 });

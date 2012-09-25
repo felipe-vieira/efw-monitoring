@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.MemoriaColeta;
+import br.com.fiap.coleta.entities.ParticaoColeta;
 import br.com.fiap.coleta.entities.ProcessadorColeta;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.MetricaTO;
@@ -85,6 +86,45 @@ public class MetricasBO {
 				
 				metrica.setData(processadorColeta.getDataColeta());
 				metrica.setValorPercentual(new BigDecimal(processadorColeta.getUsado()));
+				
+				listaMetricas.add(metrica);
+			}
+			
+			t.commit();
+			
+			return listaMetricas;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public List<MetricaTO> listParticaoColetas(Integer idParticao, Date inicio, Date fim){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM ParticaoColeta where particao.id = :idParticao AND (dataColeta BETWEEN :inicio AND :fim )");
+			
+			query.setLong("idParticao", idParticao);
+			query.setTimestamp("inicio", inicio);
+			query.setTimestamp("fim", fim);
+			
+			List<ParticaoColeta> lista = this.genericDAO.queryList(query);
+			List<MetricaTO> listaMetricas = new ArrayList<MetricaTO>();
+			
+
+			for (ParticaoColeta particaoColeta : lista) {
+				MetricaTO metrica = new MetricaTO();
+				
+				metrica.setData(particaoColeta.getDataColeta());
+				metrica.setValor(particaoColeta.getUsado());
+				metrica.setMax(particaoColeta.getParticao().getTamanho());
 				
 				listaMetricas.add(metrica);
 			}

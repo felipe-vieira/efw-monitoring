@@ -21,7 +21,7 @@ public class ParticoesRest {
 	public List<Particao> listaMetricas(@QueryParam("idNo") Integer idNo) {
 		
 		ServidorBO servidorBO = new ServidorBO();
-		return servidorBO.listParticoesServidor(idNo);
+		return servidorBO.getParticoesId(idNo);
 		
 	}
 	
