@@ -15,8 +15,7 @@ Ext.define('MONITOR.view.servidorAplicacao.ListGraficosServidorAplicacao', {
     	var storeMetricas = Ext.create('Ext.data.Store', {
     	     model: 'MONITOR.model.Metrica',
     	     data : [
-    	         {nome: 'CPU - CPU Time', tipo: 'cputime'},
-    	         {nome: 'CPU - User time', tipo: 'usertime' },
+    	         {nome: 'CPU', tipo: 'cpu'},
     	         {nome: 'Memória Heap', tipo: 'heap'},
     	         {nome: 'Memória Non-Heap', tipo: 'nonheap'}
     	     ]	

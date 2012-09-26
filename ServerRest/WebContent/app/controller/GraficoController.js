@@ -7,6 +7,8 @@ Ext.define('MONITOR.controller.GraficoController', {
     ],
     views: [
         'servidor.ListGraficos',
+        'servidorAplicacao.ListGraficosServidorAplicacao',
+        'bancoDados.ListGraficosBancoDados',
     	'grafico.GraficoPadrao',
     	'grafico.ListMetricas',
     	'grafico.GraficoPanel'
@@ -27,9 +29,14 @@ Ext.define('MONITOR.controller.GraficoController', {
     	
     	this.control({
     		
-    		'listmetricas': {
+    		'servidorgraficos > listmetricas': {
     			beforerender: this.resetRegister,
     			itemclick: this.selectItemServidor
+    		}, 
+    		
+    		'servidoraplicacaograficos > listmetricas': {
+    			beforerender: this.resetRegister,
+    			itemclick: this.selectItemServidorAplicacao
     		}, 
     		
     		'servidorgraficos':{
@@ -38,6 +45,15 @@ Ext.define('MONITOR.controller.GraficoController', {
     		
     		'servidorgraficos > graficopadrao > form button[action=filtrar]': {
     			click: this.abreGraficoServidor
+    		},
+    		
+    		
+    		'servidorgraficos':{
+    			afterrender : this.renderGraficosServidor
+    		},    		
+    		
+    		'servidorAplicacaograficos > graficopadrao > form button[action=filtrar]': {
+    			click: this.abreGraficoServidorAplicacao
     		}
     		
     	});
@@ -75,6 +91,10 @@ Ext.define('MONITOR.controller.GraficoController', {
 		
 	},
 	
+    selectItemServidorAplicacao: function(grid, record){
+		this.itemSelected = record.get('tipo');		
+	},
+	
 	renderGraficosServidor: function(mainPanel){
 		
 		var panel = mainPanel.down('graficopadrao').down('graficopanel');
@@ -94,7 +114,7 @@ Ext.define('MONITOR.controller.GraficoController', {
 	
 	abreGraficoServidor: function(button){
 		
-		var main = button.up('form').up('graficopadrao').up('servidorgraficos');
+		var main = button.up('form').up('graficopadrao').up('servidoraplicacaograficos');
 		var panel = button.up('form').up('graficopadrao').down('graficopanel');
 		var values = button.up('form').getValues();
 
@@ -118,6 +138,28 @@ Ext.define('MONITOR.controller.GraficoController', {
 				Ext.MessageBox.alert("Alerta","Selecione uma partição.");
 			}
 			
+		}
+			
+	},
+	
+	abreGraficoServidorAplicacao: function(button){
+		
+		var main = button.up('form').up('graficopadrao').up('servidoraplicacaograficos');
+		var panel = button.up('form').up('graficopadrao').down('graficopanel');
+		var values = button.up('form').getValues();
+
+		
+		var strInicio = values.dataInicio + " " + values.horaInicio;
+		var strFim = values.dataFim + " " + values.horaFim;
+		
+		var idNo = main.getIdNo();
+		
+		if(this.itemSelected == "heap"){
+			//this.loadGraficoMemoriaHeap(panel,idNo,strInicio,strFim);
+		}else if(this.itemSelected == "nonheap"){
+			//this.loadGraficoMemoriaNonHeap(panel,idNo,strInicio,strFim);
+		}else if(this.itemSelected == "cpu"){
+			//this.loadGraficoMemoriaProcessador(panel,idNo,strInicio,strFim);
 		}
 			
 	},
