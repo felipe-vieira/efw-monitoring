@@ -47,11 +47,20 @@ public class AlarmeBO {
 		try{
 			
 			TipoAlarme tipo = alarme.getTipo();
-			
-			String valor = alarme.getValor().toString();
-			String threshold = alarme.getValorLimite().toString();
+	
+			String valor = "";
+			String threshold = "";
 			String mensagem = "";
-			
+
+	
+			if (alarme.getValor() != null){
+				valor = alarme.getValor().toString();
+			}
+
+			if (alarme.getValorLimite() != null){
+				threshold = alarme.getValorLimite().toString();
+			}
+
 			
 			if (tipo.getThreshold() == true){
 				valor += tipo.getUnidade();
@@ -89,11 +98,20 @@ public class AlarmeBO {
 		try{
 			
 			TipoAlarme tipo = alarme.getTipo();
-			
-			String valor = alarme.getValor().toString();
-			String threshold = alarme.getValorLimite().toString();
-			String mensagem = "";
-			
+		
+			String valor = "";
+                        String threshold = "";
+                        String mensagem = "";
+
+
+                        if (alarme.getValor() != null){
+                                valor = alarme.getValor().toString();
+                        }
+
+                        if (alarme.getValorLimite() != null){
+                                threshold = alarme.getValorLimite().toString();
+                        }
+	
 			
 			if (tipo.getThreshold() == true){
 				valor += tipo.getUnidade();
@@ -131,11 +149,20 @@ public class AlarmeBO {
 			
 			TipoAlarme tipo = alarme.getTipo();
 			
-			String valor = alarme.getValor().toString();
-			String threshold = alarme.getValorLimite().toString();
-			String mensagem = "";
+			String valor = "";
+                        String threshold = "";
+                        String mensagem = "";
+
+
+                        if (alarme.getValor() != null){
+                                valor = alarme.getValor().toString();
+                        }
+
+                        if (alarme.getValorLimite() != null){
+                                threshold = alarme.getValorLimite().toString();
+                        }
 			
-			
+	
 			if (tipo.getThreshold() == true){
 				valor += tipo.getUnidade();
 				threshold += tipo.getUnidade();
@@ -173,10 +200,20 @@ public class AlarmeBO {
 			
 			TipoAlarme tipo = alarme.getTipo();
 			
-			String valor = alarme.getValor().toString();
-			String threshold = alarme.getValorLimite().toString();
-			String mensagem = "";
-			
+		
+			String valor = "";
+                        String threshold = "";
+                        String mensagem = "";
+
+
+                        if (alarme.getValor() != null){
+                                valor = alarme.getValor().toString();
+                        }
+
+                        if (alarme.getValorLimite() != null){
+                                threshold = alarme.getValorLimite().toString();
+                        }
+	
 			
 			if (tipo.getThreshold() == true){
 				valor += tipo.getUnidade();
@@ -214,10 +251,20 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 				
 			TipoAlarme tipo = alarme.getTipo();
 			
-			String valor = alarme.getValor().toString();
-			String threshold = alarme.getValorLimite().toString();
-			String mensagem = "";
 			
+			String valor = "";
+                        String threshold = "";
+                        String mensagem = "";
+
+
+                        if (alarme.getValor() != null){
+                                valor = alarme.getValor().toString();
+                        }
+
+                        if (alarme.getValorLimite() != null){
+                                threshold = alarme.getValorLimite().toString();
+                        }
+	
 			
 			if (tipo.getThreshold() == true){
 				valor += tipo.getUnidade();
