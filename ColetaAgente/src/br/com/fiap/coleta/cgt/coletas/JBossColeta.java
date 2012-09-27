@@ -253,6 +253,7 @@ public class JBossColeta {
 			JSONObject json = JSONObject.fromObject(this.socket.enviaComando("get jboss.thread"));
 			ServidorAplicacaoThreadColeta threadColeta = new ServidorAplicacaoThreadColeta();
 			
+			threadColeta.setServidorAplicacao(this.jboss);
 			threadColeta.setDataColeta(this.dataColeta);
 			threadColeta.setThreadCount(json.getLong("count"));
 			threadColeta.setCpuTime(json.getDouble("cpuTime")/( this.agendamento.getIntervalo() *10000000));

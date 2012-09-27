@@ -8,6 +8,8 @@
         	<generator class="increment"/>
     	</id>
 
+		<many-to-one name='servidorAplicacao'/>
+
 		<property name="dataColeta" column="data_coleta" not-null="true"/>
 		<property name="threadCount" column="thread_count" not-null="true"/>
 		<property name="cpuTime" column="cpu_time" not-null="true"/>

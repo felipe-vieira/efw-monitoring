@@ -256,6 +256,7 @@ public class GlassFishColeta {
 			System.out.println(json.toString());
 			ServidorAplicacaoThreadColeta threadColeta = new ServidorAplicacaoThreadColeta();
 			
+			threadColeta.setServidorAplicacao(this.glassfish);
 			threadColeta.setDataColeta(this.dataColeta);
 			threadColeta.setThreadCount(json.getLong("count"));
 			threadColeta.setCpuTime(json.getDouble("cpuTime")/( this.agendamento.getIntervalo() *10000000));

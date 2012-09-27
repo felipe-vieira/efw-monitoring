@@ -13,6 +13,7 @@ import br.com.fiap.coleta.entities.MemoriaColeta;
 import br.com.fiap.coleta.entities.ParticaoColeta;
 import br.com.fiap.coleta.entities.ProcessadorColeta;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoriaColeta;
+import br.com.fiap.coleta.entities.ServidorAplicacaoThreadColeta;
 import br.com.fiap.coleta.entities.enumerators.TipoMemoriaServidorAplicacao;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.MetricaTO;
@@ -151,9 +152,9 @@ public class MetricasBO {
 		try{
 			
 			Query query = session.createQuery("FROM ServidorAplicacaoMemoriaColeta where memoria.servidorAplicacao.id = :idNo" +
-					" AND memoria.tipo = :tipo (dataColeta BETWEEN :inicio AND :fim )");
+					" AND memoria.tipo = :tipo AND (dataColeta BETWEEN :inicio AND :fim )");
 			
-			query.setLong("idParticao", idNo);
+			query.setLong("idNo", idNo);
 			query.setParameter("tipo", TipoMemoriaServidorAplicacao.HEAP);
 			query.setTimestamp("inicio", inicio);
 			query.setTimestamp("fim", fim);
@@ -167,7 +168,8 @@ public class MetricasBO {
 				metrica.setData(memoriaColeta.getDataColeta());
 				metrica.setValor(memoriaColeta.getUsed());
 				metrica.setValorAlt(memoriaColeta.getCommited());
-							
+				metrica.setMax(memoriaColeta.getMemoria().getMax());
+				
 				listaMetricas.add(metrica);
 			}
 			
@@ -192,9 +194,9 @@ public class MetricasBO {
 		try{
 			
 			Query query = session.createQuery("FROM ServidorAplicacaoMemoriaColeta where memoria.servidorAplicacao.id = :idNo" +
-					" AND memoria.tipo = :tipo (dataColeta BETWEEN :inicio AND :fim )");
+					" AND memoria.tipo = :tipo AND (dataColeta BETWEEN :inicio AND :fim )");
 			
-			query.setLong("idParticao", idNo);
+			query.setLong("idNo", idNo);
 			query.setParameter("tipo", TipoMemoriaServidorAplicacao.NONHEAP);
 			query.setTimestamp("inicio", inicio);
 			query.setTimestamp("fim", fim);
@@ -208,7 +210,8 @@ public class MetricasBO {
 				metrica.setData(memoriaColeta.getDataColeta());
 				metrica.setValor(memoriaColeta.getUsed());
 				metrica.setValorAlt(memoriaColeta.getCommited());
-							
+				metrica.setMax(memoriaColeta.getMemoria().getMax());
+				
 				listaMetricas.add(metrica);
 			}
 			
@@ -224,30 +227,29 @@ public class MetricasBO {
 		
 	}
 	
-	public List<MetricaTO> listProcessadorServidorAplicacaoColetas(Integer idNo, TipoMemoriaServidorAplicacao tipo, Date inicio, Date fim){
+	public List<MetricaTO> listProcessadorServidorAplicacaoColetas(Integer idNo, Date inicio, Date fim){
 		
 		Session session = this.genericDAO.getSession();
 		Transaction t = session.beginTransaction();
 		
 		try{
 			
-			Query query = session.createQuery("FROM ServidorAplicacaoMemoriaColeta where memoria.servidorAplicacao.id = :idNo" +
-					" AND memoria.tipo = :tipo (dataColeta BETWEEN :inicio AND :fim )");
+			Query query = session.createQuery("FROM ServidorAplicacaoThreadColeta WHERE servidorAplicacao.id = :idNo" +
+					" AND (dataColeta BETWEEN :inicio AND :fim )");
 			
-			query.setLong("idParticao", idNo);
-			query.setParameter("tipo", tipo);
+			query.setLong("idNo", idNo);
 			query.setTimestamp("inicio", inicio);
 			query.setTimestamp("fim", fim);
 			
-			List<ParticaoColeta> lista = this.genericDAO.queryList(query);
+			List<ServidorAplicacaoThreadColeta> lista = this.genericDAO.queryList(query);
 			List<MetricaTO> listaMetricas = new ArrayList<MetricaTO>();
 
-			for (ParticaoColeta particaoColeta : lista) {
+			for (ServidorAplicacaoThreadColeta threadColeta : lista) {
 				MetricaTO metrica = new MetricaTO();
 				
-				metrica.setData(particaoColeta.getDataColeta());
-				metrica.setValor(particaoColeta.getUsado());
-				metrica.setMax(particaoColeta.getParticao().getTamanho());
+				metrica.setData(threadColeta.getDataColeta());
+				metrica.setValorPercentual(new BigDecimal(threadColeta.getCpuTime()));
+				metrica.setValorPercentualAlt(new BigDecimal(threadColeta.getUserTime()));
 				
 				listaMetricas.add(metrica);
 			}

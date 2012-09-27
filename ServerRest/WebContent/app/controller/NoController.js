@@ -344,6 +344,7 @@ Ext.define('MONITOR.controller.NoController', {
     	    	    	    	            {
     	    	    	    	            	xtype: 'servidoraplicacaograficos',
     	    	    	    	            	padding: 10,
+    	    	    	    	            	idNo: sa.get('id')
     	    	    	    	            },
     	    	    	                ]
     	    	    	            }).show();
