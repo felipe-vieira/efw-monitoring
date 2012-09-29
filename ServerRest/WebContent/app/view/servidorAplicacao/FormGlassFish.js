@@ -78,7 +78,7 @@ Ext.define('MONITOR.view.servidorAplicacao.FormGlassFish', {
                     	valueField: 'id',
                     	displayField: 'nome',
                     	queryMode: 'local',
-                    	emptyText: 'Selecione',
+                    	emptyText: 'Não Selecionado',
                     	forceSelection: true
                     },
                     {
@@ -90,7 +90,7 @@ Ext.define('MONITOR.view.servidorAplicacao.FormGlassFish', {
                     	valueField: 'id',
                     	displayField: 'nome',
                     	queryMode: 'local',
-                    	emptyText: 'Selecione',
+                    	emptyText: 'Não Selecionado',
                     	forceSelection: true
                     }
                 ]
