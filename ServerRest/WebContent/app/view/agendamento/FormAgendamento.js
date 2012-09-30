@@ -17,7 +17,7 @@ Ext.define('MONITOR.view.agendamento.FormAgendamento', {
                     {
                          xtype: 'combobox',
                          name: 'noId',                    	
-                         store: 'Nos',
+                         store: 'NosCombo',
                          fieldLabel: 'Nó',
                          valueField: 'id',
                          displayField: 'nome',

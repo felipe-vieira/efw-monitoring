@@ -33,7 +33,8 @@ Ext.define('MONITOR.controller.NoController', {
     
     ],
     stores: [
-    	'Nos',
+        'Nos',
+    	'NosCrud',
     	'Servidores',
     	
     	'ServidorAplicacaoDeployments',
@@ -744,35 +745,30 @@ Ext.define('MONITOR.controller.NoController', {
 
     createServidor: function(button){
     	
-    	this.getServidorThresholdsStore().reload();
 		var view = Ext.widget('formservidor');
 		var model = Ext.create('MONITOR.model.Servidor');
 		view.down('form').loadRecord(model);	
     },
     
     createSQLServer: function(button){
-    	this.getBancoDadosThresholdsStore().reload();
 		var view = Ext.widget('formsqlserver');
 		var model = Ext.create('MONITOR.model.SQLServer');
 		view.down('form').loadRecord(model);	
     },
 
     createOracle: function(button){
-    	this.getBancoDadosThresholdsStore().reload();
 		var view = Ext.widget('formoracle');
 		var model = Ext.create('MONITOR.model.Oracle');
 		view.down('form').loadRecord(model);	
     },
     
     createJBoss: function(button){
-    	this.getServidorAplicacaoThresholdsStore().reload();
 		var view = Ext.widget('formjboss');
 		var model = Ext.create('MONITOR.model.JBoss');
 		view.down('form').loadRecord(model);	
     },
     
     createGlassfish: function(button){
-    	this.getServidorAplicacaoThresholdsStore().reload();
 		var view = Ext.widget('formglassfish');
 		var model = Ext.create('MONITOR.model.Glassfish');
 		view.down('form').loadRecord(model);	
@@ -811,8 +807,6 @@ Ext.define('MONITOR.controller.NoController', {
     
     editServidor : function(record){
     	
-    	this.getServidorThresholdsStore().reload();
-    	
     	var id = record.get('id');
     	    	
 		MONITOR.model.Servidor.load(id,{
@@ -833,8 +827,6 @@ Ext.define('MONITOR.controller.NoController', {
     
     editGlassfish : function(record){
     	
-    	this.getServidorAplicacaoThresholdsStore().reload();
-    	
     	var id = record.get('id');
     	
 		MONITOR.model.Glassfish.load(id,{
@@ -853,8 +845,6 @@ Ext.define('MONITOR.controller.NoController', {
     },
     
     editJBoss : function(record){
-    	
-    	this.getServidorAplicacaoThresholdsStore().reload();
     	
     	var id = record.get('id');
     	
@@ -875,8 +865,6 @@ Ext.define('MONITOR.controller.NoController', {
     
     editOracle : function(record){
     	
-    	this.getBancoDadosThresholdsStore().reload();
-    	
     	var id = record.get('id');
     	
 		MONITOR.model.Oracle.load(id,{
@@ -895,8 +883,6 @@ Ext.define('MONITOR.controller.NoController', {
     },
     
     editSQLServer : function(record){
-    	
-    	this.getBancoDadosThresholdsStore().reload();
     	
     	var id = record.get('id');
     	
@@ -920,8 +906,8 @@ Ext.define('MONITOR.controller.NoController', {
         var form   = win.down('form');
         var record = form.getRecord();
         var values = form.getValues();
-	    var store =  this.getNosStore();
-
+	    var store =  this.getNosCrudStore();
+	    var mainNosStore = this.getNosStore();
 		var thresholdId = values.thresholdId;
 		var slaId = values.slaId;
 		
@@ -939,6 +925,8 @@ Ext.define('MONITOR.controller.NoController', {
         				win.setLoading(false);
         				win.close();
         				store.reload();
+        				mainNosStore.reload();
+        				this.itemSelected = null;
         			},
         			failure: function(rec,op){
         				win.setLoading(false);
@@ -958,8 +946,9 @@ Ext.define('MONITOR.controller.NoController', {
 		if(this.itemSelected != null){
 			
 			//var store = Ext.data.StoreManager.lookup('Nos');
-			var store = this.getNosStore();
-
+			var store = this.getNosCrudStore();
+			var mainNosStore = this.getNosStore();
+			
 			Ext.MessageBox.confirm('Confirmação','Deseja excluir o nó '+this.itemSelected.get('nome')+' ?',
 				function(resp){
 					if(resp=="yes"){
@@ -967,6 +956,8 @@ Ext.define('MONITOR.controller.NoController', {
 						this.itemSelected.destroy({
 		        			success: function(rec,op){
 		        				store.reload();
+		        				mainNosStore.reload();
+		        				this.itemSelected = null;
 		        			},
 		        			failure: function(rec,op){
 		                        Ext.MessageBox.show({

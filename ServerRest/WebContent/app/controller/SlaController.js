@@ -11,7 +11,8 @@ Ext.define('MONITOR.controller.SlaController', {
     ],
     stores: [
         'Slas',
-        'SlasCalculados'
+        'SlasCalculados',
+        'NosCombo'
         
     ],
     models: [
@@ -26,6 +27,11 @@ Ext.define('MONITOR.controller.SlaController', {
     	});
     	
     	this.control({
+    		
+    		
+    		'consultasla': {
+    			beforerender: this.reloadStoreSla
+    		},
     		
     		'crudsla > grid': {
     			beforerender: this.resetRegister,
@@ -57,6 +63,11 @@ Ext.define('MONITOR.controller.SlaController', {
 
     	
     
+    },
+    
+    
+    reloadStoreSla: function(){
+    	this.getNosComboStore().reload();
     },
 
 	selectItem: function(grid, record){

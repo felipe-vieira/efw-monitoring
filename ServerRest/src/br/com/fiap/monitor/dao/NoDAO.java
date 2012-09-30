@@ -11,13 +11,19 @@ import br.com.fiap.monitor.util.dao.DBUtil;;
 
 public class NoDAO {
 	
-	public List<No> listAllNos(){
+	public List<No> listAllNos(Integer start, Integer limit){
 		Session session = DBUtil.getCurrentSession();
 		Transaction t = session.beginTransaction();
 		
 		try{
-			Query query = session.createQuery("from No where ativo = :ativo");
+			Query query = session.createQuery("from No where ativo = :ativo ORDER BY nome");
 			query.setBoolean("ativo", true);
+			
+			if(start != null && limit != null){
+				query.setFirstResult(start);
+				query.setMaxResults(limit);
+			}
+			
 			List<No> retorno = query.list();
 			t.commit();
 			return retorno;

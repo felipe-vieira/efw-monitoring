@@ -32,9 +32,16 @@ public class NoBO {
 		this.genericDAO = new GenericDAO();
 	}
 	
+	
 	public List<No> listAllNos(){
-		return this.noDAO.listAllNos();
+		return this.listAllNos(null,null);
 	}
+	
+	public List<No> listAllNos(Integer start, Integer limit){
+		return this.noDAO.listAllNos(start, limit);
+	}
+	
+	
 
 	public No getNoId(Integer id) {
 		

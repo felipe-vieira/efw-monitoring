@@ -1,18 +1,11 @@
-Ext.define('MONITOR.store.Nos', {
+Ext.define('MONITOR.store.NosCombo', {
     extend: 'Ext.data.Store',
     model: 'MONITOR.model.No',
-    groupField: 'tipo',
     autoLoad: true,
-    autoSync: true,
-    
-    sorters:{
-    	property: 'nome',
-    	direction: 'ASC'
-    },
-    
+
     proxy: {
         type: 'rest',
-        url: 'rest/nos/',
+        url: 'rest/nosCombo/',
         reader: {
             type: 'json',
             root: 'no'

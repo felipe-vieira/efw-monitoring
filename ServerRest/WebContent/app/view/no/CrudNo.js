@@ -14,7 +14,7 @@ Ext.define('MONITOR.view.no.CrudNo', {
     	    
     	    {
     	    	xtype: 'grid',
-    	    	store: 'Nos',
+    	    	store: 'NosCrud',
     	    	columns: [
     	    	   {text: 'Nome', dataIndex: 'nome', flex:1},
     	    	   {text: 'Hostname', dataIndex: 'hostname', flex:1},
@@ -86,7 +86,7 @@ Ext.define('MONITOR.view.no.CrudNo', {
     	    	    	xtype: 'pagingtoolbar',
     	    	    	dock: 'bottom',
     	    	    	displayInfo: true,
-    	    	    	store: 'Nos'
+    	    	    	store: 'NosCrud'
     	    		}
     	    	]
     	    

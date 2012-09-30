@@ -156,7 +156,7 @@ Ext.define('MONITOR.view.janelasla.FormJanelaSla', {
                 ]
             }
         ];
-
+        
         this.buttons = [
             {
                 text: 'Salvar',
@@ -169,7 +169,7 @@ Ext.define('MONITOR.view.janelasla.FormJanelaSla', {
                 handler: this.close
             }
         ];
-
+        
         this.callParent(arguments);
     }
 });

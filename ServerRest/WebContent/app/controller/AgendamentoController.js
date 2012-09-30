@@ -6,7 +6,8 @@ Ext.define('MONITOR.controller.AgendamentoController', {
     ],
     stores: [
         'Agendamentos',
-        'Nos'
+        'Nos',
+        'NosCombo'
     ],
     models: [
         'No',
@@ -20,6 +21,11 @@ Ext.define('MONITOR.controller.AgendamentoController', {
     	});
     	
     	this.control({
+    		
+    		
+    		'formagendamento':{
+    			beforerender: this.reloadStoreNos
+    		},
     		
     		'crudagendamento > grid': {
     			beforerender: this.resetRegister,
@@ -47,6 +53,10 @@ Ext.define('MONITOR.controller.AgendamentoController', {
     	});
     	
     
+    },
+    
+    reloadStoreNos: function(button){
+    	this.getNosComboStore().reload();
     },
 
 	create: function(button){

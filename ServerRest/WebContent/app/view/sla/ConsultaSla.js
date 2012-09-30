@@ -23,7 +23,7 @@ Ext.define('MONITOR.view.sla.ConsultaSla', {
     	                   {
     	                        xtype: 'combobox',
     	                        name: 'noId',                    	
-    	                        store: 'Nos',
+    	                        store: 'NosCombo',
     	                        fieldLabel: 'Nó',
     	                        valueField: 'id',
     	                        displayField: 'nome',

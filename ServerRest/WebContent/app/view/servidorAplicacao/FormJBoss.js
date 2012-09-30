@@ -83,6 +83,24 @@ Ext.define('MONITOR.view.servidorAplicacao.FormJBoss', {
                 ]
             }
         ];
+        
+        this.listeners = {
+        		beforerender: function(window){
+        			
+        			var form = window.down('form');
+        			
+        			var cmbThresholds = form.down('combobox[name=thresholdId]');
+        			cmbThresholds.getStore().reload();
+        			var firstThreshold = cmbThresholds.getStore().first();
+        			cmbThresholds.setValue(firstThreshold);
+        			
+        			var cmbSlas = form.down('combobox[name=slaId]');
+        			cmbSlas.getStore().reload();
+        			var firstSla = cmbSlas.getStore().first();
+            		cmbSlas.setValue(firstSla);
+            		
+        		}
+        };
 
         this.buttons = [
             {

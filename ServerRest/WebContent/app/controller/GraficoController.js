@@ -81,9 +81,7 @@ Ext.define('MONITOR.controller.GraficoController', {
 				},
 				callback: function (records){
 					combobox.setVisible(true);
-					console.log(combobox);
 					combobox.bindStore(this);
-					console.log(combobox);
 				}
 			});
 		}else{
@@ -93,7 +91,6 @@ Ext.define('MONITOR.controller.GraficoController', {
 	},
 	
     selectItemServidorAplicacao: function(grid, record){
-    	console.log('oi' + record.get('tipo'));
 		this.itemSelected = record.get('tipo');		
 	},
 	

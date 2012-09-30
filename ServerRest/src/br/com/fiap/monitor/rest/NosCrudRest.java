@@ -1,0 +1,83 @@
+package br.com.fiap.monitor.rest;
+
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import br.com.fiap.monitor.bo.NoBO;
+import br.com.fiap.monitor.to.ReturnTO;
+import br.com.fiap.coleta.entities.BancoDados;
+import br.com.fiap.coleta.entities.Glassfish;
+import br.com.fiap.coleta.entities.JBoss;
+import br.com.fiap.coleta.entities.No;
+import br.com.fiap.coleta.entities.Oracle;
+import br.com.fiap.coleta.entities.SQLServer;
+import br.com.fiap.coleta.entities.Servidor;
+import br.com.fiap.coleta.entities.ServidorAplicacao;
+
+@Path("/nosCrud")
+public class NosCrudRest {
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<No> listNos(@QueryParam("start") Integer start, @QueryParam("limit") Integer limit){
+		NoBO bo = new NoBO();
+		List<No> nos = bo.listAllNos(start,limit);
+		
+		for(No no: nos){
+			if(no instanceof Servidor){
+				no.setTipo("Servidor");
+				no.setSubTipo("");
+			}else if (no instanceof ServidorAplicacao){
+				no.setTipo("Servidor de Aplicacao");
+				
+				if(no instanceof Glassfish){
+					no.setSubTipo("Glassfish");
+				}else if(no instanceof JBoss){
+					no.setSubTipo("JBoss");
+				}else{
+					no.setSubTipo("");
+				}
+				
+			}else if (no instanceof BancoDados){
+				no.setTipo("Banco de Dados");
+				
+				if(no instanceof Oracle){
+					no.setSubTipo("Oracle");
+				}else if(no instanceof SQLServer){
+					no.setSubTipo("SQL Server");
+				}else{
+					no.setSubTipo("");
+				}
+				
+			}else{
+				no.setTipo("Desconhecido");
+			}
+			
+			
+		}
+		
+		return nos;
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public ReturnTO desativaJboss(No no,@PathParam("id") Integer id){
+		
+		NoBO noBO = new NoBO();
+		if(id!=null){
+			return noBO.desativaNo(id);
+		}else{
+			return null;
+		}
+	}
+}
