@@ -35,7 +35,8 @@ Ext.define('MONITOR.view.inicio.ListAlarmesNaoLidos' ,{
             
             {header: 'Valor da Coleta', dataIndex: 'valor', tdCls: "celulaAlerta",
             	renderer: function(val,metadata,record){
-            		if(val == null || val == 0){
+            		if( (val == null || val == 0) && 
+                			(record.get('valorLimite') == null || record.get('valorLimite') == 0) ){
             			return "N/A";
             		}else{
             			return val + record.getTipoAlarme().get('unidade');
