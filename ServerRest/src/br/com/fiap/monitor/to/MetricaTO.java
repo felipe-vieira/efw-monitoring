@@ -53,7 +53,7 @@ public class MetricaTO {
 			return valorPercentual.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 		}else{
 			
-			if(this.valor != null && this.max != null){
+			if(this.valor != null && this.max != null && this.max > 0){
 				Double valorDouble = this.valor.doubleValue();
 				Double valorMax = this.max.doubleValue();
 				return new BigDecimal((valorDouble/valorMax)*100).setScale(2, BigDecimal.ROUND_HALF_EVEN);

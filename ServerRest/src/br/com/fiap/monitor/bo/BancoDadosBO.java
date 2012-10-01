@@ -11,6 +11,7 @@ import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.BancoDadosThreshold;
 import br.com.fiap.coleta.entities.BancoFile;
 import br.com.fiap.coleta.entities.BancoJob;
+import br.com.fiap.coleta.entities.BancoJobColeta;
 import br.com.fiap.coleta.entities.Oracle;
 import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
@@ -36,7 +37,6 @@ public class BancoDadosBO {
 		Session session = genericDAO.getSession();
 		Transaction t = session.beginTransaction();
 		
-		
 		try{
 			Query query = session.createQuery("FROM BancoJob where bancoDados.id  = :id ORDER BY jobName");
 			query.setInteger("id", id);
@@ -49,7 +49,7 @@ public class BancoDadosBO {
 			t.rollback();
 			return null;
 		}
-	} 
+	}
 	
 	public List<BancoFile> getFilesBanco(Integer id){
 		
@@ -267,6 +267,55 @@ public class BancoDadosBO {
 			t.rollback();
 			return null;
 		}	
+	}
+	
+	public List<BancoJobColeta> listHistoricoJob(Integer idJob, Integer start, Integer limit){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+				
+		try{
+			Query query = session.createQuery("FROM BancoJobColeta WHERE bancoJob.id = :idJob order by dataExecucao desc");
+			
+			query.setInteger("idJob", idJob);
+			query.setFirstResult(start);
+			query.setMaxResults(limit);
+			
+			List<BancoJobColeta> jobs = this.genericDAO.queryList(query);
+			t.commit();
+			
+			return jobs;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public Long contaHistoricoJob(Integer idJob){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+				
+		try{
+			
+			Query query = session.createQuery("SELECT count(*) FROM BancoJobColeta WHERE bancoJob.id = :idJob");
+			
+			query.setInteger("idJob", idJob);
+			
+			Long count = (Long) query.uniqueResult();
+			t.commit();
+			
+			return count;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
 	}
 	
 	

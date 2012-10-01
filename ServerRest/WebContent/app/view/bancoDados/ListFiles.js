@@ -12,10 +12,10 @@ Ext.define('MONITOR.view.bancoDados.ListFiles' ,{
             {header: 'Caminho',  dataIndex: 'filePath',  flex: 1},
             {header: 'Tamanho Máx.',  dataIndex: 'maxSize',  flex: 1,
             	renderer: function(val){
-            		if(val == -1){
+            		if(val == -1 || val == 0){
             			return "Ilimitado";
             		}else{
-            			return MONITOR.utils.ConvertUtils.convertB(val);
+            			return MONITOR.utils.ConvertUtils.convertKb(val);
             		}
             		
             	}

@@ -164,6 +164,7 @@ public class OracleColeta {
 		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
 		}catch(SQLException ex){
+			System.out.println("ORACLE Indisponivel - " + this.oracle.getHostname() + " -  Impossivel se conectar");
 			this.oracle.setDisponivel(false);
 			result = false;
 		}finally{

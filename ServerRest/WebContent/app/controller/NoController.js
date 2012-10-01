@@ -2,7 +2,8 @@ Ext.define('MONITOR.controller.NoController', {
     extend: 'Ext.app.Controller',
     requires: [
         'MONITOR.utils.ConvertUtils',
-        'MONITOR.utils.DateUtils'    
+        'MONITOR.utils.DateUtils',
+        'MONITOR.utils.RefreshUtils'
     ],
     views: [
     	'no.List',
@@ -24,6 +25,8 @@ Ext.define('MONITOR.controller.NoController', {
     	'bancoDados.FormOracle',
     	'bancoDados.FormSQLServer',
     	'bancoDados.ListGraficosBancoDados',
+    	'bancoDados.HistoricoJobs',
+    	'bancoDados.ListHistoricoJobs',
     	
     	'alarme.ListAlarmesNo',
     	
@@ -91,12 +94,14 @@ Ext.define('MONITOR.controller.NoController', {
     init: function() {
     	
     	Ext.apply(this,{
-    		itemSelected: null
+    		itemSelected: null,
+    		refresh: null
     	});
     	
         this.control({
         	'nolist' : {
-        		itemdblclick: this.addTabNo
+        		itemdblclick: this.addTabNo,
+        		afterrender: this.refreshNos
         	},
         	
     		'crudno > grid': {
@@ -150,11 +155,19 @@ Ext.define('MONITOR.controller.NoController', {
 			
 			'formglassfish button[action=save]': {
 				click: this.saveOrUpdate
+			},
+			
+			'listjobs':{
+				itemdblclick: this.abreHistoricoJobs
 			}
 			
         });
     },
 
+    refreshNos: function(grid){
+    	MONITOR.utils.RefreshUtils.setRefresh(grid); 
+    },
+        
     
     addTabNo: function(grid, record){
     	
@@ -724,6 +737,7 @@ Ext.define('MONITOR.controller.NoController', {
     	    	    	    	            
     	    	    	    	            {
     	    	    	    	            	xtype: 'bancodadosgraficos',
+    	    	    	    	            	idNo: bd.get('id'),
     	    	    	    	            	padding: 10,
     	    	    	    	            },
     	    	    	    	            
@@ -987,6 +1001,34 @@ Ext.define('MONITOR.controller.NoController', {
 	selectItem: function(grid, record){
 		this.itemSelected = record;
 	},
+	
+	abreHistoricoJobs: function(grid, record){
+		var idJob = record.get('id');
+		
+		var storeJobs = Ext.create('MONITOR.store.BancoJobColetas').load({
+			params:{
+				idJob: idJob,
+				start: 0,
+    			limit: 10
+			},
+			callback: function(records){
+				var win = Ext.widget('historicojobs',{
+					store: this
+				});
+				win.setTitle('Histórico do Job - ' + record.get('jobName'));
+				
+				
+				
+			}
+		});
+    	
+		storeJobs.on('beforeload',function(store, operation,eOpts){
+            operation.params={
+            	idJob: idJob,
+            };
+        });
+		
+	}
 
 
 });

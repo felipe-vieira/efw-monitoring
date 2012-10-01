@@ -73,6 +73,25 @@ Ext.define('MONITOR.view.grafico.GraficoPadrao', {
 		    	                    	forceSelection: true,
 		    	                    	hidden: true
 		    	                    	
+	    	     	              },
+	    	     	              {
+		    	                      	xtype: 'combobox',
+		    	                    	name: 'idArquivo',
+		    	                    	store: 'BancoFiles',
+		    	                    	fieldLabel: 'Arquivo',
+		    	                    	valueField: 'id',
+		    	                    	displayField: 'file',
+		    	                    	queryMode: 'local',
+		    	                    	emptyText: 'Selecione',
+		    	                    	labelWidth: 55,
+		    	                    	forceSelection: true,
+	    	     	            	  	margin:{
+	    	     	            	  		left: 10
+	    	     	            	  	},
+		    	                    	labelAlign: 'center',
+		    	                    	forceSelection: true,
+		    	                    	hidden: true
+		    	                    	
 	    	     	              }
 	    	     	   ]
                     },

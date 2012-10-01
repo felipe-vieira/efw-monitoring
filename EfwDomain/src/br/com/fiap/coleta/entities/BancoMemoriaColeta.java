@@ -17,6 +17,9 @@ public class BancoMemoriaColeta implements Serializable {
 		this.bancoDados = bancoDados;
 	}
 	
+	public BancoMemoriaColeta(){
+		
+	}
 
 	public BancoDados getBancoDados() {
 		return bancoDados;

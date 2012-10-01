@@ -1,6 +1,19 @@
 Ext.define("MONITOR.utils.ConvertUtils", {
 	singleton : true,
 	
+	
+	convertMb : function(mb) {
+		
+		if(mb > 1048576){
+			return MONITOR.utils.ConvertUtils.roundDecimal(mb/1048576) + ' TB';
+		}else if(mb > 1024){
+			return MONITOR.utils.ConvertUtils.roundDecimal(mb/1024) + ' GB';
+		}else{
+			return mb + " MB";
+		}
+		
+	},
+	
 	convertKb : function(kb) {
 		if(kb > 1073741824){
 			return MONITOR.utils.ConvertUtils.roundDecimal(kb/1073741824) + ' TB';

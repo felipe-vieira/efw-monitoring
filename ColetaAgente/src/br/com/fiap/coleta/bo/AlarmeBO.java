@@ -545,13 +545,17 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 	}
 
 	public void geraAlarmeStatus(BancoDados bd, String ultimoStatusBanco) {
-		if(!bd.getStatus().equals("ONLINE") && !bd.getStatus().equals("ultimoStatusBanco") ){
+		
+		if(!bd.getStatus().equals("ONLINE") && !bd.getStatus().equals("ACTIVE") && !bd.getStatus().equals("ultimoStatusBanco") ){
 			Alarme alarme = new Alarme();
 			alarme.setData(new Date());
 			alarme.setTipo(tipos.get(16));
 			alarme.setNo(bd);
 			alarme.setParametro(bd.getStatus());
 			alarme.setCriticidade(CriticidadeAlarme.CRITICO);
+			
+			String problema = "Banco de dados " + bd.getNome() + " - Status Alterado";
+			processaEmail(bd, alarme, problema);
 		}
 	}
 
@@ -565,6 +569,9 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 			alarme.setNo(bd);
 			alarme.setParametro(coleta.getBancoJob().getJobName()+";"+strStatus);
 			alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+			
+			String problema = "Job " + coleta.getBancoJob().getJobName() + " - Problema na execução";
+			processaEmail(bd, alarme, problema);
 		}
 		
 		if(bd.getThreshold() != null && bd.getThreshold().getLimiteTempoJob() != null){
@@ -577,6 +584,8 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 				alarme.setValor(new BigDecimal(coleta.getExecutionTime().doubleValue()));
 				alarme.setValorLimite(new BigDecimal(bd.getThreshold().getLimiteTempoJob().doubleValue()));
 				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+				String problema = "Job " + coleta.getBancoJob().getJobName() + " - Tempo de execução acima do esperado";
+				processaEmail(bd, alarme, problema);
 			}
 		}
 	}
@@ -597,6 +606,8 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 				alarme.setValor(new BigDecimal(diff.doubleValue()));
 				alarme.setValorLimite(new BigDecimal(threshold.getLimiteTempoBackup().doubleValue()));
 				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
+				String problema = "Banco de dados " + bd.getNome() + " - Muito tempo sem backup";
+				processaEmail(bd, alarme, problema);
 			}
 			
 		}

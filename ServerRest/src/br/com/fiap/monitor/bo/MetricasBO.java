@@ -9,6 +9,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import br.com.fiap.coleta.entities.BancoFileColeta;
+import br.com.fiap.coleta.entities.BancoMemoriaColeta;
 import br.com.fiap.coleta.entities.MemoriaColeta;
 import br.com.fiap.coleta.entities.ParticaoColeta;
 import br.com.fiap.coleta.entities.ProcessadorColeta;
@@ -265,5 +267,90 @@ public class MetricasBO {
 		}
 		
 	}
+	
+	public List<MetricaTO> listMemoriaBancoDadosColeta(Long idNo, Date inicio, Date fim){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM BancoMemoriaColeta where bancoDados.id = :idNo AND (dataColeta BETWEEN :inicio AND :fim )");
+			
+			query.setLong("idNo", idNo);
+			query.setTimestamp("inicio", inicio);
+			query.setTimestamp("fim", fim);
+			
+			List<BancoMemoriaColeta> lista = this.genericDAO.queryList(query);
+			List<MetricaTO> listaMetricas = new ArrayList<MetricaTO>();
+			
+			
+			for (BancoMemoriaColeta memoriaColeta : lista) {
+				
+				MetricaTO metrica = new MetricaTO();
+				
+				metrica.setData(memoriaColeta.getDataColeta());
+				metrica.setValor(memoriaColeta.getMemory());
+				metrica.setMax(memoriaColeta.getBancoDados().getTargetServerMemory());
+				
+				listaMetricas.add(metrica);
+			}
+			
+			t.commit();
+			
+			return listaMetricas;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
+	public List<MetricaTO> listFileBancoDadosColeta(Integer idFile, Date inicio, Date fim){
+		
+		Session session = this.genericDAO.getSession();
+		Transaction t = session.beginTransaction();
+		
+		try{
+			
+			Query query = session.createQuery("FROM BancoFileColeta where file.id = :idFile AND (dataColeta BETWEEN :inicio AND :fim )");
+			
+			query.setLong("idFile", idFile);
+			query.setTimestamp("inicio", inicio);
+			query.setTimestamp("fim", fim);
+			
+			List<BancoFileColeta> lista = this.genericDAO.queryList(query);
+			List<MetricaTO> listaMetricas = new ArrayList<MetricaTO>();
+			
+
+			for (BancoFileColeta fileColeta : lista) {
+				MetricaTO metrica = new MetricaTO();
+				
+				metrica.setData(fileColeta.getDataColeta());
+				metrica.setValor(fileColeta.getSize()/1024);
+				
+				if(fileColeta.getFile().getMaxSize() != null && fileColeta.getFile().getMaxSize() > 0 ){
+					metrica.setMax(fileColeta.getFile().getMaxSize()/1024);
+				}else{
+					metrica.setMax(fileColeta.getFile().getMaxSize()/1024);
+				}
+				
+				listaMetricas.add(metrica);
+			}
+			
+			t.commit();
+			
+			return listaMetricas;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			t.rollback();
+			return null;
+		}
+		
+	}
+	
 	
 }

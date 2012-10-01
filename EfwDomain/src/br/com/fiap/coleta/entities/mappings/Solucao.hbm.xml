@@ -36,7 +36,7 @@
 		
 		
 	 	<property name= "avaliacao"
-	 		    formula="( SELECT SUM(a.avaliacao) FROM  avaliacao_solucao a
+	 		    formula="( SELECT IFNULL(SUM(a.avaliacao),0) FROM  avaliacao_solucao a
                 		   WHERE a.solucao = id )"
         />
 			

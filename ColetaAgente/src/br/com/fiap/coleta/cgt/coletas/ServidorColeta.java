@@ -134,6 +134,8 @@ public class ServidorColeta {
 			
 			System.out.println("Servidor indisponivel -  "+this.servidor.getHostname()+" - Impossivel se conectar ao servidor.");
 
+			this.servidorBO.updateServidorColeta(this.servidor);
+			
 			result = false;
 			
 		} finally {
@@ -156,7 +158,7 @@ public class ServidorColeta {
 				this.indisponibilidadeBO.salvaIndisponibilidade(indisponibilidade);
 			}
 		}
-
+		
 		this.alarmeBO.geraAlarmeIndsiponibilidade(this.servidor, this.ultimoStatus);
 		
 		return result;

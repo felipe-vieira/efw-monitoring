@@ -16,8 +16,7 @@ Ext.define('MONITOR.view.bancoDados.ListGraficosBancoDados', {
     	     model: 'MONITOR.model.Metrica',
     	     data : [
     	         {nome: 'Arquivos', tipo: 'arquivos' },
-    	         {nome: 'Jobs', tipo: 'jobs'},
-    	         {nome: 'Memória', tipo: 'memoria'},
+    	         {nome: 'Memória', tipo: 'memoria'}
     	     ]	
     	 });
     	

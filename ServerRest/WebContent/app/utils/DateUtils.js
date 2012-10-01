@@ -2,12 +2,11 @@ Ext.define("MONITOR.utils.DateUtils", {
 	singleton : true,
 	
 	toStringPtBr : function (date){
-		return date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " "  + 
-			date.toLocaleTimeString();
+		return Ext.Date.format(date, 'd/m/Y H:i:s');
 	},
 	
 	toDatePtBr : function (date){
-		return date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear();		
+		return Ext.Date.format(date, 'd/m/Y');		
 	},
 	
 	toHours : function (date){

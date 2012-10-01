@@ -2,8 +2,13 @@ Ext.define('MONITOR.view.login.MainMenu', {
     extend: 'Ext.toolbar.Toolbar',
     alias: 'widget.mainmenu',
     dock: 'top',
+    requires: [
+        'MONITOR.utils.LoginUtil'
+    ],
     
     initComponent: function(){
+    	
+    	console.log(MONITOR.utils.LoginUtil.usuario);
     	
     	this.items =  [
 				{
@@ -31,6 +36,7 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	        {
     	            xtype: 'splitbutton',
     	            text: 'Cadastros',
+    	            hidden: !MONITOR.utils.LoginUtil.usuario.get('administrador'),
     	            menu: {
     	                items: [
     	                    { 
