@@ -15,7 +15,6 @@ import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.coleta.entities.enumerators.SubTipoNo;
 import br.com.fiap.coleta.entities.enumerators.TipoNo;
 import br.com.fiap.monitor.dao.GenericDAO;
-import br.com.fiap.monitor.to.PagingTO;
 import br.com.fiap.monitor.to.ReturnTO;
 
 public class SolucaoBO {

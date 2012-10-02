@@ -1,6 +1,5 @@
 package br.com.fiap.coleta;
 
-import br.com.fiap.coleta.bo.SlaBO;
 import br.com.fiap.coleta.cgt.GerenciadorFila;
 
 public class Run {
@@ -10,9 +9,6 @@ public class Run {
 		System.out.println("Iniciando o coletor...");
 		GerenciadorFila gerenciador = new GerenciadorFila();
 		gerenciador.iniciaGerenciador();
-		
-		//SlaBO slaBO = new SlaBO();
-		//slaBO.calculaSlaDiario();
 		
 	}
 	

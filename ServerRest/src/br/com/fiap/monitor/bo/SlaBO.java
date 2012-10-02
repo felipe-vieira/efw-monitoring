@@ -9,8 +9,6 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.hql.internal.ast.tree.QueryNode;
-
 import br.com.fiap.coleta.entities.DiasSemanaJanelaSla;
 import br.com.fiap.coleta.entities.DiasSemanaSla;
 import br.com.fiap.coleta.entities.JanelaSla;
@@ -19,7 +17,6 @@ import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.coleta.entities.SlaCalculado;
 import br.com.fiap.coleta.entities.enumerators.TipoSla;
 import br.com.fiap.monitor.dao.GenericDAO;
-import br.com.fiap.monitor.to.PagingTO;
 import br.com.fiap.monitor.to.ReturnTO;
 
 public class SlaBO {

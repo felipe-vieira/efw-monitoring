@@ -11,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import br.com.fiap.coleta.entities.Threshold;
 import br.com.fiap.monitor.bo.ThresholdBO;
 import br.com.fiap.monitor.to.PagingTO;
-import br.com.fiap.monitor.to.ReturnTO;
 
 @Path("/thresholds")
 public class ThresholdsRest {

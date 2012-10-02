@@ -6,8 +6,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import br.com.fiap.coleta.entities.Memoria;
-import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.coleta.util.dao.DBUtil;
 

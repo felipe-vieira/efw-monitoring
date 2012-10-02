@@ -14,8 +14,6 @@ import br.com.fiap.coleta.entities.BancoJob;
 import br.com.fiap.coleta.entities.BancoJobColeta;
 import br.com.fiap.coleta.entities.Oracle;
 import br.com.fiap.coleta.entities.SQLServer;
-import br.com.fiap.coleta.entities.ServidorAplicacaoThreshold;
-import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.ReturnTO;

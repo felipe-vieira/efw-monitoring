@@ -12,9 +12,10 @@ Ext.define('MONITOR.view.login.MainScreen', {
 	        	region: 'north',
 	            border: false,
 	            layout: 'fit',
-	            title: 'EFW Monitoring',
+	            id: 'topoheader',
+	            title: '<div style=\'height:50px;display:block\'><img src=\'resources/img/logo.png\'/></div>',
 	            floating: false, 
-	            renderTo: Ext.getBody(),  
+	            renderTo: Ext.getBody(),
 	            dockedItems: [{
 	            	xtype: 'mainmenu'
 	            }]
@@ -42,3 +43,5 @@ Ext.define('MONITOR.view.login.MainScreen', {
     }
 
 });
+
+

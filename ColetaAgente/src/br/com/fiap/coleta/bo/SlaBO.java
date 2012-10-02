@@ -81,9 +81,6 @@ public class SlaBO {
 					dataHoraInicio.set(Calendar.DATE, (dataInicio.get(Calendar.DATE) -1) );
 				}						
 				
-				System.out.println(dataHoraInicio.getTime());
-				System.out.println(dataHoraFim.getTime());
-				
 				//Calcula o tempo total em ms do sla
 				Long tempoTotal = 0l;
 				Long tempoJanelas = 0l;
@@ -190,7 +187,7 @@ public class SlaBO {
 		//Define o periodo do SLA Calculado (D-1)
 		Calendar dataInicio = Calendar.getInstance();
 			
-		dataInicio.set(Calendar.DATE, (dataInicio.get(Calendar.DATE) -1) );
+		dataInicio.add(Calendar.DATE, -1);
 		dataInicio.set(Calendar.HOUR_OF_DAY, 0);
 		dataInicio.set(Calendar.MINUTE, 0);
 		dataInicio.set(Calendar.SECOND, 0);
@@ -198,21 +195,19 @@ public class SlaBO {
 		
 		List<Sla> slas = this.slaDAO.listSlaNaoRodadosMes(dataInicio);
 		
-		Calendar dataFim = Calendar.getInstance();
-
 		dataInicio.set(Calendar.DATE, 1);
+		
+		Calendar dataFim = Calendar.getInstance();
+		
 		
 		dataFim.set(Calendar.MONTH, dataInicio.get(Calendar.MONTH));
 		dataFim.set(Calendar.YEAR, dataInicio.get(Calendar.YEAR));
-		
 		dataFim.set(Calendar.HOUR_OF_DAY, 23);
 		dataFim.set(Calendar.MINUTE, 59);
-		dataFim.set(Calendar.MONTH, 59);
+		dataFim.set(Calendar.SECOND, 59);
 		
-		int lastDay = dataFim.getActualMaximum(Calendar.DATE);
-		dataFim.set(Calendar.DATE,lastDay);
-		
-		
+		int lastDay = dataFim.getActualMaximum(Calendar.DAY_OF_MONTH);
+		dataFim.set(Calendar.DAY_OF_MONTH,lastDay);
 		
 		for (Sla sla : slas) {
 			

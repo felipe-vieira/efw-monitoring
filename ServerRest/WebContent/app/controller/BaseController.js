@@ -127,6 +127,7 @@ Ext.define('MONITOR.controller.BaseController', {
 		
     	this.alarmeSelected = record;
     	this.gridAtiva = grid;
+    	
     	this.solucaoUsada = null;
     	
     	
@@ -275,6 +276,7 @@ Ext.define('MONITOR.controller.BaseController', {
     				
     				if(record.get('status') == "RESOLVIDO" && this.solucaoUsada == null){
 	    		    	solucao.save({
+	    		    		scope: this,
 	    		    		params: {
 	    		    			'idAlarme': record.get('id'),
 	    		    			'idUsuario': MONITOR.utils.LoginUtil.usuario.get('id'),

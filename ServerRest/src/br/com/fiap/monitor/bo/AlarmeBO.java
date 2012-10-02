@@ -10,7 +10,6 @@ import org.hibernate.Transaction;
 import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.coleta.entities.Solucao;
 import br.com.fiap.coleta.entities.enumerators.StatusAlarme;
-import br.com.fiap.coleta.entities.enumerators.TipoSla;
 import br.com.fiap.monitor.dao.GenericDAO;
 import br.com.fiap.monitor.to.ReturnTO;
 

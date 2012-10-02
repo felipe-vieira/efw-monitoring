@@ -18,7 +18,6 @@ import br.com.fiap.coleta.entities.Particao;
 import br.com.fiap.coleta.entities.Processador;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.SistemaOperacional;
-import br.com.fiap.monitor.bo.NoBO;
 import br.com.fiap.monitor.bo.ServidorBO;
 import br.com.fiap.monitor.to.ReturnTO;
 

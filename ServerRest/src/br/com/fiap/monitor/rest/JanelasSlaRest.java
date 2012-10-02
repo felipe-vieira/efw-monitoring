@@ -11,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import br.com.fiap.monitor.bo.SlaBO;
 import br.com.fiap.monitor.to.PagingTO;
 import br.com.fiap.coleta.entities.JanelaSla;
-import br.com.fiap.coleta.entities.Sla;
 
 @Path("/janelasSla")
 public class JanelasSlaRest {

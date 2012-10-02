@@ -10,7 +10,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorThreshold;
 import br.com.fiap.coleta.entities.Threshold;
 import br.com.fiap.monitor.bo.ThresholdBO;

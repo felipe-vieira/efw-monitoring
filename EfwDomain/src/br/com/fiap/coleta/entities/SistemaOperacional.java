@@ -6,8 +6,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional;
-
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SistemaOperacional implements Serializable{

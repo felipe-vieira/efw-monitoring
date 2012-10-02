@@ -17,7 +17,6 @@ import br.com.fiap.coleta.entities.Oracle;
 import br.com.fiap.coleta.entities.SQLServer;
 import br.com.fiap.coleta.entities.Servidor;
 import br.com.fiap.coleta.entities.ServidorAplicacao;
-import br.com.fiap.coleta.entities.SistemaOperacional;
 import br.com.fiap.coleta.entities.enumerators.SubTipoNo;
 import br.com.fiap.coleta.entities.enumerators.TipoNo;
 import br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional;

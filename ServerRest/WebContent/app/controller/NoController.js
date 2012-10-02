@@ -281,12 +281,12 @@ Ext.define('MONITOR.controller.NoController', {
     	    	        		},
     	    	        		success: function(sla){
     	    	        			
-    	    	        			slaDiario = sla;    	    	        			
-    	    	    	        	
+    	    	        			slaDiario = sla;
+    	    	        			
     	    	    	        	var strSlaDiario = "Não Disponível";
     	    	    	        	var strSlaMensal = "Não Disponível";
     	    	    	        	
-    	    	    	        	if(slaMensal.get('controle') != null){
+    	    	    	        	if(slaDiario.get('controle') != null){
     	    	    	        		strSlaDiario = slaDiario.get('percentual') + "%";
     	    	    	        	}
     	    	    	        	
