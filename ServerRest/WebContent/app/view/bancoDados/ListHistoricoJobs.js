@@ -12,7 +12,10 @@ Ext.define('MONITOR.view.bancoDados.ListHistoricoJobs' ,{
     	    		  return Ext.Date.format(val, 'd/m/Y H:i:s');  
     	    	  },
     	      },
-    	      {header: 'Tempo',  dataIndex: 'executionTime',  flex: 1},
+    	      {header: 'Tempo',  dataIndex: 'executionTime', 
+    	    	  	renderer: function(val){
+    	    	  		return MONITOR.utils.DateUtils.secsToTime(val);
+    	    	  	}, flex: 1},
     	      {header: 'Status',  dataIndex: 'statusDescr',  flex: 1}
         ];
         
