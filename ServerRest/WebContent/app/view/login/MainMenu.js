@@ -3,34 +3,23 @@ Ext.define('MONITOR.view.login.MainMenu', {
     alias: 'widget.mainmenu',
     dock: 'top',
     requires: [
-        'MONITOR.utils.LoginUtil'
+        'MONITOR.utils.LoginUtil',
+        'MONITOR.utils.TabUtils'
     ],
     
     initComponent: function(){
-    	
-    	console.log(MONITOR.utils.LoginUtil.usuario);
     	
     	this.items =  [
 				{
 				    text: 'Inicio',
 					handler: function(){
-						var tabs = Ext.ComponentQuery.query('#mainTab');
-						tabs[0].add({
-							closable: true,
-							title: 'Inicio',
-							xtype: 'inicioview'
-						}).show();
+						MONITOR.utils.TabUtils.openShowTab('inicioview','Inicio');
 				    }
 				},
 				{
 				    text: 'SLA',
 					handler: function(){
-						var tabs = Ext.ComponentQuery.query('#mainTab');
-						tabs[0].add({
-							closable: true,
-							title: 'Consulta de SLA',
-							xtype: 'consultasla'
-						}).show();
+						MONITOR.utils.TabUtils.openShowTab('consultasla','Consulta de SLA');
 				    }
 				},
     	        {
@@ -42,69 +31,39 @@ Ext.define('MONITOR.view.login.MainMenu', {
     	                    { 
     	                        text: 'Usuários',
     	                    	handler: function(){
-    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
-    	                    		tabs[0].add({
-    	                    			closable: true,
-    	                    			title: 'Cadastro de usuários',
-    	                    			xtype: 'crudusuario'
-    	                    		}).show();
+    	                    		MONITOR.utils.TabUtils.openShowTab('crudusuario','Cadastro de usuários');
     	                        }
     	                    },
     	                    '-',
     	                    {   	                     
     	                        text: 'Nós',
     	                    	handler: function(){
-    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
-    	                    		tabs[0].add({
-    	                    			closable: true,
-    	                    			title: 'Cadastro de nós',
-    	                    			xtype: 'crudno'
-    	                    		}).show();
+    	                    		MONITOR.utils.TabUtils.openShowTab('crudno','Cadastro de nós');
     	                        }
     	                    },
     	                    { 
     	                        text: 'Agendamentos',
     	                    	handler: function(){
-    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
-    	                    		tabs[0].add({
-    	                    			closable: true,
-    	                    			title: 'Agendamentos',
-    	                    			xtype: 'crudagendamento'
-    	                    		}).show();
+    	                    		MONITOR.utils.TabUtils.openShowTab('crudagendamento','Agendamentos');
     	                        }
     	                    },
     	                    { 
     	                        text: 'Thresholds',
     	                    	handler: function(){
-    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
-    	                    		tabs[0].add({
-    	                    			closable: true,
-    	                    			title: 'Cadastro de Thresholds',
-    	                    			xtype: 'crudthreshold'
-    	                    		}).show();
+    	                    		MONITOR.utils.TabUtils.openShowTab('crudthreshold','Cadastro de Thresholds');
     	                        }
     	                    },
     	                    '-',
     	                    { 
     	                        text: 'SLA',
     	                    	handler: function(){
-    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
-    	                    		tabs[0].add({
-    	                    			closable: true,
-    	                    			title: 'Cadastro de SLA',
-    	                    			xtype: 'crudsla'
-    	                    		}).show();
+    	                    		MONITOR.utils.TabUtils.openShowTab('crudsla','Cadastro de SLA');
     	                        }
     	                    },
-    	                    { 
+    	                    {
     	                        text: 'SLA - Janelas',
     	                    	handler: function(){
-    	                    		var tabs = Ext.ComponentQuery.query('#mainTab');
-    	                    		tabs[0].add({
-    	                    			closable: true,
-    	                    			title: 'Cadastro de Janelas SLA',
-    	                    			xtype: 'crudjanelasla'
-    	                    		}).show();
+    	                    		MONITOR.utils.TabUtils.openShowTab('crudjanelasla','Cadastro de Janelas SLA');
     	                        }
     	                    },
     	                    
