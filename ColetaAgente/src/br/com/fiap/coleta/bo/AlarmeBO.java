@@ -1,9 +1,13 @@
 package br.com.fiap.coleta.bo;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +37,7 @@ public class AlarmeBO {
 	private ColetaDAO coletaDAO;
 	private Map<Integer,TipoAlarme> tipos;
     private SendEmail email;
+    
 	
 	public AlarmeBO(){
 		
@@ -46,6 +51,11 @@ public class AlarmeBO {
 		
 		try{
 			
+			DateFormat df = new SimpleDateFormat("MMMM");
+			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
+			
+			DecimalFormat decimal = new DecimalFormat("#,##");
+			
 			TipoAlarme tipo = alarme.getTipo();
 	
 			String valor = "";
@@ -54,7 +64,7 @@ public class AlarmeBO {
 
 	
 			if (alarme.getValor() != null){
-				valor = alarme.getValor().toString();
+				valor = decimal.format(alarme.getValor().toString());
 			}
 
 			if (alarme.getValorLimite() != null){
@@ -74,10 +84,11 @@ public class AlarmeBO {
 				mensagem = problema;
 			}
 			
+			
 			String email = "<table>" +  
 					"<tr><th colspan=2>" + problema + "</th></tr>" +
 					"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
 					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
 					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
 					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
@@ -97,6 +108,11 @@ public class AlarmeBO {
 		
 		try{
 			
+			DateFormat df = new SimpleDateFormat("MMMM");
+			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
+			
+			DecimalFormat decimal = new DecimalFormat("#,##");
+			
 			TipoAlarme tipo = alarme.getTipo();
 		
 			String valor = "";
@@ -105,11 +121,11 @@ public class AlarmeBO {
 
 
                         if (alarme.getValor() != null){
-                                valor = alarme.getValor().toString();
+                                valor = decimal.format(alarme.getValor().toString());
                         }
 
                         if (alarme.getValorLimite() != null){
-                                threshold = alarme.getValorLimite().toString();
+                        	threshold = alarme.getValorLimite().toString();
                         }
 	
 			
@@ -128,7 +144,7 @@ public class AlarmeBO {
 			String email = "<table>" +  
 					"<tr><th colspan=2>" + problema + "</th></tr>" +
 					"<tr><td><b>Hostname:</b></td><td>" + servidor.getHostname() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
 					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
 					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
 					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
@@ -147,6 +163,11 @@ public class AlarmeBO {
 		
 		try{
 			
+			DateFormat df = new SimpleDateFormat("MMMM");
+			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
+			
+			DecimalFormat decimal = new DecimalFormat("#,##");
+			
 			TipoAlarme tipo = alarme.getTipo();
 			
 			String valor = "";
@@ -155,11 +176,11 @@ public class AlarmeBO {
 
 
                         if (alarme.getValor() != null){
-                                valor = alarme.getValor().toString();
+                        	valor = decimal.format(alarme.getValor().toString());
                         }
 
                         if (alarme.getValorLimite() != null){
-                                threshold = alarme.getValorLimite().toString();
+                        	threshold = alarme.getValorLimite().toString();
                         }
 			
 	
@@ -178,7 +199,7 @@ public class AlarmeBO {
 			String email = "<table>" +  
 					"<tr><th colspan=2>" + problema + "</th></tr>" +
 					"<tr><td><b>Hostname:</b></td><td>" + sa.getHostname() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
 					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
 					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
 					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
@@ -197,6 +218,10 @@ public class AlarmeBO {
 	public void processaEmail(Sla sla, Alarme alarme, String problema){
 		
 		try{
+			DateFormat df = new SimpleDateFormat("MMMM");
+			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
+			
+			DecimalFormat decimal = new DecimalFormat("#,##");
 			
 			TipoAlarme tipo = alarme.getTipo();
 			
@@ -207,11 +232,11 @@ public class AlarmeBO {
 
 
                         if (alarme.getValor() != null){
-                                valor = alarme.getValor().toString();
+                        	valor = decimal.format(alarme.getValor().toString());
                         }
 
                         if (alarme.getValorLimite() != null){
-                                threshold = alarme.getValorLimite().toString();
+                        	threshold = alarme.getValorLimite().toString();
                         }
 	
 			
@@ -230,7 +255,7 @@ public class AlarmeBO {
 			String email = "<table>" +  
 					"<tr><th colspan=2>" + problema + "</th></tr>" +
 					"<tr><td><b>Nome:</b></td><td>" + sla.getNome() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
 					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
 					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
 					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
@@ -248,7 +273,12 @@ public class AlarmeBO {
 public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 		
 		try{
-				
+			
+			DateFormat df = new SimpleDateFormat("MMMM");
+			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
+			
+			DecimalFormat decimal = new DecimalFormat("#,##");
+			
 			TipoAlarme tipo = alarme.getTipo();
 			
 			
@@ -258,11 +288,11 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 
 
                         if (alarme.getValor() != null){
-                                valor = alarme.getValor().toString();
+                        	valor = decimal.format(alarme.getValor().toString());
                         }
 
                         if (alarme.getValorLimite() != null){
-                                threshold = alarme.getValorLimite().toString();
+                        	threshold = alarme.getValorLimite().toString();
                         }
 	
 			
@@ -281,7 +311,7 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 			String email = "<table>" +  
 					"<tr><th colspan=2>" + problema + "</th></tr>" +
 					"<tr><td><b>Nome:</b></td><td>" + bd.getNome() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + alarme.getData() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
 					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
 					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
 					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
@@ -570,7 +600,7 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 			alarme.setParametro(coleta.getBancoJob().getJobName()+";"+strStatus);
 			alarme.setCriticidade(CriticidadeAlarme.ALERTA);
 			
-			String problema = "Job " + coleta.getBancoJob().getJobName() + " - Problema na execução";
+			String problema = "Job " + coleta.getBancoJob().getJobName() + " - Problema na execuï¿½ï¿½o";
 			processaEmail(bd, alarme, problema);
 		}
 		
@@ -584,7 +614,7 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 				alarme.setValor(new BigDecimal(coleta.getExecutionTime().doubleValue()));
 				alarme.setValorLimite(new BigDecimal(bd.getThreshold().getLimiteTempoJob().doubleValue()));
 				alarme.setCriticidade(CriticidadeAlarme.ALERTA);
-				String problema = "Job " + coleta.getBancoJob().getJobName() + " - Tempo de execução acima do esperado";
+				String problema = "Job " + coleta.getBancoJob().getJobName() + " - Tempo de execuï¿½ï¿½o acima do esperado";
 				processaEmail(bd, alarme, problema);
 			}
 		}

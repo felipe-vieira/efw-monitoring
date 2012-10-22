@@ -198,7 +198,7 @@ public class OracleColeta {
 	
 	private void setCredentials(){
 		try{
-			this.socket.enviaComando("get ora.credentials " + this.oracle.getUsuario() + " " + this.oracle.getSenha() + " " + this.oracle.getHostname() + " " + this.oracle.getPort());
+			this.socket.enviaComando("set ora.credentials " + this.oracle.getUsuario() + " " + this.oracle.getSenha() + " " + this.oracle.getHostname() + " " + this.oracle.getPort() + " " + this.oracle.getInstanceName());
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}catch(IOException e){
