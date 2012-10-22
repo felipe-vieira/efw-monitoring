@@ -3,6 +3,7 @@ package br.com.fiap.coleta.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,7 +28,7 @@ public class Alarme implements Serializable{
 	private Integer contagem;
 	private CriticidadeAlarme criticidade;
 	private Solucao solucao;
-	
+		
 	public Alarme(){
 		this.status = StatusAlarme.NAO_LIDO;
 	}
@@ -45,6 +46,7 @@ public class Alarme implements Serializable{
 		this.no = no;
 	}
 	public Date getData() {
+		
 		return data;
 	}
 	public void setData(Date data) {

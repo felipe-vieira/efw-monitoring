@@ -206,7 +206,7 @@ public class SQLServerColeta {
 	
 	private void setCredentials(){
 		try{
-			this.socket.enviaComando("get mssql.credentials " + this.sqlserver.getUsuario() + " " + this.sqlserver.getSenha() + " " + this.sqlserver.getHostname() + " " + this.sqlserver.getPort());
+			this.socket.enviaComando("set mssql.credentials " + this.sqlserver.getUsuario() + " " + this.sqlserver.getSenha() + " " + this.sqlserver.getHostname() + " " + this.sqlserver.getPort() + " " + this.sqlserver.getInstanceName());
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}catch(IOException e){

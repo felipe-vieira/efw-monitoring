@@ -17,10 +17,10 @@ public class OracleConnectionFactory {
 	   
 	
 	//public static Connection getConnection() throws SQLException{
-	 public static Connection getConnection(String usuario, String senha, String host, int porta) throws SQLException{
+	 public static Connection getConnection(String usuario, String senha, String host, int porta, String instancia) throws SQLException{
 			
 			//TODO parametrizar porta, usuario, senha e instancia
-			String url = "jdbc:oracle:thin:@" + host + ":" + porta + ":xe";
+			String url = "jdbc:oracle:thin:@" + host + ":" + porta + ":" + instancia ;
 			//String usuario = "system";
 			//String senha = "Gavalsa0512";
 		
