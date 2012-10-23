@@ -76,10 +76,12 @@ public class Oracle {
 			
 			sql = new StringBuilder();
 			
-			sql.append(" insert into memory_usage ((select 'Target Server Memory (KB)' as counter_name, round(sum((SELECT SUM(VALUE)/1024 ");
-			sql.append(" FROM V$PGASTAT WHERE NAME = 'aggregate PGA target parameter') +  ( select sum(bytes)/1024 from v$sgastat)),0) as cntr_value, ");
-			sql.append(" round(sum((SELECT SUM(VALUE)/1024/1024 FROM V$PGASTAT WHERE NAME = 'aggregate PGA target parameter') +  ");
-			sql.append(" ( select sum(bytes)/1024/1024 from v$sgastat)),0) as MB	from dual)) ");
+			sql.append(" insert into memory_usage ((select 'Total Server Memory (KB)' as counter_name ,  ");
+			sql.append(" round(sum((SELECT SUM(VALUE)/1024 FROM V$PGASTAT WHERE NAME = 'maximum PGA allocated') +  ");
+			sql.append(" ( select sum(bytes)/1024 from v$sgastat)),0) as cntr_value,  ");
+			sql.append(" round(sum((SELECT SUM(VALUE)/1024 FROM V$PGASTAT WHERE NAME = 'maximum PGA allocated') +  ");
+			sql.append(" ( select sum(bytes)/1024 from v$sgastat)),0) as KB from dual))  ");
+
 			
 			try{
 				PreparedStatement stmt = conn.prepareStatement(sql.toString());
@@ -152,11 +154,13 @@ public class Oracle {
 			
 			sql = new StringBuilder();
 			
-			sql.append(" insert into memory_usage ((select 'Total Server Memory (KB)' as counter_name ,  ");
-			sql.append(" round(sum((SELECT SUM(VALUE)/1024 FROM V$PGASTAT WHERE NAME = 'maximum PGA allocated') +  ");
-			sql.append(" ( select sum(bytes)/1024 from v$sgastat)),0) as cntr_value,  ");
-			sql.append(" round(sum((SELECT SUM(VALUE)/1024 FROM V$PGASTAT WHERE NAME = 'maximum PGA allocated') +  ");
-			sql.append(" ( select sum(bytes)/1024 from v$sgastat)),0) as KB from dual))  ");
+			sql.append(" insert into memory_usage ((select 'Target Server Memory (KB)' as counter_name, round(sum((SELECT SUM(VALUE)/1024 ");
+			sql.append(" FROM V$PGASTAT WHERE NAME = 'aggregate PGA target parameter') +  ( select sum(bytes)/1024 from v$sgastat)),0) as cntr_value, ");
+			sql.append(" round(sum((SELECT SUM(VALUE)/1024/1024 FROM V$PGASTAT WHERE NAME = 'aggregate PGA target parameter') +  ");
+			sql.append(" ( select sum(bytes)/1024/1024 from v$sgastat)),0) as MB	from dual)) ");
+			
+			
+			
 				
 			try{
 				PreparedStatement stmt = conn.prepareStatement(sql.toString());
@@ -344,7 +348,7 @@ public class Oracle {
 			sql.append(" select i.instance_name as InstanceName, substr(f.fname,instr(f.fname,'\\',-1)+1,50) as FileName, "); 
 			sql.append(" s.start_time as Backup_start_date , s.elapsed_seconds as TempodeExecucao, i.host_name as ServerName, s.set_count, ");
 			sql.append(" case(s.backup_type) when 'D' then 'Full Backup' when 'I' then 'Incremental Backup' ");
-			sql.append(" when 'L' then 'Redo Logs' end as RecoveryModel, ROUND(MAX(f.bytes)/1024,2) as TamanhoKB "); 
+			sql.append(" when 'L' then 'Redo Logs' end as Tipo, ROUND(MAX(f.bytes)/1024,2) as TamanhoKB "); 
 			sql.append(" from v$instance i, v$backup_files f, v$backup_set s where s.recid = f.bs_key and "); 
 			sql.append(" substr(f.fname,instr(f.fname,'.',-1)+1,50) = 'BKP' "); 
 			sql.append(" and s.set_count > ? ");
@@ -362,15 +366,14 @@ public class Oracle {
 					
 					Map<String,Object> value = new HashMap<String, Object>();
 					
-					value.put("InstanceName", rs.getString("database_name"));
-					value.put("FileName", rs.getString("name"));
-					value.put("BackupStartDate", rs.getString("Backup_start_date"));
-					value.put("TempoExecucao", rs.getString("Tempo de Execucao"));
-					value.put("ServerName", rs.getString("server_name"));
-					value.put("RecoveryModel", rs.getString("recovery_model"));
-					value.put("Tamanho", rs.getString("Tamanho (KB)"));
-					value.put("Tipo", rs.getString("Tipo de Backup"));
-					value.put("SetCount",rs.getLong("backup_set_id"));
+					value.put("InstanceName", rs.getString("InstanceName"));
+					value.put("FileName", rs.getString("FileName"));
+					value.put("BackupStartDate", rs.getTimestamp("Backup_start_date").getTime());
+					value.put("TempoExecucao", rs.getString("TempodeExecucao"));
+					value.put("ServerName", rs.getString("ServerName"));
+					value.put("Tamanho", rs.getString("TamanhoKB"));
+					value.put("Tipo", rs.getString("Tipo"));
+					value.put("SetCount",rs.getLong("set_count"));
 										
 					listBackup.add(value);
 				}

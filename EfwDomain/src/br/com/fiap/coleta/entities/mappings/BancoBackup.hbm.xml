@@ -12,7 +12,7 @@
 		<property name="backupStartDate" not-null="true"/>
 		<property name="tempoExecucao" not-null="true"/>
 		<property name="tamanho" not-null="true"/>
-		<property name="recoveryModel" not-null="true"/>
+		<property name="recoveryModel"/>
 		<property name="setCount" not-null="true"/>
 		<property name="databaseName"/>
 		<property name="tipo"/>

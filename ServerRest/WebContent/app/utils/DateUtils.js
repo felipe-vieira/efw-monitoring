@@ -131,9 +131,13 @@ Ext.define("MONITOR.utils.DateUtils", {
 		var local = new Date();
 		
 		if(date.getTimezoneOffset() != local.getTimezoneOffset()){
+						
 			var offsetDate = date.getTimezoneOffset(); 
 			var offsetLocal = local.getTimezoneOffset();
 		
+			console.log(offsetDate);
+			console.log(offsetLocal);
+			
 			var diff = offsetDate - offsetLocal;
 			var msDiff = (diff*60000);
 

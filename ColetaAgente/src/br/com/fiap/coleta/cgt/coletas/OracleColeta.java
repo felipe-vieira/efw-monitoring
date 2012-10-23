@@ -469,7 +469,7 @@ public class OracleColeta {
 				b.setFileName(i.getString("FileName"));
 				b.setBackupStartDate(new Date(i.getLong("BackupStartDate")));
 				b.setTempoExecucao(i.getLong("TempoExecucao"));
-				b.setRecoveryModel(i.getString("RecoveryModel"));
+				//b.setRecoveryModel(i.getString("RecoveryModel"));
 				b.setTamanho(i.getLong("Tamanho"));
 				b.setSetCount(i.getLong("SetCount"));
 				

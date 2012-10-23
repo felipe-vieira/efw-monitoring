@@ -54,40 +54,115 @@ public class AlarmeBO {
 			DateFormat df = new SimpleDateFormat("MMMM");
 			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
 			
-			DecimalFormat decimal = new DecimalFormat("#,##");
-			
 			TipoAlarme tipo = alarme.getTipo();
 	
-			String valor = "";
-			String threshold = "";
+			BigDecimal valor = null;
+			BigDecimal threshold = null;
+			
+			String strValor = "N/A";
+			String strThreshold = "N/A";
+			
 			String mensagem = "";
 
 	
 			if (alarme.getValor() != null){
-				valor = decimal.format(alarme.getValor().toString());
+				valor = alarme.getValor().setScale(2,BigDecimal.ROUND_HALF_EVEN);
 			}
 
 			if (alarme.getValorLimite() != null){
-				threshold = alarme.getValorLimite().toString();
+				threshold = alarme.getValorLimite().setScale(2,BigDecimal.ROUND_HALF_EVEN);
 			}
 
 			
 			if (tipo.getThreshold() == true){
-				valor += tipo.getUnidade();
-				threshold += tipo.getUnidade();
+				strValor = valor.toString() + tipo.getUnidade();
+				strThreshold = threshold.toString() + tipo.getUnidade();
 			}
 			
 			if (tipo.getMensagem() != null && alarme.getParametro() != null){
-				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
+				
+				String[] parametros = alarme.getParametro().split(";");
+				mensagem =  tipo.getMensagem();
+				
+				for (String parametro : parametros) {
+					mensagem = mensagem.replaceFirst("\\?", parametro);
+				}
+								
 			}
 			else{
-				mensagem = problema;
+				mensagem = tipo.getMensagem();
 			}
 			
 			
 			String email = "<table>" +  
-					"<tr><th colspan=2>" + problema + "</th></tr>" +
+					"<tr><th colspan=2>" + mensagem + "</th></tr>" +
 					"<tr><td><b>Hostname:</b></td><td>" + no.getHostname() + "</td></tr>" +
+					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
+					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
+					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
+					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
+					"<tr><td><b>Valor:</b></td><td>" + strValor + "</td></tr>" +
+					"<tr><td><b>Threshold:</b></td><td>" + strThreshold + "</td></tr>" +
+					"</table>";
+			coletaDAO.salvaColeta(alarme);
+			
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", mensagem, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
+		
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+	}
+	
+	public void processaEmail(Sla sla, Alarme alarme, String problema){
+		
+		try{
+			DateFormat df = new SimpleDateFormat("MMMM");
+			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
+			
+			TipoAlarme tipo = alarme.getTipo();
+			
+			BigDecimal valor = null;
+			BigDecimal threshold = null;
+			
+			String strValor = "N/A";
+			String strThreshold = "N/A";
+			
+			String mensagem = "";
+
+	
+			if (alarme.getValor() != null){
+				valor = alarme.getValor().setScale(2,BigDecimal.ROUND_HALF_EVEN);
+			}
+
+			if (alarme.getValorLimite() != null){
+				threshold = alarme.getValorLimite().setScale(2,BigDecimal.ROUND_HALF_EVEN);
+			}
+
+			
+			if (tipo.getThreshold() == true){
+				strValor = valor.toString() + tipo.getUnidade();
+				strThreshold = threshold.toString() + tipo.getUnidade();
+			}
+			
+			if (tipo.getMensagem() != null && alarme.getParametro() != null){
+				
+				String[] parametros = alarme.getParametro().split(";");
+				mensagem =  tipo.getMensagem();
+				
+				for (String parametro : parametros) {
+					mensagem = mensagem.replaceFirst("\\?", parametro);
+				}
+								
+			}
+			else{
+				mensagem = tipo.getMensagem();
+			}
+			
+			String email = "<table>" +  
+					"<tr><th colspan=2>" + mensagem + "</th></tr>" +
+					"<tr><td><b>SLA:</b></td><td>" + sla.getNome() + "</td></tr>" +
+					"<tr><td><b>Hostname:</b></td><td>" + alarme.getNo().getHostname() + "</td></tr>" +
 					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
 					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
 					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
@@ -96,14 +171,14 @@ public class AlarmeBO {
 					"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
 					"</table>";
 			coletaDAO.salvaColeta(alarme);
+			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", mensagem, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
 			
-			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-		
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
 	}
 	
+	/*
 	public void processaEmail(Servidor servidor, Alarme alarme, String problema){
 		
 		try{
@@ -215,60 +290,7 @@ public class AlarmeBO {
 		}
 	}
 	
-	public void processaEmail(Sla sla, Alarme alarme, String problema){
-		
-		try{
-			DateFormat df = new SimpleDateFormat("MMMM");
-			df = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
-			
-			DecimalFormat decimal = new DecimalFormat("#,##");
-			
-			TipoAlarme tipo = alarme.getTipo();
-			
-		
-			String valor = "";
-                        String threshold = "";
-                        String mensagem = "";
 
-
-                        if (alarme.getValor() != null){
-                        	valor = decimal.format(alarme.getValor().toString());
-                        }
-
-                        if (alarme.getValorLimite() != null){
-                        	threshold = alarme.getValorLimite().toString();
-                        }
-	
-			
-			if (tipo.getThreshold() == true){
-				valor += tipo.getUnidade();
-				threshold += tipo.getUnidade();
-			}
-			
-			if (tipo.getMensagem() != null && alarme.getParametro() != null){
-				mensagem = tipo.getMensagem().replace("?", alarme.getParametro());
-			}
-			else{
-				mensagem = problema;
-			}
-			
-			String email = "<table>" +  
-					"<tr><th colspan=2>" + problema + "</th></tr>" +
-					"<tr><td><b>Nome:</b></td><td>" + sla.getNome() + "</td></tr>" +
-					"<tr><td><b>Data:</b></td><td>" + df.format(alarme.getData()) + "</td></tr>" +
-					"<tr><td><b>Mensagem:</b></td><td>" + mensagem + "</td></tr>" +
-					"<tr><td><b>Tipo:</b></td><td>" + tipo.getDescricao() + "</td></tr>" +
-					"<tr><td><b>Criticidade:</b></td><td>" + alarme.getCriticidade() + "</td></tr>" +
-					"<tr><td><b>Valor:</b></td><td>" + valor + "</td></tr>" +
-					"<tr><td><b>Threshold:</b></td><td>" + threshold + "</td></tr>" +
-					"</table>";
-			coletaDAO.salvaColeta(alarme);
-			this.enviaEmail(usuario.listaUsuariosEmail(), "tcc@wspi.com.br", problema, email, "smtp.gmail.com", "tcc@wspi.com.br", "123@fiap", 465);
-			
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-	}
 	
 public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 		
@@ -325,7 +347,7 @@ public void processaEmail(BancoDados bd, Alarme alarme, String problema){
 			ex.printStackTrace();
 		}
 	}
-	
+	*/
 	public void enviaEmail(List<Usuario> destinatario, String remetente, String assunto, String msg, String host, String usuario, String senha, int porta){
 		this.email.setTo(destinatario);
 		this.email.setFrom(remetente);

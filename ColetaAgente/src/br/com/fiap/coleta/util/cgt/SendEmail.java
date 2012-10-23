@@ -133,7 +133,6 @@ public class SendEmail {
 			
 			//msg.setContent(this.message,"text/plain");
 			msg.setContent(this.message,"text/html");
-
 		} catch (Exception e) {
 			System.out.println(">> Erro: Completar Mensagem");
 			e.printStackTrace();

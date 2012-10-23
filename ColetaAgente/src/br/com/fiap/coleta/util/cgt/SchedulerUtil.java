@@ -10,6 +10,7 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 
+import br.com.fiap.coleta.bo.SlaBO;
 import br.com.fiap.coleta.cgt.jobs.ColetaJob;
 import br.com.fiap.coleta.cgt.jobs.SlaJob;
 import br.com.fiap.coleta.entities.Agendamento;
@@ -45,6 +46,18 @@ public class SchedulerUtil  {
 	}
 	
 	public static void criaAgendamentoSla(Scheduler scheduler) throws SchedulerException{
+		
+		
+		//Executa o primeiro SLA
+		SlaBO bo = new SlaBO();
+		System.out.print("Executando sla diário... ");
+		bo.calculaSlaDiario();
+		System.out.println("OK!");
+		
+		
+		System.out.print("Executando sla mensal... ");
+		bo.calculaSlaMensal();
+		System.out.println("OK!");
 		
 		//Cria o job
 		JobDetail job = JobBuilder.newJob(SlaJob.class)

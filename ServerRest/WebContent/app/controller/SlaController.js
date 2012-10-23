@@ -169,6 +169,9 @@ Ext.define('MONITOR.controller.SlaController', {
         	var horaInicio = Ext.Date.parse(values.horaInicio, "H:i");
         	var horaFim = Ext.Date.parse(values.horaFim, "H:i");
         	
+        	console.log(horaInicio);
+        	console.log(horaFim);
+        	
        		record.set('horaInicio',horaInicio);
     		record.set('horaFim',horaFim);
         	
