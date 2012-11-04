@@ -25,10 +25,20 @@ public class DBUtil {
 	 */
 	private static SessionFactory buildSessionFactory() {
 		try {
+			
+			String urlConexao = "jdbc:mysql://"+ConnectionInfo.hostname+"/"+ConnectionInfo.database;
+			
 			Configuration configuration = new Configuration();
-			configuration.configure("resource/hibernate.cfg.xml");
-			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();        
+			
+			configuration.configure("resource/hibernate.cfg.xml")
+				.setProperty("hibernate.connection.url", urlConexao)
+				.setProperty("hibernate.connection.username", ConnectionInfo.user)
+				.setProperty("hibernate.connection.password", ConnectionInfo.password);
+			
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+			
 			return configuration.buildSessionFactory(serviceRegistry);
+			
 		} catch (Throwable ex) {
 			System.err.println("Erro na inicializacao da SessionFactory" + ex);
 			throw new ExceptionInInitializerError(ex);
