@@ -258,7 +258,7 @@ public class SlaBO {
 						slaMes.setTempoTotal(tempoTotal);
 						slaMes.setTempoJanela(tempoJanela);
 						
-						this.slaDAO.save(slaMes);
+						this.slaDAO.saveOrUpdate(slaMes);
 						t.commit();
 						
 						this.alarmeBO.geraAlarmeSlaMensal(sla, no, percentualCalculado);

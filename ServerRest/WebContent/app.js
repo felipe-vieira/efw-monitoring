@@ -17,18 +17,17 @@ Ext.application({
     ],
     launch: function() {
    
-    	
-    Ext.USE_NATIVE_JSON = true;
-    
-    Ext.create('Ext.container.Viewport', {
-            layout: 'fit',
-            renderTo: Ext.getBody(),
-            items: [
-                {
-                    xtype: 'loginform'
-                }
-            ],
-
-        });
+	    Ext.USE_NATIVE_JSON = true;
+	    
+	    Ext.create('Ext.container.Viewport', {
+	            layout: 'fit',
+	            renderTo: Ext.getBody(),
+	            items: [
+	                {
+	                    xtype: 'loginform'
+	                }
+	            ],
+	
+	    });
     }
 });
