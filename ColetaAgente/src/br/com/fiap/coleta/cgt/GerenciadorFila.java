@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SchedulerListener;
+import org.quartz.TriggerListener;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.GroupMatcher;
 
 import br.com.fiap.coleta.cgt.threads.AtualizaAgendadorThread;
 import br.com.fiap.coleta.dao.AgendamentoDAO;
@@ -26,7 +29,12 @@ public class GerenciadorFila {
 		//Popula o Scheduler 
 		this.populaScheduler();
 		try{
+			
+			//Cria o listener das triggers
+			SchedulerListener listener = new AgendadorListener();
+			
 			//Inicia o agendador
+			this.scheduler.getListenerManager().addSchedulerListener(listener);
 			this.scheduler.start();
 			
 			//Cria uma thread pra atualizar o scheduler, não da certo com o quartz porquê perde ele serializa os objetos do data map.
@@ -36,6 +44,8 @@ public class GerenciadorFila {
 			
 		}catch(SchedulerException se){
 			se.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -46,13 +56,14 @@ public class GerenciadorFila {
 			List<Agendamento> agendamentos = this.agendamentoDAO.listaAgendamentosAtivos();
 			
 			//Cria o agendamento de sla
-			SchedulerUtil.criaAgendamentoSla(scheduler);
-			
 			for(Agendamento agendamento:agendamentos){	
 				SchedulerUtil.adicionarAgendamento(scheduler, agendamento);
 				agendamento.setAgendado(true);
 				this.agendamentoDAO.updateAgendamento(agendamento);
 			}
+			
+			
+			SchedulerUtil.criaAgendamentoSla(scheduler);
 			
 			System.out.println("Agendador populado");
 			

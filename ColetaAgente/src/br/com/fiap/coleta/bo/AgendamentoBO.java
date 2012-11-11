@@ -16,6 +16,9 @@ public class AgendamentoBO {
 		return this.agendamentoDAO.pegaAgendamentoNo(no);
 	}
 	
+	public Agendamento pegaAgendamento(Integer id){
+		return this.agendamentoDAO.terminaAgendamento(id);
+	}
 	
 	
 }

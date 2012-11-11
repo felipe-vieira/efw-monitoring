@@ -3,47 +3,47 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas.jar">
+        <jar destfile="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas.jar">
             <manifest>
                 <attribute name="Main-Class" value="br.com.fiap.coleta.Run"/>
-                <attribute name="Class-Path" value=". ServidorColetas_lib/antlr-2.7.7.jar ServidorColetas_lib/dom4j-1.6.1.jar ServidorColetas_lib/hibernate-commons-annotations-4.0.1.Final.jar ServidorColetas_lib/hibernate-core-4.1.1.Final.jar ServidorColetas_lib/hibernate-jpa-2.0-api-1.0.1.Final.jar ServidorColetas_lib/javassist-3.15.0-GA.jar ServidorColetas_lib/jboss-logging-3.1.0.GA.jar ServidorColetas_lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar ServidorColetas_lib/mysql-connector-java-5.1.19-bin.jar ServidorColetas_lib/c3p0-0.9.1.1.jar ServidorColetas_lib/log4j-1.2.16.jar ServidorColetas_lib/quartz-all-2.1.4.jar ServidorColetas_lib/slf4j-api-1.6.1.jar ServidorColetas_lib/slf4j-log4j12-1.6.1.jar ServidorColetas_lib/commons-beanutils-1.8.0.jar ServidorColetas_lib/commons-beanutils-bean-collections-1.8.0.jar ServidorColetas_lib/commons-beanutils-core-1.8.0.jar ServidorColetas_lib/commons-collections-3.2.1.jar ServidorColetas_lib/commons-lang-2.5.jar ServidorColetas_lib/commons-logging-1.1.1.jar ServidorColetas_lib/commons-logging-adapters-1.1.1.jar ServidorColetas_lib/commons-logging-api-1.1.1.jar ServidorColetas_lib/ezmorph-1.0.6.jar ServidorColetas_lib/json-lib-2.4-jdk15.jar ServidorColetas_lib/jtds-1.2.5.jar ServidorColetas_lib/ojdbc14.jar ServidorColetas_lib/dsn.jar ServidorColetas_lib/imap.jar ServidorColetas_lib/mail.jar ServidorColetas_lib/mailapi.jar ServidorColetas_lib/pop3.jar ServidorColetas_lib/smtp.jar"/>
+                <attribute name="Class-Path" value=". efw_coletas_lib/antlr-2.7.7.jar efw_coletas_lib/dom4j-1.6.1.jar efw_coletas_lib/hibernate-commons-annotations-4.0.1.Final.jar efw_coletas_lib/hibernate-core-4.1.1.Final.jar efw_coletas_lib/hibernate-jpa-2.0-api-1.0.1.Final.jar efw_coletas_lib/javassist-3.15.0-GA.jar efw_coletas_lib/jboss-logging-3.1.0.GA.jar efw_coletas_lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar efw_coletas_lib/mysql-connector-java-5.1.19-bin.jar efw_coletas_lib/c3p0-0.9.1.1.jar efw_coletas_lib/log4j-1.2.16.jar efw_coletas_lib/quartz-all-2.1.4.jar efw_coletas_lib/slf4j-api-1.6.1.jar efw_coletas_lib/slf4j-log4j12-1.6.1.jar efw_coletas_lib/commons-beanutils-1.8.0.jar efw_coletas_lib/commons-beanutils-bean-collections-1.8.0.jar efw_coletas_lib/commons-beanutils-core-1.8.0.jar efw_coletas_lib/commons-collections-3.2.1.jar efw_coletas_lib/commons-lang-2.5.jar efw_coletas_lib/commons-logging-1.1.1.jar efw_coletas_lib/commons-logging-adapters-1.1.1.jar efw_coletas_lib/commons-logging-api-1.1.1.jar efw_coletas_lib/ezmorph-1.0.6.jar efw_coletas_lib/json-lib-2.4-jdk15.jar efw_coletas_lib/jtds-1.2.5.jar efw_coletas_lib/ojdbc14.jar efw_coletas_lib/dsn.jar efw_coletas_lib/imap.jar efw_coletas_lib/mail.jar efw_coletas_lib/mailapi.jar efw_coletas_lib/pop3.jar efw_coletas_lib/smtp.jar"/>
             </manifest>
-            <fileset dir="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/bin"/>
-            <fileset dir="C:/Users/Felipe/workspace/efw-monitoring/EfwDomain/bin"/>
+            <fileset dir="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/bin"/>
+            <fileset dir="C:/Users/Felipe/git/efw-monitoring/EfwDomain/bin"/>
         </jar>
-        <delete dir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <mkdir dir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/antlr-2.7.7.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/dom4j-1.6.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/hibernate-commons-annotations-4.0.1.Final.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/hibernate-core-4.1.1.Final.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/hibernate-jpa-2.0-api-1.0.1.Final.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/javassist-3.15.0-GA.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/jboss-logging-3.1.0.GA.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/hibernate/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/mysql/mysql-connector-java-5.1.19-bin.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/quartz/c3p0-0.9.1.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/quartz/log4j-1.2.16.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/quartz/quartz-all-2.1.4.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/quartz/slf4j-api-1.6.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/quartz/slf4j-log4j12-1.6.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-beanutils-1.8.0.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-beanutils-bean-collections-1.8.0.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-beanutils-core-1.8.0.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-collections-3.2.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-lang-2.5.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-logging-1.1.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-logging-adapters-1.1.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/commons/commons-logging-api-1.1.1.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/json/ezmorph-1.0.6.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/json/json-lib-2.4-jdk15.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/jdbc/jtds-1.2.5.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/jdbc/ojdbc14.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/javamail/dsn.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/javamail/imap.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/javamail/mail.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/javamail/mailapi.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/javamail/pop3.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
-        <copy file="C:/Users/Felipe/workspace/efw-monitoring/ColetaAgente/lib/javamail/smtp.jar" todir="C:/Users/Felipe/Desktop/CD/Projetos Compilados/servidor_coletas/ServidorColetas_lib"/>
+        <delete dir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <mkdir dir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/antlr-2.7.7.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/dom4j-1.6.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/hibernate-commons-annotations-4.0.1.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/hibernate-core-4.1.1.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/hibernate-jpa-2.0-api-1.0.1.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/javassist-3.15.0-GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/jboss-logging-3.1.0.GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/hibernate/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/mysql/mysql-connector-java-5.1.19-bin.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/quartz/c3p0-0.9.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/quartz/log4j-1.2.16.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/quartz/quartz-all-2.1.4.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/quartz/slf4j-api-1.6.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/quartz/slf4j-log4j12-1.6.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-beanutils-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-beanutils-bean-collections-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-beanutils-core-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-collections-3.2.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-lang-2.5.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-logging-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-logging-adapters-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/commons/commons-logging-api-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/json/ezmorph-1.0.6.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/json/json-lib-2.4-jdk15.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/jdbc/jtds-1.2.5.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/jdbc/ojdbc14.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/javamail/dsn.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/javamail/imap.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/javamail/mail.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/javamail/mailapi.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/javamail/pop3.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
+        <copy file="C:/Users/Felipe/git/efw-monitoring/ColetaAgente/lib/javamail/smtp.jar" todir="C:/Users/Felipe/Desktop/Executaveis/servidor_coletas/efw_coletas_lib"/>
     </target>
 </project>

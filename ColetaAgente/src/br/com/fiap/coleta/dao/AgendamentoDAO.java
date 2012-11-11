@@ -115,5 +115,25 @@ public class AgendamentoDAO {
 		
 	}
 	
+	public Agendamento terminaAgendamento(Integer id){
+		
+		Session sessao = DBUtil.getCurrentSession();
+		Transaction t = sessao.beginTransaction();
+		
+		Agendamento agendamento = (Agendamento) sessao.get(Agendamento.class, id);
+		
+		if(agendamento != null){
+			t.commit();
+			return agendamento;
+		}else{
+			t.rollback();
+			return null;
+		}
+		
+		
+		
+	}
+
+	
 	
 }

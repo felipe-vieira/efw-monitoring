@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 /**
  * O papel desta classe é vincular a aplicação à camada de persistência.
@@ -34,6 +35,7 @@ public class DBUtil {
 				.setProperty("hibernate.connection.url", urlConexao)
 				.setProperty("hibernate.connection.username", ConnectionInfo.user)
 				.setProperty("hibernate.connection.password", ConnectionInfo.password);
+			
 			
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 			

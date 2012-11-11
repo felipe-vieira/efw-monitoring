@@ -10,7 +10,6 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 
-import br.com.fiap.coleta.bo.SlaBO;
 import br.com.fiap.coleta.cgt.jobs.ColetaJob;
 import br.com.fiap.coleta.cgt.jobs.SlaJob;
 import br.com.fiap.coleta.entities.Agendamento;
@@ -24,7 +23,8 @@ public class SchedulerUtil  {
 				.build();
 		
 		//Passa o id do nó
-		job.getJobDataMap().put("no", agendamento.getNo().getId());		
+		job.getJobDataMap().put("no", agendamento.getNo().getId());
+		job.getJobDataMap().put("agendamento", agendamento.getId());		
 		
 		//Faz o parse da hora de inicio e hora de fim
 		String[] horaInicio = agendamento.getHoraInicio().split(":");
@@ -32,7 +32,7 @@ public class SchedulerUtil  {
 		
 		//Cria a trigger pra chamar o job
 		Trigger trigger = TriggerBuilder.newTrigger()
-				.withIdentity(String.valueOf(agendamento.getId()), String.valueOf(agendamento.getNo().getId()))
+				.withIdentity(String.valueOf(agendamento.getId()), "agendamentos")
 				.startAt(DateBuilder.dateOf(Integer.parseInt(horaInicio[0]), Integer.parseInt(horaInicio[1]), 0))
 				.endAt(DateBuilder.dateOf(Integer.parseInt(horaFim[0]), Integer.parseInt(horaFim[1]), 0))
 				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
@@ -47,7 +47,7 @@ public class SchedulerUtil  {
 	
 	public static void criaAgendamentoSla(Scheduler scheduler) throws SchedulerException{
 		
-		
+		/*
 		//Executa o primeiro SLA
 		SlaBO bo = new SlaBO();
 		System.out.print("Executando sla diário... ");
@@ -58,7 +58,7 @@ public class SchedulerUtil  {
 		System.out.print("Executando sla mensal... ");
 		bo.calculaSlaMensal();
 		System.out.println("OK!");
-		
+		*/
 		//Cria o job
 		JobDetail job = JobBuilder.newJob(SlaJob.class)
 				.withIdentity("sla", "sla")
@@ -68,7 +68,7 @@ public class SchedulerUtil  {
 		//Cria a trigger pra chamar o job
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("sla", "sla")
-				.startAt(DateBuilder.dateOf(0, 0, 0))
+				.startNow()
 				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
 					.withIntervalInMinutes(30)
 					.repeatForever()
@@ -77,6 +77,7 @@ public class SchedulerUtil  {
 			
 
 		scheduler.scheduleJob(job, trigger);
+		
 	}
 	
 	public static void removerAgendamento(Scheduler scheduler, String jobKey , String groupKey) throws SchedulerException{
