@@ -9,7 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
 import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.Oracle;
 import br.com.fiap.coleta.entities.SQLServer;

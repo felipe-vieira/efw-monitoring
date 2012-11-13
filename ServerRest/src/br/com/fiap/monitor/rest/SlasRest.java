@@ -8,9 +8,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import br.com.fiap.coleta.entities.Sla;
 import br.com.fiap.monitor.bo.SlaBO;
 import br.com.fiap.monitor.to.PagingTO;
-import br.com.fiap.coleta.entities.Sla;
 
 @Path("/slas")
 public class SlasRest {

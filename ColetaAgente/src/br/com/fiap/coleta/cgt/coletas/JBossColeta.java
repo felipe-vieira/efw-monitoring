@@ -12,7 +12,6 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import br.com.fiap.coleta.bo.AgendamentoBO;
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.IndisponibilidadeBO;

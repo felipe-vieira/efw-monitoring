@@ -27,7 +27,7 @@ public class Run {
 			ConnectionInfo.port = 3306;
 			ConnectionInfo.database = "monitor";
 			ConnectionInfo.user = "efwdbusr";
-			ConnectionInfo.password = "4c4b@Tcc";
+			ConnectionInfo.password = "efw123";
 				
 		}
 		

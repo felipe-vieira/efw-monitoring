@@ -12,14 +12,13 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import br.com.fiap.coleta.bo.AgendamentoBO;
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.bo.ServidorAplicacaoBO;
 import br.com.fiap.coleta.entities.Agendamento;
-import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.Glassfish;
+import br.com.fiap.coleta.entities.Indisponibilidade;
 import br.com.fiap.coleta.entities.No;
 import br.com.fiap.coleta.entities.ServidorAplicacaoDeployment;
 import br.com.fiap.coleta.entities.ServidorAplicacaoMemoria;

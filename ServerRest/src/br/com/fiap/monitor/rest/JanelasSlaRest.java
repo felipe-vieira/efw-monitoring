@@ -8,9 +8,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import br.com.fiap.coleta.entities.JanelaSla;
 import br.com.fiap.monitor.bo.SlaBO;
 import br.com.fiap.monitor.to.PagingTO;
-import br.com.fiap.coleta.entities.JanelaSla;
 
 @Path("/janelasSla")
 public class JanelasSlaRest {

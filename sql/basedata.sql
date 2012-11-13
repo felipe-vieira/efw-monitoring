@@ -28,4 +28,4 @@ INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(18,'SLA 
 INSERT INTO tipo_alarme(id,descricao,mensagem,threshold,unidade) VALUES(19,'SLA Mensal', 'O SLA mensal está abaixo da meta',1,'%');
 
 /* Usuario ADM */
-insert into usuario (id,login,senha,administrador,ativo) VALUES(1,'adm','pdcpdc',1,1);
+insert into usuario (id,login,senha,administrador,ativo) VALUES(1,'admin','admin',1,1);

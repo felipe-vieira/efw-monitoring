@@ -3,11 +3,7 @@ package br.com.fiap.coleta;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import javax.xml.validation.Schema;
-
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import br.com.fiap.coleta.util.dao.ConnectionInfo;

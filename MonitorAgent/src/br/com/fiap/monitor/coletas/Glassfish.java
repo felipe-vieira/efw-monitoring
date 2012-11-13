@@ -13,7 +13,6 @@ import javax.management.remote.JMXServiceURL;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import br.com.fiap.monitor.coletas.estrutura.ReturnObject;
 import br.com.fiap.monitor.utils.RESTUtils;
 

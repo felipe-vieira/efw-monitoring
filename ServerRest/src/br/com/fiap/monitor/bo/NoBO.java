@@ -6,9 +6,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import br.com.fiap.monitor.dao.GenericDAO;
-import br.com.fiap.monitor.dao.NoDAO;
-import br.com.fiap.monitor.to.ReturnTO;
 import br.com.fiap.coleta.entities.BancoDados;
 import br.com.fiap.coleta.entities.Glassfish;
 import br.com.fiap.coleta.entities.JBoss;
@@ -20,6 +17,9 @@ import br.com.fiap.coleta.entities.ServidorAplicacao;
 import br.com.fiap.coleta.entities.enumerators.SubTipoNo;
 import br.com.fiap.coleta.entities.enumerators.TipoNo;
 import br.com.fiap.coleta.entities.enumerators.TipoSistemaOperacional;
+import br.com.fiap.monitor.dao.GenericDAO;
+import br.com.fiap.monitor.dao.NoDAO;
+import br.com.fiap.monitor.to.ReturnTO;
 
 public class NoBO {
 

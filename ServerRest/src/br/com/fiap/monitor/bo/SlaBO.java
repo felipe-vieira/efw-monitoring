@@ -9,6 +9,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import br.com.fiap.coleta.entities.DiasSemanaJanelaSla;
 import br.com.fiap.coleta.entities.DiasSemanaSla;
 import br.com.fiap.coleta.entities.JanelaSla;

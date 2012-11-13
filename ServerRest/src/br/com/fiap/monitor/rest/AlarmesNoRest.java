@@ -9,7 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-
 import br.com.fiap.coleta.entities.Alarme;
 import br.com.fiap.monitor.bo.AlarmeBO;
 import br.com.fiap.monitor.to.PagingTO;

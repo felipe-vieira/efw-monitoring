@@ -5,9 +5,7 @@ import java.util.List;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
-import org.quartz.TriggerListener;
 import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.impl.matchers.GroupMatcher;
 
 import br.com.fiap.coleta.cgt.threads.AtualizaAgendadorThread;
 import br.com.fiap.coleta.dao.AgendamentoDAO;
@@ -33,7 +31,7 @@ public class GerenciadorFila {
 			//Cria o listener das triggers
 			SchedulerListener listener = new AgendadorListener();
 			
-			//Inicia o agendador
+			//Inicia o agendador	
 			this.scheduler.getListenerManager().addSchedulerListener(listener);
 			this.scheduler.start();
 			

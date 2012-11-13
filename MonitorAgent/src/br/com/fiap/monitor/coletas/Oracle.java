@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
-
 import br.com.fiap.monitor.coletas.estrutura.ReturnObject;
 import br.com.fiap.monitor.factory.OracleConnectionFactory;
 

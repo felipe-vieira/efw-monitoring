@@ -7,8 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import br.com.fiap.monitor.bo.NoBO;
 import br.com.fiap.coleta.entities.No;
+import br.com.fiap.monitor.bo.NoBO;
 
 @Path("/nosCombo")
 public class NosComboRest {

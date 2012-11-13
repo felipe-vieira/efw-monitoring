@@ -8,7 +8,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONObject;
-
 import br.com.fiap.coleta.entities.Usuario;
 import br.com.fiap.monitor.bo.UsuarioBO;
 

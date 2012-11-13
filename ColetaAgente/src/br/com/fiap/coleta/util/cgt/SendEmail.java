@@ -2,11 +2,13 @@ package br.com.fiap.coleta.util.cgt;
 
 import java.util.List;
 import java.util.Properties;
+
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage; 
+import javax.mail.internet.MimeMessage;
+
 import br.com.fiap.coleta.entities.Usuario;
 
 

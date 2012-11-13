@@ -1,17 +1,13 @@
 package br.com.fiap.coleta.cgt;
 
 import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
 import org.quartz.Trigger;
-import org.quartz.Trigger.CompletedExecutionInstruction;
 import org.quartz.TriggerKey;
-import org.quartz.TriggerListener;
 import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.impl.matchers.GroupMatcher;
 
 import br.com.fiap.coleta.bo.AgendamentoBO;
 import br.com.fiap.coleta.entities.Agendamento;

@@ -1,0 +1,33 @@
+yajsw-stable-11.03 
+
+    * Bug: 11.02 does not work with Java 1.5
+    * Bug: .svn dir in src\ahessian\org\jboss\netty\handler\ipfilter
+    * Bug: java.io.IOException: The handle is invalid -> print message instead of stack trace
+    * Bug: configuration file: error evaluating  include directives with env vars.
+    * Bug: Problems geting stdout with Solaris 10 sparc:
+    * Bug: Windows: totalRAM in WindowsXPSystemInformation
+    * Bug: commons logging, default (log4j) does not log to file.
+    * Bug: Error creating wrapper.app.pre.script
+    * Bug: Application could not restart due to hacker TCP/IP connection to wrapper controller
+    * Bug: ahessian may hang similar to java bug in ReentrantLock
+    * Change: when setting environment vars: use javas System.getEnv()
+    * Change: Executing jar files: classpath from manifest are added to the classpath of the application.
+    * New: wrapper.config.script.<n> for user defined scripts within the configuration
+    * New: decode.gv groovy script for decoding properties within the configuration file
+    * New: wrapper.script.<n>.<state>: allow multiple scripts for the same state transition. For compatibility wrapper.script.<state> will be interpreted as <n> being set to "". Execution order of the scripts is the alpha-numeric order of <n>
+    * New: Unset properties by setting  ${return null}
+    * New: \r\n line endings:  wrapper.logfile.format=LPNTM\r\n
+    * New: property wrapper.cleanup_tmp default: true, clean up the tmp folder of err_ ... files at startup. Note: jna cleans up its files at startup.
+    * New: property wrapper.tray.spawn_process
+    
+
+NOTE Windows vista, 7, etc: the batch files have to be run as administrator.
+
+NOTE: JBoss 7: runs only with java version prior to 6_17 or higher than 7_0. Jboss seems to be aware of this issue.
+https://issues.jboss.org/browse/AS7-4968
+
+NOTE: It is recommended to run the wrapper with java 7.
+http://sourceforge.net/projects/yajsw/forums/forum/810311/topic/5302435
+
+NOTE: If you are having issues displaying the system tray icon on ubuntu unity
+http://www.howtogeek.com/68119/how-to-bring-app-icons-back-into-unitys-system-tray/

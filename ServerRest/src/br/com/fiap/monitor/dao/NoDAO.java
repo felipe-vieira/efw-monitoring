@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.fiap.coleta.entities.No;
-import br.com.fiap.monitor.util.dao.DBUtil;;
+import br.com.fiap.monitor.util.dao.DBUtil;
 
 public class NoDAO {
 	

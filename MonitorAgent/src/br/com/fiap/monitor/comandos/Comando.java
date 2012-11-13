@@ -1,6 +1,6 @@
 package br.com.fiap.monitor.comandos;
 
-import org.hyperic.sigar.*;
+import org.hyperic.sigar.SigarException;
 
 import br.com.fiap.monitor.coletas.Configuracoes;
 import br.com.fiap.monitor.coletas.Glassfish;

@@ -9,7 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-
 import br.com.fiap.coleta.entities.BancoBackup;
 import br.com.fiap.monitor.bo.BancoDadosBO;
 import br.com.fiap.monitor.to.PagingTO;

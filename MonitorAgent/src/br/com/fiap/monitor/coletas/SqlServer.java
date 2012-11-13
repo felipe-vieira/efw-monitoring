@@ -9,11 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.fiap.monitor.coletas.estrutura.ReturnObject;
-
-import br.com.fiap.monitor.factory.SqlServerConnectionFactory;
-
 import net.sf.json.JSONArray;
+import br.com.fiap.monitor.coletas.estrutura.ReturnObject;
+import br.com.fiap.monitor.factory.SqlServerConnectionFactory;
 
 
 

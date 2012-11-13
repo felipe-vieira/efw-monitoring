@@ -8,7 +8,6 @@ import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import br.com.fiap.coleta.bo.AlarmeBO;
 import br.com.fiap.coleta.bo.IndisponibilidadeBO;
 import br.com.fiap.coleta.bo.ServidorBO;
