@@ -7,15 +7,24 @@ import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthenticationException;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.AuthPolicy;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 
 public class RESTUtils {
@@ -28,11 +37,27 @@ public class RESTUtils {
     private static final Logger LOG = Logger.getLogger(RESTUtils.class.getName());
 	
 	
-    public static String getInformation(String resourcePath) throws IOException, AuthenticationException {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+    public static String getInformation(String resourcePath, String user, String password) throws IOException, AuthenticationException {
+    	HttpHost targetHost = new HttpHost("localhost", 4848, "http"); 
+    	DefaultHttpClient httpClient = new DefaultHttpClient();
+
+    	AuthScope authScope = new AuthScope("localhost", 4848);
+        UsernamePasswordCredentials userPass = new UsernamePasswordCredentials("admin", "admin");
+        
+        httpClient.getCredentialsProvider().setCredentials(authScope,userPass);
+        
+        // Create AuthCache instance
+        AuthCache authCache = new BasicAuthCache();
+        // Generate BASIC scheme object and add it to the local auth cache
+        BasicScheme basicAuth = new BasicScheme();
+        authCache.put(targetHost, basicAuth);
+        
+        BasicHttpContext localContext = new BasicHttpContext();
+        localContext.setAttribute(ClientContext.AUTH_CACHE, authCache); 
+        
         HttpGet httpG = new HttpGet(ADMINISTRATION_URL + resourcePath);
         httpG.setHeader("Accept", CONTENT_TYPE_JSON);
-        HttpResponse response = httpClient.execute(httpG);
+        HttpResponse response = httpClient.execute(targetHost,httpG,localContext);
         HttpEntity entity = response.getEntity();
         InputStream instream = entity.getContent();
         return isToString(instream);

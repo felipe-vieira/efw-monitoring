@@ -8,39 +8,39 @@
                 <attribute name="Main-Class" value="br.com.fiap.monitor.Run"/>
                 <attribute name="Class-Path" value=". agente_lib/sigar.jar agente_lib/commons-beanutils-1.8.0.jar agente_lib/commons-beanutils-bean-collections-1.8.0.jar agente_lib/commons-beanutils-core-1.8.0.jar agente_lib/commons-collections-3.2.1.jar agente_lib/commons-lang-2.5.jar agente_lib/commons-logging-1.1.1.jar agente_lib/commons-logging-adapters-1.1.1.jar agente_lib/commons-logging-api-1.1.1.jar agente_lib/ezmorph-1.0.6.jar agente_lib/json-lib-2.4-jdk15.jar agente_lib/jboss-as-controller-client-7.0.2.Final.jar agente_lib/jboss-as-protocol-7.0.2.Final.jar agente_lib/junit-4.10.jar agente_lib/jboss-remoting-3.2.0.Beta2.jar agente_lib/xnio-api-3.0.0.Beta3.jar agente_lib/xnio-nio-3.0.0.Beta3.jar agente_lib/jboss-dmr-1.0.0.Final.jar agente_lib/jboss-logging-3.0.1.GA.jar agente_lib/jboss-marshalling-1.3.0.GA.jar agente_lib/jboss-threads-2.0.0.GA.jar agente_lib/jboss-sasl-1.0.0.Beta2.jar agente_lib/jtds-1.2.5.jar agente_lib/ojdbc14.jar agente_lib/commons-codec-1.6.jar agente_lib/fluent-hc-4.2.jar agente_lib/httpclient-4.2.jar agente_lib/httpclient-cache-4.2.jar agente_lib/httpcore-4.2.jar agente_lib/httpmime-4.2.jar"/>
             </manifest>
-            <fileset dir="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/bin"/>
+            <fileset dir="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/bin"/>
         </jar>
         <delete dir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
         <mkdir dir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/sigar/sigar.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-beanutils-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-beanutils-bean-collections-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-beanutils-core-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-collections-3.2.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-lang-2.5.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-logging-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-logging-adapters-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-logging-api-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/json/ezmorph-1.0.6.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/json/json-lib-2.4-jdk15.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-as-controller-client-7.0.2.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-as-protocol-7.0.2.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/junit-4.10.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-remoting-3.2.0.Beta2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/xnio-api-3.0.0.Beta3.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/xnio-nio-3.0.0.Beta3.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-dmr-1.0.0.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-logging-3.0.1.GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-marshalling-1.3.0.GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-threads-2.0.0.GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/JBoss/jboss-sasl-1.0.0.Beta2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/jdbc/jtds-1.2.5.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/jdbc/ojdbc14.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/commons/commons-codec-1.6.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/http/fluent-hc-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/http/httpclient-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/http/httpclient-cache-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/http/httpcore-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
-        <copy file="C:/Users/Felipe/git/efw-monitoring/MonitorAgent/lib/http/httpmime-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/sigar/sigar.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-beanutils-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-beanutils-bean-collections-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-beanutils-core-1.8.0.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-collections-3.2.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-lang-2.5.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-logging-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-logging-adapters-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-logging-api-1.1.1.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/json/ezmorph-1.0.6.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/json/json-lib-2.4-jdk15.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-as-controller-client-7.0.2.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-as-protocol-7.0.2.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/junit-4.10.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-remoting-3.2.0.Beta2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/xnio-api-3.0.0.Beta3.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/xnio-nio-3.0.0.Beta3.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-dmr-1.0.0.Final.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-logging-3.0.1.GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-marshalling-1.3.0.GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-threads-2.0.0.GA.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/JBoss/jboss-sasl-1.0.0.Beta2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/jdbc/jtds-1.2.5.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/jdbc/ojdbc14.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/commons/commons-codec-1.6.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/http/fluent-hc-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/http/httpclient-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/http/httpclient-cache-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/http/httpcore-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
+        <copy file="C:/Users/Felipe/workspace/efw-monitoring/MonitorAgent/lib/http/httpmime-4.2.jar" todir="C:/Users/Felipe/Desktop/Executaveis/agente/agente_lib"/>
     </target>
 </project>

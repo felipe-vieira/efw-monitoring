@@ -192,7 +192,7 @@ public class Glassfish {
 	    	
 	    	try{
 	    		
-	    		String stringJson = RESTUtils.getInformation("/domain/applications/list-applications");
+	    		String stringJson = RESTUtils.getInformation("/domain/applications/list-applications",this.user,this.password);
 	    		JSONObject json = JSONObject.fromObject(stringJson).getJSONObject("properties");
 	    		System.out.println(json.toString());
 	    		
@@ -221,9 +221,6 @@ public class Glassfish {
 	        //TODO parametrizar.
 	        String[] credentials = new String[]{this.user, this.password};
 	        
-	        System.out.println("usuario " + this.user);
-	        System.out.println("senha " + this.password);
-
 	        env.put(JMXConnector.CREDENTIALS, credentials);              
 
 	        JMXConnector jmxc =
